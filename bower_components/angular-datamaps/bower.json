@@ -1,0 +1,40 @@
+{
+  "name": "angular-datamaps",
+  "description": "AngularJS Datamaps -- provides an Angular directive to wrap https://github.com/markmarkoh/datamaps",
+  "version": "0.1.0",
+  "author": "Drew Machat<drew@alleyinteractive.com>",
+  "main": "dist/angular-datamaps.min.js",
+  "dependencies": {
+    "angular": ">=1.0.8",
+    "datamaps": "~0.4.0"
+  },
+  "devDependencies": {
+    "es5-shim": "~2.1.0",
+    "json3": "~3.2.5",
+    "html5shiv": "~3.7.0",
+    "respond": "~1.3.0",
+    "angular-mocks": ">=1.0.8",
+    "bootstrap": "~3.0.0"
+  },
+  "ignore": [
+    ".DS_Store",
+    ".git",
+    ".bowerrc",
+    ".editorconfig",
+    ".gitignore",
+    ".jshintrc",
+    "bower.json",
+    "package.json",
+    "README.md",
+    "Gruntfile.js",
+    "usaMap.png",
+    "karma.conf.js",
+    "protractor.conf.js",
+    "bower_components",
+    "node_modules",
+    "src",
+    "dev",
+    "test",
+    "e2e"
+  ]
+}

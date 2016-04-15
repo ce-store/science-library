@@ -1,0 +1,39 @@
+<div class="col-md-12 footer-padding">
+  <div class="row">
+    <!-- Description -->
+    <p class="center">
+      <span ng-class="[{'answer-highlight': nameHighlight}]">{{name}}</span>
+      <span class="highlight" ng-class="[{'answer-highlight': technical_areaHighlight}]">({{technicalArea}})</span>
+    </p>
+  </div>
+
+  <div class="row">
+    <div class="list-view">
+      <h3 class="floating-header">Publications</h3>
+
+      <div class="authorFilters">
+        <label class="journal"></label>
+        <input id="journalInput" type="checkbox" ng-model="journalInput">
+        <label class="external-conference"></label>
+        <input id="externalInput" type="checkbox" ng-model="externalInput">
+        <label class="internal-conference"></label>
+        <input id="internalInput" type="checkbox" ng-model="internalInput">
+        <label class="technical-report"></label>
+        <input id="technicalInput" type="checkbox" ng-model="technicalInput">
+        <label class="other-document"></label>
+        <input id="otherInput" type="checkbox" ng-model="otherInput">
+      </div>
+
+      <div class="col-md-12 clear" ng-class="[{'answer-highlight': publicationsHighlight}]">
+        <!-- Results list -->
+        <ul class="results-list" id="publications-results-list">
+          <li class="no-bullets" ng-repeat="item in publications | orderBy : 'name' | orderBy : '-citations' | filter : filterPapers">
+            <span ng-class="[className, ('document-' + $index)]" ng-repeat="className in item.class track by $index"></span>
+            <a ng-href="paper/{{item.id}}" class="list-name">{{item.name}}</a> <!-- <small class="highlight">({{item.citations}})</small> -->
+          </li>
+          <p ng-if="publications.length === 0">No publications found.</p>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

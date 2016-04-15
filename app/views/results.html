@@ -1,0 +1,23 @@
+<div class="col-md-12 footer-padding">
+  <div class="row">
+    <!-- Question -->
+    <p class="description">{{qa.question}}</p>
+  </div>
+
+  <div class="row">
+    <div class="list-view">
+      <h3>
+        View top <input class="highlight bold list-num" ng-model="listLength"></input> results
+      </h3>
+
+      <div ng-if="qa.type === 'list'">
+        <!-- Results list -->
+        <ul class="results-list">
+          <li ng-repeat="item in qa.answer | limitTo : listLength">
+            <a ng-href="{{item.url}}" class="list-name">{{item.name}} <small ng-if="item.value" class="highlight">({{item.value}})</small></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

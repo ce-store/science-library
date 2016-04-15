@@ -1,0 +1,14 @@
+<!-- Top 50 -->
+<h3 class="floating-header">
+  View top <input class="highlight bold list-num" ng-model="listLength"></input>
+  <span uib-dropdown on-toggle="toggled(open)">
+    <a href id="simple-dropdown" uib-dropdown-toggle>
+      <span class="highlight bold list-name">{{listName}}<span class="caret"></span></span>
+    </a>
+    <ul class="uib-dropdown-menu" aria-labelledby="simple-dropdown">
+      <li role="menuitem" ng-repeat="type in listTypes">
+        <a ng-show="type !== listTypes[3]" href="#" ng-click="select(type)">{{type | capitalise}}</a>
+      </li>
+    </ul>
+  </span>
+</h3>

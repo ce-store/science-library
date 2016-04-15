@@ -1,0 +1,43 @@
+<div class="col-md-12 footer-padding">
+  <div class="row">
+    <div class="list-view">
+      <h3>Comments</h3>
+
+      <div>
+        <!-- Results list -->
+        <ul class="results-list">
+          <li ng-repeat="item in comments">
+            <a ng-if="item.url" ng-href="{{item.url}}">
+              <span ng-if="item.id">{{item.id}} - </span>
+              {{item.comment}} - {{item.user}}
+            </a>
+            <span ng-if="!item.url">
+              <span ng-if="item.id">{{item.id}} - </span>
+              {{item.comment}} - {{item.user}}
+            </span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="list-view">
+      <h3>Issues</h3>
+
+      <div>
+        <!-- Results list -->
+        <ul class="results-list">
+          <li ng-repeat="item in issues">
+            <a ng-if="item.url" ng-href="{{item.url}}">
+              <span ng-if="item.id">{{item.id}} - </span>
+              {{item.comment}} - {{item.user}}
+            </a>
+            <span ng-if="!item.url">
+              <span ng-if="item.id">{{item.id}} - </span>
+              {{item.comment}} - {{item.user}}
+            </span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

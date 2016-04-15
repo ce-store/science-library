@@ -1,0 +1,37 @@
+{
+  "name": "itapapers",
+  "version": "0.0.0",
+  "dependencies": {
+    "angular": "^1.4.0",
+    "bootstrap": "^3.2.0",
+    "angular-ui-router": "~0.2.15",
+    "d3-tip": "~0.6.7",
+    "d3": "~3.5.10",
+    "d3.promise": "~1.1.0",
+    "datamaps": "~0.4.0",
+    "topojson": "~1.6.19",
+    "angular-bootstrap": "~0.14.3",
+    "angular-google-maps": "~2.2.1",
+    "angular-datamaps": "~0.1.2",
+    "angular-local-storage": "~0.2.3",
+    "ng-csv": "~0.3.6",
+    "webspeech": "*"
+  },
+  "devDependencies": {
+    "angular-mocks": "^1.4.0"
+  },
+  "appPath": "app",
+  "moduleName": "itapapersApp",
+  "overrides": {
+    "bootstrap": {
+      "main": [
+        "less/bootstrap.less",
+        "dist/css/bootstrap.css",
+        "dist/js/bootstrap.js"
+      ]
+    }
+  },
+  "resolutions": {
+    "angular": "^1.2"
+  }
+}

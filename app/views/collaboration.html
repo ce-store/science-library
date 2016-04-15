@@ -1,0 +1,92 @@
+<div class="col-md-12 footer-padding">
+  <div class="row">
+    <!-- Description -->
+    <p class="center">
+      Collaborations between
+      <span ng-class="[{'answer-highlight': nameHighlight}]" ng-repeat="author in authors">
+        <a ng-href="author/{{author.id}}">{{author.name}}</a><span ng-if="$index < authors.length - 2">,</span><span ng-if="$index === authors.length - 2"> and</span><span ng-if="$index === authors.length - 1">.</span>
+      </span>
+    </p>
+  </div>
+
+  <div class="row">
+    <div class="list-view">
+      <div class="col-md-9">
+        <div ng-show="currentView === views[0]">
+          <h3>Papers</h3>
+
+          <div id="bar-chart"></div>
+        </div>
+
+        <div ng-show="currentView === views[1]" id="collaborations-papers-list">
+          <h3 class="floating-header">Papers</h3>
+
+          <div class="authorFilters">
+            <label ng-show="journalPapers" class="journal"></label>
+            <input ng-show="journalPapers" id="journalInput" type="checkbox" ng-model="journalInput">
+            <label ng-show="externalPapers" class="external-conference"></label>
+            <input ng-show="externalPapers" id="externalInput" type="checkbox" ng-model="externalInput">
+            <label ng-show="internalPapers" class="internal-conference"></label>
+            <input ng-show="internalPapers" id="internalInput" type="checkbox" ng-model="internalInput">
+            <label ng-show="technicalReports" class="technical-report"></label>
+            <input ng-show="technicalReports" id="technicalInput" type="checkbox" ng-model="technicalInput">
+            <label ng-show="otherDocuments" class="other-document"></label>
+            <input ng-show="otherDocuments" id="otherInput" type="checkbox" ng-model="otherInput">
+          </div>
+
+          <ul class="results-list clear" id="publications-results-list">
+            <li class="no-bullets" ng-repeat="item in papers | limitTo : listLength | orderBy : 'name' | orderBy : '-weight' | filter : filterPapers">
+              <span ng-class="[className, ('document-' + $index)]" ng-repeat="className in item.class track by $index"></span>
+              <a ng-href="paper/{{item.id}}" class="list-name">{{item.name}}</a>
+              <small ng-if="item.noteworthy"><span class="glyphicon glyphicon-star-empty highlight" aria-hidden="true"></span> ({{item.noteworthy}})</small> <!-- <small class="highlight" uib-tooltip="Citation count">({{item.value}})</small> -->
+            </li>
+          </ul>
+        </div>
+
+        <button ng-show="currentView !== views[0]" class="btn view-btn" ng-click="showView(views[0])">Show Papers Chart</button>
+        <button ng-show="currentView !== views[1]" class="btn view-btn" ng-click="showView(views[1])">List Papers</button>
+        <div ng-show="currentView !== views[1]" class="float-right">
+          <span class="helper-text">Click a bar on the graph to show papers.</span>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <h3>Statistics</h3>
+
+        <div class="total-publication-count">
+          <dl class="dl-horizontal dl-publications" ng-class="[{'answer-highlight': publicationsHighlight}]">
+            <div ng-show="totalPublications" ng-class="[{'answer-highlight': total_publication_countHighlight}]">
+              <dt>Total ITA Publications</dt>
+              <dd>{{totalPublications}}</dd>
+            </div>
+          </dl>
+          <dl class="dl-horizontal dl-publications" ng-class="[{'answer-highlight': publicationsHighlight}]">
+            <div ng-show="journalPapers" ng-class="[{'answer-highlight': journal_paper_countHighlight}]">
+              <dt>Journals</dt>
+              <dd>{{journalPapers}}</dd>
+            </div>
+            <div ng-show="externalPapers" ng-class="[{'answer-highlight': external_paper_countHighlight}]">
+              <dt>External Conferences</dt>
+              <dd>{{externalPapers}}</dd>
+            </div>
+            <div ng-show="internalPapers" ng-class="[{'answer-highlight': internal_paper_countHighlight}]">
+              <dt>Internal Conferences</dt>
+              <dd>{{internalPapers}}</dd>
+            </div>
+            <div ng-show="technicalReports" ng-class="[{'answer-highlight': technical_report_countHighlight}]">
+              <dt>Technical Reports</dt>
+              <dd>{{technicalReports}}</dd>
+            </div>
+            <div ng-show="otherDocuments" ng-class="[{'answer-highlight': other_document_countHighlight}]">
+              <dt>Other Documents</dt>
+              <dd>{{otherDocuments}}</dd>
+            </div>
+          </dl>
+        </div>
+
+        <!-- Pie Chart -->
+        <div class="small-pie" id="pie-chart"></div>
+      </div>
+    </div>
+  </div>
+</div>

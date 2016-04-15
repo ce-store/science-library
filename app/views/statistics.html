@@ -1,0 +1,53 @@
+<div class="col-md-12 footer-padding">
+  <div class="row">
+    <!-- Description -->
+    <p class="center details">A statistical summary of publications by year.</p>
+  </div>
+
+  <div class="row">
+    <div class="list-view">
+      <table class="clear">
+        <tr>
+          <th>Publication Year</th>
+          <th>Total Publications</th>
+          <th colspan="2">Single Institute Paper Count</th>
+          <th colspan="2">Collaborative Paper Count</th>
+          <th colspan="2">International Paper Count</th>
+          <th colspan="2">Government Paper Count</th>
+          <th colspan="2">Journal Paper Count</th>
+          <th colspan="2">External Conference Paper Count</th>
+          <th colspan="1">Patent Count</th>
+
+          <!-- <th>Total Authors</th> -->
+          <th colspan="1">Active ITA Authors</th>
+          <!-- <th colspan="2">Active Non-ITA Authors</th> -->
+          <th class="no-border">Total Citations</th>
+        </tr>
+        <tr ng-repeat="row in statistics | orderBy : 'scope'">
+          <td>{{row.scope}}</td>
+          <td>{{row.totalPubs}}</td>
+          <td class="no-border">{{row.singleInstCount}}</td>
+          <td class="percentage">{{row.singleInstCountPercent}} &#37;</td>
+          <td class="no-border">{{row.collabCount}}</td>
+          <td class="percentage">{{row.collabCountPercent}} &#37;</td>
+          <td class="no-border">{{row.internationalCount}}</td>
+          <td class="percentage">{{row.internationalCountPercent}} &#37;</td>
+          <td class="no-border">{{row.govCount}}</td>
+          <td class="percentage">{{row.govCountPercent}} &#37;</td>
+          <td class="no-border">{{row.journalCount}}</td>
+          <td class="percentage">{{row.journalCountPercent}} &#37;</td>
+          <td class="no-border">{{row.extCount}}</td>
+          <td class="percentage">{{row.extCountPercent}} &#37;</td>
+          <td>{{row.patentCount}}</td>
+
+          <!-- <td>{{row.totalAuthors}}</td> -->
+          <td>{{row.activeITA}}</td>
+          <!-- <td class="percentage">{{row.activeITAPercent}} &#37;</td> -->
+          <!-- <td class="no-border">{{row.activeNonITA}}</td> -->
+          <!-- <td class="percentage">{{row.activeNonITAPercent}} &#37;</td> -->
+          <td class="no-border">{{row.citations}}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,8 @@
+<div class="page-header">
+  <a ng-href="." ng-click="refresh()"><h1>Science Library</h1></a>
+  <button ng-click="reset()" class="btn reset-btn">Reset</button>
+  <button ng-csv="getCSVData" csv-header="getCSVHeader()" filename="{{ csvFileName() }}" tooltip-placement="bottom" uib-tooltip="{{ tooltipHTML() }}" class="btn reset-btn">Export</button>
+  <a ng-href="statistics"><button class="btn reset-btn">Statistics</button></a>
+  <a ng-if="debug" ng-href="comments"><button class="btn reset-btn">Comments</button></a>
+  <button ng-if="debug" ng-click="addComment()" class="btn reset-btn">Add Comment</button>
+</div>

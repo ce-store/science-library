@@ -1,0 +1,106 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <base href="/">
+    <!-- <base href="/ITA_Papers/"> -->
+    <!-- <base href="/ITA_External_Papers/"> -->
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css(.) styles/vendor.css -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
+  </head>
+  <body ng-app="itapapersApp">
+    <!--[if lte IE 8]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <!-- Header -->
+    <ita-header></ita-header>
+
+    <div ui-view></div>
+    <!-- <a ui-sref="main">Main</a>
+    <a ui-sref="venue">Venue</a> -->
+
+    <ita-footer></ita-footer>
+
+    <!-- <div ng-include="'views/main.html'" ng-controller="MainCtrl"></div> -->
+
+    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
+     <script>
+       !function(A,n,g,u,l,a,r){A.GoogleAnalyticsObject=l,A[l]=A[l]||function(){
+       (A[l].q=A[l].q||[]).push(arguments)},A[l].l=+new Date,a=n.createElement(g),
+       r=n.getElementsByTagName(g)[0],a.src=u,r.parentNode.insertBefore(a,r)
+       }(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+       ga('create', 'UA-XXXXX-X');
+       ga('send', 'pageview');
+    </script>
+
+    <script src='//maps.googleapis.com/maps/api/js'></script>
+    <!-- build:js(.) scripts/vendor.js -->
+    <!-- bower:js -->
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="bower_components/d3/d3.js"></script>
+    <script src="bower_components/d3-tip/index.js"></script>
+    <script src="bower_components/d3.promise/dist/d3.promise.min.js"></script>
+    <script src="bower_components/topojson/topojson.js"></script>
+    <script src="bower_components/datamaps/dist/datamaps.all.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="bower_components/angular-simple-logger/dist/angular-simple-logger.js"></script>
+    <script src="bower_components/lodash/lodash.js"></script>
+    <script src="bower_components/angular-google-maps/dist/angular-google-maps.js"></script>
+    <script src="bower_components/angular-datamaps/dist/angular-datamaps.min.js"></script>
+    <script src="bower_components/angular-local-storage/dist/angular-local-storage.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="bower_components/ng-csv/build/ng-csv.min.js"></script>
+    <script src="bower_components/platform/platform.js"></script>
+    <script src="bower_components/webspeech/src/webspeech.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <!-- build:js({.tmp,app}) scripts/scripts.js -->
+    <script src="scripts/app.js"></script>
+    <script src="scripts/controllers/main.js"></script>
+    <script src="scripts/controllers/venue.js"></script>
+    <script src="scripts/filters/capitalise.js"></script>
+    <script src="scripts/services/store.js"></script>
+    <script src="scripts/services/charts.js"></script>
+    <script src="scripts/controllers/author.js"></script>
+    <script src="scripts/services/narrative.js"></script>
+    <script src="scripts/controllers/paper.js"></script>
+    <script src="scripts/services/urls.js"></script>
+    <script src="scripts/controllers/results.js"></script>
+    <script src="scripts/controllers/organisation.js"></script>
+    <script src="scripts/controllers/project.js"></script>
+    <script src="scripts/services/hudson.js"></script>
+    <script src="scripts/directives/ita-header.js"></script>
+    <script src="scripts/directives/ita-footer.js"></script>
+    <script src="scripts/filters/orderobjectby.js"></script>
+    <script src="scripts/services/colours.js"></script>
+    <script src="scripts/services/debug.js"></script>
+    <script src="scripts/controllers/add-comment.js"></script>
+    <script src="scripts/controllers/comments.js"></script>
+    <script src="scripts/services/document-types.js"></script>
+    <script src="scripts/services/utils.js"></script>
+    <script src="scripts/controllers/collaboration.js"></script>
+    <script src="scripts/directives/top-header.js"></script>
+    <script src="scripts/directives/edge-bundle-chart.js"></script>
+    <script src="scripts/directives/force-directed-graph.js"></script>
+    <script src="scripts/services/csv.js"></script>
+    <script src="scripts/controllers/voice-warning.js"></script>
+    <script src="scripts/controllers/statistics.js"></script>
+    <!-- endbuild -->
+</body>
+</html>

@@ -1,0 +1,77 @@
+<div class="col-md-12 footer-padding">
+  <div class="row">
+    <!-- Title -->
+    <p class="center">
+      <span class="highlight" ng-class="[{'answer-highlight': full_nameHighlight}]">{{venueName}}</span>
+      ran for
+      <span class="highlight" ng-class="[{'answer-highlight': years_ranHighlight}]">{{yearsRan}} years</span>
+    </p>
+  </div>
+
+  <!-- Venue map -->
+  <div class="row">
+  <div class="col-md-8">
+    <h3 class="indent">
+      Details for
+      <span uib-dropdown on-toggle="toggled(open)">
+        <a href id="simple-dropdown" uib-dropdown-toggle>
+          <span class="highlight bold list-name">{{selectedYear}}<span class="caret"></span></span>
+        </a>
+        <ul class="uib-dropdown-menu" aria-labelledby="simple-dropdown">
+          <li role="menuitem" ng-repeat="year in years | orderBy : '+'">
+            <a href="#" ng-click="select(year)">{{year | capitalise}}</a>
+          </li>
+        </ul>
+      </span>
+    </h3>
+
+    <datamap map="map.world" plugins="map.plugins" plugin-data="map.pluginData" class="venue-map" id="venue-map" ng-class="[{'answer-highlight': occurs_atHighlight}]">
+    </datamap>
+  </div>
+
+  <!-- Papers -->
+  <div class="col-md-4 venue-details">
+    <h3>Papers</h3>
+    <ul class="mini results-list">
+      <li class="no-bullets" ng-repeat="paper in papers | orderBy : 'name' | orderBy : '-citations'">
+        <span ng-class="paper.class"></span><a ng-href="paper/{{paper.id}}" class="list-name">{{paper.name}}</a> <!-- <small class="highlight">({{paper.citations}})</small> -->
+      </li>
+    </ul>
+
+    <h3>Organisations</h3>
+    <ul class="mini results-list">
+      <li ng-if="org.fillKey !== 'EVENT'" ng-repeat="org in bubbles | orderBy : 'name' | orderBy : '-radius'">
+        <a ng-href="organisation/{{org.id}}" class="list-name">{{org.name}}</a> <!-- <small class="highlight">({{org.radius / multiplier}})</small> -->
+      </li>
+    </ul>
+
+    <h3>Authors</h3>
+    <ul class="mini results-list">
+      <li ng-repeat="(id, author) in authors | orderObjectBy : 'count' : '-name'">
+        <a ng-href="author/{{author.id}}" class="list-name">{{author.name}}</a> <!-- <small class="highlight">({{author.count}})</small> -->
+      </li>
+    </ul>
+
+    <h3>Details</h3>
+    <div class="venue-dates">
+      <span>Date: </span><span ng-class="[{'answer-highlight': start_dateHighlight}]">{{startDate}}</span> - <span ng-class="[{'answer-highlight': end_dateHighlight}]">{{endDate}}</span>
+    </div>
+    <a ng-href="{{url}}"><button class="btn view-btn" ng-class="[{'answer-highlight': urlHighlight}]">Website</button></a>
+  </div>
+</div>
+
+<!-- <div class="row">
+  Topics
+  <div class="col-md-10">
+    <div class="panel">
+      <span id="topics-chart"></span>
+    </div>
+  </div>
+
+  Posters
+  <div class="col-md-2">
+    <div class="panel">
+      <h5>Posters</h5>
+    </div>
+  </div>
+</div> -->
