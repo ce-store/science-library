@@ -9,7 +9,7 @@
  */
 angular.module('itapapersApp')
   .service('charts', function () {
-    var getScatterData = function(results) {
+    var getScatterData = function(results, server) {
       var data = results.data;
       var instances = results.instances;
 
@@ -58,6 +58,7 @@ angular.module('itapapersApp')
 
           var profilePicture = results.instances[id].property_values["profile picture"];
           if (profilePicture) {
+            profilePicture[0] = server + profilePicture[0];
             c.picture = profilePicture[0];
             h.picture = profilePicture[0];
           }

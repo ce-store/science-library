@@ -8,7 +8,7 @@
  * Controller of the itapapersApp
  */
 angular.module('itapapersApp')
-  .controller('MainCtrl', ['$scope', '$stateParams', '$location', '$sce', 'store', 'charts', 'debug', 'documentTypes', 'utils', 'csv', 'colours', 'localStorageService', function ($scope, $stateParams, $location, $sce, store, charts, debug, documentTypes, utils, csv, colours, localStorageService) {
+  .controller('MainCtrl', ['$scope', '$stateParams', '$location', '$sce', 'store', 'charts', 'debug', 'documentTypes', 'utils', 'csv', 'colours', 'localStorageService', 'server', function ($scope, $stateParams, $location, $sce, store, charts, debug, documentTypes, utils, csv, colours, localStorageService, server) {
     $scope.listTypes = ['papers', 'authors', 'venues', 'projects', 'organisations', 'co-authors'];
     $scope.listLength = 50;
     $scope.listName = $scope.listTypes[0];
@@ -314,7 +314,7 @@ angular.module('itapapersApp')
           .then(function(results) {
             populateList(results.data, results.instances);
 
-            var opts = charts.getScatterData(results);
+            var opts = charts.getScatterData(results, server);
             drawScatterPlot(opts);
           });
       } else if ($scope.listName === $scope.listTypes[2]) {
@@ -388,7 +388,7 @@ angular.module('itapapersApp')
             var html = "<h2>" + d.name + " <small>(" + d.employer + ")</small></h2>" + "<dl><dt>H-Index</dt><dd>" + d.hIndex + "</dd><dt>Citation Count</dt><dd>" + d.citations + "</dd><dt>ITA Publications</dt><dd>" + d.totalPubs + "</dd></dl>";
 
             if (d.picture) {
-              html += "<img src='/" + d.picture + "' />";
+              html += "<img src='" + d.picture + "' />";
             }
 
             return html;
