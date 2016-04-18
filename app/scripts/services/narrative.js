@@ -1,5 +1,7 @@
 "use strict";
 
+var server = null;
+
 // Link dimensions
 var link_width = 1.8;
 var link_gap = 2;
@@ -681,12 +683,13 @@ function draw_nodes(scenes, svg) {
     // TODO: Show posters on mouseover
     if (d.char_node !== true) {
       //DSB - switch request to open source ce-store (and remove hardcoded localhost)
-      var url = "/ce-store/stores/DEFAULT/instances/" + d.paper;
+      var url = server + "/ce-store/stores/DEFAULT/instances/" + d.paper;
 
       d3.json(url, function(error, data) {
         if (error) {
           throw error;
         }
+
         var title = data.property_values.title[0];
 
         // Remove other titles (overlapping may cause this)
@@ -877,12 +880,14 @@ function draw_links(links, svg) {
     .on("mouseout", mouseout_cb);
 } // draw_links
 
-function drawNarrativeChart(safe_name, tie_breaker, center_sort, collapse, data) {
+function drawNarrativeChart(safe_name, tie_breaker, center_sort, collapse, data, svr) {
   var vals = data.structured_response.main_instance.property_values;
   var rels = data.structured_response.related_instances;
   var i = 0;
 
   var authorMap = {};
+
+  server = svr;
 
   // build character list
   var xchars = [];
@@ -942,13 +947,15 @@ function drawNarrativeChart(safe_name, tie_breaker, center_sort, collapse, data)
     var date;
 
     var year = dateVals.year[0];
-    var month = dateVals.month ? dateVals.month[0] : 0;
-    var day = dateVals.day ? dateVals.day[0] : null;
+    var month = dateVals.month ? dateVals.month[0] : 1;
+    var day = dateVals.day ? dateVals.day[0] : 1;
+
+    //Javascript dates have month numbers starting at 0 but the
+    //value from the ce-store has month numbers starting at 1
+    --month;
 
     if (day) {
-      date = new Date(dateVals.year, month, day);
-    } else {
-      date = new Date(dateVals.year, month);
+      date = new Date(year, month, day);
     }
 
     paperAndDates.push({
@@ -1210,7 +1217,8 @@ function drawNarrativeChart(safe_name, tie_breaker, center_sort, collapse, data)
 
   var xAxis = d3.svg.axis()
     .scale(x)
-    .orient("bottom");
+    .orient("bottom")
+    .tickFormat(d3.time.format("%b %Y"));
 
   var axisLabels = container.append("g")
     .attr("class", "x axis")
