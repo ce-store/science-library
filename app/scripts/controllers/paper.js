@@ -127,43 +127,42 @@ angular.module('itapapersApp')
         $scope.paperClass = utils.getClassName($scope.paperType);
 
         // venue
-        if ($scope.paperType === types[$scope.externalConferenceType] ||
-            $scope.paperType === types[$scope.internalConferenceType]) {
+        if (properties.venue) {
+          var eventId = properties.venue;
+          var event = relatedInstances[eventId];
+          var eventSeriesId = event.property_values['is part of'][0];
+          var eventSeries = relatedInstances[eventSeriesId];
+          var venueYear = properties.venue[0];
+          var venueArr = venueYear.split(" ");
+          $scope.showVenue = true;
+          $scope.venue = {
+            id: eventSeries._id,
+            year: event._id,
+            name: event._id
+          };
 
-          if (properties.venue) {
-            var venueYear = properties.venue[0];
-            var venueArr = venueYear.split(" ");
-            $scope.showVenue = true;
+          // Get venue data
+          var location = relatedInstances[venueYear].property_values["occurs at"];
+          store.getVenue(location)
+            .then(function(data) {
+              var locationVals = data.property_values;
+              var center = {
+                latitude: locationVals.latitude[0],
+                longitude: locationVals.longitude[0]
+              };
 
-            $scope.venue = {
-              id: venueArr[0],
-              year: venueArr[1],
-              name: properties.venue[0]
-            };
+              $scope.map = {
+                center: center,
+                zoom: 8
+              };
+              $scope.marker = {
+                id: data._id,
+                coords: center
+              };
+            });
+        }
 
-            // Get venue data
-            var location = relatedInstances[venueYear].property_values["occurs at"];
-            store.getVenue(location)
-              .then(function(data) {
-                var locationVals = data.property_values;
-                var center = {
-                  latitude: locationVals.latitude[0],
-                  longitude: locationVals.longitude[0]
-                };
-
-                $scope.map = {
-                  center: center,
-                  zoom: 8
-                };
-                $scope.marker = {
-                  id: data._id,
-                  coords: center
-                };
-              });
-          }
-        } else if ($scope.paperType === types[$scope.journalType]) {
-          // do something with journal
-        } else if ($scope.paperType === types[$scope.otherDocumentType]) {
+        if ($scope.paperType === types[$scope.otherDocumentType]) {
           // set type to specific type of other document
           for (var j = 0; j < directConceptNames.length; ++j) {
             if (directConceptNames.indexOf(documentTypes.invitedTalk) > -1) {

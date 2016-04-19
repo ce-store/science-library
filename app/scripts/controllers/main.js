@@ -421,7 +421,7 @@ angular.module('itapapersApp')
           .attr("x", width - 5)
           .attr("y", -6)
           .style("text-anchor", "end")
-          .text("Total ITA Publications");
+          .text("Total (External)");
 
       // y axis
       svg.append("g")

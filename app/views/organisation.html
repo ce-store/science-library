@@ -52,7 +52,7 @@
           <!-- Results list -->
           <ul class="results-list" ng-class="[{'answer-highlight': employsHighlight}]">
             <li ng-repeat="item in employees | limitTo : listLength | orderObjectBy : 'value' : '-name'">
-              <a ng-href="author/{{item.id}}" class="list-name">{{item.name}}</a> <!-- <small ng-show="item.value" class="highlight" uib-tooltip="Total ITA Publications">({{item.value}})</small> -->
+              <a ng-href="author/{{item.id}}" class="list-name">{{item.name}}</a> <!-- <small ng-show="item.value" class="highlight" uib-tooltip="Total External Publications">({{item.value}})</small> -->
             </li>
           </ul>
         </div>
@@ -76,7 +76,7 @@
         <div class="total-publication-count">
           <dl class="dl-horizontal dl-publications" ng-class="[{'answer-highlight': publicationsHighlight}]">
             <div ng-show="totalPublications" ng-class="[{'answer-highlight': total_publication_countHighlight}]">
-              <dt>Total ITA Publications</dt>
+              <dt>Total (External)</dt>
               <dd>{{totalPublications}}</dd>
             </div>
           </dl>
