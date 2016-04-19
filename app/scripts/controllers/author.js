@@ -274,7 +274,7 @@ angular.module('itapapersApp')
                   types: [paperType],
                   venue: paperProps.venue ? paperProps.venue[0] : (paperProps["old venue"] ? paperProps["old venue"][0] : ""),
                   authors: paperProps["original authors string"] ? paperProps["original authors string"][0] : "",
-                    weight: paperProps.weight ? paperProps.weight[0] : -1
+                  weight: paperProps.weight ? paperProps.weight[0] : -1
                 };
               } else {
                 if (maxCitations < paperCitationCount) {
@@ -342,7 +342,7 @@ angular.module('itapapersApp')
 
                 var coAuthorIds = coAuthorStatProps["co-author"];
                 var coAuthorId = coAuthorIds[0] === $scope.authorId ? coAuthorIds[1] : coAuthorIds[0];
-                var coAuthorCount = coAuthorStatProps["co-author count"] ? parseInt(coAuthorStatProps["co-author count"][0], 10) : 0;
+                var coAuthorCount = coAuthorStatProps["co-author count"] ? parseInt(coAuthorStatProps["co-author count"][0], 10) : 1;
                 var coAuthorProps = relatedInstances[coAuthorId].property_values;
                 var coAuthorName = coAuthorProps["full name"] ? coAuthorProps["full name"][0] : unknown;
                 var coAuthorEmployer = coAuthorProps["is employed by"] ? coAuthorProps["is employed by"][0] : unknown;
@@ -374,10 +374,14 @@ angular.module('itapapersApp')
                   }
 
                   if (!found) {
+                    var caCount = 1;
+                    if (coCoAuthorStatProps["co-author count"]) {
+                      caCount = coCoAuthorStatProps["co-author count"][0];
+                    }
                     coCoAuthorStats.push({
                       id: coAuthorCoAuthors[j],
                       authors: coCoAuthorStatProps["co-author"],
-                      count: coCoAuthorStatProps["co-author count"][0]
+                      count: caCount
                     });
                   }
                 }

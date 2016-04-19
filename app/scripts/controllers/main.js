@@ -158,7 +158,7 @@ angular.module('itapapersApp')
           for (j = 0; j < type.length; ++j) {
             className.push(utils.getClassName(type[j]));
 
-            var venue = paperProps.venue ? paperProps.venue[0] : (paperProps["old venue"] ? paperProps["old venue"] : "");
+            var venue = paperProps.venue ? paperProps.venue[0] : (paperProps["old venue"] ? paperProps["old venue"][0] : "");
             var authors = paperProps["original authors string"] ? paperProps["original authors string"][0] : "";
             csvData.push([id, name, citations, type[j], venue, authors]);
           }
