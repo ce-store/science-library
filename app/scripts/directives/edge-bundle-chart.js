@@ -379,7 +379,8 @@
           }
           // remove authors from authors list in paper
           for (i = indexes.length - 1; i >= 0 ; --i) {
-            paper.authors = paper.authors.splice(i, 1);
+            var indexToRemove = indexes[i];
+            paper.authors.splice(indexToRemove, 1);
           }
 
           if (paper.authors.length === 0) {
@@ -448,13 +449,11 @@
             var a1 = auths[i];
             for (var j = i + 1; j < auths.length; j++) {
               var a2 = auths[j];
-              if (a1 > a2) {
-                var b = a2;
-                a2 = a1;
-                a1 = b;
-              }
               linkages[a1] = linkages[a1] || {};
               linkages[a1][a2] = (linkages[a1][a2] || 0) + 1;
+
+              linkages[a2] = linkages[a2] || {};
+              linkages[a2][a1] = (linkages[a2][a1] || 0) + 1;
             }
           }
         });
@@ -476,7 +475,12 @@
         Object.keys(linkages).forEach(function(a1) {
           var coauths = linkages[a1];
           Object.keys(coauths).forEach(function(a2) {
-            links.push({source:authors[a1],target:authors[a2],value:coauths[a2]});
+            var src = authors[a1];
+            var tgt = authors[a2];
+
+            if (src && tgt) {
+              links.push({source:src,target:tgt,value:coauths[a2]});
+            }
           });
         });
 
