@@ -112,6 +112,29 @@ angular.module('itapapersApp')
       }
     }
 
+    function getDataForCompute () {
+      var key = "compute ce query";
+
+      if (localStorageService.isSupported) {
+        var val = localStorageService.get(key + "-" + store);
+
+        if (val) {
+          return $q.when(val);
+        } else {
+          var url = server + "/ce-store/stores/" + store + "/queries/" + key + "/execute?returnInstances=true";
+
+          return $http.get(url)
+            .then(function(response) {
+              localStorageService.set(key + "-" + response);
+
+              return response;
+            }, function(err) {
+              return err;
+            });
+        }
+      }
+    }
+
     function getPublishedPeople () {
       // This isn't working for some reason ???
 
@@ -611,6 +634,7 @@ angular.module('itapapersApp')
     }
 
     return {
+      getDataForCompute: getDataForCompute,
       getAcademicDocuments: getAcademicDocuments,
       getPublishedPeople: getPublishedPeople,
       getEventSeries: getEventSeries,

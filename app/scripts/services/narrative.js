@@ -912,26 +912,28 @@ function drawNarrativeChart(safe_name, tie_breaker, center_sort, collapse, data,
   authorMap[data.structured_response.main_instance._id] = character.id;
   authorIndex[character.id] = data.structured_response.main_instance._id;
 
-  for (i = 0; i < vals["co-author"].length; ++i) {
-    var org = rels[vals["co-author"][i]].property_values["is employed by"];
-    org = org ? org[0] : "unknown";
-    var type;
-    if (rels[org]) {
-      type = rels[org].property_values.type ? rels[org].property_values.type[0] : null;
+  if (vals["co-author"]) {
+    for (i = 0; i < vals["co-author"].length; ++i) {
+      var org = rels[vals["co-author"][i]].property_values["is employed by"];
+      org = org ? org[0] : "unknown";
+      var type;
+      if (rels[org]) {
+        type = rels[org].property_values.type ? rels[org].property_values.type[0] : null;
+      }
+
+      var c = rels[vals["co-author"][i]];
+      var cName = c.property_values["full name"] ? c.property_values["full name"][0] : c._id;
+
+      character = {
+        name: cName,
+        id: i + 1,
+        group: type ? types[type] : types.UNKNOWN
+      };
+
+      xchars.push(character);
+      authorMap[c._id] = character.id;
+      authorIndex[character.id] = c._id;
     }
-
-    var c = rels[vals["co-author"][i]];
-    var cName = c.property_values["full name"] ? c.property_values["full name"][0] : c._id;
-
-    character = {
-      name: cName,
-      id: i + 1,
-      group: type ? types[type] : types.UNKNOWN
-    };
-
-    xchars.push(character);
-    authorMap[c._id] = character.id;
-    authorIndex[character.id] = c._id;
   }
 
   // build narrative

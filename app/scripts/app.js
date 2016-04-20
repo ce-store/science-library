@@ -81,6 +81,11 @@ angular
         url: "/comments?debug",
         templateUrl: "views/comments.html",
         controller: "CommentsCtrl"
+      })
+      .state('compute', {
+        url: "/compute?debug",
+        templateUrl: "views/compute.html",
+        controller: "ComputeCtrl"
       });
 
       // use the HTML5 History API

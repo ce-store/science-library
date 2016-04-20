@@ -251,6 +251,13 @@ td {
   overflow-y: auto;
 }
 
+.ce-list {
+  color: #fff;
+  font-size: 12px;
+  padding-left: 20px;
+  margin: 15px 0;
+}
+
 .no-min-list {
   min-height: 0;
 }
