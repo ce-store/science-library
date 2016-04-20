@@ -112,27 +112,28 @@ angular.module('itapapersApp')
       }
     }
 
-    function getDataForCompute () {
-      var key = "compute ce query";
+    function getDataForCompute (queryName) {
+      var key = null;
 
-      if (localStorageService.isSupported) {
-        var val = localStorageService.get(key + "-" + store);
-
-        if (val) {
-          return $q.when(val);
-        } else {
-          var url = server + "/ce-store/stores/" + store + "/queries/" + key + "/execute?returnInstances=true";
-
-          return $http.get(url)
-            .then(function(response) {
-              localStorageService.set(key + "-" + response);
-
-              return response;
-            }, function(err) {
-              return err;
-            });
-        }
+      if (queryName) {
+        key = queryName;
+      } else {
+        key = "compute ce query";
       }
+
+      var url = server + "/ce-store/stores/" + store + "/queries/" + key + "/execute?returnInstances=true";
+
+      return $http.get(url)
+        .then(function(response) {
+
+          if (response.data.results.length == 0) {
+            return getDataForCompute("compute ce query 2");
+          } else {
+            return response;
+          }
+        }, function(err) {
+          return err;
+        });
     }
 
     function getPublishedPeople () {

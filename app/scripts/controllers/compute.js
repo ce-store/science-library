@@ -467,7 +467,7 @@ angular.module('itapapersApp')
     			  }
     			  
     			  var cc = paper.instances["citation count"][0];
-    			  console.log(cc);
+
     			  if (cc) {
     				  ccTot += parseInt(cc.property_values["citation count"][0] || "0");
     			  }
