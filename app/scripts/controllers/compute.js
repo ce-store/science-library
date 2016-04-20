@@ -8,7 +8,7 @@
  * Controller of the itapapersApp
  */
 angular.module('itapapersApp')
-  .controller('ComputeCtrl', ['$scope', '$stateParams', 'store', 'debug', function ($scope, $stateParams, store, debug) {
+  .controller('ComputeCtrl', ['$scope', '$stateParams', 'store', 'debug', 'server', function ($scope, $stateParams, store, debug, server) {
 
     if ($stateParams.debug) {
       debug.set($stateParams.debug);
@@ -100,8 +100,26 @@ angular.module('itapapersApp')
 
           computeTotals(dates, papers);
           ceForTotals(dates);
+
+          saveCeToStore();
       });
-    
+
+      function saveCeToStore() {
+        var url = server + "/ce-store/stores/DEFAULT/sources/computedCe?showStats=true&action=save";
+        var ce = "";
+
+        for (var i in $scope.computedCe) {
+          ce += $scope.computedCe[i] + "\n\n";
+        }
+
+        $.ajax({
+          type: "POST",
+          url: url,
+          data: ce,
+          contentType: "text/plain;charset=UTF-8"
+        });
+      }
+
       function buildLinks(papers, citations, oas, people, organisations, cas, dates) {
         for (var key in papers) {
           if (papers.hasOwnProperty(key)) {
@@ -699,6 +717,19 @@ angular.module('itapapersApp')
 
           $scope.computedCe.push(ceText);
         }
+      }
+
+      function ceForTotals(dates) {
+        var hdrText = "";
+        hdrText += "-------------\n";
+        hdrText += "-- UI message\n";
+        hdrText += "-------------\n";
+        $scope.computedCe.push(hdrText);
+
+        var ceText = "";
+        ceText += "there is a UI message named 'msg computed' that\n";
+        ceText += "  has 'All data has been computed for the Science Library' as message text.";
+        $scope.computedCe.push(ceText);
       }
 
       var encodeForCe = function(pValue) {

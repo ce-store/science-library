@@ -266,8 +266,27 @@ angular.module('itapapersApp')
     var getData = function() {
       store.getLastUpdated()
         .then(function(response) {
+          var foundComputeMessage = false;
+          var lastUpdatedText = "";
+
           if (response.results.length > 0) {
-            $scope.lastUpdated = response.results[0][1];
+            for (var i in response.results) {
+              var msg = response.results[i];
+
+              if (msg) {
+                if (msg[0] == "msg date") {
+                  lastUpdatedText = msg[1];
+                }
+                if (msg[0] == "msg computed") {
+                  foundComputeMessage = true;
+                }
+              }
+            }
+
+            if (!foundComputeMessage) {
+              lastUpdatedText += " (computed data not yet generated)";
+            }
+            $scope.lastUpdated = lastUpdatedText;
           }
         });
 
