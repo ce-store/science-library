@@ -113,27 +113,18 @@ angular.module('itapapersApp')
     }
 
     function getDataForCompute (queryName) {
-      var key = null;
+      var conNames = "";
 
-      if (queryName) {
-        key = queryName;
-      } else {
-        key = "compute ce query";
-      }
+      conNames += "published person,";
+      conNames += "academic document,";
+      conNames += "co-author statistic,";
+      conNames += "paper citation count,";
+      conNames += "ordered author,";
+      conNames += "published organisation";
 
-      var url = server + "/ce-store/stores/" + store + "/queries/" + key + "/execute?returnInstances=true";
+      var url = server + "/ce-store/stores/" + store + "/special/instances-for-multiple-concepts?conceptNames=" + conNames;
 
-      return $http.get(url)
-        .then(function(response) {
-
-          if (response.data.results.length == 0) {
-            return getDataForCompute("compute ce query 2");
-          } else {
-            return response;
-          }
-        }, function(err) {
-          return err;
-        });
+      return $http.get(url);
     }
 
     function getPublishedPeople () {

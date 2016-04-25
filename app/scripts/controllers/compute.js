@@ -16,10 +16,8 @@ angular.module('itapapersApp')
 
     store.getDataForCompute()
       .then(function(results) {
-          var instances = results.data.instances;
-          var conName = null;
           var papers = {};
-          var oas = {};
+          var oas = {}
           var people = {};
           var organisations = {};
           var citations = {};
@@ -28,59 +26,73 @@ angular.module('itapapersApp')
 
           $scope.computedCe = [];
 
-          for (var key in instances) {
-        	if (instances.hasOwnProperty(key)) {
-        	  var inst = instances[key];
-        	  
-        	  inst.instances = {};
-        	  inst.values = {};
+          for (var i in results.data["academic document"]) {
+            var inst = results.data["academic document"][i];
+            inst.instances = {};
+            inst.values = {};
 
-        	  conName = "academic document";
-              if (((inst.direct_concept_names.indexOf(conName) > -1) || (inst.inherited_concept_names.indexOf(conName)) > -1)) {
-                papers[inst._id] = inst;
-                inst.instances["citation count"] = [];
-                inst.instances["ordered authors"] = [];
-                inst.instances["written by"] = [];
-                inst.values["citation count"] = null;
-                inst.values["original authors string"] = null;
-                inst.values["weight"] = null;
-                inst.values["alternative weight 1"] = null;
-                inst.values["alternative weight 2"] = null;
-                inst.extraTypes = [];
-              }
+            inst.instances["citation count"] = [];
+            inst.instances["ordered authors"] = [];
+            inst.instances["written by"] = [];
+            inst.values["citation count"] = null;
+            inst.values["original authors string"] = null;
+            inst.values["weight"] = null;
+            inst.values["alternative weight 1"] = null;
+            inst.values["alternative weight 2"] = null;
+            inst.extraTypes = [];
 
-              conName = "ordered author";
-              if (((inst.direct_concept_names.indexOf(conName) > -1) || (inst.inherited_concept_names.indexOf(conName)) > -1)) {
-                oas[inst._id] = inst;
-                inst.instances["author person"] = null;
-              }
+            papers[inst._id] = inst;
+          }
 
-              conName = "person";
-              if (((inst.direct_concept_names.indexOf(conName) > -1) || (inst.inherited_concept_names.indexOf(conName)) > -1)) {
-                people[inst._id] = inst;
-                inst.instances["wrote"] = [];
-                inst.instances["is employed by"] = null;
-                inst.values["citation count"] = null;
-                inst.values["h-index"] = null;
-              }
+          for (var i in results.data["ordered author"]) {
+            var inst = results.data["ordered author"][i];
+            inst.instances = {};
+            inst.values = {};
 
-              conName = "organisation";
-              if (((inst.direct_concept_names.indexOf(conName) > -1) || (inst.inherited_concept_names.indexOf(conName)) > -1)) {
-                organisations[inst._id] = inst;
-                inst.instances["employs"] = [];
-              }
+            inst.instances["author person"] = null;
 
-              conName = "paper citation count";
-              if (((inst.direct_concept_names.indexOf(conName) > -1) || (inst.inherited_concept_names.indexOf(conName)) > -1)) {
-                citations[inst._id] = inst;
-              }
+            oas[inst._id] = inst;
+          }
 
-              conName = "co-author statistic";
-              if (((inst.direct_concept_names.indexOf(conName) > -1) || (inst.inherited_concept_names.indexOf(conName)) > -1)) {
-                cas[inst._id] = inst;
-                inst.values["co-author count"] = [];
-              }
-        	}
+          for (var i in results.data["published person"]) {
+            var inst = results.data["published person"][i];
+            inst.instances = {};
+            inst.values = {};
+
+            inst.instances["wrote"] = [];
+            inst.instances["is employed by"] = null;
+            inst.values["citation count"] = null;
+            inst.values["h-index"] = null;
+
+            people[inst._id] = inst;
+          }
+
+          for (var i in results.data["published organisation"]) {
+            var inst = results.data["published organisation"][i];
+            inst.instances = {};
+            inst.values = {};
+
+            inst.instances["employs"] = [];
+
+            organisations[inst._id] = inst;
+          }
+
+          for (var i in results.data["paper citation count"]) {
+              var inst = results.data["paper citation count"][i];
+              inst.instances = {};
+              inst.values = {};
+
+              citations[inst._id] = inst;
+          }
+
+          for (var i in results.data["co-author statistic"]) {
+            var inst = results.data["co-author statistic"][i];
+            inst.instances = {};
+            inst.values = {};
+
+            inst.values["co-author count"] = [];
+
+            cas[inst._id] = inst;
           }
 
           buildLinks(papers, citations, oas, people, organisations, cas, dates);
