@@ -169,7 +169,10 @@ angular.module('itapapersApp')
 
             if (ccInst) {
               paper.instances["citation count"].push(ccInst);
-              paper.values["citation count"] = ccInst.property_values["citation count"][0] || 0;
+              paper.values["citation count"] = 0;
+              if (ccInst.property_values["citation count"]) {
+                paper.values["citation count"] = ccInst.property_values["citation count"][0] || 0;
+              }
             } else {
               console.log("No ccInst for " + paper._id);
             }
@@ -303,18 +306,22 @@ angular.module('itapapersApp')
             for (var i in authors) {
               var person = authors[i];
               var org = person.instances["is employed by"];
-              var type = org.property_values["type"][0];
-              
+              var type = null;
+
+              if (org.property_values["type"]) {
+                type = org.property_values["type"][0];
+              }
+
               if (types.indexOf(type) == -1) {
-            	  types.push(type);
+            	types.push(type);
               }
               
               if (person.direct_concept_names.indexOf("ITA person") > -1) {
-            	  weight += 100;
-            	  altWeight1 += 100;
-            	  altWeight2 += 100;
+            	weight += 100;
+            	altWeight1 += 100;
+            	altWeight2 += 100;
               } else {
-            	  altweight2 -= 100;
+                altWeight2 -= 100;
               }
             }
           }
@@ -360,7 +367,11 @@ angular.module('itapapersApp')
 
               for (var i in allOrgs) {
                 var org = allOrgs[i];
-                var country = org.property_values["is affiliated to"][0];
+                var country = null;
+
+                if (org.property_values["is affiliated to"]) {
+                  country = org.property_values["is affiliated to"][0];
+                }
 
                 //Remove this if/when countries other than US and UK will be counted
                 if ((country == "UK") || (country == "US")) {

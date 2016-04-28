@@ -171,7 +171,10 @@ angular.module('itapapersApp')
                 name: relatedEmployer._id
               };
             }
-            $scope.type = relatedEmployer.property_values.type[0];
+
+            if (relatedEmployer.property_values.type) {
+              $scope.type = relatedEmployer.property_values.type[0];
+            }
           }
         }
 
@@ -236,91 +239,93 @@ angular.module('itapapersApp')
         // papers
         $scope.papersList = [];
         var documentMap = {};
-        for (i = 0; i < properties.wrote.length; ++i) {
-          var paperId = properties.wrote[i];
-          var paper = relatedInstances[paperId];
-          var paperType = utils.getType(paper.direct_concept_names);
-          var paperProps = paper.property_values;
-          var citationId = paperProps["citation count"];
-          var paperCitationCount = 0;
+        if (properties.wrote) {
+          for (i = 0; i < properties.wrote.length; ++i) {
+            var paperId = properties.wrote[i];
+            var paper = relatedInstances[paperId];
+            var paperType = utils.getType(paper.direct_concept_names);
+            var paperProps = paper.property_values;
+            var citationId = paperProps["citation count"];
+            var paperCitationCount = 0;
 
-          if (!documentMap[paperId]) {
-            var variantFound = false;
-            var maxCitations = 0;
+            if (!documentMap[paperId]) {
+              var variantFound = false;
+              var maxCitations = 0;
 
-            // find max variant
-            if (paperProps.variant) {
-              for (j = 0; j < paperProps.variant.length; ++j) {
-                var variantId = paperProps.variant[j];
+              // find max variant
+              if (paperProps.variant) {
+                for (j = 0; j < paperProps.variant.length; ++j) {
+                  var variantId = paperProps.variant[j];
 
-                if (documentMap[variantId]) {
-                  maxCitations = documentMap[variantId].citations > maxCitations ? documentMap[variantId].citations : maxCitations;
-                  variantFound = variantId;
+                  if (documentMap[variantId]) {
+                    maxCitations = documentMap[variantId].citations > maxCitations ? documentMap[variantId].citations : maxCitations;
+                    variantFound = variantId;
+                  }
                 }
               }
-            }
 
-            if (citationId) {
-              var citationProps = relatedInstances[citationId].property_values;
+              if (citationId) {
+                var citationProps = relatedInstances[citationId].property_values;
 
-              // set citation count in map
-              paperCitationCount = citationProps["citation count"] ? parseInt(citationProps["citation count"][0], 10) : 0;
-              if (!variantFound) {
-                documentMap[paperId] = {
-                  citations: paperCitationCount,
-                  index: i,
-                  title: paperProps.title ? paperProps.title[0] : unknown,
-                  noteworthy: paperProps["noteworthy reason"] ? paperProps["noteworthy reason"][0] : null,
-                  types: [paperType],
-                  venue: paperProps.venue ? paperProps.venue[0] : (paperProps["old venue"] ? paperProps["old venue"][0] : ""),
-                  authors: paperProps["original authors string"] ? paperProps["original authors string"][0] : "",
-                  weight: paperProps.weight ? paperProps.weight[0] : -1
-                };
-              } else {
-                if (maxCitations < paperCitationCount) {
-                  var variantTypes = documentMap[variantFound].types.slice();
-                  documentMap[variantFound] = null;
+                // set citation count in map
+                paperCitationCount = citationProps["citation count"] ? parseInt(citationProps["citation count"][0], 10) : 0;
+                if (!variantFound) {
                   documentMap[paperId] = {
                     citations: paperCitationCount,
                     index: i,
                     title: paperProps.title ? paperProps.title[0] : unknown,
                     noteworthy: paperProps["noteworthy reason"] ? paperProps["noteworthy reason"][0] : null,
-                    types: [paperType].concat(variantTypes),
+                    types: [paperType],
                     venue: paperProps.venue ? paperProps.venue[0] : (paperProps["old venue"] ? paperProps["old venue"][0] : ""),
                     authors: paperProps["original authors string"] ? paperProps["original authors string"][0] : "",
                     weight: paperProps.weight ? paperProps.weight[0] : -1
                   };
                 } else {
-                  documentMap[variantFound].types.push(paperType);
+                  if (maxCitations < paperCitationCount) {
+                    var variantTypes = documentMap[variantFound].types.slice();
+                    documentMap[variantFound] = null;
+                    documentMap[paperId] = {
+                      citations: paperCitationCount,
+                      index: i,
+                      title: paperProps.title ? paperProps.title[0] : unknown,
+                      noteworthy: paperProps["noteworthy reason"] ? paperProps["noteworthy reason"][0] : null,
+                      types: [paperType].concat(variantTypes),
+                      venue: paperProps.venue ? paperProps.venue[0] : (paperProps["old venue"] ? paperProps["old venue"][0] : ""),
+                      authors: paperProps["original authors string"] ? paperProps["original authors string"][0] : "",
+                      weight: paperProps.weight ? paperProps.weight[0] : -1
+                    };
+                  } else {
+                    documentMap[variantFound].types.push(paperType);
+                  }
                 }
               }
             }
           }
-        }
 
-        // recreate array - test for index to remove duplicate citations
-        for (i = 0; i < properties.wrote.length; ++i) {
-          var thisPaperId = properties.wrote[i];
-          var thisPaper = documentMap[thisPaperId];
+          // recreate array - test for index to remove duplicate citations
+          for (i = 0; i < properties.wrote.length; ++i) {
+            var thisPaperId = properties.wrote[i];
+            var thisPaper = documentMap[thisPaperId];
 
-          if (thisPaper && thisPaper.index === i) {
-            var paperItem = {
-              id: thisPaperId,
-              name: thisPaper.title,
-              noteworthy: thisPaper.noteworthy,
-              citations: thisPaper.citations,
-              type: utils.sortTypes(thisPaper.types),
-              venue: thisPaper.venue,
-              authors: thisPaper.authors,
-              class: [],
-              weight: thisPaper.weight
-            };
+            if (thisPaper && thisPaper.index === i) {
+              var paperItem = {
+                id: thisPaperId,
+                name: thisPaper.title,
+                noteworthy: thisPaper.noteworthy,
+                citations: thisPaper.citations,
+                type: utils.sortTypes(thisPaper.types),
+                venue: thisPaper.venue,
+                authors: thisPaper.authors,
+                class: [],
+                weight: thisPaper.weight
+              };
 
-            for (j = 0; j < paperItem.type.length; ++j) {
-              paperItem.class.push(utils.getClassName(paperItem.type[j]));
+              for (j = 0; j < paperItem.type.length; ++j) {
+                paperItem.class.push(utils.getClassName(paperItem.type[j]));
+              }
+
+              $scope.papersList.push(paperItem);
             }
-
-            $scope.papersList.push(paperItem);
           }
         }
 
@@ -348,7 +353,9 @@ angular.module('itapapersApp')
                 var coAuthorEmployer = coAuthorProps["is employed by"] ? coAuthorProps["is employed by"][0] : unknown;
                 var coAuthorType;
                 if (coAuthorEmployer !== unknown) {
-                  coAuthorType = relatedInstances[coAuthorEmployer].property_values.type[0];
+                  if (relatedInstances[coAuthorEmployer].property_values.type) {
+                    coAuthorType = relatedInstances[coAuthorEmployer].property_values.type[0];
+                  }
                 } else {
                   coAuthorType = unknown;
                 }

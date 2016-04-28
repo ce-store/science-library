@@ -215,9 +215,15 @@ angular.module('itapapersApp')
                   }
 
                   // get date properties
-                  var dateId = paperProps["final date"][0];
-                  var month = relatedInstances[dateId].property_values.month;
-                  var year = relatedInstances[dateId].property_values.year;
+                  var dateId = null;
+                  var month = null;
+                  var year = null;
+
+                  if (paperProps["final date"]) {
+                    dateId = paperProps["final date"][0];
+                    month = relatedInstances[dateId].property_values.month
+                    year = relatedInstances[dateId].property_values.year
+                  }
 
                   if (!month) {
                     month = '1';

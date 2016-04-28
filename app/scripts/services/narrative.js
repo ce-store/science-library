@@ -943,27 +943,31 @@ function drawNarrativeChart(safe_name, tie_breaker, center_sort, collapse, data,
 
   var paperAndDates = [];
 
-  for (i = 0; i < vals.wrote.length; ++i) {
-    var paperDate = rels[vals.wrote[i]].property_values["final date"][0];
-    var dateVals = rels[paperDate].property_values;
-    var date;
+  if (vals.wrote) {
+	for (i = 0; i < vals.wrote.length; ++i) {
+      if (rels[vals.wrote[i]].property_values["final date"]) {
+        var paperDate = rels[vals.wrote[i]].property_values["final date"][0];
+        var dateVals = rels[paperDate].property_values;
+        var date;
 
-    var year = dateVals.year[0];
-    var month = dateVals.month ? dateVals.month[0] : 1;
-    var day = dateVals.day ? dateVals.day[0] : 1;
+        var year = dateVals.year[0];
+        var month = dateVals.month ? dateVals.month[0] : 1;
+        var day = dateVals.day ? dateVals.day[0] : 1;
 
-    //Javascript dates have month numbers starting at 0 but the
-    //value from the ce-store has month numbers starting at 1
-    --month;
+        //Javascript dates have month numbers starting at 0 but the
+        //value from the ce-store has month numbers starting at 1
+        --month;
 
-    if (day) {
-      date = new Date(year, month, day);
+        if (day) {
+          date = new Date(year, month, day);
+        }
+
+        paperAndDates.push({
+          date: date,
+          paper: vals.wrote[i]
+        });
+      }
     }
-
-    paperAndDates.push({
-      date: date,
-      paper: vals.wrote[i]
-    });
   }
 
   var sortDatesAsc = function (obj1, obj2) {
@@ -979,374 +983,377 @@ function drawNarrativeChart(safe_name, tie_breaker, center_sort, collapse, data,
     }
   };
 
-  paperAndDates.sort(sortDatesAsc);
+  if (paperAndDates[0]) {
+    paperAndDates.sort(sortDatesAsc);
 
-  var offset = paperAndDates[0].date.getTime() / 1000000000;
-  var nextTimestamp;
+    var offset = paperAndDates[0].date.getTime() / 1000000000;
+    var nextTimestamp;
 
-  for (i = 0; i < paperAndDates.length; ++i) {
-    var currentTimestamp = paperAndDates[i].date.getTime() / 1000000000 - offset;
-    if (paperAndDates[i + 1]) {
-      nextTimestamp = paperAndDates[i + 1].date.getTime() / 1000000000 - offset;
-    } else {
-      nextTimestamp = currentTimestamp;
+    for (i = 0; i < paperAndDates.length; ++i) {
+      var currentTimestamp = paperAndDates[i].date.getTime() / 1000000000 - offset;
+      if (paperAndDates[i + 1]) {
+        nextTimestamp = paperAndDates[i + 1].date.getTime() / 1000000000 - offset;
+      } else {
+        nextTimestamp = currentTimestamp;
+      }
+
+      var scene = {
+        chars: [],
+        duration: nextTimestamp - currentTimestamp,
+        start: currentTimestamp,
+        paper: paperAndDates[i].paper,
+        id: i
+      };
+
+      var paperVals = rels[paperAndDates[i].paper].property_values;
+
+      for (var j = 0; j < paperVals.author.length; ++j) {
+        var authorVals = rels[paperVals.author[j]].property_values;
+        var authorId = authorVals["author person"];
+
+        if (authorId) {
+          scene.chars.push(authorMap[authorId]);
+        }
+      }
+
+      narrative.scenes.push(scene);
     }
 
-    var scene = {
-      chars: [],
-      duration: nextTimestamp - currentTimestamp,
-      start: currentTimestamp,
-      paper: paperAndDates[i].paper,
-      id: i
+    // draw
+    var margin = {
+      top: 20,
+      right: 100,
+      bottom: 20,
+      left: 1
+    };
+    var width = raw_chart_width - margin.left - margin.right;
+
+    var jscenes = narrative.scenes;
+    // This calculation is only relevant for equal_scenes = true
+    var scene_width = (width - longest_name) / (jscenes.length + 1);
+
+    var total_panels = 0;
+    var scenes = [];
+    for (i = 0; i < jscenes.length; i++) {
+      var duration = parseInt(jscenes[i].duration, 10);
+      var start;
+      if (equal_scenes) {
+        start = i * scene_width + longest_name;
+      } else {
+        start = parseInt(jscenes[i].start, 10);
+      }
+      var chars = jscenes[i].chars;
+      //if (chars.length == 0) continue;
+      scenes[scenes.length] = new SceneNode(jscenes[i].chars,
+        start, duration,
+        parseInt(jscenes[i].id, 10), jscenes[i].paper);
+      scenes[scenes.length - 1].comic_name = safe_name;
+      total_panels += duration;
+    } // for
+
+    if (scenes[0]) {
+      scenes.sort(function(a, b) {
+        return a.start - b.start;
+      });
+      total_panels -= scenes[scenes.length - 1].duration;
+      scenes[scenes.length - 1].duration = 0;
+    }
+
+    // Make space at the leftmost end of the chart for character names
+    //var total_panels = parseInt(j['panels']);
+    var panel_width = Math.min((width - longest_name) / total_panels, 15);
+    var panel_shift = Math.round(longest_name / panel_width);
+    total_panels += panel_shift;
+    panel_width = Math.min(width / total_panels, 15);
+
+    // Calculate chart height based on the number of characters
+    // TODO: Redo this calculation
+    //var raw_chart_height = xchars.length*(link_width + link_gap + group_gap);// - (link_gap + group_gap);
+    var raw_chart_height = 700;
+    var height = raw_chart_height - margin.top - margin.bottom;
+
+    // Drag & zoom
+    function zoomed() {
+      var x = d3.event.translate[0];
+      var y = d3.event.translate[1] + drag_offset;
+      container.attr("transform", "translate(" + [x, y] + ")scale(" + d3.event.scale + ")");
+    }
+
+    function dragstarted( ) {
+      d3.event.sourceEvent.stopPropagation();
+      d3.select(this).classed("dragging", true);
+    }
+
+    function dragged(d) {
+      d3.select(this)
+        .attr("cx", d.x = d3.event.x)
+        .attr("cy", d.y = d3.event.y);
+    }
+
+    function dragended(d) {
+      d3.select(this).classed("dragging", false);
+    }
+
+    var zoom = d3.behavior.zoom()
+        .scaleExtent([0, 10])
+        .on("zoom", zoomed);
+
+    var drag = d3.behavior.drag()
+        .origin(function(d) { return d; })
+        .on("dragstart", dragstarted)
+        .on("drag", dragged)
+        .on("dragend", dragended);
+
+    var svg = d3.select("#narrative-chart").append("svg")
+        .attr("width", "100%")
+        .attr("height", "100%")
+        .attr("class", "chart")
+        .attr("id", safe_name)
+      .append("g")
+        .call(zoom);
+
+    var rect = svg.append("rect")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .attr("class", "chart")
+        .style("fill", "none")
+        .style("pointer-events", "all");
+
+    var container = svg.append("g")
+        .attr("id", "narrative-container")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")scale(1)");
+
+    var charsArr = [];
+    var char_map = []; // maps id to pointer
+    for (i = 0; i < xchars.length; i++) {
+      charsArr[charsArr.length] = new Character_(xchars[i].name, xchars[i].id, xchars[i].group);
+      char_map[xchars[i].id] = charsArr[charsArr.length - 1];
+    }
+
+    var groups = define_groups(charsArr);
+    find_median_groups(groups, scenes, charsArr, char_map, tie_breaker);
+    groups = sort_groups_main(groups, center_sort);
+
+    var links = generate_links(charsArr, scenes);
+    var char_scenes = add_char_scenes(charsArr, scenes, links, groups, panel_shift, safe_name);
+
+
+    // Determine the position of each character in each group
+    // (if it ever appears in the scenes that appear in that
+    // group)
+    groups.forEach(function(g) {
+      g.all_chars.sort(function(a, b) {
+        return a.group_ptr.order - b.group_ptr.order;
+      });
+      var y = g.min;
+      for (var i = 0; i < g.all_chars.length; i++) {
+        if (g.all_chars[i]) {
+          g.all_chars[i].group_positions[g.id] = y + i * (text_height);
+        }
+      }
+    });
+
+
+    calculate_node_positions(charsArr, scenes, total_panels,
+      width, height, char_scenes, groups, panel_width,
+      panel_shift, char_map);
+
+
+    scenes.forEach(function(s) {
+      if (!s.char_node) {
+        var first_scenes = [];
+
+        s.in_links.forEach(function(l) {
+          if (l.from.char_node) {
+            first_scenes[first_scenes.length] = l.from;
+          }
+        });
+
+        for (var i = 0; i < first_scenes.length; i++) {
+          first_scenes[i].y = s.y + s.height / 2.0 + i * text_height;
+        }
+      }
+    });
+
+    // Determining the y-positions of the names (i.e. the char scenes)
+    // if the appear at the beginning of the chart
+    char_scenes.forEach(function(cs) {
+
+      var character = char_map[cs.chars[0]];
+      if (character.first_scene.x < per_width * width) {
+        // The median group of the first scene in which the character appears
+        // We want the character's name to appear in that group
+        var first_group = character.first_scene.median_group;
+        cs.y = character.group_positions[first_group.id];
+      }
+    });
+
+    calculate_link_positions(scenes, charsArr, groups, char_map);
+
+    height = groups[groups.length - 1].max + group_gap * 5;
+    raw_chart_height = height + margin.top + margin.bottom;
+
+    draw_links(links, container);
+    draw_nodes(scenes, container);
+
+    // chart elements
+    var narrativeChart = document.getElementById("narrative-chart");
+    var narrativeContainer = document.getElementById("narrative-container");
+
+    // axis
+    var t1 = paperAndDates[0].date,
+        t2 = paperAndDates[paperAndDates.length - 1].date,
+        t0 = d3.time.month.offset(t1, -1),
+        t3 = d3.time.month.offset(t2, +1);
+
+    var containerWidth = narrativeContainer.getBoundingClientRect().width;
+    var axisWidth;
+    var rotateAxis = false;
+
+    if (raw_chart_width > containerWidth) {
+      axisWidth = containerWidth;
+      rotateAxis = true;
+    } else {
+      axisWidth = raw_chart_width;
+    }
+
+    var x = d3.time.scale()
+      .domain([t0, t3])
+      .range([t0, t3].map(d3.time.scale()
+        .domain([t1, t2])
+        .range([0, axisWidth - 160])));
+
+    var xAxis = d3.svg.axis()
+      .scale(x)
+      .orient("bottom")
+      .tickFormat(d3.time.format("%b %Y"));
+
+    var axisLabels = container.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(" + (longest_name + 20) + "," + (height + margin.top) + ")")
+      .call(xAxis)
+    .selectAll("text")
+      .attr("y", 6)
+      .attr("x", 6)
+      .style("text-anchor", "start");
+
+    if (rotateAxis) {
+      axisLabels
+        .attr("y", 0)
+        .attr("x", 9)
+        .attr("dy", ".35em")
+        .attr("transform", "rotate(90)");
+    }
+
+    // calculate scale
+    var chartRect = narrativeChart.getBoundingClientRect();
+    var containerRect = narrativeContainer.getBoundingClientRect();
+    var containerRectWidth = containerRect.width;
+
+    if (containerRectWidth < 200) {
+      containerRectWidth = containerRectWidth * 2;
+    }
+
+    var scale = (chartRect.width - 140) / containerRectWidth;
+    var chartHeight = chartRect.height - 100;
+    var containerHeight = containerRect.height;
+
+    if (scale < 1) {
+      scale = chartHeight/containerHeight;
+
+      if (scale > 1) {
+        scale = 1;
+      }
+    }
+
+    // apply scale
+    container.attr("transform", "translate(" + margin.left + "," + margin.top + ")scale(" + scale + ")");
+    zoom.scale(scale);
+
+    // adjust offset
+    chartRect = narrativeChart.getBoundingClientRect();
+    containerRect = narrativeContainer.getBoundingClientRect();
+
+    chartHeight = chartRect.height;
+    containerHeight = containerRect.height;
+
+    if (containerHeight < chartHeight) {
+      var diff = chartHeight - containerHeight;
+      drag_offset = diff / 2;
+    }
+
+    var leftOffset = 0;
+    if (containerRect.width < chartRect.width) {
+      var leftDiff = chartRect.width - 140 - containerRect.width;
+      leftOffset = leftDiff / 2;
+    }
+
+    container.attr("transform", "translate(" + (margin.left + leftOffset) + "," + (margin.top + drag_offset) + ")scale(" + scale + ")");
+
+    function toggleListView() {
+      var narrative = d3.select("#narrative-chart");
+      var papers = d3.select("#papers-list");
+      var toggle = d3.select(".toggle-button");
+
+      if (narrative[0][0].getAttribute("class").indexOf("hidden") > -1) {
+        narrative.attr("class", "panel");
+        papers.attr("class", "hidden panel");
+        toggle.text("List view");
+      } else {
+        narrative.attr("class", "hidden panel");
+        papers.attr("class", "panel");
+        toggle.text("Narrative view");
+      }
+    }
+
+    // draw toggle
+    var toggle = d3.select("#toggle-box").append("svg")
+      .attr("id", "toggle")
+      .on("click", toggleListView);
+
+    var g = toggle.append("g");
+
+    g.append("text")
+      .attr("class", "toggle-button")
+      .text("List view");
+
+    // draw paper title box
+    var titleBox = d3.select("#narrative-chart").append("svg")
+      .attr("id", "paper-title-box");
+
+    g = titleBox.append("g")
+      .attr("id", "title-box")
+      .attr("transform", "translate(0, 10)");
+
+    g.append("text")
+      .attr("class", "paper-title-placeholder")
+      .text("Hover over a paper");
+
+    // draw legend
+    var legend = d3.select("#narrative-chart").append("svg")
+      .attr("class", "narrative-legend");
+
+    var industryMap = {
+      "IND": "Industry",
+      "AC":  "Academia",
+      "GOV": "Government"
     };
 
-    var paperVals = rels[paperAndDates[i].paper].property_values;
+    i = 0;
+    for (var t in types) {
+      if (types.hasOwnProperty(t)) {
+        g = legend.append("g");
 
-    for (var j = 0; j < paperVals.author.length; ++j) {
-      var authorVals = rels[paperVals.author[j]].property_values;
-      var authorId = authorVals["author person"];
+        g.append("rect")
+          .attr("fill", color[types[t]])
+          .attr("class", "legend-key")
+          .attr("transform", "translate(" + 10 + "," + (i * 15) + ")");
+        g.append("text")
+          .attr("transform", "translate(" + 30 + "," + (i * 15 + 8) + ")")
+          .text(industryMap[t]);
 
-      if (authorId) {
-        scene.chars.push(authorMap[authorId]);
+        i++;
       }
-    }
-
-    narrative.scenes.push(scene);
-  }
-
-  // draw
-  var margin = {
-    top: 20,
-    right: 100,
-    bottom: 20,
-    left: 1
-  };
-  var width = raw_chart_width - margin.left - margin.right;
-
-  var jscenes = narrative.scenes;
-  // This calculation is only relevant for equal_scenes = true
-  var scene_width = (width - longest_name) / (jscenes.length + 1);
-
-  var total_panels = 0;
-  var scenes = [];
-  for (i = 0; i < jscenes.length; i++) {
-    var duration = parseInt(jscenes[i].duration, 10);
-    var start;
-    if (equal_scenes) {
-      start = i * scene_width + longest_name;
-    } else {
-      start = parseInt(jscenes[i].start, 10);
-    }
-    var chars = jscenes[i].chars;
-    //if (chars.length == 0) continue;
-    scenes[scenes.length] = new SceneNode(jscenes[i].chars,
-      start, duration,
-      parseInt(jscenes[i].id, 10), jscenes[i].paper);
-    scenes[scenes.length - 1].comic_name = safe_name;
-    total_panels += duration;
-  } // for
-
-  scenes.sort(function(a, b) {
-    return a.start - b.start;
-  });
-  total_panels -= scenes[scenes.length - 1].duration;
-  scenes[scenes.length - 1].duration = 0;
-
-
-  // Make space at the leftmost end of the chart for character names
-  //var total_panels = parseInt(j['panels']);
-  var panel_width = Math.min((width - longest_name) / total_panels, 15);
-  var panel_shift = Math.round(longest_name / panel_width);
-  total_panels += panel_shift;
-  panel_width = Math.min(width / total_panels, 15);
-
-  // Calculate chart height based on the number of characters
-  // TODO: Redo this calculation
-  //var raw_chart_height = xchars.length*(link_width + link_gap + group_gap);// - (link_gap + group_gap);
-  var raw_chart_height = 700;
-  var height = raw_chart_height - margin.top - margin.bottom;
-
-  // Drag & zoom
-  function zoomed() {
-    var x = d3.event.translate[0];
-    var y = d3.event.translate[1] + drag_offset;
-    container.attr("transform", "translate(" + [x, y] + ")scale(" + d3.event.scale + ")");
-  }
-
-  function dragstarted( ) {
-    d3.event.sourceEvent.stopPropagation();
-    d3.select(this).classed("dragging", true);
-  }
-
-  function dragged(d) {
-    d3.select(this)
-      .attr("cx", d.x = d3.event.x)
-      .attr("cy", d.y = d3.event.y);
-  }
-
-  function dragended(d) {
-    d3.select(this).classed("dragging", false);
-  }
-
-  var zoom = d3.behavior.zoom()
-      .scaleExtent([0, 10])
-      .on("zoom", zoomed);
-
-  var drag = d3.behavior.drag()
-      .origin(function(d) { return d; })
-      .on("dragstart", dragstarted)
-      .on("drag", dragged)
-      .on("dragend", dragended);
-
-  var svg = d3.select("#narrative-chart").append("svg")
-      .attr("width", "100%")
-      .attr("height", "100%")
-      .attr("class", "chart")
-      .attr("id", safe_name)
-    .append("g")
-      .call(zoom);
-
-  var rect = svg.append("rect")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-      .attr("class", "chart")
-      .style("fill", "none")
-      .style("pointer-events", "all");
-
-  var container = svg.append("g")
-      .attr("id", "narrative-container")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")scale(1)");
-
-  var charsArr = [];
-  var char_map = []; // maps id to pointer
-  for (i = 0; i < xchars.length; i++) {
-    charsArr[charsArr.length] = new Character_(xchars[i].name, xchars[i].id, xchars[i].group);
-    char_map[xchars[i].id] = charsArr[charsArr.length - 1];
-  }
-
-  var groups = define_groups(charsArr);
-  find_median_groups(groups, scenes, charsArr, char_map, tie_breaker);
-  groups = sort_groups_main(groups, center_sort);
-
-  var links = generate_links(charsArr, scenes);
-  var char_scenes = add_char_scenes(charsArr, scenes, links, groups, panel_shift, safe_name);
-
-
-  // Determine the position of each character in each group
-  // (if it ever appears in the scenes that appear in that
-  // group)
-  groups.forEach(function(g) {
-    g.all_chars.sort(function(a, b) {
-      return a.group_ptr.order - b.group_ptr.order;
-    });
-    var y = g.min;
-    for (var i = 0; i < g.all_chars.length; i++) {
-      if (g.all_chars[i]) {
-        g.all_chars[i].group_positions[g.id] = y + i * (text_height);
-      }
-    }
-  });
-
-
-  calculate_node_positions(charsArr, scenes, total_panels,
-    width, height, char_scenes, groups, panel_width,
-    panel_shift, char_map);
-
-
-  scenes.forEach(function(s) {
-    if (!s.char_node) {
-      var first_scenes = [];
-
-      s.in_links.forEach(function(l) {
-        if (l.from.char_node) {
-          first_scenes[first_scenes.length] = l.from;
-        }
-      });
-
-      for (var i = 0; i < first_scenes.length; i++) {
-        first_scenes[i].y = s.y + s.height / 2.0 + i * text_height;
-      }
-    }
-  });
-
-  // Determining the y-positions of the names (i.e. the char scenes)
-  // if the appear at the beginning of the chart
-  char_scenes.forEach(function(cs) {
-
-    var character = char_map[cs.chars[0]];
-    if (character.first_scene.x < per_width * width) {
-      // The median group of the first scene in which the character appears
-      // We want the character's name to appear in that group
-      var first_group = character.first_scene.median_group;
-      cs.y = character.group_positions[first_group.id];
-    }
-  });
-
-  calculate_link_positions(scenes, charsArr, groups, char_map);
-
-  height = groups[groups.length - 1].max + group_gap * 5;
-  raw_chart_height = height + margin.top + margin.bottom;
-
-  draw_links(links, container);
-  draw_nodes(scenes, container);
-
-  // chart elements
-  var narrativeChart = document.getElementById("narrative-chart");
-  var narrativeContainer = document.getElementById("narrative-container");
-
-  // axis
-  var t1 = paperAndDates[0].date,
-      t2 = paperAndDates[paperAndDates.length - 1].date,
-      t0 = d3.time.month.offset(t1, -1),
-      t3 = d3.time.month.offset(t2, +1);
-
-  var containerWidth = narrativeContainer.getBoundingClientRect().width;
-  var axisWidth;
-  var rotateAxis = false;
-
-  if (raw_chart_width > containerWidth) {
-    axisWidth = containerWidth;
-    rotateAxis = true;
-  } else {
-    axisWidth = raw_chart_width;
-  }
-
-  var x = d3.time.scale()
-    .domain([t0, t3])
-    .range([t0, t3].map(d3.time.scale()
-      .domain([t1, t2])
-      .range([0, axisWidth - 160])));
-
-  var xAxis = d3.svg.axis()
-    .scale(x)
-    .orient("bottom")
-    .tickFormat(d3.time.format("%b %Y"));
-
-  var axisLabels = container.append("g")
-    .attr("class", "x axis")
-    .attr("transform", "translate(" + (longest_name + 20) + "," + (height + margin.top) + ")")
-    .call(xAxis)
-  .selectAll("text")
-    .attr("y", 6)
-    .attr("x", 6)
-    .style("text-anchor", "start");
-
-  if (rotateAxis) {
-    axisLabels
-      .attr("y", 0)
-      .attr("x", 9)
-      .attr("dy", ".35em")
-      .attr("transform", "rotate(90)");
-  }
-
-  // calculate scale
-  var chartRect = narrativeChart.getBoundingClientRect();
-  var containerRect = narrativeContainer.getBoundingClientRect();
-  var containerRectWidth = containerRect.width;
-
-  if (containerRectWidth < 200) {
-    containerRectWidth = containerRectWidth * 2;
-  }
-
-  var scale = (chartRect.width - 140) / containerRectWidth;
-  var chartHeight = chartRect.height - 100;
-  var containerHeight = containerRect.height;
-
-  if (scale < 1) {
-    scale = chartHeight/containerHeight;
-
-    if (scale > 1) {
-      scale = 1;
-    }
-  }
-
-  // apply scale
-  container.attr("transform", "translate(" + margin.left + "," + margin.top + ")scale(" + scale + ")");
-  zoom.scale(scale);
-
-  // adjust offset
-  chartRect = narrativeChart.getBoundingClientRect();
-  containerRect = narrativeContainer.getBoundingClientRect();
-
-  chartHeight = chartRect.height;
-  containerHeight = containerRect.height;
-
-  if (containerHeight < chartHeight) {
-    var diff = chartHeight - containerHeight;
-    drag_offset = diff / 2;
-  }
-
-  var leftOffset = 0;
-  if (containerRect.width < chartRect.width) {
-    var leftDiff = chartRect.width - 140 - containerRect.width;
-    leftOffset = leftDiff / 2;
-  }
-
-  container.attr("transform", "translate(" + (margin.left + leftOffset) + "," + (margin.top + drag_offset) + ")scale(" + scale + ")");
-
-  function toggleListView() {
-    var narrative = d3.select("#narrative-chart");
-    var papers = d3.select("#papers-list");
-    var toggle = d3.select(".toggle-button");
-
-    if (narrative[0][0].getAttribute("class").indexOf("hidden") > -1) {
-      narrative.attr("class", "panel");
-      papers.attr("class", "hidden panel");
-      toggle.text("List view");
-    } else {
-      narrative.attr("class", "hidden panel");
-      papers.attr("class", "panel");
-      toggle.text("Narrative view");
-    }
-  }
-
-  // draw toggle
-  var toggle = d3.select("#toggle-box").append("svg")
-    .attr("id", "toggle")
-    .on("click", toggleListView);
-
-  var g = toggle.append("g");
-
-  g.append("text")
-    .attr("class", "toggle-button")
-    .text("List view");
-
-  // draw paper title box
-  var titleBox = d3.select("#narrative-chart").append("svg")
-    .attr("id", "paper-title-box");
-
-  g = titleBox.append("g")
-    .attr("id", "title-box")
-    .attr("transform", "translate(0, 10)");
-
-  g.append("text")
-    .attr("class", "paper-title-placeholder")
-    .text("Hover over a paper");
-
-  // draw legend
-  var legend = d3.select("#narrative-chart").append("svg")
-    .attr("class", "narrative-legend");
-
-  var industryMap = {
-    "IND": "Industry",
-    "AC":  "Academia",
-    "GOV": "Government"
-  };
-
-  i = 0;
-  for (var t in types) {
-    if (types.hasOwnProperty(t)) {
-      g = legend.append("g");
-
-      g.append("rect")
-        .attr("fill", color[types[t]])
-        .attr("class", "legend-key")
-        .attr("transform", "translate(" + 10 + "," + (i * 15) + ")");
-      g.append("text")
-        .attr("transform", "translate(" + 30 + "," + (i * 15 + 8) + ")")
-        .text(industryMap[t]);
-
-      i++;
     }
   }
 }
