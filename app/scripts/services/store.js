@@ -122,7 +122,7 @@ angular.module('itapapersApp')
       conNames += "ordered author,";
       conNames += "published organisation";
 
-      var url = server + "/ce-store/stores/" + store + "/special/instances-for-multiple-concepts?conceptNames=" + conNames;
+      var url = server + "/ce-store/stores/" + store + "/special/instances-for-multiple-concepts?conceptNames=" + conNames + '&style=summary';
 
       return $http.get(url);
     }
