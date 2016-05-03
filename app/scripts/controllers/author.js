@@ -219,11 +219,11 @@ angular.module('itapapersApp')
           // citation count && h-index
           var url = citationCount.url ? citationCount.url[0] : null;
 
-//DSB - change to use ITA h-index and citation count for consistency (url link still goes to google)
+//DSB - change to use local h-index and citation count for consistency (url link still goes to google)
 //          var count = citationCount["citation count"] ? citationCount["citation count"][0] : 0;
 //          var hIndex = citationCount["h-index"] ? citationCount["h-index"][0] : 0;
-          var count = properties["ita citation count"] ? properties["ita citation count"][0] : 0;
-          var hIndex = properties["ita h-index"] ? properties["ita h-index"][0] : 0;
+          var count = properties["local citation count"] ? properties["local citation count"][0] : 0;
+          var hIndex = properties["local h-index"] ? properties["local h-index"][0] : 0;
 
           $scope.citationCount = {
             url: url,

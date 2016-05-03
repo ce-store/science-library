@@ -168,8 +168,8 @@ angular.module('itapapersApp')
           citationProps = instances[data[i][1]].property_values;
 
           name = data[i][3];
-          citations = personProps["ita citation count"] ? parseInt(personProps["ita citation count"][0], 10) : 0;
-          hIndex = personProps["ita h-index"] ? parseInt(personProps["ita h-index"][0], 10) : 0;
+          citations = personProps["local citation count"] ? parseInt(personProps["local citation count"][0], 10) : 0;
+          hIndex = personProps["local h-index"] ? parseInt(personProps["local h-index"][0], 10) : 0;
 
           var journals = personProps["journal paper count"] ? parseInt(personProps["journal paper count"][0], 10) : 0;
           var conferences = personProps["conference paper count"] ? parseInt(personProps["conference paper count"][0], 10) : 0;
@@ -291,7 +291,7 @@ angular.module('itapapersApp')
         });
 
       if ($scope.listName === $scope.listTypes[0]) {
-        store.getAcademicDocuments()
+        store.getDocuments()
           .then(function(results) {
             populateList(results.data, results.instances);
 

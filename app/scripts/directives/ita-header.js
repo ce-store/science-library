@@ -57,11 +57,11 @@ angular.module('itapapersApp')
 
           var matchType = function (type) {
             if (type === "paper") {
-              return "academic document";
+              return "document";
             } else if (type === "venue") {
               return "event series";
             } else if (type === "project") {
-              return "ITA project";
+              return "project";
             } else if (type === "author") {
               return "person";
             } else {

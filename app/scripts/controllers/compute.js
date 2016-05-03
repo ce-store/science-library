@@ -17,6 +17,7 @@ angular.module('itapapersApp')
     store.getDataForCompute()
       .then(function(results) {
           var papers = {};
+          var external_papers = {}
           var oas = {}
           var people = {};
           var organisations = {};
@@ -26,8 +27,8 @@ angular.module('itapapersApp')
 
           $scope.computedCe = [];
 
-          for (var i in results.data["academic document"]) {
-            var inst = results.data["academic document"][i];
+          for (var i in results.data["document"]) {
+            var inst = results.data["document"][i];
             inst.instances = {};
             inst.values = {};
 
@@ -42,6 +43,10 @@ angular.module('itapapersApp')
             inst.extraTypes = [];
 
             papers[inst._id] = inst;
+
+            if ((inst.direct_concept_names.indexOf("external document") > -1) || (inst.inherited_concept_names.indexOf("external document") > -1)) {
+                external_papers[inst._id] = inst;
+            }
           }
 
           for (var i in results.data["ordered author"]) {
@@ -110,7 +115,7 @@ angular.module('itapapersApp')
           ceForDocumentTypes(papers);
           ceForCoauthorCounts(cas);
 
-          computeTotals(dates, papers);
+          computeTotals(dates, external_papers);
           ceForTotals(dates);
 
           ceForUiMessage(dates);
@@ -510,7 +515,7 @@ angular.module('itapapersApp')
             if (paper.extraTypes.indexOf("an international document") > -1) {
               ++iCount;
             }
-            if (paper.inherited_concept_names.indexOf("government document") > -1) {
+            if (paper.direct_concept_names.indexOf("government document") > -1) {
               ++gCount;
             }
             if (paper.direct_concept_names.indexOf("journal document") > -1) {
@@ -618,7 +623,7 @@ angular.module('itapapersApp')
       function ceForDocumentOriginalAuthors(papers) {
         var hdrText = "";
         hdrText += "--------------------------------------------\n";
-        hdrText += "-- academic document:original authors string\n";
+        hdrText += "-- document:original authors string\n";
         hdrText += "--------------------------------------------\n";
         $scope.computedCe.push(hdrText);
 
@@ -628,7 +633,7 @@ angular.module('itapapersApp')
             var authList = paper.values["original authors string"];
 
             var ceText = "";
-            ceText += "the academic document '" + encodeForCe(paperId) + "'\n";
+            ceText += "the document '" + encodeForCe(paperId) + "'\n";
             ceText += "  has '" + encodeForCe(authList) + "' as original authors string.";
 
             $scope.computedCe.push(ceText);
@@ -639,7 +644,7 @@ angular.module('itapapersApp')
       function ceForPersonCitations(people) {
         var hdrText = "";
         hdrText += "---------------------------------------------------\n";
-        hdrText += "-- published person:ita citation count, ita h-index\n";
+        hdrText += "-- published person:local citation count, local h-index\n";
         hdrText += "---------------------------------------------------\n";
         $scope.computedCe.push(hdrText);
 
@@ -651,8 +656,8 @@ angular.module('itapapersApp')
 
             var ceText = "";
             ceText += "the published person '" + encodeForCe(person._id) + "'\n";
-            ceText += "  has '" + encodeForCe(cc) + "' as ita citation count and\n";
-            ceText += "  has '" + encodeForCe(h) + "' as ita h-index.";
+            ceText += "  has '" + encodeForCe(cc) + "' as local citation count and\n";
+            ceText += "  has '" + encodeForCe(h) + "' as local h-index.";
 
             $scope.computedCe.push(ceText);
           }
@@ -662,7 +667,7 @@ angular.module('itapapersApp')
       function ceForDocumentWeights(papers) {
         var hdrText = "";
           hdrText += "-----------------------------------------------------------------------\n";
-          hdrText += "-- academic document:weight, alternative weight 1, alternative weight 2\n";
+          hdrText += "-- document:weight\n";
           hdrText += "-----------------------------------------------------------------------\n";
         $scope.computedCe.push(hdrText);
 
@@ -671,10 +676,8 @@ angular.module('itapapersApp')
             var paper = papers[paperId];
             var ceText = "";
 
-            ceText += "the academic document '" + encodeForCe(paper._id) + "'\n";
-            ceText += "  has '" + encodeForCe(paper.values["weight"]) + "' as weight and\n";
-            ceText += "  has '" + encodeForCe(paper.values["alternative weight 1"]) + "' as alternative weight 1 and\n"
-            ceText += "  has '" + encodeForCe(paper.values["alternative weight 2"]) + "' as alternative weight 2.";
+            ceText += "the document '" + encodeForCe(paper._id) + "'\n";
+            ceText += "  has '" + encodeForCe(paper.values["weight"]) + "' as weight.";
 
             $scope.computedCe.push(ceText);
           }
@@ -693,7 +696,7 @@ angular.module('itapapersApp')
           var ceText = "";
           var firstTime = true;
 
-          ceText = "the academic document '" + encodeForCe(paper._id) + "'\n";
+          ceText = "the document '" + encodeForCe(paper._id) + "'\n";
 
           for (var typeId in paper.extraTypes) {
             var extraType = paper.extraTypes[typeId];

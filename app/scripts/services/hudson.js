@@ -12,12 +12,12 @@ angular.module('itapapersApp')
     var questions = [];
     var url = server + '/ITAHudson/QuestionAnalyser?debug=true';
     var types = {
-      academicDocument: 'academic document',
+      document: 'document',
       person: 'person',
       event: 'event',
       eventSeries: 'event series',
       organisation: 'organisation',
-      project: 'ITA project'
+      project: 'project'
     };
 
     var saveQuestion = function(question, type, property) {
@@ -41,7 +41,7 @@ angular.module('itapapersApp')
     };
 
     var hasUsefulConceptName = function (instance) {
-      return instance.direct_concept_names.indexOf(types.academicDocument) > -1 ||
+      return instance.direct_concept_names.indexOf(types.document) > -1 ||
         instance.direct_concept_names.indexOf(types.person) > -1 ||
         instance.direct_concept_names.indexOf(types.eventSeries) > -1 ||
         instance.direct_concept_names.indexOf(types.event) > -1 ||
@@ -52,7 +52,7 @@ angular.module('itapapersApp')
     var getUrl = function(type, instance) {
       var url;
 
-      if (type === types.academicDocument) {
+      if (type === types.document) {
         url = '/paper/' + instance._id;
       } else if (type === types.person) {
         url = '/author/' + instance._id;
@@ -85,8 +85,8 @@ angular.module('itapapersApp')
           console.log('prop name: ' + propertyName);
           console.log('domain name: ' + domainName);
 
-          if (domainName.indexOf(types.academicDocument) > -1) {
-            type = types.academicDocument;
+          if (domainName.indexOf(types.document) > -1) {
+            type = types.document;
           } else if (domainName.indexOf(types.person) > -1) {
             type = types.person;
           } else if (domainName.indexOf(types.eventSeries) > -1) {
@@ -139,7 +139,7 @@ angular.module('itapapersApp')
 
         if (instance) {
           // get url
-          if (instance.direct_concept_names.indexOf(types.academicDocument) > -1) {
+          if (instance.direct_concept_names.indexOf(types.document) > -1) {
             url = '/paper/' + instance._id;
           } else if (instance.direct_concept_names.indexOf(types.person) > -1) {
             url = '/author/' + instance._id;

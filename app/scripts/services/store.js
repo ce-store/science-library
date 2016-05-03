@@ -87,8 +87,8 @@ angular.module('itapapersApp')
       return filteredData;
     }
 
-    function getAcademicDocuments () {
-      var key = "academic document citations";
+    function getDocuments () {
+      var key = "document citations";
 
       if (localStorageService.isSupported) {
         var val = localStorageService.get(key + "-" + store);
@@ -116,7 +116,7 @@ angular.module('itapapersApp')
       var conNames = "";
 
       conNames += "published person,";
-      conNames += "academic document,";
+      conNames += "document,";
       conNames += "co-author statistic,";
       conNames += "paper citation count,";
       conNames += "ordered author,";
@@ -470,7 +470,7 @@ angular.module('itapapersApp')
     }
 
     function getPersonDocument () {
-      var key = "person -> academic document";
+      var key = "person -> document";
 
       if (localStorageService.isSupported) {
         var val = localStorageService.get(key + "-" + store);
@@ -493,7 +493,7 @@ angular.module('itapapersApp')
     }
 
     function getDocumentDetails () {
-      var key = "academic document details";
+      var key = "document details";
 
       if (localStorageService.isSupported) {
         var val = localStorageService.get(key + "-" + store);
@@ -627,7 +627,7 @@ angular.module('itapapersApp')
 
     return {
       getDataForCompute: getDataForCompute,
-      getAcademicDocuments: getAcademicDocuments,
+      getDocuments: getDocuments,
       getPublishedPeople: getPublishedPeople,
       getEventSeries: getEventSeries,
       getProjects: getProjects,

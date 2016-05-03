@@ -27,8 +27,8 @@ angular.module('itapapersApp')
           var orgProps = instances[data[i][2]].property_values;
 
           var id = data[i][0];
-          var citations = personProps["ita citation count"] ? personProps["ita citation count"][0] : 0;
-          var hIndex = personProps["ita h-index"] ? personProps["ita h-index"][0] : 0;
+          var citations = personProps["local citation count"] ? personProps["local citation count"][0] : 0;
+          var hIndex = personProps["local h-index"] ? personProps["local h-index"][0] : 0;
           var industry = orgProps.type ? orgProps.type[0] : "Unknown";
 
           var journals = personProps["journal paper count"] ? parseInt(personProps["journal paper count"][0], 10) : 0;

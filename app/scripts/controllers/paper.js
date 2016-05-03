@@ -293,7 +293,7 @@ angular.module('itapapersApp')
       if (abstractText !== null) {
       	  //DSB - switch request to open source ce-store
           var url = server + "/ce-store/stores/DEFAULT/sources/generalCeForm?showStats=true&action=save";
-          var ce = "the academic document '" + $stateParams.paperId + "' has '" + encodeForCe(abstractText) + "' as abstract.";
+          var ce = "the document '" + $stateParams.paperId + "' has '" + encodeForCe(abstractText) + "' as abstract.";
           $scope.abstract = abstractText;
           console.log(ce);
 
@@ -319,7 +319,7 @@ angular.module('itapapersApp')
           "\n  has '" + formattedDate + "' as date checked and" +
           "\n  has '" + citationCount + "' as citation count.";
 
-        var paperCe = "\n\nthe academic document '" + $stateParams.paperId + "'" +
+        var paperCe = "\n\nthe document '" + $stateParams.paperId + "'" +
           "\n  has the paper citation count 'citation:" + $stateParams.paperId + "-01' as citation count.";
 
         $scope.citationCount = {
