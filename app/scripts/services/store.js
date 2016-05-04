@@ -120,7 +120,9 @@ angular.module('itapapersApp')
       conNames += "co-author statistic,";
       conNames += "paper citation count,";
       conNames += "ordered author,";
-      conNames += "published organisation";
+      conNames += "published organisation,";
+      conNames += "topic-person statistic,";
+      conNames += "topic-organisation statistic";
 
       var url = server + "/ce-store/stores/" + store + "/special/instances-for-multiple-concepts?conceptNames=" + conNames + '&style=summary';
 

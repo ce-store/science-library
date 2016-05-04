@@ -23,6 +23,8 @@ angular.module('itapapersApp')
           var organisations = {};
           var citations = {};
           var cas = {};
+          var tps = {};
+          var tos = {};
           var dates = {};
 
           $scope.computedCe = [];
@@ -100,6 +102,26 @@ angular.module('itapapersApp')
             cas[inst._id] = inst;
           }
 
+          for (var i in results.data["topic-person statistic"]) {
+            var inst = results.data["topic-person statistic"][i];
+            inst.instances = {};
+            inst.values = {};
+
+            inst.values["paper count"] = [];
+
+            tps[inst._id] = inst;
+          }
+
+          for (var i in results.data["topic-organisation statistic"]) {
+            var inst = results.data["topic-organisation statistic"][i];
+            inst.instances = {};
+            inst.values = {};
+
+            inst.values["paper count"] = [];
+
+            tos[inst._id] = inst;
+          }
+
           buildLinks(papers, citations, oas, people, organisations, cas, dates);
 
           computeDocumentOriginalAuthors(papers);
@@ -108,12 +130,16 @@ angular.module('itapapersApp')
           computeDocumentWeights(papers, people, organisations);
           computeDocumentTypes(papers);
           computeCoauthorCounts(cas, people);
+          computeTopicPersonCounts(tps);
+          computeTopicOrganisationCounts(tos);
 
           ceForDocumentOriginalAuthors(papers);
           ceForPersonCitations(people);
           ceForDocumentWeights(papers);
           ceForDocumentTypes(papers);
           ceForCoauthorCounts(cas);
+          ceForTopicPersonCounts(tps);
+          ceForTopicOrganisationCounts(tos);
 
           computeTotals(dates, external_papers);
           ceForTotals(dates);
@@ -440,6 +466,26 @@ angular.module('itapapersApp')
         }
       }
 
+      function computeTopicPersonCounts(tps) {
+        for (var tpsId in tps) {
+          if (tps.hasOwnProperty(tpsId)) {
+            var tp = tps[tpsId];
+
+            tp.values["paper count"] = tp.property_values["document"].length;
+          }
+        }
+      }
+
+      function computeTopicOrganisationCounts(tos) {
+        for (var tosId in tos) {
+          if (tos.hasOwnProperty(tosId)) {
+            var to = tos[tosId];
+
+            to.values["paper count"] = to.property_values["document"].length;
+          }
+        }
+      }
+
       function computeTotals(dates, papers) {
         var allItaAuthors = [];
         var allNonItaAuthors = [];
@@ -715,22 +761,58 @@ angular.module('itapapersApp')
       }
 
       function ceForCoauthorCounts(cas) {
-          var hdrText = "";
-          hdrText += "--------------------------------------\n";
-          hdrText += "-- co-author statistic:co-author count\n";
-          hdrText += "--------------------------------------\n";
-          $scope.computedCe.push(hdrText);
+        var hdrText = "";
+        hdrText += "--------------------------------------\n";
+        hdrText += "-- co-author statistic:co-author count\n";
+        hdrText += "--------------------------------------\n";
+        $scope.computedCe.push(hdrText);
 
-          for (var i in cas) {
-            var ca = cas[i];
-            var ceText = "";
+        for (var i in cas) {
+          var ca = cas[i];
+          var ceText = "";
 
-            ceText += "the co-author statistic '" + encodeForCe(ca._id) + "'\n";
-            ceText += "  has '" + ca.values["co-author count"] + "' as co-author count.";
+          ceText += "the co-author statistic '" + encodeForCe(ca._id) + "'\n";
+          ceText += "  has '" + ca.values["co-author count"] + "' as co-author count.";
 
-            $scope.computedCe.push(ceText);
-          }
+          $scope.computedCe.push(ceText);
         }
+      }
+
+      function ceForTopicPersonCounts(tps) {
+        var hdrText = "";
+        hdrText += "-------------------------------------\n";
+        hdrText += "-- topic-person statistic:paper count\n";
+        hdrText += "-------------------------------------\n";
+        $scope.computedCe.push(hdrText);
+
+        for (var i in tps) {
+          var tp = tps[i];
+          var ceText = "";
+
+          ceText += "the topic-person statistic '" + encodeForCe(tp._id) + "'\n";
+          ceText += "  has '" + tp.values["paper count"] + "' as paper count.";
+
+          $scope.computedCe.push(ceText);
+        }
+      }
+
+      function ceForTopicOrganisationCounts(tos) {
+        var hdrText = "";
+        hdrText += "-------------------------------------------\n";
+        hdrText += "-- topic-organisation statistic:paper count\n";
+        hdrText += "-------------------------------------------\n";
+        $scope.computedCe.push(hdrText);
+
+        for (var i in tos) {
+          var to = tos[i];
+          var ceText = "";
+
+          ceText += "the topic-organisation statistic '" + encodeForCe(to._id) + "'\n";
+          ceText += "  has '" + to.values["paper count"] + "' as paper count.";
+
+          $scope.computedCe.push(ceText);
+        }
+      }
 
       function ceForTotals(dates) {
         var hdrText = "";
