@@ -518,10 +518,10 @@ angular.module('itapapersApp')
             if (paper.direct_concept_names.indexOf("government document") > -1) {
               ++gCount;
             }
-            if (paper.direct_concept_names.indexOf("journal document") > -1) {
+            if (paper.direct_concept_names.indexOf("journal paper") > -1) {
               ++jCount;
             }
-            if (paper.direct_concept_names.indexOf("external conference document") > -1) {
+            if (paper.direct_concept_names.indexOf("external conference paper") > -1) {
               ++ecCount;
             }
             if (paper.direct_concept_names.indexOf("patent") > -1) {

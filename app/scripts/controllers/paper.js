@@ -14,7 +14,7 @@ angular.module('itapapersApp')
     $scope.internalConferenceType = documentTypes.internal;
     $scope.technicalReportType = documentTypes.technical;
     $scope.otherDocumentType = documentTypes.other;
-    $scope.conferenceType = "conference document";
+    $scope.conferenceType = "conference paper";
 
     var lastHighlight = null;
     var types = documentTypes.nameMap;

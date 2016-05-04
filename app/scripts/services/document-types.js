@@ -9,10 +9,10 @@
  */
 angular.module('itapapersApp')
   .constant('documentTypes', {
-    journal: "journal document",
-    external: "external conference document",
+    journal: "journal paper",
+    external: "external conference paper",
     patent: "patent",
-    internal: "internal conference document",
+    internal: "internal conference paper",
     technical: "technical report",
     other: "other document",
     invitedTalk: "invited talk",
@@ -23,10 +23,10 @@ angular.module('itapapersApp')
     softwareAsset: "software asset",
     demonstration: "demonstration",
     nameMap: {
-      "journal document": "Journal",
-      "external conference document": "External Conference",
+      "journal paper": "Journal",
+      "external conference paper": "External Conference",
       "patent": "Patent",
-      "internal conference document": "Internal Conference",
+      "internal conference paper": "Internal Conference",
       "technical report": "Technical Report",
       "other document": "Other Document",
       "invited talk": "Invited Talk",
