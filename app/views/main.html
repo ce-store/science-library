@@ -6,7 +6,7 @@
 
   <div class="row">
     <div class="list-view">
-      <div ng-show="listName === listTypes[0]">
+      <div ng-show="listName === listTypes.papers">
         <div class="col-md-8">
           <top-header></top-header>
 
@@ -84,7 +84,7 @@
       </div>
 
       <!-- Author list -->
-      <div ng-show="listName === listTypes[1]">
+      <div ng-show="listName === listTypes.authors">
         <div class="col-md-3">
           <top-header></top-header>
 
@@ -111,7 +111,7 @@
       </div>
 
       <!-- Venue list -->
-      <div ng-show="listName === listTypes[2]">
+      <div ng-show="listName === listTypes.venues">
         <div class="col-md-12">
           <top-header></top-header>
 
@@ -124,7 +124,7 @@
       </div>
 
       <!-- Projects list -->
-      <!-- <div ng-show="listName === listTypes[3]">
+      <!-- <div ng-show="listName === listTypes.projects">
         <div class="col-md-12">
           <top-header></top-header>
 
@@ -142,7 +142,7 @@
       </div> -->
 
       <!-- Organisation list -->
-      <div ng-show="listName === listTypes[4]">
+      <div ng-show="listName === listTypes.orgs">
         <div class="col-md-12">
           <top-header></top-header>
           <h3 class="floating-header header-extension">
@@ -187,7 +187,7 @@
       </div>
 
       <!-- Co-authors list -->
-      <div ng-if="listName === listTypes[5]">
+      <div ng-if="listName === listTypes.coauthors">
         <div>
           <top-header></top-header>
 

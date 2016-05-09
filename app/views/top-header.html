@@ -7,7 +7,7 @@
     </a>
     <ul class="uib-dropdown-menu" aria-labelledby="simple-dropdown">
       <li role="menuitem" ng-repeat="type in listTypes">
-        <a ng-show="type !== listTypes[3]" href="#" ng-click="select(type)">{{type | capitalise}}</a>
+        <a ng-show="type !== listTypes.projects" href="#" ng-click="select(type)">{{type | capitalise}}</a>
       </li>
     </ul>
   </span>
