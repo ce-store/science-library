@@ -685,12 +685,13 @@ td {
 }
 
 #chart-svg .axis text.label {
-  fill: #000;
+  fill: #fff;
 }
 
 .axis text {
   font-family: "Helvetica", sans-serif;
   font-weight: lighter;
+  fill: #fff;
 }
 
 .axis line, .axis path {
@@ -700,18 +701,22 @@ td {
 }
 
 .scatter-axis line {
-  stroke: #f0f0f0;
+  stroke: #26343F;
 }
 
 .scatter-legend {
-  stroke: #e0e0e0;
+  stroke: #a0a0a0;
   stroke-width: 1;
+  fill: #22394a;
+}
+
+.legend text {
   fill: #fff;
 }
 
 .d3-tip {
   padding: 12px;
-  background: #fff;
+  background: #26343F;
   border: 1px solid #a0a0a0;
   width: 290px;
 }
@@ -729,7 +734,7 @@ td {
 
 .d3-tip:after {
   border-color: rgba(255, 255, 255, 0);
-  border-top-color: #fff;
+  border-top-color: #26343F;
   border-width: 10px;
   margin-left: -10px;
 }
@@ -740,13 +745,22 @@ td {
   margin-left: -11px;
 }
 
+.d3-tip h2 {
+  color: #fff;
+}
+
+.d3-tip h2 small {
+  color: #a0a0a0;
+}
+
 .d3-tip dl {
   width: 180px;
   float: left;
+  font-size: 12px;
 }
 
 .d3-tip dt {
-  color: #000;
+  color: #fff;
   font-weight: lighter;
   width: 120px;
   float: left;
@@ -1029,6 +1043,8 @@ body > pre {
   height: 700px;
   width: calc(100% - 100px);
   margin-left: 50px;
+  background: transparent;
+  padding: 0;
 }
 
 .narrative-legend {
@@ -1040,6 +1056,12 @@ body > pre {
   height: 65px;
   width: 120px;
   border: 1px solid #a1a1a1;
+  background: #22394a;
+}
+
+.narrative-legend text {
+  fill: #fff;
+  font-weight: lighter;
 }
 
 .legend-key {
@@ -1077,7 +1099,6 @@ body > pre {
 
 svg {
   font: 10px sans-serif;
-  background: white;
 }
 
 sup, sub {
@@ -1086,14 +1107,13 @@ sup, sub {
 
 .scene {
   cursor: pointer;
-  fill-opacity: .15;
-  color: #787878;
+  fill-opacity: .3;
+  fill: #fff;
   shape-rendering: auto;
 }
 
 .scene:hover {
   fill-opacity: 0.6;
-  color: #FFFF00;
 }
 
 .node {
@@ -1102,8 +1122,10 @@ sup, sub {
 
 .node text {
   pointer-events: none;
-  text-shadow: 1px 1px #fff;
+  text-shadow: 1px 1px #000;
+  fill: #fff;
   font-size: 10px;
+  font-weight: lighter;
 }
 
 .link {
@@ -1130,18 +1152,23 @@ sup, sub {
   left: 80px;
   top: 15px;
   padding: 10px;
-  height: 35px;
+  height: 30px;
   width: calc(100% - 295px);
-  border: 1px solid #a1a1a1;
+  border-bottom: 1px solid #a1a1a1;
+  fill: #fff;
+  background: #22394a;
 }
 
 .paper-title {
   font-size: 14px;
+  font-weight: lighter;
 }
 
 .paper-title-placeholder {
   font-size: 14px;
   opacity: 0.5;
+  font-style: italic;
+  font-weight: lighter;
 }
 
 p.step {

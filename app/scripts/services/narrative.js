@@ -781,8 +781,8 @@ function draw_nodes(scenes, svg) {
       })
       .attr("height", 7.5)
       .attr("transform", null)
-      .attr("fill", "#fff")
-      .style("opacity", 1);
+      // .attr("fill", "#fff")
+      .style("opacity", 0);
   }
 
   // TODO: Append something to show type of paper - too busy?

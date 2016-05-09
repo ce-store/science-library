@@ -428,7 +428,7 @@ angular.module('itapapersApp')
       svg.append("rect")
           .attr("width", width)
           .attr("height", height)
-          .attr("fill", "#fff");
+          .attr("fill", "#22394a");
 
       // x axis
       svg.append("g")
