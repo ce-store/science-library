@@ -944,7 +944,7 @@ function drawNarrativeChart(safe_name, tie_breaker, center_sort, collapse, data,
   var paperAndDates = [];
 
   if (vals.wrote) {
-	for (i = 0; i < vals.wrote.length; ++i) {
+  for (i = 0; i < vals.wrote.length; ++i) {
       if (rels[vals.wrote[i]].property_values["final date"]) {
         var paperDate = rels[vals.wrote[i]].property_values["final date"][0];
         var dateVals = rels[paperDate].property_values;
