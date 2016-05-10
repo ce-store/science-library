@@ -401,6 +401,27 @@ angular.module('itapapersApp')
       }
     }
 
+    function getTopic (topic) {
+      if (localStorageService.isSupported) {
+        var val = localStorageService.get(topic);
+
+        if (val) {
+          return $q.when(val);
+        } else {
+          //DSB - switch request to open source ce-store
+          var url = server + "/ce-store/stores/" + store + "/instances/" + topic + "?style=summary&referringInstances=false&steps=3&limitRelationships=topic%20statistic,person,document,citation%20count";
+
+          return $http.get(url)
+            .then(function(response) {
+              localStorageService.set(topic, response.data);
+              return response.data;
+            }, function(err) {
+              return err;
+            });
+        }
+      }
+    }
+
     // Not used
     function getOrganisationPublications () {
       var key = "organisation publications";
@@ -662,6 +683,7 @@ angular.module('itapapersApp')
       getPaper: getPaper,
       getVenue: getVenue,
       getOrganisation: getOrganisation,
+      getTopic: getTopic,
       getOrganisationPublications: getOrganisationPublications,
       getOrganisationDetails: getOrganisationDetails,
       getPersonDetails: getPersonDetails,

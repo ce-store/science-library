@@ -36,5 +36,13 @@ angular.module('itapapersApp')
       "workshop": "Workshop",
       "software asset": "Software Asset",
       "demonstration": "Demonstration"
+    },
+    typeMap: {
+      "Journal": "journal",
+      "External Conference": "external",
+      "Patent": "patent",
+      "Internal Conference": "internal",
+      "Technical Report": "technical",
+      "Other Document": "other"
     }
   });

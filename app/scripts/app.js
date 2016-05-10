@@ -57,6 +57,11 @@ angular
         templateUrl: "views/organisation.html",
         controller: "OrganisationCtrl"
       })
+      .state('topic', {
+        url: "/topic/:topicId?debug",
+        templateUrl: "views/topic.html",
+        controller: "TopicCtrl"
+      })
       .state('project', {
         url: "/project/:projectId?debug",
         templateUrl: "views/project.html",
