@@ -17,6 +17,7 @@ angular.module('itapapersApp')
       event: 'event',
       eventSeries: 'event series',
       organisation: 'organisation',
+      topic: 'topic',
       project: 'project'
     };
 
@@ -46,6 +47,7 @@ angular.module('itapapersApp')
         instance.direct_concept_names.indexOf(types.eventSeries) > -1 ||
         instance.direct_concept_names.indexOf(types.event) > -1 ||
         instance.direct_concept_names.indexOf(types.organisation) > -1 ||
+        instance.direct_concept_names.indexOf(types.topic) > -1 ||
         instance.direct_concept_names.indexOf(types.project) > -1;
     };
 
@@ -149,6 +151,8 @@ angular.module('itapapersApp')
             url = '/venue/' + instance.property_values['is part of'][0] + '/' + instance._id;
           } else if (instance.direct_concept_names.indexOf(types.organisation) > -1) {
             url = '/organisation/' + instance._id;
+          } else if (instance.direct_concept_names.indexOf(types.topic) > -1) {
+            url = '/topic/' + instance._id;
           } else if (instance.direct_concept_names.indexOf(types.project) > -1) {
             url = '/project/' + instance._id;
           }

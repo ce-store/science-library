@@ -9,7 +9,7 @@
  */
 angular.module('itapapersApp')
   .controller('TopicCtrl', ['$scope', '$stateParams', 'store', 'debug', 'hudson', 'documentTypes', 'utils', 'csv', function ($scope, $stateParams, store, debug, hudson, documentTypes, utils, csv) {
-    $scope.views = ['papers', 'authors'];
+    $scope.views = ['papers', 'authors', 'organisations'];
     $scope.currentView = $scope.views[0];
     $scope.journalType = documentTypes.journal;
     $scope.externalConferenceType = documentTypes.external;
@@ -85,9 +85,16 @@ angular.module('itapapersApp')
     elem = angular.element("#authors-results-list .results-list");
     elem.css("height", "calc(100% - 50px)");
 
+    // set height of organisations list
+    elem = angular.element("#orgs-results-list");
+    elem.css("height", height + "px");
+    elem.css("max-height", height + "px");
+
+    elem = angular.element("#orgs-results-list .results-list");
+    elem.css("height", "calc(100% - 50px)");
+
     store.getTopic($stateParams.topicId)
       .then(function(data) {
-        console.log(data);
         var properties = data.main_instance.property_values;
         var relatedInstances = data.related_instances;
         var documentMap = {};
@@ -110,6 +117,8 @@ angular.module('itapapersApp')
 
         // Sort through documents to find variants
         $scope.authors = [];
+        $scope.organisations = [];
+        var topicProps;
         for (var id in relatedInstances) {
           var instance = relatedInstances[id];
 
@@ -162,8 +171,8 @@ angular.module('itapapersApp')
                 }
               }
             }
-          } else if (instance.direct_concept_names.indexOf("topic statistic") > -1) {
-            var topicProps = instance.property_values;
+          } else if (instance.direct_concept_names.indexOf("topic-person statistic") > -1) {
+            topicProps = instance.property_values;
             var author = topicProps.person ? topicProps.person[0] : unknown;
             var authorDocs = topicProps.document.length;
 
@@ -171,9 +180,23 @@ angular.module('itapapersApp')
               var authorProps = relatedInstances[author].property_values;
 
               $scope.authors.push({
-                id: id,
+                id: author,
                 name: authorProps["full name"] ? authorProps["full name"][0] : id,
                 papers: authorDocs
+              });
+            }
+          } else if (instance.direct_concept_names.indexOf("topic-organisation statistic") > -1) {
+            topicProps = instance.property_values;
+            var org = topicProps.organisation ? topicProps.organisation[0] : unknown;
+            var orgDocs = topicProps.document.length;
+
+            if (org !== unknown) {
+              var orgProps = relatedInstances[org].property_values;
+
+              $scope.organisations.push({
+                id: org,
+                name: orgProps["name"] ? orgProps["name"][0] : id,
+                papers: orgDocs
               });
             }
           }
@@ -211,6 +234,7 @@ angular.module('itapapersApp')
 
           $scope.publications.push(paperItem);
         }
+        $scope.paperCounts.total = $scope.paperCounts.journal + $scope.paperCounts.external + $scope.paperCounts.patent;
 
         // Set up pie chart data
         $scope.pieData = [{

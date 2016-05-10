@@ -3,7 +3,7 @@
     <!-- Description -->
     <p class="center">
       <span ng-class="[{'answer-highlight': nameHighlight}]">{{name | capitaliseFirst}}</span>
-      <span ng-if="markers" class="highlight">({{markers}})</span>
+      <span ng-if="markers" class="highlight">({{markers | capitaliseFirst}})</span>
     </p>
   </div>
 
@@ -49,9 +49,24 @@
         </ul>
       </div>
 
+      <!-- Organisations -->
+      <div ng-show="currentView === views[2]" class="list-view list-view-no-margin" id="orgs-results-list">
+        <h3 class="floating-header">Organisations</h3>
+
+        <!-- Results list -->
+        <ul class="results-list clear">
+          <li ng-repeat="item in organisations | orderBy : 'name' | orderBy : '-papers'">
+            <a ng-href="organisation/{{item.id}}" class="list-name">{{item.name}}</a> <small ng-if="item.papers" class="highlight">({{item.papers}})</small>
+          </li>
+          <p ng-if="organisation.length === 0">No organisations found.</p>
+        </ul>
+      </div>
+
+      <!-- Buttons -->
       <div class="center">
         <button ng-show="currentView !== views[0]" class="btn view-btn" ng-click="showView(views[0])">List Publications</button>
         <button ng-show="currentView !== views[1]" class="btn view-btn" ng-click="showView(views[1])">List Authors</button>
+        <button ng-show="currentView !== views[2]" class="btn view-btn" ng-click="showView(views[2])">List Organisations</button>
       </div>
     </div>
 
@@ -62,9 +77,9 @@
 
         <div class="total-publication-count">
           <dl class="dl-horizontal dl-publications" ng-class="[{'answer-highlight': publicationsHighlight}]">
-            <div ng-show="totalPublications" ng-class="[{'answer-highlight': total_publication_countHighlight}]">
+            <div ng-show="paperCounts.total" ng-class="[{'answer-highlight': total_publication_countHighlight}]">
               <dt>Total (External)</dt>
-              <dd>{{totalPublications}}</dd>
+              <dd>{{paperCounts.total}}</dd>
             </div>
           </dl>
           <dl class="dl-horizontal dl-publications" ng-class="[{'answer-highlight': publicationsHighlight}]">

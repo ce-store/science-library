@@ -409,7 +409,7 @@ angular.module('itapapersApp')
           return $q.when(val);
         } else {
           //DSB - switch request to open source ce-store
-          var url = server + "/ce-store/stores/" + store + "/instances/" + topic + "?style=summary&referringInstances=false&steps=3&limitRelationships=topic%20statistic,person,document,citation%20count";
+          var url = server + "/ce-store/stores/" + store + "/instances/" + topic + "?style=summary&referringInstances=false&steps=3&limitRelationships=topic%20statistic,person,document,citation%20count,organisation";
 
           return $http.get(url)
             .then(function(response) {
