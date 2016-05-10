@@ -88,7 +88,7 @@
         <div class="col-md-3">
           <top-header></top-header>
 
-          <ul class="results-list clear">
+          <ul class="results-list clear" style="padding-top: 15px">
             <li ng-repeat="item in list | orderBy : 'name' | orderBy : '-value' | limitTo : listLength">
               <a ng-href="{{listName | limitTo : listName.length - 1}}/{{item.id}}" class="list-name">{{item.name}}</a> <!-- <small class="highlight" uib-tooltip="ITA Publication count">({{item.value}})</small> -->
             </li>
@@ -114,6 +114,8 @@
       <div ng-show="listName === listTypes.venues">
         <div class="col-md-12">
           <top-header></top-header>
+        </div>
+        <div class="col-md-12">
 
           <ul class="results-list clear">
             <li ng-repeat="item in list | orderBy : 'name' | orderBy : '-value' | limitTo : listLength">
@@ -188,7 +190,7 @@
 
       <!-- Co-authors list -->
       <div ng-if="listName === listTypes.coauthors">
-        <div>
+        <div class="col-md-12">
           <top-header></top-header>
 
           <div class="authorFilters filters-right">
@@ -202,6 +204,22 @@
         </div>
 
         <div class="clear" edge-bundle-chart num-authors="listLength" ac="acInput" gov="govInput" ind="indInput"></div>
+      </div>
+
+      <!-- Topics list -->
+      <div ng-if="listName === listTypes.topics">
+        <div class="col-md-12">
+          <top-header></top-header>
+        </div>
+
+        <div class="col-md-12">
+          <ul class="results-list">
+            <li ng-repeat="item in list | orderBy : 'id' | orderBy : 'papers' | limitTo : listLength">
+              <!-- Topics list -->
+              <a ng-href="{{listName | limitTo : listName.length - 1}}/{{item.id}}" class="list-name">{{ item.id | capitaliseFirst }}</a>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>

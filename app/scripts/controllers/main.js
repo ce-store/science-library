@@ -15,7 +15,8 @@ angular.module('itapapersApp')
       venues: 'venues',
       projects: 'projects',
       orgs: 'organisations',
-      coauthors: 'co-authors'
+      coauthors: 'co-authors',
+      topics: 'topics'
     };
     $scope.listLength = 50;
     $scope.listName = $scope.listTypes.papers;
@@ -209,6 +210,12 @@ angular.module('itapapersApp')
           }
 
           csvData.push([id, name, area, value, papers]);
+        } else if ($scope.listName === $scope.listTypes.topics) {
+          // topics page
+          var topicProps = instances[id].property_values;
+          papers = topicProps["paper count"] ? topicProps["paper count"][0] : 0;
+
+          csvData.push([id, papers]);
         }
 
         // set value property
@@ -354,6 +361,11 @@ angular.module('itapapersApp')
           .then(function(data) {
             populateList(data.results, data.instances);
             $scope.sunburstData = charts.getSunburstData(data);
+          });
+      } else if ($scope.listName === $scope.listTypes.topics) {
+        store.getTopics()
+          .then(function(data) {
+            populateList(data.results, data.instances);
           });
       }
     };
