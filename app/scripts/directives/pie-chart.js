@@ -13,7 +13,9 @@ angular.module('itapapersApp')
       restrict: 'EA',
       link: function postLink(scope, element, attrs) {
         var expData = $parse(attrs.data);
+        var expFactor = $parse(attrs.factor);
         var data = expData(scope);
+        var factor = expFactor(scope);
 
         scope.$watchCollection(expData, function(newVal) {
           data = newVal;
@@ -25,7 +27,7 @@ angular.module('itapapersApp')
         var d3 = $window.d3;
 
         var drawPieChart = function(data) {
-          var width = (scope.width - 200) * 0.33;
+          var width = (scope.width - 200) * factor;
           var height = scope.height - 500;
 
           if (scope.width < 1000 || height < 300) {
@@ -68,6 +70,9 @@ angular.module('itapapersApp')
               return color(d.data.label);
             });
 
+          var totals = [];
+          var hiddenLegendRows = 0;
+
           var legend = svg.selectAll('.legend')
             .data(color.domain())
             .enter()
@@ -76,6 +81,7 @@ angular.module('itapapersApp')
             .attr('display', function(d) {
               for (var i = 0; i < data.length; ++i) {
                 if (data[i].label === d) {
+                  totals.push(data[i].value);
                   if (!data[i].value) {
                     return 'none';
                   }
@@ -83,10 +89,11 @@ angular.module('itapapersApp')
               }
             })
             .attr('transform', function(d, i) {
+              hiddenLegendRows = totals[i] === 0 ? hiddenLegendRows + 1 : hiddenLegendRows;
               var height = legendRectSize + legendSpacing;
               var offset =  height * color.domain().length / 2;
               var horz = -2.5 * legendRectSize;
-              var vert = i * height - offset;
+              var vert = (i - hiddenLegendRows) * height - offset;
               return 'translate(' + horz + ',' + vert + ')';
             });
 

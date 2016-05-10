@@ -221,8 +221,8 @@ angular.module('itapapersApp')
 
                   if (paperProps["final date"]) {
                     dateId = paperProps["final date"][0];
-                    month = relatedInstances[dateId].property_values.month
-                    year = relatedInstances[dateId].property_values.year
+                    month = relatedInstances[dateId].property_values.month;
+                    year = relatedInstances[dateId].property_values.year;
                   }
 
                   if (!month) {
@@ -330,7 +330,7 @@ angular.module('itapapersApp')
             });
           }
 
-          var pieData = [{
+          $scope.pieData = [{
             label: types[$scope.journalType],
             value: $scope.journalPapers
           }, {
