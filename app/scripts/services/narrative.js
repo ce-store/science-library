@@ -57,7 +57,7 @@ var opacity = {
     "-webkit-transition": "opacity .25s ease-in-out"
   },
   opaqueLinks: {
-    "stroke-opacity": 0.6,
+    "stroke-opacity": 0.9,
     "transition": "opacity .25s ease-in-out",
     "-moz-transition": "opacity .25s ease-in-out",
     "-webkit-transition": "opacity .25s ease-in-out"
@@ -69,7 +69,7 @@ var opacity = {
     "-webkit-transition": "opacity .25s ease-in-out"
   },
   translucentLinks: {
-    "stroke-opacity": 0.1,
+    "stroke-opacity": 0.2,
     "transition": "opacity .25s ease-in-out",
     "-moz-transition": "opacity .25s ease-in-out",
     "-webkit-transition": "opacity .25s ease-in-out"
