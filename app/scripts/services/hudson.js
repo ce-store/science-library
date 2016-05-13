@@ -153,7 +153,7 @@ angular.module('itapapersApp')
           }
 
           $location.url(url);
-          saveQuestion(data.question_text, "redirect");
+          saveQuestion(data.question_text, 'redirect');
         }
       }
     };
@@ -166,20 +166,12 @@ angular.module('itapapersApp')
         // Question - send to Hudson
         $http.post(server + questionAnalyser, question)
           .then(function(response) {
-            console.log(response);
             handleAnswer(response.data);
           }, function(response) {
             console.log('failed: ' + response);
         });
       } else {
-        // Keyword Search
-        $http.get(server + ceStore + keywordSearch + question)
-          .then(function(response) {
-            console.log(response);
-            handleAnswer(response.data);
-          }, function(response) {
-            console.log('failed: ' + response);
-        });
+        $location.url('results?keywords=' + question);
       }
     };
 

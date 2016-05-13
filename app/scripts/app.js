@@ -73,7 +73,7 @@ angular
         controller: "CollaborationCtrl"
       })
       .state('results', {
-        url: "/results?debug",
+        url: "/results?debug&keywords",
         templateUrl: "views/results.html",
         controller: "ResultsCtrl"
       })
