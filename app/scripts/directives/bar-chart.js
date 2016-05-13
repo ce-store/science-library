@@ -17,7 +17,7 @@ angular.module('itapapersApp')
 
         scope.$watchCollection(expData, function(newVal) {
           data = newVal;
-          if (data) {
+          if (data && !data[0].total) {
             drawBarChart(data);
           }
         });
