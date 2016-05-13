@@ -3,15 +3,7 @@ Science Library
 
 # UI changes
 
-1. Default sort no longer working on paper page
-(is sorting alphabetically)
-
 1. Additional sorts for pages:
- + Papers
- by collaborations (default)
- by # citations
- by date (most recent first)
- by name
  + Authors
  by # external papers (default)
  by # ITA citations
@@ -142,7 +134,9 @@ properties to be returned
 ---------------------
 
 # Done
+
 # UI bugs
+
 1. On author scatter clicking the checkboxes gives a JS error:
 `scatter-chart.js:177`
 `Uncaught ReferenceError: scatterYAxisNames is not defined`
@@ -157,6 +151,18 @@ publications (journals + external conferences + patents).
 This isn't really a bug but a change, but I just don't agree with ARL that
 patents should not be included in that count as it looks like it just doesn't
 add up.
+
+# UI changes
+
+1. Default sort no longer working on paper page
+(is sorting alphabetically)
+
+1. Additional sorts for pages:
+ + Papers
+ by collaborations (default)
+ by # citations
+ by date (most recent first)
+ by name
 
 # Hudson
 1. Implement keyword search as part of Hudson

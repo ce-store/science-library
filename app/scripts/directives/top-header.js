@@ -15,8 +15,18 @@ angular.module('itapapersApp')
         scope.sortList = function(i) {
           scope.sortName = scope.sort.names[i];
           scope.sortValue = scope.sort.values[i];
-          scope.change();
+          scope.sortCommand = scope.sort.reverse[i] + scope.sort.values[i];
+          scope.sortShow = scope.sort.show[i];
+          if (scope.change) {
+            scope.change();
+          }
         };
+
+        scope.$watch('sort', function(newValue, oldValue) {
+          if (newValue) {
+            scope.sortList(0);
+          }
+        }, true);
 
         scope.sortList(0);
       }

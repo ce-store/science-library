@@ -19,14 +19,25 @@ angular.module('itapapersApp')
       topics: 'topics'
     };
     $scope.listLength = 50;
+    // TODO: Complete these!
     $scope.sortTypes = {
-      'papers': { names: null, values: null },
-      'authors': { names: null, values: null },
+      'papers': {
+        names: ['most collaborative', 'citation count', 'most recent', 'name'],
+        values: ['weight', 'value', 'date', 'name'],
+        show: [false, true, false, false],
+        reverse: ['-', '-', '-', '+']
+      },
+      'authors': {
+        names: null,//['external papers', 'ITA citations', 'ITA h-index', 'co-author'],
+        values: null
+      },
       'venues': { names: null, values: null },
       'projects': { names: null, values: null },
       'organisations': {
         names: ['authors', 'papers'],
-        values: ['-value', '-papers']
+        values: ['value', 'papers'],
+        show: [true, true],
+        reverse: ['-', '-']
       },
       'co-authors': { names: null, values: null },
       'topics': { names: null, values: null }
@@ -76,8 +87,8 @@ angular.module('itapapersApp')
     $scope.select = function(type) {
       $scope.listName = type;
       $scope.list = [];
-      getData();
       $scope.sort = $scope.sortTypes[type];
+      getData();
     };
 
     $scope.reset = function () {
@@ -129,7 +140,7 @@ angular.module('itapapersApp')
 
       // loop through results and extract relevant data
       for (var i = 0; i < data.length; ++i) {
-        var id, citations, name, hIndex, totalPubs, type, className, value, papers, weight, noteworthy;
+        var id, citations, name, date, hIndex, totalPubs, type, className, value, papers, weight, noteworthy;
         var citationProps;
         var area, areaId;
 
@@ -141,6 +152,7 @@ angular.module('itapapersApp')
           citationProps = instances[data[i][1]].property_values;
 
           name = paperProps.title ? paperProps.title[0] : unknown;
+          date = paperProps["final date"] ? Date.parse(paperProps["final date"][0]) : 0;
           citations = citationProps["citation count"] ? parseInt(citationProps["citation count"][0], 10) : 0;
           weight = paperProps.weight ? parseInt(paperProps.weight[0], 10) : -1;
 
@@ -242,6 +254,7 @@ angular.module('itapapersApp')
           $scope.list.push({
             id: id,
             name: name,
+            date: date,
             value: parseInt(value, 10),
             papers: parseInt(papers, 10),
             area: area,
@@ -369,5 +382,5 @@ angular.module('itapapersApp')
       }
     };
 
-    $scope.select($scope.listTypes.orgs);
+    $scope.select($scope.listTypes.papers);
   }]);

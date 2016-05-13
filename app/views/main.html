@@ -29,10 +29,11 @@
           <div class="clear">
             <div class="col-md-12">
               <ul class="results-list no-bullets">
-                <li ng-repeat="item in list | orderBy : 'name' | orderBy : '-weight' | filter : filterPapers | limitTo : listLength">
+                <li ng-repeat="item in list | orderBy : 'name' | orderBy : sortCommand | filter : filterPapers | limitTo : listLength">
                   <span ng-class="[className, ('document-' + $index)]" ng-repeat="className in item.class track by $index"></span>
                   <a ng-href="{{listName | limitTo : listName.length - 1}}/{{item.id}}" class="list-name">{{item.name}}</a>
-                  <small ng-if="item.noteworthy"><span class="glyphicon glyphicon-star-empty highlight" aria-hidden="true"></span> ({{item.noteworthy}})</small>  <!-- <small ng-if="item.value" class="highlight" uib-tooltip="Citation count">({{item.value}})</small> -->
+                  <small ng-if="item.noteworthy"><span class="glyphicon glyphicon-star-empty highlight" aria-hidden="true"></span> ({{item.noteworthy}})</small>
+                  <small ng-if="item[sortValue] && sortShow" class="highlight">({{item[sortValue]}})</small>
                 </li>
               </ul>
             </div>
@@ -159,10 +160,10 @@
 
           <div class="col-md-6 clear">
             <ul class="results-list no-bullets">
-              <li ng-repeat="item in list | orderBy : 'name' | orderBy : sortValue | filter : filterOrganisations | limitTo : listLength">
+              <li ng-repeat="item in list | orderBy : 'name' | orderBy : sortCommand | filter : filterOrganisations | limitTo : listLength">
                 <!-- Organisation list -->
                 <span ng-class="item.class"></span>
-                <a ng-href="{{listName | limitTo : listName.length - 1}}/{{item.id}}" class="list-name">{{item.name}}</a> <!-- <small ng-if="sortName === sortNames[0] && item.value" class="highlight" uib-tooltip="Number of authors">({{item.value}})</small><small ng-if="sortName === sortNames[1] && item.papers" class="highlight" uib-tooltip="ITA Publication count">({{item.papers}})</small> -->
+                <a ng-href="{{listName | limitTo : listName.length - 1}}/{{item.id}}" class="list-name">{{item.name}}</a> <small ng-if="item[sortValue]" class="highlight">({{item[sortValue]}})</small>
               </li>
             </ul>
           </div>
