@@ -315,7 +315,7 @@ angular.module('itapapersApp')
 
 //DSB - changed to use only journal and external paper counts
 //            $scope.totalPublications = $scope.journalPapers + $scope.externalPapers + $scope.internalPapers + $scope.technicalReports + $scope.otherDocuments;
-            $scope.totalPublications = $scope.journalPapers + $scope.externalPapers;
+            $scope.totalPublications = $scope.journalPapers + $scope.externalPapers + $scope.patents;
 
             $scope.pieData = [{
               label: types[$scope.journalType],
