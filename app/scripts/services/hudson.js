@@ -8,9 +8,8 @@
  * Factory in the itapapersApp.
  */
 angular.module('itapapersApp')
-  .factory('hudson', ['$http', '$location', '$rootScope', 'server', function ($http, $location, $rootScope, server) {
+  .factory('hudson', ['$http', '$location', '$rootScope', 'server', 'questionAnalyser', 'ceStore', 'keywordSearch', function ($http, $location, $rootScope, server, questionAnalyser, ceStore, keywordSearch) {
     var questions = [];
-    var url = server + '/ITAHudson/QuestionAnalyser?debug=true';
     var types = {
       document: 'document',
       person: 'person',
@@ -84,8 +83,6 @@ angular.module('itapapersApp')
         if (data.properties[property].length > 0) {
           propertyName = data.properties[property][0].property_name;
           domainName = data.properties[property][0].domain_name;
-          console.log('prop name: ' + propertyName);
-          console.log('domain name: ' + domainName);
 
           if (domainName.indexOf(types.document) > -1) {
             type = types.document;
@@ -100,7 +97,6 @@ angular.module('itapapersApp')
           } else if (domainName.indexOf(types.project) > -1) {
             type = types.project;
           }
-          console.log('type: ' + type);
         }
       }
 
@@ -122,7 +118,6 @@ angular.module('itapapersApp')
         saveQuestion(data.question_text, "highlight", propertyName.replace(/ /g, '_'));
       // redirect
       } else {
-        console.log('redirect');
         var insts = data.answer_instances ? data.answer_instances : data.instances;
 
         for (word in insts) {
@@ -164,13 +159,28 @@ angular.module('itapapersApp')
     };
 
     var askQuestion = function (question) {
-      $http.post(url, question)
-        .then(function(response) {
-          console.log(response);
-          handleAnswer(response.data);
-        }, function(response) {
-          console.log('failed: ' + response);
-      });
+      var words = question.split(' ');
+      var questionWords = ['what', 'who', 'list', 'show', 'draw'];
+
+      if (questionWords.indexOf(words[0]) > -1) {
+        // Question - send to Hudson
+        $http.post(server + questionAnalyser, question)
+          .then(function(response) {
+            console.log(response);
+            handleAnswer(response.data);
+          }, function(response) {
+            console.log('failed: ' + response);
+        });
+      } else {
+        // Keyword Search
+        $http.get(server + ceStore + keywordSearch + question)
+          .then(function(response) {
+            console.log(response);
+            handleAnswer(response.data);
+          }, function(response) {
+            console.log('failed: ' + response);
+        });
+      }
     };
 
     var getLatestQuestion = function () {

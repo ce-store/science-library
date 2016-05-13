@@ -8,9 +8,7 @@
  * Factory in the itapapersApp.
  */
 angular.module('itapapersApp')
-  .factory('store', ['$http', '$q', 'server', 'localStorageService', 'utils', function ($http, $q, server, localStorageService, utils) {
-    var store = "DEFAULT";
-    //var store = "extonly";
+  .factory('store', ['$http', '$q', 'server', 'localStorageService', 'utils', 'ceStore', function ($http, $q, server, localStorageService, utils, ceStore) {
 
     function filterData (data) {
       var documentMap = {};
@@ -91,18 +89,18 @@ angular.module('itapapersApp')
       var key = "document citations";
 
       if (localStorageService.isSupported) {
-        var val = localStorageService.get(key + "-" + store);
+        var val = localStorageService.get(key + "-" + ceStore);
 
         if (val) {
           return $q.when(val);
         } else {
           //DSB - switch request to open source ce-store
-          var url = server + "/ce-store/stores/" + store + "/queries/" + key + "/execute?returnInstances=true";
+          var url = server + ceStore + "/queries/" + key + "/execute?returnInstances=true";
 
           return $http.get(url)
             .then(function(response) {
               var filtered = filterData(response.data);
-              localStorageService.set(key + "-" + store, filtered);
+              localStorageService.set(key + "-" + ceStore, filtered);
 
               return filtered;
             }, function(err) {
@@ -124,7 +122,7 @@ angular.module('itapapersApp')
       conNames += "topic-person statistic,";
       conNames += "topic-organisation statistic";
 
-      var url = server + "/ce-store/stores/" + store + "/special/instances-for-multiple-concepts?conceptNames=" + conNames + '&style=summary';
+      var url = server + ceStore + "/special/instances-for-multiple-concepts?conceptNames=" + conNames + '&style=summary';
 
       return $http.get(url);
     }
@@ -143,7 +141,7 @@ angular.module('itapapersApp')
       //     return $q.when(val);
       //   } else {
       //     console.log('no published');
-      //     var url = server + "/ce-store/stores/" + store + "/queries/" + key + "/execute";
+      //     var url = server + ceStore + "/queries/" + key + "/execute";
 
       //     return $http.get(url)
       //       .then(function(response) {
@@ -160,7 +158,7 @@ angular.module('itapapersApp')
       // }
 
       //DSB - switch request to open source ce-store
-      var url = server + "/ce-store/stores/" + store + "/queries/published person citations/execute?returnInstances=true";
+      var url = server + ceStore + "/queries/published person citations/execute?returnInstances=true";
 
       return $http.get(url)
         .then(function(response) {
@@ -181,18 +179,18 @@ angular.module('itapapersApp')
       var key = "event series";
 
       if (localStorageService.isSupported) {
-        var val = localStorageService.get(key + "-" + store);
+        var val = localStorageService.get(key + "-" + ceStore);
 
         if (val) {
           return $q.when(val);
         } else {
           //DSB - switch request to open source ce-store
-          var url = server + "/ce-store/stores/" + store + "/queries/" + key + "/execute";
+          var url = server + ceStore + "/queries/" + key + "/execute";
 
           return $http.get(url)
             .then(function(response) {
               var filtered = response.data.results;
-              localStorageService.set(key + "-" + store, filtered);
+              localStorageService.set(key + "-" + ceStore, filtered);
 
               return filtered;
             }, function(err) {
@@ -206,17 +204,17 @@ angular.module('itapapersApp')
       var key = "projects";
 
       if (localStorageService.isSupported) {
-        var val = localStorageService.get(key + "-" + store);
+        var val = localStorageService.get(key + "-" + ceStore);
 
         if (val) {
           return $q.when(val);
         } else {
           //DSB - switch request to open source ce-store
-          var url = server + "/ce-store/stores/" + store + "/queries/" + key + "/execute?returnInstances=true";
+          var url = server + ceStore + "/queries/" + key + "/execute?returnInstances=true";
 
           return $http.get(url)
             .then(function(response) {
-              localStorageService.set(key + "-" + store, response.data);
+              localStorageService.set(key + "-" + ceStore, response.data);
               return response.data;
             }, function(err) {
               return err;
@@ -229,17 +227,17 @@ angular.module('itapapersApp')
       var key = "organisations";
 
       if (localStorageService.isSupported) {
-        var val = localStorageService.get(key + "-" + store);
+        var val = localStorageService.get(key + "-" + ceStore);
 
         if (val) {
           return $q.when(val);
         } else {
           //DSB - switch request to open source ce-store
-          var url = server + "/ce-store/stores/" + store + "/queries/" + key + "/execute?returnInstances=true";
+          var url = server + ceStore + "/queries/" + key + "/execute?returnInstances=true";
 
           return $http.get(url)
             .then(function(response) {
-              localStorageService.set(key + "-" + store, response.data);
+              localStorageService.set(key + "-" + ceStore, response.data);
               return response.data;
             }, function(err) {
               return err;
@@ -252,17 +250,17 @@ angular.module('itapapersApp')
       var key = "topics";
 
       if (localStorageService.isSupported) {
-        var val = localStorageService.get(key + "-" + store);
+        var val = localStorageService.get(key + "-" + ceStore);
 
         if (val) {
           return $q.when(val);
         } else {
           //DSB - switch request to open source ce-store
-          var url = server + "/ce-store/stores/" + store + "/queries/" + key + "/execute?returnInstances=true";
+          var url = server + ceStore + "/queries/" + key + "/execute?returnInstances=true";
 
           return $http.get(url)
             .then(function(response) {
-              localStorageService.set(key + "-" + store, response.data);
+              localStorageService.set(key + "-" + ceStore, response.data);
               return response.data;
             }, function(err) {
               return err;
@@ -275,17 +273,17 @@ angular.module('itapapersApp')
       var key = "totals";
 
       if (localStorageService.isSupported) {
-        var val = localStorageService.get(key + "-" + store);
+        var val = localStorageService.get(key + "-" + ceStore);
 
         if (val) {
           return $q.when(val);
         } else {
           //DSB - switch request to open source ce-store
-          var url = server + "/ce-store/stores/" + store + "/queries/" + key + "/execute?returnInstances=true";
+          var url = server + ceStore + "/queries/" + key + "/execute?returnInstances=true";
 
           return $http.get(url)
             .then(function(response) {
-              localStorageService.set(key + "-" + store, response.data);
+              localStorageService.set(key + "-" + ceStore, response.data);
               return response.data;
             }, function(err) {
               return err;
@@ -298,17 +296,17 @@ angular.module('itapapersApp')
       var key = "last updated";
 
       if (localStorageService.isSupported) {
-        var val = localStorageService.get(key + "-" + store);
+        var val = localStorageService.get(key + "-" + ceStore);
 
         if (val) {
           return $q.when(val);
         } else {
           //DSB - switch request to open source ce-store
-          var url = server + "/ce-store/stores/" + store + "/queries/" + key + "/execute";
+          var url = server + ceStore + "/queries/" + key + "/execute";
 
           return $http.get(url)
             .then(function(response) {
-              localStorageService.set(key + "-" + store, response.data);
+              localStorageService.set(key + "-" + ceStore, response.data);
               return response.data;
             }, function(err) {
               return err;
@@ -325,7 +323,7 @@ angular.module('itapapersApp')
           return $q.when(val);
         } else {
           //DSB - switch request to open source ce-store
-          var url = server + "/ce-store/stores/" + store + "/instances/" + authorName + "?showStats=true&steps=2&style=summary&referringInstances=false&limitRelationships=is%20employed%20by,wrote,author,final%20date,citation%20count,co-author,co-author%20statistic";
+          var url = server + ceStore + "/instances/" + authorName + "?showStats=true&steps=2&style=summary&referringInstances=false&limitRelationships=is%20employed%20by,wrote,author,final%20date,citation%20count,co-author,co-author%20statistic";
 
           return $http.get(url)
             .then(function(response) {
@@ -346,7 +344,7 @@ angular.module('itapapersApp')
           return $q.when(val);
         } else {
           //DSB - switch request to open source ce-store
-          var url = server + "/ce-store/stores/" + store + "/instances/" + paperName + "?style=summary&steps=2&referringInstances=false";
+          var url = server + ceStore + "/instances/" + paperName + "?style=summary&steps=2&referringInstances=false";
 
           return $http.get(url)
             .then(function(response) {
@@ -367,7 +365,7 @@ angular.module('itapapersApp')
           return $q.when(val);
         } else {
           //DSB - switch request to open source ce-store
-          var url = server + "/ce-store/stores/" + store + "/instances/" + location;
+          var url = server + ceStore + "/instances/" + location;
 
           return $http.get(url)
             .then(function(response) {
@@ -388,7 +386,7 @@ angular.module('itapapersApp')
           return $q.when(val);
         } else {
           //DSB - switch request to open source ce-store
-          var url = server + "/ce-store/stores/" + store + "/instances/" + organisation + "?style=summary&referringInstances=false&steps=3&limitRelationships=is%20located%20at,employs,citation%20count,wrote,final%20date";
+          var url = server + ceStore + "/instances/" + organisation + "?style=summary&referringInstances=false&steps=3&limitRelationships=is%20located%20at,employs,citation%20count,wrote,final%20date";
 
           return $http.get(url)
             .then(function(response) {
@@ -409,7 +407,7 @@ angular.module('itapapersApp')
           return $q.when(val);
         } else {
           //DSB - switch request to open source ce-store
-          var url = server + "/ce-store/stores/" + store + "/instances/" + topic + "?style=summary&referringInstances=false&steps=3&limitRelationships=topic%20statistic,person,document,citation%20count,organisation";
+          var url = server + ceStore + "/instances/" + topic + "?style=summary&referringInstances=false&steps=3&limitRelationships=topic%20statistic,person,document,citation%20count,organisation";
 
           return $http.get(url)
             .then(function(response) {
@@ -427,17 +425,17 @@ angular.module('itapapersApp')
       var key = "organisation publications";
 
       if (localStorageService.isSupported) {
-        var val = localStorageService.get(key + "-" + store);
+        var val = localStorageService.get(key + "-" + ceStore);
 
         if (val) {
           return $q.when(val);
         } else {
           //DSB - switch request to open source ce-store
-          var url = server + "/ce-store/stores/" + store + "/queries/" + key + "/execute?returnInstances=true";
+          var url = server + ceStore + "/queries/" + key + "/execute?returnInstances=true";
 
           return $http.get(url)
             .then(function(response) {
-              localStorageService.set(key + "-" + store, response.data);
+              localStorageService.set(key + "-" + ceStore, response.data);
               return response.data;
             }, function(err) {
               return err;
@@ -450,17 +448,17 @@ angular.module('itapapersApp')
       var key = "organisation details";
 
       if (localStorageService.isSupported) {
-        var val = localStorageService.get(key + "-" + store);
+        var val = localStorageService.get(key + "-" + ceStore);
 
         if (val) {
           return $q.when(val);
         } else {
           //DSB - switch request to open source ce-store
-          var url = server + "/ce-store/stores/" + store + "/queries/" + key + "/execute?showStats=false&suppressCe=true";
+          var url = server + ceStore + "/queries/" + key + "/execute?showStats=false&suppressCe=true";
 
           return $http.get(url)
             .then(function(response) {
-              localStorageService.set(key + "-" + store, response.data);
+              localStorageService.set(key + "-" + ceStore, response.data);
               return response.data;
             }, function(err) {
               return err;
@@ -473,17 +471,17 @@ angular.module('itapapersApp')
       var key = "person details";
 
       if (localStorageService.isSupported) {
-        var val = localStorageService.get(key + "-" + store);
+        var val = localStorageService.get(key + "-" + ceStore);
 
         if (val) {
           return $q.when(val);
         } else {
           //DSB - switch request to open source ce-store
-          var url = server + "/ce-store/stores/" + store + "/queries/" + key + "/execute?showStats=false&suppressCe=true";
+          var url = server + ceStore + "/queries/" + key + "/execute?showStats=false&suppressCe=true";
 
           return $http.get(url)
             .then(function(response) {
-              localStorageService.set(key + "-" + store, response.data);
+              localStorageService.set(key + "-" + ceStore, response.data);
               return response.data;
             }, function(err) {
               return err;
@@ -496,17 +494,17 @@ angular.module('itapapersApp')
       var key = "published person -> organisation";
 
       if (localStorageService.isSupported) {
-        var val = localStorageService.get(key + "-" + store);
+        var val = localStorageService.get(key + "-" + ceStore);
 
         if (val) {
           return $q.when(val);
         } else {
           //DSB - switch request to open source ce-store
-          var url = server + "/ce-store/stores/" + store + "/queries/" + key + "/execute?showStats=false&suppressCe=true";
+          var url = server + ceStore + "/queries/" + key + "/execute?showStats=false&suppressCe=true";
 
           return $http.get(url)
             .then(function(response) {
-              localStorageService.set(key + "-" + store, response.data);
+              localStorageService.set(key + "-" + ceStore, response.data);
               return response.data;
             }, function(err) {
               return err;
@@ -519,17 +517,17 @@ angular.module('itapapersApp')
       var key = "person -> document";
 
       if (localStorageService.isSupported) {
-        var val = localStorageService.get(key + "-" + store);
+        var val = localStorageService.get(key + "-" + ceStore);
 
         if (val) {
           return $q.when(val);
         } else {
           //DSB - switch request to open source ce-store
-          var url = server + "/ce-store/stores/" + store + "/queries/" + key + "/execute?showStats=false&suppressCe=true";
+          var url = server + ceStore + "/queries/" + key + "/execute?showStats=false&suppressCe=true";
 
           return $http.get(url)
             .then(function(response) {
-              localStorageService.set(key + "-" + store, response.data);
+              localStorageService.set(key + "-" + ceStore, response.data);
               return response.data;
             }, function(err) {
               return err;
@@ -542,17 +540,17 @@ angular.module('itapapersApp')
       var key = "document details";
 
       if (localStorageService.isSupported) {
-        var val = localStorageService.get(key + "-" + store);
+        var val = localStorageService.get(key + "-" + ceStore);
 
         if (val) {
           return $q.when(val);
         } else {
           //DSB - switch request to open source ce-store
-          var url = server + "/ce-store/stores/" + store + "/queries/" + key + "/execute?showStats=false&suppressCe=true";
+          var url = server + ceStore + "/queries/" + key + "/execute?showStats=false&suppressCe=true";
 
           return $http.get(url)
             .then(function(response) {
-              localStorageService.set(key + "-" + store, response.data);
+              localStorageService.set(key + "-" + ceStore, response.data);
               return response.data;
             }, function(err) {
               return err;
@@ -569,7 +567,7 @@ angular.module('itapapersApp')
           return $q.when(val);
         } else {
           //DSB - switch request to open source ce-store
-          var url = server + "/ce-store/stores/" + store + "/instances/" + project + "?steps=2&style=summary&referringInstances=false&limitRelationships=paper,technical%20area,citation%20count";
+          var url = server + ceStore + "/instances/" + project + "?steps=2&style=summary&referringInstances=false&limitRelationships=paper,technical%20area,citation%20count";
           return $http.get(url)
             .then(function(response) {
               localStorageService.set(project, response.data);
@@ -586,17 +584,17 @@ angular.module('itapapersApp')
       var key = 'event series details';
 
       if (localStorageService.isSupported) {
-        var val = localStorageService.get(key + "-" + store);
+        var val = localStorageService.get(key + "-" + ceStore);
 
         if (val) {
           return $q.when(val);
         } else {
           //DSB - switch request to open source ce-store
-          var url = server + "/ce-store/stores/" + store + "/queries/" + key + "/execute?returnInstances=true";
+          var url = server + ceStore + "/queries/" + key + "/execute?returnInstances=true";
 
           return $http.get(url)
             .then(function(response) {
-              localStorageService.set(key + "-" + store, response.data);
+              localStorageService.set(key + "-" + ceStore, response.data);
               return response.data;
             }, function(err) {
               return err;
@@ -609,17 +607,17 @@ angular.module('itapapersApp')
       var key = "comment";
 
       if (localStorageService.isSupported) {
-        var val = localStorageService.get(key + "-" + store);
+        var val = localStorageService.get(key + "-" + ceStore);
 
         if (val) {
           return $q.when(val);
         } else {
           //DSB - switch request to open source ce-store
-          var url = server + "/ce-store/stores/" + store + "/concepts/" + key + "/instances";
+          var url = server + ceStore + "/concepts/" + key + "/instances";
 
           return $http.get(url)
             .then(function(response) {
-              localStorageService.set(key + "-" + store, response.data);
+              localStorageService.set(key + "-" + ceStore, response.data);
               return response.data;
             }, function(err) {
               return err;
@@ -632,17 +630,17 @@ angular.module('itapapersApp')
       var key = "issue";
 
       if (localStorageService.isSupported) {
-        var val = localStorageService.get(key + "-" + store);
+        var val = localStorageService.get(key + "-" + ceStore);
 
         if (val) {
           return $q.when(val);
         } else {
           //DSB - switch request to open source ce-store
-          var url = server + "/ce-store/stores/" + store + "/concepts/" + key + "/instances";
+          var url = server + ceStore + "/concepts/" + key + "/instances";
 
           return $http.get(url)
             .then(function(response) {
-              localStorageService.set(key + "-" + store, response.data);
+              localStorageService.set(key + "-" + ceStore, response.data);
               return response.data;
             }, function(err) {
               return err;
