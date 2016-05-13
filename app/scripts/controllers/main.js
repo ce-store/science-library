@@ -19,11 +19,19 @@ angular.module('itapapersApp')
       topics: 'topics'
     };
     $scope.listLength = 50;
-    $scope.listName = $scope.listTypes.papers;
-    $scope.sortNames = ['authors', 'papers'];
-    $scope.sortName = $scope.sortNames[0];
-    $scope.sortValues = ['-value', '-papers'];
-    $scope.sortValue = $scope.sortValues[0];
+    $scope.sortTypes = {
+      'papers': { names: null, values: null },
+      'authors': { names: null, values: null },
+      'venues': { names: null, values: null },
+      'projects': { names: null, values: null },
+      'organisations': {
+        names: ['authors', 'papers'],
+        values: ['-value', '-papers']
+      },
+      'co-authors': { names: null, values: null },
+      'topics': { names: null, values: null }
+    };
+
     $scope.journalType = documentTypes.journal;
     $scope.externalConferenceType = documentTypes.external;
     $scope.patentType = documentTypes.patent;
@@ -48,7 +56,6 @@ angular.module('itapapersApp')
 
     var unknown = "unknown";
     var types = documentTypes.nameMap;
-    var change;
 
     if ($stateParams.debug) {
       debug.set($stateParams.debug);
@@ -69,13 +76,8 @@ angular.module('itapapersApp')
     $scope.select = function(type) {
       $scope.listName = type;
       $scope.list = [];
-      getData(type);
-    };
-
-    $scope.sort = function(i) {
-      $scope.sortName = $scope.sortNames[i];
-      $scope.sortValue = $scope.sortValues[i];
-      change();
+      getData();
+      $scope.sort = $scope.sortTypes[type];
     };
 
     $scope.reset = function () {
@@ -140,7 +142,7 @@ angular.module('itapapersApp')
 
           name = paperProps.title ? paperProps.title[0] : unknown;
           citations = citationProps["citation count"] ? parseInt(citationProps["citation count"][0], 10) : 0;
-          weight = paperProps.weight ? paperProps.weight[0] : -1;
+          weight = paperProps.weight ? parseInt(paperProps.weight[0], 10) : -1;
 
           // set types for duplicates and non-duplicates
           var types = data[i][3];
@@ -367,5 +369,5 @@ angular.module('itapapersApp')
       }
     };
 
-    getData();
+    $scope.select($scope.listTypes.orgs);
   }]);

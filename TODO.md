@@ -126,21 +126,6 @@ present.
 Venue details can contain additional information.
 
 # Hudson
-1. Implement keyword search as part of Hudson
-Use the existing ce-store keyword search API as is and simply hardcode a list of
-concepts and properties in JS that could be rendered.
-e.g. to test the api yourself simply use the engineering panel "search" box to
-search for "Gaian" or "Controlled English" and you can see that concept/property
-matches worth listing in the UI would be:
-`document->abstract`
-`document->title`
-`topic`
-`person`
-`organisation`
-...all others can probably simple be filtered out in JS for now.  In the future
-we may want to add new meta-model concepts for "searchable thing" and mark
-specific CE concepts and properties as searchable, but for now it seems to work
-fine if we use it as is.
 
 1. Add *help* mode
 Can be a hardcoded response but should be shown if you say *help* or something
@@ -153,6 +138,8 @@ based on simple matching to a concept
 1. Try to minimise JSON volumes for pages (Dave)
 Review each request and try to minimize size by specifying only the required
 properties to be returned
+
+---------------------
 
 # Done
 # UI bugs
@@ -170,3 +157,20 @@ publications (journals + external conferences + patents).
 This isn't really a bug but a change, but I just don't agree with ARL that
 patents should not be included in that count as it looks like it just doesn't
 add up.
+
+# Hudson
+1. Implement keyword search as part of Hudson
+Use the existing ce-store keyword search API as is and simply hardcode a list of
+concepts and properties in JS that could be rendered.
+e.g. to test the api yourself simply use the engineering panel "search" box to
+search for "Gaian" or "Controlled English" and you can see that concept/property
+matches worth listing in the UI would be:
+`document->abstract`
+`document->title`
+`topic`
+`person`
+`organisation`
+...all others can probably simple be filtered out in JS for now.  In the future
+we may want to add new meta-model concepts for "searchable thing" and mark
+specific CE concepts and properties as searchable, but for now it seems to work
+fine if we use it as is.

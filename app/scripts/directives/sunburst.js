@@ -14,14 +14,13 @@ angular.module('itapapersApp')
       link: function postLink(scope, element, attrs) {
         var expData = $parse(attrs.data);
         var data = expData(scope);
-        var change;
 
         scope.$watchCollection(expData, function(newVal) {
           var oldData = data;
           data = newVal;
 
           if (oldData) {
-            change();
+            scope.change();
           } else if (data) {
             drawSunburst(data);
           }
@@ -111,15 +110,15 @@ angular.module('itapapersApp')
               .on("mouseout", tip.hide)
               .each(stash);
 
-          change = function() {
+          scope.change = function() {
             var value = function(d) {
               if (d.parent) {
                 if ((scope.acInput && d.parent.name === "AC") ||
                     (scope.indInput && d.parent.name === "IND") ||
                     (scope.govInput && d.parent.name === "GOV")) {
-                  if (scope.sortName === scope.sortNames[0]) {
+                  if (scope.sortName === scope.sort.names[0]) {
                     return d.employees;
-                  } else if (scope.sortName === scope.sortNames[1]) {
+                  } else if (scope.sortName === scope.sort.names[1]) {
                     return d.papers;
                   }
                 }
@@ -134,8 +133,8 @@ angular.module('itapapersApp')
                 .attrTween("d", arcTweenData);
           };
 
-          d3.selectAll("input").on("change", change);
-          change();
+          d3.selectAll("input").on("change", scope.change);
+          scope.change();
 
           function click(d) {
             node = d;

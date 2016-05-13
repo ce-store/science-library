@@ -147,19 +147,6 @@
       <div ng-show="listName === listTypes.orgs">
         <div class="col-md-12">
           <top-header></top-header>
-          <h3 class="floating-header header-extension">
-            sorted by
-            <span uib-dropdown on-toggle="toggled(open)">
-              <a href id="simple-dropdown" uib-dropdown-toggle>
-                <span class="highlight bold list-name">{{sortName}}<span class="caret"></span></span>
-              </a>
-              <ul class="uib-dropdown-menu" aria-labelledby="simple-dropdown">
-                <li role="menuitem" ng-repeat="type in sortNames">
-                  <a href="#" ng-click="sort($index)">{{type | capitalise}}</a>
-                </li>
-              </ul>
-            </span>
-          </h3>
 
           <div class="authorFilters filters-right">
             <label class="ac"></label>
