@@ -34,9 +34,6 @@ angular.module('itapapersApp')
 
     $scope.scatterYAxisOpts = ["hIndex", "citations"];
     $scope.scatterYAxis = $scope.scatterYAxisOpts[0];
-    var scatterYAxisNames = {};
-    scatterYAxisNames[$scope.scatterYAxisOpts[0]] = "H-Index";
-    scatterYAxisNames[$scope.scatterYAxisOpts[1]] = "Citation Count";
 
     var scatterColour = d3.scale.ordinal()
         .domain(["AC", "IND", "GOV"])

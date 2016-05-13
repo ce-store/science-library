@@ -15,6 +15,10 @@ angular.module('itapapersApp')
         var expOptions = $parse(attrs.options);
         var options = expOptions(scope);
 
+        var scatterYAxisNames = {};
+        scatterYAxisNames[scope.scatterYAxisOpts[0]] = "H-Index";
+        scatterYAxisNames[scope.scatterYAxisOpts[1]] = "Citation Count";
+
         scope.$watchCollection(expOptions, function(newVal) {
           options = newVal;
           if (options) {
