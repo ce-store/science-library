@@ -6,8 +6,8 @@
       <span class="highlight bold list-name">{{listName}}<span class="caret"></span></span>
     </a>
     <ul class="uib-dropdown-menu" aria-labelledby="simple-dropdown">
-      <li role="menuitem" ng-repeat="type in listTypes">
-        <a ng-show="type !== listTypes.projects" href="#" ng-click="select(type)">{{type | capitalise}}</a>
+      <li role="menuitem" ng-repeat="(key, type) in listTypes">
+        <a ng-show="type !== listTypes.projects" ui-sref="category({category: key})" ng-click="select(type)">{{type | capitalise}}</a>
       </li>
     </ul>
   </span>
@@ -20,7 +20,7 @@
       </a>
       <ul class="uib-dropdown-menu" aria-labelledby="simple-dropdown">
         <li role="menuitem" ng-repeat="type in sort.names">
-          <a href="#" ng-click="sortList($index)">{{type | capitalise}}</a>
+          <a href="#" ng-click="sortList($index)">{{type | capitaliseFirstOnly}}</a>
         </li>
       </ul>
     </span>

@@ -4,33 +4,9 @@ Science Library
 # UI changes
 
 1. Additional sorts for pages:
- + Authors
- by # external papers (default)
- by # ITA citations
- by # ITA h-index
- by # co-authors
- by name
- + Venues
- by # papers (default)
- by recency (date of most recent event)
- by duration (number of years contributed)
- by # citations (total paper citations) * I will add a CE property for this *
- by name
- + Organisations
- by # authors (default)
- by # papers
- by # citations * I will add a CE property for this *
- by name
- + Topics
- by collaborations (default)
- by # papers * I will add a CE property for this *
- by # authors * I will add a CE property for this *
- by # citations * I will add a CE property for this *
- by name
+Requires updates on CE for completion
 
-1. Add the numbers in brackets back for the items listed in the previous step
-if the underlying data is numeric (except for collaborations which comes from
-`weight` and won't make any sense)
+1. Remove comment and issue code from JS
 
 1. If a document has a *status* that does not match 'accepted' then:
  + in the list view precede the title with *[submitted]* (or whatever the status is)
@@ -99,6 +75,10 @@ items in lists or in tables:
 
 # Model related
 
+1. Integrating Legacy text
+
+1. Code up title/colours/other hardcoded text in CE
+
 1. Remove *organisation->type*
 Currently contains ‘GOV’, ‘IND’ etc.  But the organisation type can be obtained
 by seeing if the instance is a concept named `government organisation`,
@@ -163,6 +143,33 @@ add up.
  by # citations
  by date (most recent first)
  by name
+ + Authors
+ by # external papers (default)
+ by # ITA citations
+ by # ITA h-index
+ by # co-authors
+ by name
+ + Venues
+ by # papers (default)
+ by recency (date of most recent event)
+ by duration (number of years contributed)
+ by # citations (total paper citations) * I will add a CE property for this *
+ by name
+ + Organisations
+ by # authors (default)
+ by # papers
+ by # citations * I will add a CE property for this *
+ by name
+ + Topics
+ by collaborations (default)
+ by # papers * I will add a CE property for this *
+ by # authors * I will add a CE property for this *
+ by # citations * I will add a CE property for this *
+ by name
+
+1. Add the numbers in brackets back for the items listed in the previous step
+if the underlying data is numeric (except for collaborations which comes from
+`weight` and won't make any sense)
 
 # Hudson
 1. Implement keyword search as part of Hudson

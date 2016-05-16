@@ -90,8 +90,9 @@
           <top-header></top-header>
 
           <ul class="results-list clear" style="padding-top: 15px">
-            <li ng-repeat="item in list | orderBy : 'name' | orderBy : '-value' | limitTo : listLength">
-              <a ng-href="{{listName | limitTo : listName.length - 1}}/{{item.id}}" class="list-name">{{item.name}}</a> <!-- <small class="highlight" uib-tooltip="ITA Publication count">({{item.value}})</small> -->
+            <li ng-repeat="item in list | orderBy : 'name' | orderBy : sortCommand | limitTo : listLength">
+              <a ng-href="{{listName | limitTo : listName.length - 1}}/{{item.id}}" class="list-name">{{item.name}}</a>
+              <small ng-if="item[sortValue] && sortShow" class="highlight">({{item[sortValue]}})</small>
             </li>
           </ul>
         </div>
@@ -119,8 +120,8 @@
         <div class="col-md-12">
 
           <ul class="results-list clear">
-            <li ng-repeat="item in list | orderBy : 'name' | orderBy : '-value' | limitTo : listLength">
-              <a ng-href="{{listName | limitTo : listName.length - 1}}/{{item.id}}/" class="list-name">{{item.name}}</a> <!-- <small ng-if="item.value" class="highlight">({{item.value}})</small> -->
+            <li ng-repeat="item in list | orderBy : 'name' | orderBy : 'sortCommand' | limitTo : listLength">
+              <a ng-href="{{listName | limitTo : listName.length - 1}}/{{item.id}}/" class="list-name">{{item.name}}</a> <small ng-if="item[sortValue] && sortShow" class="highlight">({{item[sortValue]}})</small>
             </li>
           </ul>
         </div>
@@ -145,7 +146,7 @@
       </div> -->
 
       <!-- Organisation list -->
-      <div ng-show="listName === listTypes.orgs">
+      <div ng-show="listName === listTypes.organisations">
         <div class="col-md-12">
           <top-header></top-header>
 
@@ -163,7 +164,8 @@
               <li ng-repeat="item in list | orderBy : 'name' | orderBy : sortCommand | filter : filterOrganisations | limitTo : listLength">
                 <!-- Organisation list -->
                 <span ng-class="item.class"></span>
-                <a ng-href="{{listName | limitTo : listName.length - 1}}/{{item.id}}" class="list-name">{{item.name}}</a> <small ng-if="item[sortValue]" class="highlight">({{item[sortValue]}})</small>
+                <a ng-href="{{listName | limitTo : listName.length - 1}}/{{item.id}}" class="list-name">{{item.name}}</a>
+                <small ng-if="item[sortValue] && sortShow" class="highlight">({{item[sortValue]}})</small>
               </li>
             </ul>
           </div>
@@ -202,9 +204,10 @@
 
         <div class="col-md-12">
           <ul class="results-list">
-            <li ng-repeat="item in list | orderBy : 'id' | orderBy : 'papers' | limitTo : listLength">
+            <li ng-repeat="item in list | orderBy : 'id' | orderBy : sortCommand | limitTo : listLength">
               <!-- Topics list -->
               <a ng-href="{{listName | limitTo : listName.length - 1}}/{{item.id}}" class="list-name">{{ item.id | capitaliseFirst }}</a>
+              <small ng-if="item[sortValue] && sortShow" class="highlight">({{item[sortValue]}})</small>
             </li>
           </ul>
         </div>

@@ -14,7 +14,7 @@ angular.module('itapapersApp')
       authors: 'authors',
       venues: 'venues',
       projects: 'projects',
-      orgs: 'organisations',
+      organisations: 'organisations',
       coauthors: 'co-authors',
       topics: 'topics'
     };
@@ -23,24 +23,36 @@ angular.module('itapapersApp')
     $scope.sortTypes = {
       'papers': {
         names: ['most collaborative', 'citation count', 'most recent', 'name'],
-        values: ['weight', 'value', 'date', 'name'],
+        values: ['weight', 'citations', 'date', 'name'],
         show: [false, true, false, false],
         reverse: ['-', '-', '-', '+']
       },
       'authors': {
-        names: null,//['external papers', 'ITA citations', 'ITA h-index', 'co-author'],
-        values: null
+        names: ['external paper count', 'ITA citation count', 'ITA h-index', 'co-author count', 'name'],
+        values: ['totalPubs', 'citations', 'hIndex', 'coAuthors', 'name'],
+        show: [true, true, true, true, false],
+        reverse: ['-', '-', '-', '-', '+']
       },
-      'venues': { names: null, values: null },
-      'projects': { names: null, values: null },
+      'venues': {
+        names: ['name'], // ['papers', 'most recent', 'duration', 'citation count', 'name'],
+        values: ['name'],
+        show: [false],
+        reverse: ['+']
+      },
+      'projects': {},
       'organisations': {
-        names: ['authors', 'papers'],
-        values: ['value', 'papers'],
+        names: ['authors', 'papers', 'citation count', 'name'],
+        values: ['value', 'papers', 'citations', 'name'],
+        show: [true, true, true, false],
+        reverse: ['-', '-', '-', '+']
+      },
+      'co-authors': {},
+      'topics': {
+        names: ['collaborations', 'paper count', 'author count', 'citation count', 'name'],
+        values: ['collaborations', 'papers'],
         show: [true, true],
         reverse: ['-', '-']
-      },
-      'co-authors': { names: null, values: null },
-      'topics': { names: null, values: null }
+      }
     };
 
     $scope.journalType = documentTypes.journal;
@@ -154,7 +166,7 @@ angular.module('itapapersApp')
           name = paperProps.title ? paperProps.title[0] : unknown;
           date = paperProps["final date"] ? Date.parse(paperProps["final date"][0]) : 0;
           citations = citationProps["citation count"] ? parseInt(citationProps["citation count"][0], 10) : 0;
-          weight = paperProps.weight ? parseInt(paperProps.weight[0], 10) : -1;
+          weight = paperProps.weight ? paperProps.weight[0] : -1;
 
           // set types for duplicates and non-duplicates
           var types = data[i][3];
@@ -162,14 +174,16 @@ angular.module('itapapersApp')
           if (types.length > 1) {
             type = utils.sortTypes(types);
             for (j in types) {
-              $scope.typeCount[types[j]]++;
+              if (types.hasOwnProperty(j)) {
+                $scope.typeCount[types[j]]++;
+              }
             }
           } else {
             type = [types[0]];
             $scope.typeCount[type]++;
           }
 
-          // noteworthy
+          // is it a noteworthy paper?
           noteworthy = paperProps["noteworthy reason"] ? paperProps["noteworthy reason"][0] : null;
 
           // generate class names
@@ -181,25 +195,54 @@ angular.module('itapapersApp')
             var authors = paperProps["original authors string"] ? paperProps["original authors string"][0] : "";
             csvData.push([id, name, citations, type[j], venue, authors]);
           }
+
+          // push data to list
+          $scope.list.push({
+            id: id,
+            name: name,
+            date: date,
+            citations: parseInt(citations, 10),
+            weight: parseInt(weight, 10),
+            type: type,
+            class: className,
+            noteworthy: noteworthy
+          });
         } else if ($scope.listName === $scope.listTypes.authors) {
           // authors page
           var personProps = instances[data[i][0]].property_values;
           citationProps = instances[data[i][1]].property_values;
 
           name = data[i][3];
-          citations = personProps["local citation count"] ? parseInt(personProps["local citation count"][0], 10) : 0;
-          hIndex = personProps["local h-index"] ? parseInt(personProps["local h-index"][0], 10) : 0;
+          citations = personProps["local citation count"] ? personProps["local citation count"][0] : 0;
+          hIndex = personProps["local h-index"] ? personProps["local h-index"][0] : 0;
 
           var journals = personProps["journal paper count"] ? parseInt(personProps["journal paper count"][0], 10) : 0;
           var conferences = personProps["conference paper count"] ? parseInt(personProps["conference paper count"][0], 10) : 0;
           totalPubs = journals + conferences;
+          var coAuthors = personProps["co-author count"] ? personProps["co-author count"][0] : 0;
 
           csvData.push([id, name, citations, hIndex]);
+
+          // push data to list
+          $scope.list.push({
+            id: id,
+            name: name,
+            citations: parseInt(citations, 10),
+            hIndex: parseInt(hIndex, 10),
+            coAuthors: parseInt(coAuthors, 10),
+            totalPubs: totalPubs
+          });
         } else if ($scope.listName === $scope.listTypes.venues) {
           // venues page
           name = data[i][1];
 
           csvData.push([id, name]);
+
+          // push data to list
+          $scope.list.push({
+            id: id,
+            name: name
+          });
         } else if ($scope.listName === $scope.listTypes.projects) {
           // projects page
           areaId = data[i][1];
@@ -209,7 +252,22 @@ angular.module('itapapersApp')
           area = instances[areaId].property_values.name ? instances[areaId].property_values.name[0] : null;
 
           csvData.push([areaId, area, id, name, value]);
-        } else if ($scope.listName === $scope.listTypes.orgs) {
+
+          if (!$scope.projects[area]) {
+            $scope.projects[area] = [];
+            $scope.areaNames.push(area);
+          }
+
+          // push data to list
+          $scope.projects[area].push({
+            id: id,
+            name: name,
+            value: parseInt(value, 10),
+            papers: parseInt(papers, 10),
+            areaId: areaId,
+            class: className
+          });
+        } else if ($scope.listName === $scope.listTypes.organisations) {
           // organisations page
           var orgProps = instances[id].property_values;
           name = orgProps.name ? orgProps.name[0] : null;
@@ -221,52 +279,32 @@ angular.module('itapapersApp')
           }
 
           csvData.push([id, name, area, value, papers]);
+
+          // push data to list
+          $scope.list.push({
+            id: id,
+            name: name,
+            value: parseInt(value, 10),
+            papers: parseInt(papers, 10),
+            area: area
+          });
         } else if ($scope.listName === $scope.listTypes.topics) {
           // topics page
           var topicProps = instances[id].property_values;
           papers = topicProps["paper count"] ? topicProps["paper count"][0] : 0;
 
           csvData.push([id, papers]);
-        }
 
-        // set value property
-        if ($scope.listName === $scope.listTypes.papers) {
-          value = citations;
-        } else if ($scope.listName === $scope.listTypes.authors) {
-          value = totalPubs;
-        }
-
-        if ($scope.listName === $scope.listTypes.projects) {
-          if (!$scope.projects[area]) {
-            $scope.projects[area] = [];
-            $scope.areaNames.push(area);
-          }
-
-          $scope.projects[area].push({
-            id: id,
-            name: name,
-            value: parseInt(value, 10),
-            papers: parseInt(papers, 10),
-            class: className
-          });
-        } else {
-          // push results to list
+          // push data to list
           $scope.list.push({
             id: id,
-            name: name,
             date: date,
-            value: parseInt(value, 10),
-            papers: parseInt(papers, 10),
-            area: area,
-            areaId: areaId,
-            type: type,
-            class: className,
-            weight: weight,
-            noteworthy: noteworthy
+            papers: parseInt(papers, 10)
           });
         }
       }
 
+      // add CSV data
       if ($scope.listName === $scope.listTypes.papers) {
         csvHeader = ["paper id", "name", "citation count", "paper type", "venue", "authors"];
         csvName = "papers";
@@ -279,10 +317,11 @@ angular.module('itapapersApp')
       } else if ($scope.listName === $scope.listTypes.projects) {
         csvHeader = ["technical area id", "technical area name", "project id", "project name", "papers count"];
         csvName = "projects";
-      } else if ($scope.listName === $scope.listTypes.orgs) {
+      } else if ($scope.listName === $scope.listTypes.organisations) {
         csvHeader = ["organisation id", "name", "type", "employee count", "papers count"];
         csvName = "organisations";
       }
+      // TODO: add CSV data for coauthors and topics
 
       csv.setName(csvName);
       csv.setHeader(csvHeader);
@@ -327,9 +366,6 @@ angular.module('itapapersApp')
             $scope.internalPapers = $scope.typeCount[types[$scope.internalConferenceType]];
             $scope.technicalReports = $scope.typeCount[types[$scope.technicalReportType]];
             $scope.otherDocuments = $scope.typeCount[types[$scope.otherDocumentType]];
-
-//DSB - changed to use only journal and external paper counts
-//            $scope.totalPublications = $scope.journalPapers + $scope.externalPapers + $scope.internalPapers + $scope.technicalReports + $scope.otherDocuments;
             $scope.totalPublications = $scope.journalPapers + $scope.externalPapers + $scope.patents;
 
             $scope.pieData = [{
@@ -368,7 +404,7 @@ angular.module('itapapersApp')
           .then(function(data) {
             populateList(data.results, data.instances);
           });
-      } else if ($scope.listName === $scope.listTypes.orgs) {
+      } else if ($scope.listName === $scope.listTypes.organisations) {
         store.getOrganisations()
           .then(function(data) {
             populateList(data.results, data.instances);
@@ -382,5 +418,9 @@ angular.module('itapapersApp')
       }
     };
 
-    $scope.select($scope.listTypes.papers);
+    if ($stateParams.category) {
+      $scope.select($scope.listTypes[$stateParams.category]);
+    } else {
+      $scope.select($scope.listTypes.papers);
+    }
   }]);

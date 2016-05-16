@@ -37,6 +37,11 @@ angular
         templateUrl: "views/main.html",
         controller: "MainCtrl"
       })
+      .state('category', {
+        url: "/:category?debug",
+        templateUrl: "views/main.html",
+        controller: "MainCtrl"
+      })
       .state('author', {
         url: "/author/:authorId?debug",
         templateUrl: "views/author.html",
