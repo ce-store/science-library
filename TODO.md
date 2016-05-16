@@ -6,8 +6,6 @@ Science Library
 1. Additional sorts for pages:
 Requires updates on CE for completion
 
-1. Remove comment and issue code from JS
-
 1. If a document has a *status* that does not match 'accepted' then:
  + in the list view precede the title with *[submitted]* (or whatever the status is)
  + in the details view add a prominent message showing the non-accepted status
@@ -170,6 +168,8 @@ add up.
 1. Add the numbers in brackets back for the items listed in the previous step
 if the underlying data is numeric (except for collaborations which comes from
 `weight` and won't make any sense)
+
+1. Remove comment and issue code from JS
 
 # Hudson
 1. Implement keyword search as part of Hudson

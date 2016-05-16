@@ -19,9 +19,13 @@ angular.module('itapapersApp')
   })
   .filter('capitaliseFirst', function () {
     return function(input, all) {
-      return input.replace(/^(.)|\s(.)/g, function(v) {
-        return v.toUpperCase( );
-      });
+      if (input) {
+        return input.replace(/^(.)|\s(.)/g, function(v) {
+          return v.toUpperCase( );
+        });
+      } else {
+        return input;
+      }
     };
   })
   .filter('capitaliseFirstOnly', function () {

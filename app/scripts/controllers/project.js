@@ -8,7 +8,7 @@
  * Controller of the itapapersApp
  */
 angular.module('itapapersApp')
-  .controller('ProjectCtrl', ['$scope', '$stateParams', 'store', 'debug', 'hudson', 'documentTypes', 'utils', 'csv', function ($scope, $stateParams, store, debug, hudson, documentTypes, utils, csv) {
+  .controller('ProjectCtrl', ['$scope', '$stateParams', 'store', 'hudson', 'documentTypes', 'utils', 'csv', function ($scope, $stateParams, store, hudson, documentTypes, utils, csv) {
     $scope.journalType = documentTypes.journal;
     $scope.externalConferenceType = documentTypes.external;
     $scope.internalConferenceType = documentTypes.internal;
@@ -19,10 +19,6 @@ angular.module('itapapersApp')
     var unknown = "Unknown";
     var lastHighlight;
     var types = documentTypes.nameMap;
-
-    if ($stateParams.debug) {
-      debug.set($stateParams.debug);
-    }
 
     $scope.$on('question:added', function() {
       refreshHighlight();

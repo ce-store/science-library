@@ -8,7 +8,7 @@
  * Controller of the itapapersApp
  */
 angular.module('itapapersApp')
-  .controller('PaperCtrl', ['$scope', '$stateParams', '$http', 'store', 'hudson', 'server', 'debug', 'documentTypes', 'utils', 'csv', function ($scope, $stateParams, $http, store, hudson, server, debug, documentTypes, utils, csv) {
+  .controller('PaperCtrl', ['$scope', '$stateParams', '$http', 'store', 'hudson', 'server', 'documentTypes', 'utils', 'csv', function ($scope, $stateParams, $http, store, hudson, server, documentTypes, utils, csv) {
     $scope.journalType = documentTypes.journal;
     $scope.externalConferenceType = documentTypes.external;
     $scope.internalConferenceType = documentTypes.internal;
@@ -18,10 +18,6 @@ angular.module('itapapersApp')
 
     var lastHighlight = null;
     var types = documentTypes.nameMap;
-
-    if ($stateParams.debug) {
-      debug.set($stateParams.debug);
-    }
 
     $scope.$on('question:added', function() {
       refreshHighlight();

@@ -33,52 +33,52 @@ angular
     // Now set up the states
     $stateProvider
       .state('main', {
-        url: "/?debug",
+        url: "/",
         templateUrl: "views/main.html",
         controller: "MainCtrl"
       })
       .state('category', {
-        url: "/:category?debug",
+        url: "/:category",
         templateUrl: "views/main.html",
         controller: "MainCtrl"
       })
       .state('author', {
-        url: "/author/:authorId?debug",
+        url: "/author/:authorId",
         templateUrl: "views/author.html",
         controller: "AuthorCtrl"
       })
       .state('paper', {
-        url: "/paper/:paperId?debug",
+        url: "/paper/:paperId",
         templateUrl: "views/paper.html",
         controller: "PaperCtrl"
       })
       .state('venue', {
-        url: "/venue/:venueId/:year?debug",
+        url: "/venue/:venueId/:year",
         templateUrl: "views/venue.html",
         controller: "VenueCtrl"
       })
       .state('organisation', {
-        url: "/organisation/:organisationId?debug",
+        url: "/organisation/:organisationId",
         templateUrl: "views/organisation.html",
         controller: "OrganisationCtrl"
       })
       .state('topic', {
-        url: "/topic/:topicId?debug",
+        url: "/topic/:topicId",
         templateUrl: "views/topic.html",
         controller: "TopicCtrl"
       })
       .state('project', {
-        url: "/project/:projectId?debug",
+        url: "/project/:projectId",
         templateUrl: "views/project.html",
         controller: "ProjectCtrl"
       })
       .state('collaboration', {
-        url: "/collaboration?author&debug",
+        url: "/collaboration?author",
         templateUrl: "views/collaboration.html",
         controller: "CollaborationCtrl"
       })
       .state('results', {
-        url: "/results?debug&keywords",
+        url: "/results?keywords",
         templateUrl: "views/results.html",
         controller: "ResultsCtrl"
       })
@@ -88,12 +88,12 @@ angular
         controller: "StatisticsCtrl"
       })
       .state('comments', {
-        url: "/comments?debug",
+        url: "/comments",
         templateUrl: "views/comments.html",
         controller: "CommentsCtrl"
       })
       .state('compute', {
-        url: "/compute?debug",
+        url: "/compute",
         templateUrl: "views/compute.html",
         controller: "ComputeCtrl"
       });

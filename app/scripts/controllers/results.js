@@ -8,12 +8,8 @@
  * Controller of the itapapersApp
  */
 angular.module('itapapersApp')
-  .controller('ResultsCtrl', ['$scope', '$stateParams', '$http', 'debug', 'server', 'ceStore', 'keywordSearch', function ($scope, $stateParams, $http, debug, server, ceStore, keywordSearch) {
+  .controller('ResultsCtrl', ['$scope', '$stateParams', '$http', 'server', 'ceStore', 'keywordSearch', function ($scope, $stateParams, $http, server, ceStore, keywordSearch) {
     $scope.listLength = 25;
-
-    if ($stateParams.debug) {
-      debug.set($stateParams.debug);
-    }
 
     if ($stateParams.keywords) {
       $scope.keywords = $stateParams.keywords;

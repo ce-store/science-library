@@ -8,7 +8,7 @@
  * Controller of the itapapersApp
  */
 angular.module('itapapersApp')
-  .controller('VenueCtrl', ['$scope', '$stateParams', 'store', 'hudson', 'colours', 'debug', 'documentTypes', 'utils', 'csv', function ($scope, $stateParams, store, hudson, colours, debug, documentTypes, utils, csv) {
+  .controller('VenueCtrl', ['$scope', '$stateParams', 'store', 'hudson', 'colours', 'documentTypes', 'utils', 'csv', function ($scope, $stateParams, store, hudson, colours, documentTypes, utils, csv) {
     $scope.map = {};
     $scope.multiplier = 3;
     var bubblesData = {};
@@ -18,10 +18,6 @@ angular.module('itapapersApp')
     var csvDataYears = {};
     var unknown = 'Unknown';
     var lastHighlight = null;
-
-    if ($stateParams.debug) {
-      debug.set($stateParams.debug);
-    }
 
     $scope.$on('question:added', function() {
       refreshHighlight();

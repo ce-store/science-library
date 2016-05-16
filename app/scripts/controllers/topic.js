@@ -8,7 +8,7 @@
  * Controller of the itapapersApp
  */
 angular.module('itapapersApp')
-  .controller('TopicCtrl', ['$scope', '$stateParams', 'store', 'debug', 'hudson', 'documentTypes', 'utils', 'csv', function ($scope, $stateParams, store, debug, hudson, documentTypes, utils, csv) {
+  .controller('TopicCtrl', ['$scope', '$stateParams', 'store', 'hudson', 'documentTypes', 'utils', 'csv', function ($scope, $stateParams, store, hudson, documentTypes, utils, csv) {
     $scope.views = ['papers', 'authors', 'organisations'];
     $scope.currentView = $scope.views[0];
     $scope.journalType = documentTypes.journal;
@@ -21,10 +21,6 @@ angular.module('itapapersApp')
     var unknown = "Unknown";
     var lastHighlight;
     var types = documentTypes.nameMap;
-
-    if ($stateParams.debug) {
-      debug.set($stateParams.debug);
-    }
 
     $scope.$on('question:added', function() {
       refreshHighlight();

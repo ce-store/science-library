@@ -8,11 +8,7 @@
  * Controller of the itapapersApp
  */
 angular.module('itapapersApp')
-  .controller('ComputeCtrl', ['$scope', '$stateParams', 'store', 'debug', 'server', function ($scope, $stateParams, store, debug, server) {
-
-    if ($stateParams.debug) {
-      debug.set($stateParams.debug);
-    }
+  .controller('ComputeCtrl', ['$scope', '$stateParams', 'store', 'server', function ($scope, $stateParams, store, server) {
 
     store.getDataForCompute()
       .then(function(results) {

@@ -8,7 +8,7 @@
  * Controller of the itapapersApp
  */
 angular.module('itapapersApp')
-  .controller('MainCtrl', ['$scope', '$stateParams', '$location', '$sce', 'store', 'charts', 'debug', 'documentTypes', 'utils', 'csv', 'colours', 'localStorageService', 'server', function ($scope, $stateParams, $location, $sce, store, charts, debug, documentTypes, utils, csv, colours, localStorageService, server) {
+  .controller('MainCtrl', ['$scope', '$stateParams', '$location', '$sce', 'store', 'charts', 'documentTypes', 'utils', 'csv', 'colours', 'localStorageService', 'server', function ($scope, $stateParams, $location, $sce, store, charts, documentTypes, utils, csv, colours, localStorageService, server) {
     $scope.listTypes = {
       papers: 'papers',
       authors: 'authors',
@@ -79,10 +79,6 @@ angular.module('itapapersApp')
 
     var unknown = "unknown";
     var types = documentTypes.nameMap;
-
-    if ($stateParams.debug) {
-      debug.set($stateParams.debug);
-    }
 
     var resetTypeCount = function() {
       $scope.typeCount = {};
