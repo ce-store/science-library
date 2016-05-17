@@ -73,13 +73,12 @@ sup, sub {
 
 .scene {
   cursor: pointer;
-  fill-opacity: .15;
   color: #787878;
   shape-rendering: auto;
 }
 
 .scene:hover {
-  fill-opacity: 0.6;
+  /*fill-opacity: 0.6;*/
   color: #FFFF00;
 }
 

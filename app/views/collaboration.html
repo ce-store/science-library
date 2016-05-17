@@ -60,6 +60,7 @@
               <dd>{{totalPublications}}</dd>
             </div>
           </dl>
+          <hr class="statistics-hr">
           <dl class="dl-horizontal dl-publications" ng-class="[{'answer-highlight': publicationsHighlight}]">
             <div ng-show="journalPapers" ng-class="[{'answer-highlight': journal_paper_countHighlight}]">
               <dt>Journals</dt>
@@ -69,6 +70,13 @@
               <dt>External Conferences</dt>
               <dd>{{externalPapers}}</dd>
             </div>
+            <div ng-show="patents" ng-class="[{'answer-highlight': patent_countHighlight}]">
+              <dt>Patents</dt>
+              <dd>{{patents}}</dd>
+            </div>
+          </dl>
+          <hr class="statistics-hr">
+          <dl class="dl-horizontal dl-publications" ng-class="[{'answer-highlight': publicationsHighlight}]">
             <div ng-show="internalPapers" ng-class="[{'answer-highlight': internal_paper_countHighlight}]">
               <dt>Internal Conferences</dt>
               <dd>{{internalPapers}}</dd>

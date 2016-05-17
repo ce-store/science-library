@@ -26,14 +26,6 @@ Requires updates on CE for completion
  + in the list view precede the title with *[submitted]* (or whatever the status is)
  + in the details view add a prominent message showing the non-accepted status
 
-1. Home page - can we add a line/separator after Patents and before Internal
-Conferences.
-I want to reinforce the split between internal and external papers.
-
-1. On the author narrative is it possible to use the standard paper icon instead
-of the grey blob?
-This would then be consisted with everywhere else we list papers...
-
 1. On the authors page provide a switch/option to show google scholar citations
 data as well as the local citations.
 Perhaps show both if both available? (or allow a click to switch between them)
@@ -179,6 +171,14 @@ related google scholar citation instance)
 
 1. On the authors scatter chart is it possible to show all the authors hidden
 under a single dot when they are stacked, e.g. on hover?
+
+1. Home page - can we add a line/separator after Patents and before Internal
+Conferences.
+I want to reinforce the split between internal and external papers.
+
+1. On the author narrative is it possible to use the standard paper icon instead
+of the grey blob?
+This would then be consisted with everywhere else we list papers...
 
 # Hudson
 

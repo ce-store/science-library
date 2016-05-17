@@ -79,6 +79,10 @@ hr {
   margin: 10px 0 15px 0;
 }
 
+hr.statistics-hr {
+  width: 300px;
+}
+
 dl {
   color: #fff;
   margin: 5px 0;
@@ -1111,13 +1115,13 @@ sup, sub {
 
 .scene {
   cursor: pointer;
-  fill-opacity: .3;
+  fill-opacity: .8;
   fill: #fff;
   shape-rendering: auto;
 }
 
 .scene:hover {
-  fill-opacity: 0.6;
+  /*fill-opacity: .8;*/
 }
 
 .node {

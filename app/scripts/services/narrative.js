@@ -1,6 +1,7 @@
 "use strict";
 
 var server = null;
+var rels;
 
 // Link dimensions
 var link_width = 1.8;
@@ -62,6 +63,12 @@ var opacity = {
     "-moz-transition": "opacity .25s ease-in-out",
     "-webkit-transition": "opacity .25s ease-in-out"
   },
+  opaqueScene: {
+    "opacity": 0.9,
+    "transition": "opacity .25s ease-in-out",
+    "-moz-transition": "opacity .25s ease-in-out",
+    "-webkit-transition": "opacity .25s ease-in-out"
+  },
   translucentNodes: {
     "opacity": 0.1,
     "transition": "opacity .25s ease-in-out",
@@ -70,6 +77,12 @@ var opacity = {
   },
   translucentLinks: {
     "stroke-opacity": 0.2,
+    "transition": "opacity .25s ease-in-out",
+    "-moz-transition": "opacity .25s ease-in-out",
+    "-webkit-transition": "opacity .25s ease-in-out"
+  },
+  translucentScene: {
+    "opacity": 0.2,
     "transition": "opacity .25s ease-in-out",
     "-moz-transition": "opacity .25s ease-in-out",
     "-webkit-transition": "opacity .25s ease-in-out"
@@ -613,7 +626,12 @@ function calculate_link_positions(scenes) {
 
 } // calculate_link_positions
 
-function styleLinkedAuthors(from, chars, focus, visited) {
+function styleLinkedAuthors(from, chars, focus, visited, iteration) {
+  if (!from.char_node) {
+    d3.selectAll("[scene_id=\"" + from.id + "\"] .scene")
+      .style({"opacity": 1});
+  }
+
   if (!visited) {
     visited = [];
   }
@@ -626,6 +644,25 @@ function styleLinkedAuthors(from, chars, focus, visited) {
     // make connected authors opaque
     d3.selectAll("[scene_id=\"" + from.id + "\"]")
       .style({"opacity": 1});
+  }
+
+  function setFuturePapers(to, chars, focus, futureVisitors) {
+    if (futureVisitors.indexOf(to.id) > -1) {
+      console.log ("visited");
+    } else {
+      futureVisitors.push(to.id);
+      if (!to.char_node) {
+        d3.selectAll("[scene_id=\"" + to.id + "\"] .scene")
+          .style({"opacity": 1});
+      }
+
+      for (var k = 0; k < to.out_links.length; ++k) {
+        if (chars.indexOf(to.out_links[k].char_id) > -1) {
+          var newTo = to.out_links[k].to;
+          setFuturePapers(newTo, chars, focus, futureVisitors);
+        }
+      }
+    }
   }
 
   if (visited.indexOf(from.id) > -1) {
@@ -642,16 +679,15 @@ function styleLinkedAuthors(from, chars, focus, visited) {
     } else {
       for (var i = 0; i < from.in_links.length; ++i) {
         if (chars.indexOf(from.in_links[i].char_id) > -1) {
-          var newFrom;
-          if (focus) {
-            newFrom = from.in_links[i].from;
-            styleLinkedAuthors(newFrom, chars, focus, visited);
-          } else {
-            newFrom = from.in_links[i].from;
-            styleLinkedAuthors(newFrom, chars, focus, visited);
-          }
+          var newFrom = from.in_links[i].from;
+          styleLinkedAuthors(newFrom, chars, focus, visited, true);
         }
       }
+    }
+
+    if (!iteration) {
+      var futureVistors = [];
+      setFuturePapers(from, chars, focus, futureVistors);
     }
   }
 }
@@ -676,6 +712,8 @@ function draw_nodes(scenes, svg) {
   function mouseover(d) {
     d3.selectAll(".node_char")
       .style(opacity.translucentNodes);
+    d3.selectAll(".scene")
+      .style(opacity.translucentScene);
     d3.selectAll(".link")
       .style(opacity.translucentLinks);
     styleLinkedAuthors(d, d.chars, true);
@@ -708,6 +746,8 @@ function draw_nodes(scenes, svg) {
   function mouseout(d) {
     d3.selectAll(".node_char")
       .style(opacity.opaqueNodes);
+    d3.selectAll(".scene")
+      .style(opacity.opaqueScene);
     d3.selectAll(".link")
       .style(opacity.opaqueLinks);
     styleLinkedAuthors(d, d.chars, false);
@@ -755,10 +795,30 @@ function draw_nodes(scenes, svg) {
       return d.height;
     })
     .attr("class", "scene")
-    // .style("fill", function(d) { return "#1f77b4"; })
+    .style("fill", function(d) {
+      if (d.paper) {
+        var directConceptNames = rels[d.paper].direct_concept_names;
+        var inheritedConceptNames = rels[d.paper].inherited_concept_names;
+        var papers = ["#5596e6", "#00b299", "#7c56a5", "#f49c4e", "#cc3f40", "#94a3ab"];
+
+        if (directConceptNames.indexOf("journal paper") > -1) {
+          return papers[0];
+        } else if (directConceptNames.indexOf("external conference paper") > -1) {
+          return papers[1];
+        } else if (directConceptNames.indexOf("patent") > -1) {
+          return papers[2];
+        } else if (directConceptNames.indexOf("internal conference paper") > -1) {
+          return papers[3];
+        } else if (directConceptNames.indexOf("technical report") > -1) {
+          return papers[4];
+        } else if (directConceptNames.indexOf("other document") > -1 || inheritedConceptNames.indexOf("other document") > -1) {
+          return papers[5];
+        }
+      }
+
+      return "#fff";
+    })
     // .style("stroke", function(d) { return "#0f3a58"; })
-    .attr("rx", 20)
-    .attr("ry", 10)
     .append("title")
     .text(function(d) {
       return d.name;
@@ -841,6 +901,8 @@ function draw_links(links, svg) {
   function mouseover_cb(d) {
     d3.selectAll(".node_char")
       .style(opacity.translucentNodes);
+    d3.selectAll(".scene")
+      .style(opacity.translucentScene);
     d3.selectAll(".link")
       .style(opacity.translucentLinks);
     styleLinkedAuthors(d.from, [d.char_id], true);
@@ -849,6 +911,8 @@ function draw_links(links, svg) {
   function mouseout_cb(d) {
     d3.selectAll(".node_char")
       .style(opacity.opaqueNodes);
+    d3.selectAll(".scene")
+      .style(opacity.opaqueScene);
     d3.selectAll(".link")
       .style(opacity.opaqueLinks);
     styleLinkedAuthors(d.from, [d.char_id], false);
@@ -882,7 +946,7 @@ function draw_links(links, svg) {
 
 function drawNarrativeChart(safe_name, tie_breaker, center_sort, collapse, data, svr) {
   var vals = data.structured_response.main_instance.property_values;
-  var rels = data.structured_response.related_instances;
+  rels = data.structured_response.related_instances;
   var i = 0;
 
   var authorMap = {};
