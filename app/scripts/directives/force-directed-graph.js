@@ -132,7 +132,8 @@ angular.module('itapapersApp')
             allNodes.forEach(function(d, i) {
               if (d.group === "AC" && acInput ||
                 d.group === "GOV" && govInput ||
-                d.group === "IND" && indInput) {
+                d.group === "IND" && indInput ||
+                d.id === scope.authorId) {
                 if (i === 0) {
                   rootFound = true;
                   linksMap[rootId] = linksMap[rootId] ? linksMap[rootId] : [];

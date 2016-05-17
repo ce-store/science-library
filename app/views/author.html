@@ -12,7 +12,23 @@
       <div ng-show="currentView === views[0]" id="narrative-chart" class="panel"></div>
 
       <div ng-show="currentView === views[1]" id="authors-publications-list" class="list-view list-view-no-margin" ng-class="[{'answer-highlight': wroteHighlight}]">
-        <h3 class="floating-header">{{author}} wrote</h3>
+        <h3 class="floating-header">
+          {{author}}'s papers
+
+          <span ng-show="sort.names">
+            sorted by
+            <span uib-dropdown on-toggle="toggled(open)">
+              <a href id="simple-dropdown" uib-dropdown-toggle>
+                <span class="highlight bold list-name">{{sortName}}<span class="caret"></span></span>
+              </a>
+              <ul class="uib-dropdown-menu" aria-labelledby="simple-dropdown">
+                <li role="menuitem" ng-repeat="type in sort.names">
+                  <a href="#" ng-click="sortList($index)">{{type | capitaliseFirstOnly}}</a>
+                </li>
+              </ul>
+            </span>
+          </span>
+        </h3>
 
         <div class="authorFilters">
           <label ng-show="journalPapers" class="journal"></label>
@@ -30,10 +46,11 @@
         </div>
 
         <ul class="results-list clear" id="publications-results-list">
-          <li class="no-bullets" ng-repeat="paper in papersList | orderBy : 'name' | orderBy : '-weight' | filter : filterPapers">
+          <li class="no-bullets" ng-repeat="paper in papersList | orderBy : 'name' | orderBy : sortCommand | filter : filterPapers">
             <span ng-class="[className, ('document-' + $index)]" ng-repeat="className in paper.class track by $index"></span>
             <a ng-href="paper/{{paper.id}}" class="list-name">{{paper.name}}</a>
-            <small ng-if="paper.noteworthy"><span class="glyphicon glyphicon-star-empty highlight" aria-hidden="true"></span> ({{paper.noteworthy}})</small><!-- <small ng-if="paper.citations" class="highlight" uib-tooltip="Citation count">({{paper.citations}})</small> -->
+            <small ng-if="paper.noteworthy"><span class="glyphicon glyphicon-star-empty highlight" aria-hidden="true"></span> ({{paper.noteworthy}})</small>
+            <small ng-if="paper[sortValue] && sortShow" class="highlight">({{paper[sortValue]}})</small>
           </li>
         </ul>
       </div>
