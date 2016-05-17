@@ -75,9 +75,13 @@
 
         <div class="total-publication-count">
           <dl class="dl-horizontal dl-publications" ng-class="[{'answer-highlight': publicationsHighlight}]">
-            <div ng-show="totalPublications" ng-class="[{'answer-highlight': total_publication_countHighlight}]">
+            <div ng-show="totalExternalPublications" ng-class="[{'answer-highlight': total_publication_countHighlight}]">
               <dt>Total (External)</dt>
-              <dd>{{totalPublications}}</dd>
+              <dd>{{totalExternalPublications}}</dd>
+            </div>
+            <div ng-show="totalInternalPublications" ng-class="[{'answer-highlight': total_publication_countHighlight}]">
+              <dt>Total (Internal)</dt>
+              <dd>{{totalInternalPublications}}</dd>
             </div>
           </dl>
           <hr class="statistics-hr">

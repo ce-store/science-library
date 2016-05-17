@@ -96,15 +96,14 @@ angular.module('itapapersApp')
         $scope.country = properties["is located at"] ? properties["is located at"][0] : null;
 
         $scope.journalPapers = properties["journal paper count"] ? parseInt(properties["journal paper count"][0], 10) : 0;
-        $scope.externalPapers = properties["external paper count"] ? parseInt(properties["external paper count"][0], 10) : 0;
+        $scope.externalPapers = properties["external conference paper count"] ? parseInt(properties["external conference paper count"][0], 10) : 0;
         $scope.patents = properties["patent count"] ? parseInt(properties["patent count"][0], 10) : 0;
-        $scope.internalPapers = properties["internal paper count"] ? parseInt(properties["internal paper count"][0], 10) : 0;
+        $scope.internalPapers = properties["internal conference paper count"] ? parseInt(properties["internal conference paper count"][0], 10) : 0;
         $scope.technicalReports = properties["technical report count"] ? parseInt(properties["technical report count"][0], 10) : 0;
         $scope.otherDocuments = properties["other document count"] ? parseInt(properties["other document count"][0], 10) : 0;
 
-//DSB - changed to use CE computed value
-//        $scope.totalPublications = $scope.journalPapers + $scope.externalPapers + $scope.patents + $scope.internalPapers;
-        $scope.totalPublications = properties["paper count"] ? parseInt(properties["paper count"][0], 10) : 0;
+        $scope.totalExternalPublications = properties["external document count"] ? parseInt(properties["external document count"][0], 10) : 0;
+        $scope.totalInternalPublications = properties["internal document count"] ? parseInt(properties["internal document count"][0], 10) : 0;
 
         var employees = properties.employs;
         var documentMap = {};
@@ -123,8 +122,6 @@ angular.module('itapapersApp')
           var thisExternalPapers = authorProps["external paper count"] ? parseInt(authorProps["external paper count"][0], 10) : 0;
           var thisPatentPapers = authorProps["patent count"] ? parseInt(authorProps["patent count"][0], 10) : 0;
           var thisInternalPapers = authorProps["internal paper count"] ? parseInt(authorProps["internal paper count"][0], 10) : 0;
-//DSB - changed to use CE computed value
-//          var totalCount = thisJournalPapers + thisExternalPapers + thisPatentPapers + thisInternalPapers;
           var totalCount = authorProps["total publication count"] ? parseInt(authorProps["total publication count"][0], 10) : 0;
 
           // add author to employee list
