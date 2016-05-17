@@ -444,7 +444,7 @@ angular.module('itapapersApp')
               for (var i1 in papers1) {
                 var p1 = papers1[i1];
                 for (var i2 in papers2) {
-                  var p2 = papers1[i2];
+                  var p2 = papers2[i2];
 
                   if (p1 == p2) {
                     if (joint.indexOf(p1) == -1) {
