@@ -9,6 +9,7 @@
  */
 angular.module('itapapersApp')
   .controller('MainCtrl', ['$scope', '$stateParams', '$location', '$sce', 'store', 'charts', 'documentTypes', 'utils', 'csv', 'colours', 'localStorageService', 'server', function ($scope, $stateParams, $location, $sce, store, charts, documentTypes, utils, csv, colours, localStorageService, server) {
+    $scope.accepted = 'accepted';
     $scope.listTypes = {
       papers: 'papers',
       authors: 'authors',
@@ -148,7 +149,7 @@ angular.module('itapapersApp')
 
       // loop through results and extract relevant data
       for (var i = 0; i < data.length; ++i) {
-        var id, citations, name, date, hIndex, totalPubs, type, className, value, papers, weight, noteworthy;
+        var id, citations, name, date, hIndex, totalPubs, type, className, value, papers, weight;
         var citationProps;
         var area, areaId;
 
@@ -179,8 +180,8 @@ angular.module('itapapersApp')
             $scope.typeCount[type]++;
           }
 
-          // is it a noteworthy paper?
-          noteworthy = paperProps["noteworthy reason"] ? paperProps["noteworthy reason"][0] : null;
+          var noteworthy = paperProps["noteworthy reason"] ? paperProps["noteworthy reason"][0] : null;
+          var status = paperProps.status ? paperProps.status[0] : unknown;
 
           // generate class names
           className = [];
@@ -201,7 +202,8 @@ angular.module('itapapersApp')
             weight: parseInt(weight, 10),
             type: type,
             class: className,
-            noteworthy: noteworthy
+            noteworthy: noteworthy,
+            status: status
           });
         } else if ($scope.listName === $scope.listTypes.authors) {
           // authors page

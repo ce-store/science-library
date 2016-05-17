@@ -424,6 +424,11 @@ td {
   height: 200px;
 }
 
+.status-warning {
+  font-weight: bold;
+  color: red;
+}
+
 /* Author page */
 
 .view-btn {

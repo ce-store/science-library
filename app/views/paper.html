@@ -64,6 +64,12 @@
             </dd>
           </dl>
 
+          <!-- Status -->
+          <dl class="dl-horizontal" ng-class="[{'answer-highlight': statusHighlight}]">
+            <dt>Status</dt>
+            <dd ng-class="[{'status-warning': status !== accepted}]">{{status | capitalise}}</dd>
+          </dl>
+
           <!-- Paper Type -->
           <dl class="dl-horizontal" ng-class="[{'answer-highlight': paper_typeHighlight}]">
             <dt>Paper Type</dt>

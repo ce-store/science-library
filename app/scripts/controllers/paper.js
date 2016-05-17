@@ -14,7 +14,8 @@ angular.module('itapapersApp')
     $scope.internalConferenceType = documentTypes.internal;
     $scope.technicalReportType = documentTypes.technical;
     $scope.otherDocumentType = documentTypes.other;
-    $scope.conferenceType = "conference paper";
+    $scope.conferenceType = documentTypes.conference;
+    $scope.accepted = 'accepted';
 
     var lastHighlight = null;
     var types = documentTypes.nameMap;
@@ -97,6 +98,7 @@ angular.module('itapapersApp')
 
         $scope.title = properties.title ? properties.title[0] : unknown;
         $scope.noteworthy = properties["noteworthy reason"] ? properties["noteworthy reason"][0] : null;
+        $scope.status = properties.status ? properties.status[0] : unknown;
 
         // sources
         $scope.paperSource = properties["paper thumbnail"] ? server + properties["paper thumbnail"][0] : null;

@@ -10,6 +10,7 @@
 angular.module('itapapersApp')
   .constant('documentTypes', {
     journal: "journal paper",
+    conference: "conference paper",
     external: "external conference paper",
     patent: "patent",
     internal: "internal conference paper",
