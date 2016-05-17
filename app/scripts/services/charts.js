@@ -52,6 +52,9 @@ angular.module('itapapersApp')
             name: data[i][3],
             totalPubs: totalPubs,
             citations: parseInt(citations, 10),
+            hIndex: parseInt(hIndex, 10),
+            googleCitations: parseInt(googleCitations, 10),
+            googleHIndex: parseInt(googleHIndex, 10),
             industry: industry,
             yValue: parseInt(citations, 10)
           };
@@ -60,7 +63,10 @@ angular.module('itapapersApp')
             employer: data[i][2],
             name: data[i][3],
             totalPubs: totalPubs,
+            citations: parseInt(citations, 10),
             hIndex: parseInt(hIndex, 10),
+            googleCitations: parseInt(googleCitations, 10),
+            googleHIndex: parseInt(googleHIndex, 10),
             industry: industry,
             yValue: parseInt(hIndex, 10)
           };
@@ -69,7 +75,10 @@ angular.module('itapapersApp')
             employer: data[i][2],
             name: data[i][3],
             totalPubs: totalPubs,
+            citations: parseInt(citations, 10),
+            hIndex: parseInt(hIndex, 10),
             googleCitations: parseInt(googleCitations, 10),
+            googleHIndex: parseInt(googleHIndex, 10),
             industry: industry,
             yValue: parseInt(googleCitations, 10)
           };
@@ -78,6 +87,9 @@ angular.module('itapapersApp')
             employer: data[i][2],
             name: data[i][3],
             totalPubs: totalPubs,
+            citations: parseInt(citations, 10),
+            hIndex: parseInt(hIndex, 10),
+            googleCitations: parseInt(googleCitations, 10),
             googleHIndex: parseInt(googleHIndex, 10),
             industry: industry,
             yValue: parseInt(googleHIndex, 10)

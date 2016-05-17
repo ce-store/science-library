@@ -86,10 +86,29 @@ angular.module('itapapersApp')
               .attr('class', 'd3-tip')
               .offset([-10, 0])
               .html(function(d) {
-                var html = "<h2>" + d.name + " <small>(" + d.employer + ")</small></h2>" + "<dl><dt>H-Index</dt><dd>" + d.hIndex + "</dd><dt>Citation Count</dt><dd>" + d.citations + "</dd><dt>ITA Publications</dt><dd>" + d.totalPubs + "</dd></dl>";
+                var data = options[scope.scatterYAxis];
 
-                if (d.picture) {
-                  html += "<img src='" + d.picture + "' />";
+                var authors = [d];
+                for (var i = 0; i < data.length; ++i) {
+                  if (data[i].id !== d.id && data[i].totalPubs === d.totalPubs && ((d.hIndex && data[i].hIndex === d.hIndex) || (d.citations && data[i].citations === d.citations))) {
+                    authors.push(data[i]);
+                  }
+                }
+
+                var html = "";
+                for (var j = 0; j < authors.length; ++j) {
+                  var a = authors[j];
+                  html += "<div><h2>" + a.name + " <small>(" + a.employer + ")</small></h2>" + "<dl><dt>Local H-Index</dt><dd>" + a.hIndex + "</dd><dt>Local Citation Count</dt><dd>" + a.citations + "</dd><dt>ITA Publications</dt><dd>" + a.totalPubs + "</dd></dl>";
+
+                  if (a.picture) {
+                    html += "<img src='" + a.picture + "' />";
+                  }
+
+                  html += "<div style='clear: both'></div></div>";
+
+                  if (j < authors.length - 1) {
+                    html += "<hr>";
+                  }
                 }
 
                 return html;
