@@ -22,11 +22,6 @@ Requires updates on CE for completion
  by # citations * I will add a CE property for this *
  by name
 
-1. Author page -> co-authors chart
-Allow the type that the author is (e.g. blue/academic for Don Towsley) to be
-deselected but continue to render the author whos page this is.
-It is quite handy to find who an author co-authors with outside of their own type.
-
 1. Author page -> list papers
 Provide the same sort options as for the overall papers home page
 
@@ -179,6 +174,11 @@ Perhaps show both if both available? (or allow a click to switch between them)
 1. If a document has a *status* that does not match 'accepted' then:
  + in the list view precede the title with *[submitted]* (or whatever the status is)
  + in the details view add a prominent message showing the non-accepted status
+
+1. Author page -> co-authors chart
+Allow the type that the author is (e.g. blue/academic for Don Towsley) to be
+deselected but continue to render the author whos page this is.
+It is quite handy to find who an author co-authors with outside of their own type.
 
 # Hudson
 
