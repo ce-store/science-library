@@ -14,6 +14,11 @@ angular.module('itapapersApp')
       link: function postLink(scope, element, attrs) {
         var expData = $parse(attrs.data);
         var data = expData(scope);
+        var lastSort;
+
+        if (scope.sort && scope.sort.names) {
+          lastSort = scope.sort.names[0];
+        }
 
         scope.$watchCollection(expData, function(newVal) {
           var oldData = data;
@@ -117,9 +122,13 @@ angular.module('itapapersApp')
                     (scope.indInput && d.parent.name === "IND") ||
                     (scope.govInput && d.parent.name === "GOV")) {
                   if (scope.sortName === scope.sort.names[0]) {
+                    lastSort = scope.sort.names[0];
                     return d.employees;
-                  } else if (scope.sortName === scope.sort.names[1]) {
+                  } else if (scope.sortName === scope.sort.names[1] || lastSort === scope.sort.names[1]) {
+                    lastSort = scope.sort.names[1];
                     return d.papers;
+                  } else {
+                    return d.employees;
                   }
                 }
               } else {
