@@ -56,10 +56,28 @@
       </div>
 
       <div ng-show="currentView === views[2]" id="authors-coauthors-list" class="list-view list-view-no-margin" ng-class="[{'answer-highlight': co-authorHighlight}]">
-        <h3>{{author}} co-authored with</h3>
+        <h3>
+          {{author}}'s co-authors
+
+          <span ng-show="sort.names">
+            sorted by
+            <span uib-dropdown on-toggle="toggled(open)">
+              <a href id="simple-dropdown" uib-dropdown-toggle>
+                <span class="highlight bold list-name">{{sortName}}<span class="caret"></span></span>
+              </a>
+              <ul class="uib-dropdown-menu" aria-labelledby="simple-dropdown">
+                <li role="menuitem" ng-repeat="type in sort.names">
+                  <a href="#" ng-click="sortList($index)">{{type | capitaliseFirstOnly}}</a>
+                </li>
+              </ul>
+            </span>
+          </span>
+        </h3>
+
         <ul class="results-list" id="coauthors-results-list">
-          <li ng-repeat="coauthor in coauthorsList | orderBy : '-count'">
-            <a ng-href="collaboration?author={{authorId}}&author={{coauthor.id}}" class="list-name">{{coauthor.name}}</a> <!-- <small class="highlight" uib-tooltip="Number of co-authored papers">({{coauthor.count}})</small> -->
+          <li ng-repeat="coauthor in coauthorsList | orderBy : 'name' | orderBy : sortCommand">
+            <a ng-href="collaboration?author={{authorId}}&author={{coauthor.id}}" class="list-name">{{coauthor.name}}</a>
+            <small ng-show="coauthor[sortValue] && sortShow" class="highlight">({{coauthor[sortValue]}})</small>
           </li>
         </ul>
       </div>

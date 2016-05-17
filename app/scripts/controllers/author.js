@@ -19,20 +19,29 @@ angular.module('itapapersApp')
     $scope.otherDocumentType = documentTypes.other;
     $scope.journalInput = $scope.externalInput = $scope.patentInput = $scope.internalInput = $scope.technicalInput = $scope.otherInput = $scope.acInput = $scope.indInput = $scope.govInput = true;
 
-    $scope.sort = {
-      names: ['most collaborative', 'citation count', 'most recent', 'name'],
-      values: ['weight', 'citations', 'date', 'name'],
-      show: [false, true, false, false],
-      reverse: ['-', '-', '-', '+']
+    $scope.sortTypes = {
+      papers: {
+        names: ['most collaborative', 'citation count', 'most recent', 'name'],
+        values: ['weight', 'citations', 'date', 'name'],
+        show: [false, true, false, false],
+        reverse: ['-', '-', '-', '+']
+      },
+      coAuthors: {
+        names: ['shared paper count', 'name'],
+        values: ['count', 'name'],
+        show: [true, false],
+        reverse: ['-', '+']
+      }
     };
 
     $scope.sortList = function(i) {
-      $scope.sortName = $scope.sort.names[i];
-      $scope.sortValue = $scope.sort.values[i];
-      $scope.sortCommand = $scope.sort.reverse[i] + $scope.sort.values[i];
-      $scope.sortShow = $scope.sort.show[i];
+      if ($scope.sort) {
+        $scope.sortName = $scope.sort.names[i];
+        $scope.sortValue = $scope.sort.values[i];
+        $scope.sortCommand = $scope.sort.reverse[i] + $scope.sort.values[i];
+        $scope.sortShow = $scope.sort.show[i];
+      }
     };
-    $scope.sortList(0);
 
     var lastHighlight = null;
     var types = documentTypes.nameMap;
@@ -77,6 +86,13 @@ angular.module('itapapersApp')
           drawNarrativeChart($stateParams.authorId, true, false, false, $scope.data);
         }, 100);
       }
+
+      if (view === $scope.views[1]) {
+        $scope.sort = $scope.sortTypes.papers;
+      } else if (view === $scope.views[2]) {
+        $scope.sort = $scope.sortTypes.coAuthors;
+      }
+      $scope.sortList(0);
 
       generateCSVData();
     };
@@ -353,67 +369,67 @@ angular.module('itapapersApp')
           count: $scope.totalPublications
         });
 
-        if (properties['co-author statistic'] != null) {
-            for (i = 0; i < properties['co-author statistic'].length; ++i) {
-                var statId = properties['co-author statistic'][i];
-                var coAuthorStatProps = relatedInstances[statId].property_values;
+        if (properties['co-author statistic'] !== null) {
+          for (i = 0; i < properties['co-author statistic'].length; ++i) {
+            var statId = properties['co-author statistic'][i];
+            var coAuthorStatProps = relatedInstances[statId].property_values;
 
-                var coAuthorIds = coAuthorStatProps["co-author"];
-                var coAuthorId = coAuthorIds[0] === $scope.authorId ? coAuthorIds[1] : coAuthorIds[0];
-                var coAuthorCount = coAuthorStatProps["co-author count"] ? parseInt(coAuthorStatProps["co-author count"][0], 10) : 1;
-                var coAuthorProps = relatedInstances[coAuthorId].property_values;
-                var coAuthorName = coAuthorProps["full name"] ? coAuthorProps["full name"][0] : unknown;
-                var coAuthorEmployer = coAuthorProps["is employed by"] ? coAuthorProps["is employed by"][0] : unknown;
-                var coAuthorType;
-                if (coAuthorEmployer !== unknown) {
-                  if (relatedInstances[coAuthorEmployer].property_values.type) {
-                    coAuthorType = relatedInstances[coAuthorEmployer].property_values.type[0];
-                  }
-                } else {
-                  coAuthorType = unknown;
+            var coAuthorIds = coAuthorStatProps["co-author"];
+            var coAuthorId = coAuthorIds[0] === $scope.authorId ? coAuthorIds[1] : coAuthorIds[0];
+            var coAuthorCount = coAuthorStatProps["co-author count"] ? parseInt(coAuthorStatProps["co-author count"][0], 10) : 1;
+            var coAuthorProps = relatedInstances[coAuthorId].property_values;
+            var coAuthorName = coAuthorProps["full name"] ? coAuthorProps["full name"][0] : unknown;
+            var coAuthorEmployer = coAuthorProps["is employed by"] ? coAuthorProps["is employed by"][0] : unknown;
+            var coAuthorType;
+            if (coAuthorEmployer !== unknown) {
+              if (relatedInstances[coAuthorEmployer].property_values.type) {
+                coAuthorType = relatedInstances[coAuthorEmployer].property_values.type[0];
+              }
+            } else {
+              coAuthorType = unknown;
+            }
+
+            $scope.coauthorsList.push({
+              id: coAuthorId,
+              name: coAuthorName,
+              count: coAuthorCount
+            });
+
+            var coAuthorCoAuthors = coAuthorProps["co-author statistic"];
+            var coCoAuthorStats = [];
+
+            // remove root author's stats
+            for (j in coAuthorCoAuthors) {
+              var coCoAuthorStatProps = relatedInstances[coAuthorCoAuthors[j]].property_values;
+              var found = false;
+
+              for (var k in coCoAuthorStatProps["co-author"]) {
+                if (coCoAuthorStatProps["co-author"][k] === $scope.authorId) {
+                  found = true;
                 }
+              }
 
-                $scope.coauthorsList.push({
-                  id: coAuthorId,
-                  name: coAuthorName,
-                  count: coAuthorCount
-                });
-
-                var coAuthorCoAuthors = coAuthorProps["co-author statistic"];
-                var coCoAuthorStats = [];
-
-                // remove root author's stats
-                for (j in coAuthorCoAuthors) {
-                  var coCoAuthorStatProps = relatedInstances[coAuthorCoAuthors[j]].property_values;
-                  var found = false;
-
-                  for (var k in coCoAuthorStatProps["co-author"]) {
-                    if (coCoAuthorStatProps["co-author"][k] === $scope.authorId) {
-                      found = true;
-                    }
-                  }
-
-                  if (!found) {
-                    var caCount = 1;
-                    if (coCoAuthorStatProps["co-author count"]) {
-                      caCount = coCoAuthorStatProps["co-author count"][0];
-                    }
-                    coCoAuthorStats.push({
-                      id: coAuthorCoAuthors[j],
-                      authors: coCoAuthorStatProps["co-author"],
-                      count: caCount
-                    });
-                  }
+              if (!found) {
+                var caCount = 1;
+                if (coCoAuthorStatProps["co-author count"]) {
+                  caCount = coCoAuthorStatProps["co-author count"][0];
                 }
-
-                $scope.nodes.push({
-                  id: coAuthorId,
-                  name: coAuthorName,
-                  group: coAuthorType,
-                  count: coAuthorCount,
-                  links: coCoAuthorStats
+                coCoAuthorStats.push({
+                  id: coAuthorCoAuthors[j],
+                  authors: coCoAuthorStatProps["co-author"],
+                  count: caCount
                 });
               }
+            }
+
+            $scope.nodes.push({
+              id: coAuthorId,
+              name: coAuthorName,
+              group: coAuthorType,
+              count: coAuthorCount,
+              links: coCoAuthorStats
+            });
+          }
         }
 
         // Draw charts
@@ -428,7 +444,6 @@ angular.module('itapapersApp')
     $scope.addCitations = function() {
       var citations = prompt("Please enter the citation count, h-index and URL separated with spaces", "123 13 www.url.com");
       if (citations !== null) {
-    	//DSB - switch request to open source ce-store
         var url = server + "/ce-store/stores/DEFAULT/sources/generalCeForm?showStats=true&action=save";
 
         var ce;

@@ -23,11 +23,8 @@ Requires updates on CE for completion
  by name
 
 1. Author page -> list co-authors
- + Default sort should be *number of co-authored papers* but also allow sorting
-by name
  + Show icons for authors to be consistent with elsewhere
  + Add checkboxes to allow authors to be filtered by types
- + Show number of co-authorships in brackets after author name
  + Can we also show a summary list of organisations that are co-authored with
 
 1. Organisation page -> list papers
@@ -179,6 +176,11 @@ It is quite handy to find who an author co-authors with outside of their own typ
 
 1. Author page -> list papers
 Provide the same sort options as for the overall papers home page
+
+1. Author page -> list co-authors
+ + Default sort should be *number of co-authored papers* but also allow sorting
+by name
+ + Show number of co-authorships in brackets after author name
 
 # Hudson
 
