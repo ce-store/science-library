@@ -12,37 +12,23 @@
       <div ng-show="currentView === views[0]" id="narrative-chart" class="panel"></div>
 
       <div ng-show="currentView === views[1]" id="authors-publications-list" class="list-view list-view-no-margin" ng-class="[{'answer-highlight': wroteHighlight}]">
-        <h3 class="floating-header">
-          {{author}}'s papers
+        <div class="col-md-12">
+          <top-header headertext="header"></top-header>
 
-          <span ng-show="sort.names">
-            sorted by
-            <span uib-dropdown on-toggle="toggled(open)">
-              <a href id="simple-dropdown" uib-dropdown-toggle>
-                <span class="highlight bold list-name">{{sortName}}<span class="caret"></span></span>
-              </a>
-              <ul class="uib-dropdown-menu" aria-labelledby="simple-dropdown">
-                <li role="menuitem" ng-repeat="type in sort.names">
-                  <a href="#" ng-click="sortList($index)">{{type | capitaliseFirstOnly}}</a>
-                </li>
-              </ul>
-            </span>
-          </span>
-        </h3>
-
-        <div class="authorFilters">
-          <label ng-show="journalPapers" class="journal"></label>
-          <input ng-show="journalPapers" id="journalInput" type="checkbox" ng-model="journalInput">
-          <label ng-show="externalPapers" class="external-conference"></label>
-          <input ng-show="externalPapers" id="externalInput" type="checkbox" ng-model="externalInput">
-          <label ng-show="patents" class="patent"></label>
-          <input ng-show="patents" id="patentInput" type="checkbox" ng-model="patentInput">
-          <label ng-show="internalPapers" class="internal-conference"></label>
-          <input ng-show="internalPapers" id="internalInput" type="checkbox" ng-model="internalInput">
-          <label ng-show="technicalReports" class="technical-report"></label>
-          <input ng-show="technicalReports" id="technicalInput" type="checkbox" ng-model="technicalInput">
-          <label ng-show="otherDocuments" class="other-document"></label>
-          <input ng-show="otherDocuments" id="otherInput" type="checkbox" ng-model="otherInput">
+          <div class="authorFilters">
+            <label ng-show="journalPapers" class="journal"></label>
+            <input ng-show="journalPapers" id="journalInput" type="checkbox" ng-model="journalInput">
+            <label ng-show="externalPapers" class="external-conference"></label>
+            <input ng-show="externalPapers" id="externalInput" type="checkbox" ng-model="externalInput">
+            <label ng-show="patents" class="patent"></label>
+            <input ng-show="patents" id="patentInput" type="checkbox" ng-model="patentInput">
+            <label ng-show="internalPapers" class="internal-conference"></label>
+            <input ng-show="internalPapers" id="internalInput" type="checkbox" ng-model="internalInput">
+            <label ng-show="technicalReports" class="technical-report"></label>
+            <input ng-show="technicalReports" id="technicalInput" type="checkbox" ng-model="technicalInput">
+            <label ng-show="otherDocuments" class="other-document"></label>
+            <input ng-show="otherDocuments" id="otherInput" type="checkbox" ng-model="otherInput">
+          </div>
         </div>
 
         <ul class="results-list clear" id="publications-results-list">
@@ -56,23 +42,9 @@
       </div>
 
       <div ng-show="currentView === views[2]" id="authors-coauthors-list" class="list-view list-view-no-margin" ng-class="[{'answer-highlight': co-authorHighlight}]">
-        <h3>
-          {{author}}'s co-authors
-
-          <span ng-show="sort.names">
-            sorted by
-            <span uib-dropdown on-toggle="toggled(open)">
-              <a href id="simple-dropdown" uib-dropdown-toggle>
-                <span class="highlight bold list-name">{{sortName}}<span class="caret"></span></span>
-              </a>
-              <ul class="uib-dropdown-menu" aria-labelledby="simple-dropdown">
-                <li role="menuitem" ng-repeat="type in sort.names">
-                  <a href="#" ng-click="sortList($index)">{{type | capitaliseFirstOnly}}</a>
-                </li>
-              </ul>
-            </span>
-          </span>
-        </h3>
+        <div class="col-md-12">
+          <top-header headertext="header"></top-header>
+        </div>
 
         <ul class="results-list" id="coauthors-results-list">
           <li ng-repeat="coauthor in coauthorsList | orderBy : 'name' | orderBy : sortCommand">

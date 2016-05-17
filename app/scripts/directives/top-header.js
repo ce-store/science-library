@@ -7,11 +7,18 @@
  * # topHeader
  */
 angular.module('itapapersApp')
-  .directive('topHeader', function () {
+  .directive('topHeader', ['$parse', function ($parse) {
     return {
-      templateUrl: 'views/top-header.html',
       restrict: 'E',
+      templateUrl: 'views/top-header.html',
       link: function postLink(scope, element, attrs) {
+        var expHeader = $parse(attrs.headertext);
+        scope.header = expHeader(scope);
+
+        scope.$watchCollection(expHeader, function(header) {
+          scope.header = header;
+        });
+
         scope.sortList = function(i) {
           if (scope.sort && scope.sort.names) {
             scope.sortName = scope.sort.names[i];
@@ -33,4 +40,4 @@ angular.module('itapapersApp')
         scope.sortList(0);
       }
     };
-  });
+  }]);

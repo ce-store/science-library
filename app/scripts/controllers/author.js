@@ -10,7 +10,6 @@
 angular.module('itapapersApp')
   .controller('AuthorCtrl', ['$scope', '$stateParams', '$timeout', 'store', 'server', 'hudson', 'documentTypes', 'utils', 'csv', 'colours', function ($scope, $stateParams, $timeout, store, server, hudson, documentTypes, utils, csv, colours) {
     $scope.views = ['graph', 'papers', 'co-authors', 'co-authors-graph'];
-    $scope.currentView = $scope.views[0];
     $scope.journalType = documentTypes.journal;
     $scope.externalConferenceType = documentTypes.external;
     $scope.patentType = documentTypes.patent;
@@ -31,15 +30,6 @@ angular.module('itapapersApp')
         values: ['count', 'name'],
         show: [true, false],
         reverse: ['-', '+']
-      }
-    };
-
-    $scope.sortList = function(i) {
-      if ($scope.sort) {
-        $scope.sortName = $scope.sort.names[i];
-        $scope.sortValue = $scope.sort.values[i];
-        $scope.sortCommand = $scope.sort.reverse[i] + $scope.sort.values[i];
-        $scope.sortShow = $scope.sort.show[i];
       }
     };
 
@@ -89,10 +79,11 @@ angular.module('itapapersApp')
 
       if (view === $scope.views[1]) {
         $scope.sort = $scope.sortTypes.papers;
+        $scope.header = $scope.papersHeader;
       } else if (view === $scope.views[2]) {
         $scope.sort = $scope.sortTypes.coAuthors;
+        $scope.header = $scope.coAuthorsHeader;
       }
-      $scope.sortList(0);
 
       generateCSVData();
     };
@@ -175,6 +166,8 @@ angular.module('itapapersApp')
         // Set data
         $scope.authorId = $stateParams.authorId;
         $scope.author = properties["full name"] ? properties["full name"][0] : unknown;
+        $scope.coAuthorsHeader = $scope.author + "'s co-authors";
+        $scope.papersHeader = $scope.author + "'s papers";
 
         // Employer
         $scope.employer = {};
@@ -440,4 +433,6 @@ angular.module('itapapersApp')
         generateCSVData();
         refreshHighlight();
     });
+
+    $scope.showView($scope.views[0]);
   }]);
