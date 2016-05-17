@@ -195,12 +195,13 @@ angular.module('itapapersApp')
 
         // Publications
         $scope.journalPapers = properties["journal paper count"] ? parseInt(properties["journal paper count"][0], 10) : 0;
-        $scope.externalPapers = properties["external paper count"] ? parseInt(properties["external paper count"][0], 10) : 0;
+        $scope.externalPapers = properties["external conference paper count"] ? parseInt(properties["external conference paper count"][0], 10) : 0;
         $scope.patents = properties["patent count"] ? parseInt(properties["patent count"][0], 10) : 0;
-        $scope.internalPapers = properties["internal paper count"] ? parseInt(properties["internal paper count"][0], 10) : 0;
+        $scope.internalPapers = properties["internal conference paper count"] ? parseInt(properties["internal conference paper count"][0], 10) : 0;
         $scope.technicalReports = properties["technical report count"] ? parseInt(properties["technical report count"][0], 10) : 0;
         $scope.otherDocuments = properties["other document count"] ? parseInt(properties["other document count"][0], 10) : 0;
-        $scope.totalPublications = properties["total publication count"] ? parseInt(properties["total publication count"][0], 10) : 0;
+        $scope.totalExternalPublications = properties["external document count"] ? parseInt(properties["external document count"][0], 10) : 0;
+        $scope.totalInternalPublications = properties["internal document count"] ? parseInt(properties["internal document count"][0], 10) : 0;
 
         $scope.pieData = [{
           label: types[$scope.journalType],

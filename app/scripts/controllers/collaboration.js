@@ -248,7 +248,8 @@ angular.module('itapapersApp')
         $scope.internalPapers = $scope.typeCount[types[documentTypes.internal]];
         $scope.technicalReports = $scope.typeCount[types[documentTypes.technical]];
         $scope.otherDocuments = $scope.typeCount[types[documentTypes.other]];
-        $scope.totalPublications = $scope.journalPapers + $scope.externalPapers + $scope.patents + $scope.internalPapers;
+        $scope.totalExternalPublications = $scope.journalPapers + $scope.externalPapers + $scope.patents;
+        $scope.totalInternalPublications = $scope.internalPapers + $scope.technicalReports + $scope.otherDocuments;
 
         // build chart data
         if (min && max) {

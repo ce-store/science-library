@@ -118,17 +118,15 @@ angular.module('itapapersApp')
           var authorName = authorProps["full name"] ? authorProps["full name"][0] : null;
 
           // count papers
-          var thisJournalPapers = authorProps["journal paper count"] ? parseInt(authorProps["journal paper count"][0], 10) : 0;
-          var thisExternalPapers = authorProps["external paper count"] ? parseInt(authorProps["external paper count"][0], 10) : 0;
-          var thisPatentPapers = authorProps["patent count"] ? parseInt(authorProps["patent count"][0], 10) : 0;
-          var thisInternalPapers = authorProps["internal paper count"] ? parseInt(authorProps["internal paper count"][0], 10) : 0;
-          var totalCount = authorProps["total publication count"] ? parseInt(authorProps["total publication count"][0], 10) : 0;
+          var documentCount = authorProps["document count"] ? parseInt(authorProps["document count"][0], 10) : 0;
+          var totalExternalCount = authorProps["external document count"] ? parseInt(authorProps["external document count"][0], 10) : 0;
+          var totalInternalCount = authorProps["internal document count"] ? parseInt(authorProps["internal document count"][0], 10) : 0;
 
           // add author to employee list
           $scope.employees[authorId] = {
             id: authorId,
             name: authorName,
-            value: totalCount
+            value: documentCount
           };
 
           var papers = authorProps.wrote;
