@@ -6,6 +6,22 @@ Science Library
 1. Additional sorts for pages:
 Requires updates on CE for completion
 
+ + Venues
+ by # papers (default)
+ by recency (date of most recent event)
+ by duration (number of years contributed)
+ by # citations (total paper citations) * I will add a CE property for this *
+
+ + Organisations
+ by citation
+
+ + Topics
+ by collaborations (default)
+ by # papers * I will add a CE property for this *
+ by # authors * I will add a CE property for this *
+ by # citations * I will add a CE property for this *
+ by name
+
 1. If a document has a *status* that does not match 'accepted' then:
  + in the list view precede the title with *[submitted]* (or whatever the status is)
  + in the details view add a prominent message showing the non-accepted status
@@ -148,10 +164,6 @@ add up.
  by # co-authors
  by name
  + Venues
- by # papers (default)
- by recency (date of most recent event)
- by duration (number of years contributed)
- by # citations (total paper citations) * I will add a CE property for this *
  by name
  + Organisations
  by # authors (default)
@@ -159,10 +171,7 @@ add up.
  by # citations * I will add a CE property for this *
  by name
  + Topics
- by collaborations (default)
  by # papers * I will add a CE property for this *
- by # authors * I will add a CE property for this *
- by # citations * I will add a CE property for this *
  by name
 
 1. Add the numbers in brackets back for the items listed in the previous step
