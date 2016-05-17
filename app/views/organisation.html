@@ -20,28 +20,30 @@
         </div>
 
         <div ng-show="currentView === views[1]" id="org-papers-list">
-          <h3 class="floating-header">Papers</h3>
+          <div class="col-md-12">
+            <top-header headertext="header"></top-header>
 
-          <div class="authorFilters">
-            <label ng-show="journalPapers" class="journal"></label>
-            <input ng-show="journalPapers" id="journalInput" type="checkbox" ng-model="journalInput">
-            <label ng-show="externalPapers" class="external-conference"></label>
-            <input ng-show="externalPapers" id="externalInput" type="checkbox" ng-model="externalInput">
-            <label ng-show="patents" class="patent"></label>
-            <input ng-show="patents" id="patentInput" type="checkbox" ng-model="patentInput">
-            <label ng-show="internalPapers" class="internal-conference"></label>
-            <input ng-show="internalPapers" id="internalInput" type="checkbox" ng-model="internalInput">
-            <label ng-show="technicalReports" class="technical-report"></label>
-            <input ng-show="technicalReports" id="technicalInput" type="checkbox" ng-model="technicalInput">
-            <label ng-show="otherDocuments" class="other-document"></label>
-            <input ng-show="otherDocuments" id="otherInput" type="checkbox" ng-model="otherInput">
+            <div class="authorFilters">
+              <label ng-show="journalPapers" class="journal"></label>
+              <input ng-show="journalPapers" id="journalInput" type="checkbox" ng-model="journalInput">
+              <label ng-show="externalPapers" class="external-conference"></label>
+              <input ng-show="externalPapers" id="externalInput" type="checkbox" ng-model="externalInput">
+              <label ng-show="patents" class="patent"></label>
+              <input ng-show="patents" id="patentInput" type="checkbox" ng-model="patentInput">
+              <label ng-show="internalPapers" class="internal-conference"></label>
+              <input ng-show="internalPapers" id="internalInput" type="checkbox" ng-model="internalInput">
+              <label ng-show="technicalReports" class="technical-report"></label>
+              <input ng-show="technicalReports" id="technicalInput" type="checkbox" ng-model="technicalInput">
+              <label ng-show="otherDocuments" class="other-document"></label>
+              <input ng-show="otherDocuments" id="otherInput" type="checkbox" ng-model="otherInput">
+            </div>
           </div>
 
           <ul class="results-list clear">
-            <li class="no-bullets" ng-repeat="item in papers | limitTo : listLength | orderObjectBy : 'weight' : '-name' | filter : filterPapers">
+            <li class="no-bullets" ng-repeat="item in papersList | limitTo : listLength | orderBy : 'name' | orderBy : sortCommand | filter : filterPapers">
               <span ng-class="[className, ('document-' + $index)]" ng-repeat="className in item.class track by $index"></span>
               <a ng-href="paper/{{item.id}}" class="list-name">{{item.name}}</a>
-              <small ng-if="item.noteworthy"><span class="glyphicon glyphicon-star-empty highlight" aria-hidden="true"></span> ({{item.noteworthy}})</small> <!-- <small ng-if="item.value" class="highlight" uib-tooltip="Citation count">({{item.value}})</small> -->
+              <small ng-if="item.noteworthy"><span class="glyphicon glyphicon-star-empty highlight" aria-hidden="true"></span> ({{item.noteworthy}})</small> <small ng-if="item[sortValue] && sortShow" class="highlight">({{item[sortValue]}})</small>
             </li>
           </ul>
         </div>

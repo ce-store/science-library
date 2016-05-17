@@ -433,7 +433,7 @@ angular.module('itapapersApp')
 
         generateCSVData();
         refreshHighlight();
-    });
 
-    $scope.showView($scope.views[0]);
+        $scope.showView($scope.views[0]);
+      });
   }]);

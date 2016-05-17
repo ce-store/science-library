@@ -10,7 +10,6 @@
 angular.module('itapapersApp')
   .controller('OrganisationCtrl', ['$scope', '$stateParams', '$document', 'store', 'hudson', 'documentTypes', 'utils', 'csv', 'colours', function ($scope, $stateParams, $document, store, hudson, documentTypes, utils, csv, colours) {
     $scope.views = ["chart", "list", "authors"];
-    $scope.currentView = $scope.views[0];
     $scope.journalType = documentTypes.journal;
     $scope.externalConferenceType = documentTypes.external;
     $scope.patentType = documentTypes.patent;
@@ -18,6 +17,21 @@ angular.module('itapapersApp')
     $scope.technicalReportType = documentTypes.technical;
     $scope.otherDocumentType = documentTypes.other;
     $scope.journalInput = $scope.externalInput = $scope.patentInput = $scope.internalInput = $scope.technicalInput = $scope.otherInput = true;
+
+    $scope.sortTypes = {
+      papers: {
+        names: ['most collaborative', 'citation count', 'most recent', 'name'],
+        values: ['weight', 'value', 'date', 'name'],
+        show: [false, true, false, false],
+        reverse: ['-', '-', '-', '+']
+      },
+      authors: { // TODO
+        // names: ['shared paper count', 'name'],
+        // values: ['count', 'name'],
+        // show: [true, false],
+        // reverse: ['-', '+']
+      }
+    };
 
     var lastHighlight = null;
     var types = documentTypes.nameMap;
@@ -28,6 +42,14 @@ angular.module('itapapersApp')
 
     $scope.showView = function (view) {
       $scope.currentView = view;
+
+      if (view === $scope.views[1]) {
+        $scope.sort = $scope.sortTypes.papers;
+        $scope.header = $scope.papersHeader;
+      } else if (view === $scope.views[2]) {
+        $scope.sort = $scope.sortTypes.authors;
+        $scope.header = $scope.authorsHeader;
+      }
     };
 
     var refreshHighlight = function() {
@@ -94,6 +116,8 @@ angular.module('itapapersApp')
         $scope.name = properties.name ? properties.name[0] : null;
         $scope.industry = properties.type ? properties.type[0] : null;
         $scope.country = properties["is located at"] ? properties["is located at"][0] : null;
+        $scope.authorsHeader = $scope.name + "'s authors";
+        $scope.papersHeader = $scope.name + "'s papers";
 
         $scope.journalPapers = properties["journal paper count"] ? parseInt(properties["journal paper count"][0], 10) : 0;
         $scope.externalPapers = properties["external conference paper count"] ? parseInt(properties["external conference paper count"][0], 10) : 0;
@@ -105,6 +129,7 @@ angular.module('itapapersApp')
         $scope.totalExternalPublications = properties["external document count"] ? parseInt(properties["external document count"][0], 10) : 0;
         $scope.totalInternalPublications = properties["internal document count"] ? parseInt(properties["internal document count"][0], 10) : 0;
 
+        $scope.papersList = [];
         var employees = properties.employs;
         var documentMap = {};
         var csvData = [];
@@ -174,6 +199,7 @@ angular.module('itapapersApp')
                       index: j,
                       title: paperTitle,
                       noteworthy: paperProps["noteworthy reason"] ? paperProps["noteworthy reason"][0] : null,
+                      date: paperProps["final date"] ? Date.parse(paperProps["final date"][0]) : 0,
                       types: [paperType],
                       venue: paperProps.venue ? paperProps.venue[0] : (paperProps["old venue"] ? paperProps["old venue"][0] : ""),
                       authors: paperProps["original authors string"] ? paperProps["original authors string"][0] : "",
@@ -188,6 +214,7 @@ angular.module('itapapersApp')
                         index: j,
                         title: paperTitle,
                         noteworthy: paperProps["noteworthy reason"] ? paperProps["noteworthy reason"][0] : null,
+                        date: paperProps["final date"] ? Date.parse(paperProps["final date"][0]) : 0,
                         types: [paperType].concat(variantTypes),
                         venue: paperProps.venue ? paperProps.venue[0] : (paperProps["old venue"] ? paperProps["old venue"][0] : ""),
                         authors: paperProps["original authors string"] ? paperProps["original authors string"][0] : "",
@@ -253,12 +280,13 @@ angular.module('itapapersApp')
                   id: thisPaperId,
                   name: thisPaper.title,
                   noteworthy: thisPaper.noteworthy,
+                  date: thisPaper.date,
                   value: thisPaper.citations,
                   type: utils.sortTypes(thisPaper.types),
                   venue: thisPaper.venue,
                   authors: thisPaper.authors,
                   class: [],
-                  weight: thisPaper.weight
+                  weight: parseInt(thisPaper.weight, 10)
                 };
 
                 for (k = 0; k < paperItem.type.length; ++k) {
@@ -267,6 +295,7 @@ angular.module('itapapersApp')
                 }
 
                 $scope.papers[thisPaperId] = (paperItem);
+                $scope.papersList.push(paperItem);
               }
             }
           }
@@ -336,5 +365,7 @@ angular.module('itapapersApp')
 
           refreshHighlight();
         }
+
+        $scope.showView($scope.views[0]);
       });
   }]);
