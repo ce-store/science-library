@@ -141,11 +141,6 @@ angular.module('itapapersApp')
         var properties = data.structured_response.main_instance.property_values;
         var relatedInstances = data.structured_response.related_instances;
 
-        // Restructure data for paper types over time
-        // restructureDataForTimeChart(properties, relatedInstances, null, "wrote", "type", function(d, startYear, endYear) {
-        //   drawCatagoriesOverTimeChart(d, "#papers-chart", startYear, endYear);
-        // });
-
         // Set data
         $scope.authorId = $stateParams.authorId;
         $scope.author = properties["full name"] ? properties["full name"][0] : unknown;
@@ -181,9 +176,6 @@ angular.module('itapapersApp')
         $scope.internalPapers = properties["internal paper count"] ? parseInt(properties["internal paper count"][0], 10) : 0;
         $scope.technicalReports = properties["technical report count"] ? parseInt(properties["technical report count"][0], 10) : 0;
         $scope.otherDocuments = properties["other document count"] ? parseInt(properties["other document count"][0], 10) : 0;
-
-//DSB - changed to use CE computed value
-//        $scope.totalPublications = $scope.journalPapers + $scope.externalPapers + $scope.patents + $scope.internalPapers;
         $scope.totalPublications = properties["total publication count"] ? parseInt(properties["total publication count"][0], 10) : 0;
 
         $scope.pieData = [{
@@ -212,22 +204,29 @@ angular.module('itapapersApp')
         if (properties["citation count"]) {
           var citationCount = relatedInstances[properties["citation count"][0]].property_values;
 
-          // citation count && h-index
+          // local and google citation count && h-index
           var url = citationCount.url ? citationCount.url[0] : null;
 
-//DSB - change to use local h-index and citation count for consistency (url link still goes to google)
-//          var count = citationCount["citation count"] ? citationCount["citation count"][0] : 0;
-//          var hIndex = citationCount["h-index"] ? citationCount["h-index"][0] : 0;
+         var googleCount = citationCount["citation count"] ? citationCount["citation count"][0] : 0;
+         var googleHIndex = citationCount["h-index"] ? citationCount["h-index"][0] : 0;
           var count = properties["local citation count"] ? properties["local citation count"][0] : 0;
           var hIndex = properties["local h-index"] ? properties["local h-index"][0] : 0;
 
           $scope.citationCount = {
             url: url,
-            count: count
+            count: parseInt(count, 10)
           };
           $scope.hIndex = {
             url: url,
-            index: hIndex
+            index: parseInt(hIndex, 10)
+          };
+          $scope.googleCitationCount = {
+            url: url,
+            count: parseInt(googleCount, 10)
+          };
+          $scope.googleHIndex = {
+            url: url,
+            index: parseInt(googleHIndex, 10)
           };
         }
 

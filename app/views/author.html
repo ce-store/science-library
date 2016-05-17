@@ -123,26 +123,32 @@
       <!-- Citations -->
       <div>
         <dl class="dl-horizontal dl-publications">
-          <div ng-class="[{'answer-highlight': citation_countHighlight}]">
-            <dt>Citation Count</dt>
-            <dd ng-if="citationCount">
+          <div ng-if="citationCount" ng-class="[{'answer-highlight': citation_countHighlight}]">
+            <dt>Citation Count (local)</dt>
+            <dd>
               <a ng-if="citationCount.url" ng-href="{{citationCount.url}}">{{citationCount.count}}</a>
               <span ng-if="!citationCount.url">{{citationCount.count}}</span>
             </dd>
-            <dd ng-if="!citationCount">
-              <a ng-href="{{scholarLink}}">Unknown</a>
-              <button class="btn" ng-click="addCitations()">Add Citation Count</button>
-            </dd>
           </div>
-          <div class="dl-horizontal dl-publications" ng-class="[{'answer-highlight': h_indexHighlight}]">
-            <dt>H-Index</dt>
-            <dd ng-if="hIndex">
+          <div ng-if="hIndex" class="dl-horizontal dl-publications" ng-class="[{'answer-highlight': h_indexHighlight}]">
+            <dt>H-Index (local)</dt>
+            <dd>
               <a ng-if="hIndex.url" ng-href="{{hIndex.url}}">{{hIndex.index}}</a>
               <span ng-if="!hIndex.url">{{hIndex.index}}</span>
             </dd>
-            <dd ng-if="!hIndex">
-              <a ng-href="{{scholarLink}}">Unknown</a>
-              <button class="btn" ng-click="addCitations()">Add H-Index</button>
+          </div>
+          <div ng-if="googleCitationCount" class="dl-horizontal dl-publications" ng-class="[{'answer-highlight': h_indexHighlight}]">
+            <dt>Citation Count (Google)</dt>
+            <dd>
+              <a ng-if="googleCitationCount.url" ng-href="{{googleCitationCount.url}}">{{googleCitationCount.count}}</a>
+              <span ng-if="!googleCitationCount.url">{{googleCitationCount.count}}</span>
+            </dd>
+          </div>
+          <div ng-if="googleHIndex" class="dl-horizontal dl-publications" ng-class="[{'answer-highlight': h_indexHighlight}]">
+            <dt>H-Index (Google)</dt>
+            <dd>
+              <a ng-if="googleHIndex.url" ng-href="{{googleHIndex.url}}">{{googleHIndex.index}}</a>
+              <span ng-if="!googleHIndex.url">{{googleHIndex.index}}</span>
             </dd>
           </div>
         </dl>
