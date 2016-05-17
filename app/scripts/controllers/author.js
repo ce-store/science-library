@@ -19,6 +19,21 @@ angular.module('itapapersApp')
     $scope.otherDocumentType = documentTypes.other;
     $scope.journalInput = $scope.externalInput = $scope.patentInput = $scope.internalInput = $scope.technicalInput = $scope.otherInput = $scope.acInput = $scope.indInput = $scope.govInput = true;
 
+    $scope.sort = {
+      names: ['most collaborative', 'citation count', 'most recent', 'name'],
+      values: ['weight', 'citations', 'date', 'name'],
+      show: [false, true, false, false],
+      reverse: ['-', '-', '-', '+']
+    };
+
+    $scope.sortList = function(i) {
+      $scope.sortName = $scope.sort.names[i];
+      $scope.sortValue = $scope.sort.values[i];
+      $scope.sortCommand = $scope.sort.reverse[i] + $scope.sort.values[i];
+      $scope.sortShow = $scope.sort.show[i];
+    };
+    $scope.sortList(0);
+
     var lastHighlight = null;
     var types = documentTypes.nameMap;
 
@@ -270,6 +285,7 @@ angular.module('itapapersApp')
                     index: i,
                     title: paperProps.title ? paperProps.title[0] : unknown,
                     noteworthy: paperProps["noteworthy reason"] ? paperProps["noteworthy reason"][0] : null,
+                    date: paperProps["final date"] ? Date.parse(paperProps["final date"][0]) : 0,
                     types: [paperType],
                     venue: paperProps.venue ? paperProps.venue[0] : (paperProps["old venue"] ? paperProps["old venue"][0] : ""),
                     authors: paperProps["original authors string"] ? paperProps["original authors string"][0] : "",
@@ -284,6 +300,7 @@ angular.module('itapapersApp')
                       index: i,
                       title: paperProps.title ? paperProps.title[0] : unknown,
                       noteworthy: paperProps["noteworthy reason"] ? paperProps["noteworthy reason"][0] : null,
+                      date: paperProps["final date"] ? Date.parse(paperProps["final date"][0]) : 0,
                       types: [paperType].concat(variantTypes),
                       venue: paperProps.venue ? paperProps.venue[0] : (paperProps["old venue"] ? paperProps["old venue"][0] : ""),
                       authors: paperProps["original authors string"] ? paperProps["original authors string"][0] : "",
@@ -307,6 +324,7 @@ angular.module('itapapersApp')
                 id: thisPaperId,
                 name: thisPaper.title,
                 noteworthy: thisPaper.noteworthy,
+                date: thisPaper.date,
                 citations: thisPaper.citations,
                 type: utils.sortTypes(thisPaper.types),
                 venue: thisPaper.venue,
