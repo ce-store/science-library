@@ -16,6 +16,8 @@ angular.module('itapapersApp')
       var useStorage = typeof(Storage) !== "undefined";
       var citationData = [];
       var hIndexData = [];
+      var googleCitationData = [];
+      var googleHIndexData = [];
       var scatterOptions;
 
       if (useStorage && localStorage.getItem("scatterOptions")) {
@@ -29,6 +31,15 @@ angular.module('itapapersApp')
           var id = data[i][0];
           var citations = personProps["local citation count"] ? personProps["local citation count"][0] : 0;
           var hIndex = personProps["local h-index"] ? personProps["local h-index"][0] : 0;
+          var googleCitation = personProps["citation count"] ? personProps["citation count"][0] : null;
+
+          var googleCitations = 0;
+          var googleHIndex = 0;
+
+          if (googleCitation && instances[googleCitation]) {
+            googleCitations = citationProps["citation count"] ? citationProps["citation count"][0] : 0;
+            googleHIndex = citationProps["h-index"] ? citationProps["h-index"][0] : 0;
+          }
           var industry = orgProps.type ? orgProps.type[0] : "Unknown";
 
           var journals = personProps["journal paper count"] ? parseInt(personProps["journal paper count"][0], 10) : 0;
@@ -40,20 +51,36 @@ angular.module('itapapersApp')
             employer: data[i][2],
             name: data[i][3],
             totalPubs: totalPubs,
-            citations: citations,
-            hIndex: hIndex,
+            citations: parseInt(citations, 10),
             industry: industry,
-            yValue: citations
+            yValue: parseInt(citations, 10)
           };
           var h = {
             id: id,
             employer: data[i][2],
             name: data[i][3],
             totalPubs: totalPubs,
-            citations: citations,
-            hIndex: hIndex,
+            hIndex: parseInt(hIndex, 10),
             industry: industry,
-            yValue: hIndex
+            yValue: parseInt(hIndex, 10)
+          };
+          var gc = {
+            id: id,
+            employer: data[i][2],
+            name: data[i][3],
+            totalPubs: totalPubs,
+            googleCitations: parseInt(googleCitations, 10),
+            industry: industry,
+            yValue: parseInt(googleCitations, 10)
+          };
+          var gh = {
+            id: id,
+            employer: data[i][2],
+            name: data[i][3],
+            totalPubs: totalPubs,
+            googleHIndex: parseInt(googleHIndex, 10),
+            industry: industry,
+            yValue: parseInt(googleHIndex, 10)
           };
 
           var profilePicture = results.instances[id].property_values["profile picture"];
@@ -65,11 +92,15 @@ angular.module('itapapersApp')
 
           citationData.push(c);
           hIndexData.push(h);
+          googleCitationData.push(gc);
+          googleHIndexData.push(gh);
         }
 
         scatterOptions = {
           citations: citationData,
-          hIndex: hIndexData
+          hIndex: hIndexData,
+          googleCitations: googleCitationData,
+          googleHIndex: googleHIndexData
         };
         localStorage.setItem("scatterOptions", JSON.stringify(scatterOptions));
       }

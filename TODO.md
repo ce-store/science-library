@@ -26,11 +26,6 @@ Requires updates on CE for completion
  + in the list view precede the title with *[submitted]* (or whatever the status is)
  + in the details view add a prominent message showing the non-accepted status
 
-1. In the authors scatter chart provide a toggle to switch between *local*
-citation data and *google* citation data (e.g. *local h-index* and *local
-citation count* on the *person* instance vs the corresponding data on the
-related google scholar citation instance)
-
 1. On the authors scatter chart is it possible to show all the authors hidden
 under a single dot when they are stacked, e.g. on hover?
 
@@ -179,6 +174,11 @@ if the underlying data is numeric (except for collaborations which comes from
 `weight` and won't make any sense)
 
 1. Remove comment and issue code from JS
+
+1. In the authors scatter chart provide a toggle to switch between *local*
+citation data and *google* citation data (e.g. *local h-index* and *local
+citation count* on the *person* instance vs the corresponding data on the
+related google scholar citation instance)
 
 # Hudson
 1. Implement keyword search as part of Hudson

@@ -7,7 +7,7 @@
  * # scatterChart
  */
 angular.module('itapapersApp')
-  .directive('scatterChart', ['$parse', '$window', 'store', 'csv', 'colours', function ($parse, $window, store, csv, colours) {
+  .directive('scatterChart', ['$parse', '$window', '$location', 'store', 'csv', 'colours', function ($parse, $window, $location, store, csv, colours) {
     return {
       restrict:'EA',
       template:"<div id='chart'></div>",
@@ -18,6 +18,8 @@ angular.module('itapapersApp')
         var scatterYAxisNames = {};
         scatterYAxisNames[scope.scatterYAxisOpts[0]] = "H-Index";
         scatterYAxisNames[scope.scatterYAxisOpts[1]] = "Citation Count";
+        scatterYAxisNames[scope.scatterYAxisOpts[2]] = "Google H-Index";
+        scatterYAxisNames[scope.scatterYAxisOpts[3]] = "Google Citation Count";
 
         scope.$watchCollection(expOptions, function(newVal) {
           options = newVal;
@@ -159,6 +161,18 @@ angular.module('itapapersApp')
           d3.select("#citation-count")
             .on("click", function() {
               scope.scatterYAxis = scope.scatterYAxisOpts[1];
+              scope.$apply();
+              filterDots();
+            });
+          d3.select("#google-h-index")
+            .on("click", function() {
+              scope.scatterYAxis = scope.scatterYAxisOpts[2];
+              scope.$apply();
+              filterDots();
+            });
+          d3.select("#google-citation-count")
+            .on("click", function() {
+              scope.scatterYAxis = scope.scatterYAxisOpts[3];
               scope.$apply();
               filterDots();
             });

@@ -63,7 +63,7 @@ angular.module('itapapersApp')
     $scope.otherDocumentType = documentTypes.other;
     $scope.journalInput = $scope.externalInput = $scope.patentInput = $scope.internalInput = $scope.technicalInput = $scope.otherInput = $scope.acInput = $scope.indInput = $scope.govInput = true;
 
-    $scope.scatterYAxisOpts = ["hIndex", "citations"];
+    $scope.scatterYAxisOpts = ["hIndex", "citations", "googleHIndex", "googleCitations"];
     $scope.scatterYAxis = $scope.scatterYAxisOpts[0];
 
     var scatterColour = d3.scale.ordinal()

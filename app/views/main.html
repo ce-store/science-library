@@ -106,8 +106,10 @@
           <div scatter-chart options="options"></div>
 
           <div class="chart-btns">
-            <button ng-show="scatterYAxis === scatterYAxisOpts[1]" class="btn" id="h-index">H-Index</button>
-            <button ng-show="scatterYAxis === scatterYAxisOpts[0]" class="btn" id="citation-count">Citation Count</button>
+            <button ng-show="scatterYAxis !== scatterYAxisOpts[0]" class="btn" id="h-index">Local H-Index</button>
+            <button ng-show="scatterYAxis !== scatterYAxisOpts[1]" class="btn" id="citation-count">Local Citation Count</button>
+            <button ng-show="scatterYAxis !== scatterYAxisOpts[2]" class="btn" id="google-h-index">Google H-Index</button>
+            <button ng-show="scatterYAxis !== scatterYAxisOpts[3]" class="btn" id="google-citation-count">Google Citation Count</button>
           </div>
         </div>
       </div>
