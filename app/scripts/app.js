@@ -37,11 +37,6 @@ angular
         templateUrl: "views/main.html",
         controller: "MainCtrl"
       })
-      .state('category', {
-        url: "/:category",
-        templateUrl: "views/main.html",
-        controller: "MainCtrl"
-      })
       .state('author', {
         url: "/author/:authorId",
         templateUrl: "views/author.html",
@@ -87,15 +82,15 @@ angular
         templateUrl: "views/statistics.html",
         controller: "StatisticsCtrl"
       })
-      .state('comments', {
-        url: "/comments",
-        templateUrl: "views/comments.html",
-        controller: "CommentsCtrl"
-      })
       .state('compute', {
         url: "/compute",
         templateUrl: "views/compute.html",
         controller: "ComputeCtrl"
+      })
+      .state('category', {
+        url: "/:category",
+        templateUrl: "views/main.html",
+        controller: "MainCtrl"
       });
 
       // use the HTML5 History API
