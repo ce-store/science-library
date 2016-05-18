@@ -30,6 +30,11 @@ Requires updates on CE for completion
 1. Organisation page -> list papers
 Provide the same sort options as for the overall papers home page
 
+1. Organisation page -> list authors
+Sort should be on external paper count not total paper count.
+Can we show numbers in brackets too.
+Should we allow sorts on this page (to match main author list page)?
+
 1. Icons for authors - whenever authors are rendered can we show the icon that
 corresponds to their type (industrial, academic etc)
 
@@ -66,13 +71,14 @@ Also, the same logic applies to people: they will be `government person`,
 `industry person` etc, saving the need to navigate back to the organisation to
 check
 
-1. Rename *document->original authors string* to *full author list*
+1. Rename *document->original authors string* to *full author list* (done in CE)
 
-1. Rename *document->old venue* to *venue details*
+1. Rename *document->old venue* to *venue details* (done in CE)
 Also, this should always be shown (unless empty) even when `venue` is also
 present.
 Venue details can contain additional information.
 
+1. *document->weight* is not being calculated correctly in compute.js
 
 # Performance related
 
@@ -83,20 +89,21 @@ Venue details can contain additional information.
 be made twice: "person details", "published person -> organisation",
 "person -> document" 
 
+1. Try to minimise JSON volumes for pages (Dave)
+Review each request and try to minimize size by specifying only the required
+properties to be returned
 
 # Hudson
 
 1. Add *help* mode
 Can be a hardcoded response but should be shown if you say *help* or something
+Note that the keyword search has been updated to support quoted values, AND, OR
+and NOT operators (with AND being the default), e.g.
+"Controlled English +Gain -"Information Fabric"
 
 1. Add *list* commands
 e.g. * list papers *, *list government papers* etc, showing a list of instances
 based on simple matching to a concept
-
-# Other
-1. Try to minimise JSON volumes for pages (Dave)
-Review each request and try to minimize size by specifying only the required
-properties to be returned
 
 ---------------------
 
