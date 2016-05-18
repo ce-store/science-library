@@ -66,10 +66,7 @@ Also, the same logic applies to people: they will be `government person`,
 `industry person` etc, saving the need to navigate back to the organisation to
 check
 
-1. Remove *document->original authors string*
-This is now only used by the exportfunction I believe.  I wrote code to compute
-it (in `controllers/compute.js` which would be better to simply run when needed
-for export rather than having to compute and save into the CE...
+1. Rename *document->original authors string* to *full author list*
 
 1. Rename *document->old venue* to *venue details*
 Also, this should always be shown (unless empty) even when `venue` is also

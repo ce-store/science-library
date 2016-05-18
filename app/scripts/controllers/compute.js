@@ -34,7 +34,7 @@ angular.module('itapapersApp')
             inst.instances["ordered authors"] = [];
             inst.instances["written by"] = [];
             inst.values["citation count"] = null;
-            inst.values["original authors string"] = null;
+            inst.values["full author list"] = null;
             inst.values["weight"] = null;
             inst.values["alternative weight 1"] = null;
             inst.values["alternative weight 2"] = null;
@@ -284,7 +284,7 @@ angular.module('itapapersApp')
               }
             }
 
-            paper.values["original authors string"] = authorListText;
+            paper.values["full author list"] = authorListText;
           }
         }
       }
@@ -665,18 +665,18 @@ angular.module('itapapersApp')
       function ceForDocumentOriginalAuthors(papers) {
         var hdrText = "";
         hdrText += "--------------------------------------------\n";
-        hdrText += "-- document:original authors string\n";
+        hdrText += "-- document:full author list\n";
         hdrText += "--------------------------------------------\n";
         $scope.computedCe.push(hdrText);
 
         for (var paperId in papers) {
           if (papers.hasOwnProperty(paperId)) {
             var paper = papers[paperId];
-            var authList = paper.values["original authors string"];
+            var authList = paper.values["full author list"];
 
             var ceText = "";
             ceText += "the document '" + encodeForCe(paperId) + "'\n";
-            ceText += "  has '" + encodeForCe(authList) + "' as original authors string.";
+            ceText += "  has '" + encodeForCe(authList) + "' as full author list.";
 
             $scope.computedCe.push(ceText);
           }
