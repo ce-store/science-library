@@ -22,6 +22,11 @@ Requires updates on CE for completion
  by # citations (new property added - topic->citation count)
  by name
 
+1. Main author list page
+Numbers shown in brackets should be external paper count but seem to be
+external paper count + internal conference paper count?
+e.g. don_towsley should be 83 but is 123?
+
 1. Author page -> list co-authors
  + Show icons for authors to be consistent with elsewhere
  + Add checkboxes to allow authors to be filtered by types
@@ -57,6 +62,14 @@ items in lists or in tables:
  + Add list of related topics to organisation details page (showing relative size of topics)
  + Add list of related topics to venue details page (showing relative size of topics)
 
+1. Venue details page
+Can we show numbers in brackets for Papers, Organisations, Authors - it's hard
+to immediately see how many may be in each area, especially for the ACITA events.
+
+1. Remove old code
+e.g. some queries are marked as "not used".  I've removed them from SL_data
+and everything still works so I think the ScienceLibrary JS can be removed too.
+
 # Model related
 
 1. Integrating Legacy text
@@ -79,6 +92,14 @@ present.
 Venue details can contain additional information.
 
 1. *document->weight* is not being calculated correctly in compute.js
+
+1. Add new *programme* concept and property to link documents to specific
+programmes. (Dave)
+
+1. Implement new relationship between individuals and papers so that they
+can have a different organisation for each individual paper.
+See document *ScienceLibrary/doc/ScienceLibrary - model fixes v1.0.docx* for
+details if needed.
 
 # Performance related
 
