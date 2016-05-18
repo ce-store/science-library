@@ -63,7 +63,7 @@ angular.module('itapapersApp')
             inst.values = {};
 
             inst.instances["wrote"] = [];
-            inst.instances["writes papers for"] = null;
+            inst.instances["writes documents for"] = null;
             inst.values["citation count"] = null;
             inst.values["h-index"] = null;
 
@@ -213,13 +213,13 @@ angular.module('itapapersApp')
       }
 
       function linkPersonOrgs(person, organisations) {
-        var orgNames = person.property_values["writes papers for"];
+        var orgNames = person.property_values["writes documents for"];
 
         if (orgNames) {
           var org = organisations[orgNames[0]];
 
           if (org) {
-            person.instances["writes papers for"] = org;
+            person.instances["writes documents for"] = org;
             org.instances["employs"].push(person);
           } else {
             console.log("No org for " + person._id);
@@ -339,7 +339,7 @@ angular.module('itapapersApp')
 
             for (var i in authors) {
               var person = authors[i];
-              var org = person.instances["writes papers for"];
+              var org = person.instances["writes documents for"];
               var type = null;
 
               if (org) {
@@ -390,7 +390,7 @@ angular.module('itapapersApp')
             for (var personId in paper.instances["written by"]) {
               var person = paper.instances["written by"][personId];
 
-              var org = person.instances["writes papers for"];
+              var org = person.instances["writes documents for"];
               
               if (org) {
                 if (allOrgs.indexOf(org) == -1) {
