@@ -10,16 +10,16 @@ Requires updates on CE for completion
  by # papers (default)
  by recency (date of most recent event)
  by duration (number of years contributed)
- by # citations (total paper citations) * I will add a CE property for this *
+ by # citations (total paper citations) (new properties added - event->citation count and event series->citation count) 
 
  + Organisations
  by citation
 
  + Topics
  by collaborations (default)
- by # papers * I will add a CE property for this *
- by # authors * I will add a CE property for this *
- by # citations * I will add a CE property for this *
+ by # papers (new property added - topic->number of documents)
+ by # authors (new property added - topic->number of authors)
+ by # citations (new property added - topic->citation count)
  by name
 
 1. Author page -> list co-authors
@@ -72,6 +72,17 @@ check
 Also, this should always be shown (unless empty) even when `venue` is also
 present.
 Venue details can contain additional information.
+
+
+# Performance related
+
+1. On the authors list page the HTTP request to execute the query
+"published person citations" seems to get called twice?
+
+1. On the co-authors wheel page the following HTTP requests for queries seem to
+be made twice: "person details", "published person -> organisation",
+"person -> document" 
+
 
 # Hudson
 
@@ -130,10 +141,10 @@ add up.
  + Organisations
  by # authors (default)
  by # papers
- by # citations * I will add a CE property for this *
+ by # citations (new property added - organisation->citation count)
  by name
  + Topics
- by # papers * I will add a CE property for this *
+ by # papers (new property added - topic->number of documents)
  by name
 
 1. Add the numbers in brackets back for the items listed in the previous step
