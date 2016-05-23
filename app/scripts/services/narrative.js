@@ -961,7 +961,7 @@ function drawNarrativeChart(safe_name, tie_breaker, center_sort, collapse, data,
     "GOV": 2
   };
 
-  var employerType = rels[vals["is employed by"][0]].property_values.type;
+  var employerType = rels[vals["default organisation"][0]].property_values.type;
   var character = {
     name: vals["full name"][0],
     id: 0,
@@ -978,7 +978,7 @@ function drawNarrativeChart(safe_name, tie_breaker, center_sort, collapse, data,
 
   if (vals["co-author"]) {
     for (i = 0; i < vals["co-author"].length; ++i) {
-      var org = rels[vals["co-author"][i]].property_values["is employed by"];
+      var org = rels[vals["co-author"][i]].property_values["default organisation"];
       org = org ? org[0] : "unknown";
       var type;
       if (rels[org]) {

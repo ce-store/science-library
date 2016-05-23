@@ -284,7 +284,7 @@ angular.module('itapapersApp')
         if (val) {
           return $q.when(val);
         } else {
-          var url = server + ceStore + "/instances/" + authorName + "?showStats=true&steps=2&style=summary&referringInstances=false&limitRelationships=is%20employed%20by,wrote,author,final%20date,citation%20count,co-author,co-author%20statistic";
+          var url = server + ceStore + "/instances/" + authorName + "?showStats=true&steps=2&style=summary&referringInstances=false&limitRelationships=default%20organisation,wrote,author,final%20date,citation%20count,co-author,co-author%20statistic";
 
           return $http.get(url)
             .then(function(response) {
