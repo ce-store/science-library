@@ -11,55 +11,70 @@
     <div class="col-md-9">
       <!-- Publications -->
       <div ng-show="currentView === views[0]" class="list-view list-view-no-margin" id="publications-results-list">
-        <h3 class="floating-header">Publications</h3>
+        <div class="col-md-12">
+          <top-header headertext="header"></top-header>
 
-        <div class="authorFilters">
-          <label class="journal"></label>
-          <input id="journalInput" type="checkbox" ng-model="journalInput">
-          <label class="external-conference"></label>
-          <input id="externalInput" type="checkbox" ng-model="externalInput">
-          <label class="internal-conference"></label>
-          <input id="internalInput" type="checkbox" ng-model="internalInput">
-          <label class="technical-report"></label>
-          <input id="technicalInput" type="checkbox" ng-model="technicalInput">
-          <label class="other-document"></label>
-          <input id="otherInput" type="checkbox" ng-model="otherInput">
+          <div class="authorFilters">
+            <label class="journal"></label>
+            <input id="journalInput" type="checkbox" ng-model="journalInput">
+            <label class="external-conference"></label>
+            <input id="externalInput" type="checkbox" ng-model="externalInput">
+            <label class="internal-conference"></label>
+            <input id="internalInput" type="checkbox" ng-model="internalInput">
+            <label class="technical-report"></label>
+            <input id="technicalInput" type="checkbox" ng-model="technicalInput">
+            <label class="other-document"></label>
+            <input id="otherInput" type="checkbox" ng-model="otherInput">
+          </div>
         </div>
 
         <!-- Results list -->
-        <ul class="results-list clear">
-          <li class="no-bullets" ng-repeat="item in publications | orderBy : 'name' | orderBy : '-citations' | filter : filterPapers">
-            <span ng-class="[className, ('document-' + $index)]" ng-repeat="className in item.class track by $index"></span>
-            <a ng-href="paper/{{item.id}}" class="list-name">{{item.name}}</a> <small ng-if="item.citations" class="highlight">({{item.citations}})</small>
-          </li>
-          <p ng-if="publications.length === 0">No publications found.</p>
-        </ul>
+        <div class="col-md-12">
+          <ul class="results-list clear">
+            <li class="no-bullets" ng-repeat="item in publications | orderBy : 'name' | orderBy : sortCommand | filter : filterPapers">
+              <span ng-class="[className, ('document-' + $index)]" ng-repeat="className in item.class track by $index"></span>
+              <a ng-href="paper/{{item.id}}" class="list-name">{{item.name}}</a>
+              <small ng-if="item[sortValue] && sortShow" class="highlight">({{item[sortValue]}})</small>
+            </li>
+            <p ng-if="publications.length === 0">No publications found.</p>
+          </ul>
+        </div>
       </div>
 
       <!-- Authors -->
       <div ng-show="currentView === views[1]" class="list-view list-view-no-margin" id="authors-results-list">
-        <h3 class="floating-header">Authors</h3>
+        <div class="col-md-12">
+          <top-header headertext="header"></top-header>
+        </div>
 
-        <!-- Results list -->
-        <ul class="results-list clear">
-          <li ng-repeat="item in authors | orderBy : 'name' | orderBy : '-papers'">
-            <a ng-href="author/{{item.id}}" class="list-name">{{item.name}}</a> <small ng-if="item.papers" class="highlight">({{item.papers}})</small>
-          </li>
-          <p ng-if="authors.length === 0">No authors found.</p>
-        </ul>
+        <div class="col-md-12">
+          <!-- Results list -->
+          <ul class="results-list clear">
+            <li ng-repeat="item in authors | orderBy : 'name' | orderBy : sortCommand">
+              <a ng-href="author/{{item.id}}" class="list-name">{{item.name}}</a>
+              <small ng-if="item[sortValue] && sortShow" class="highlight">({{item[sortValue]}})</small>
+            </li>
+            <p ng-if="authors.length === 0">No authors found.</p>
+          </ul>
+        </div>
       </div>
 
       <!-- Organisations -->
       <div ng-show="currentView === views[2]" class="list-view list-view-no-margin" id="orgs-results-list">
-        <h3 class="floating-header">Organisations</h3>
+        <div class="col-md-12">
+          <top-header headertext="header"></top-header>
+        </div>
 
         <!-- Results list -->
-        <ul class="results-list clear">
-          <li ng-repeat="item in organisations | orderBy : 'name' | orderBy : '-papers'">
-            <a ng-href="organisation/{{item.id}}" class="list-name">{{item.name}}</a> <small ng-if="item.papers" class="highlight">({{item.papers}})</small>
-          </li>
-          <p ng-if="organisation.length === 0">No organisations found.</p>
-        </ul>
+        <div class="col-md-12">
+          <ul class="results-list">
+            <li ng-repeat="item in organisations | orderBy : 'name' | orderBy : sortCommand">
+              <a ng-href="organisation/{{item.id}}" class="list-name">{{item.name}}</a>
+              <small ng-if="item[sortValue] && sortShow" class="highlight">({{item[sortValue]}})</small>
+            </li>
+            <p ng-if="organisation.length === 0">No organisations found.</p>
+          </ul>
+        </div>
       </div>
 
       <!-- Buttons -->

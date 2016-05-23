@@ -10,13 +10,33 @@
 angular.module('itapapersApp')
   .controller('TopicCtrl', ['$scope', '$stateParams', 'store', 'hudson', 'documentTypes', 'utils', 'csv', function ($scope, $stateParams, store, hudson, documentTypes, utils, csv) {
     $scope.views = ['papers', 'authors', 'organisations'];
-    $scope.currentView = $scope.views[0];
     $scope.journalType = documentTypes.journal;
     $scope.externalConferenceType = documentTypes.external;
     $scope.internalConferenceType = documentTypes.internal;
     $scope.technicalReportType = documentTypes.technical;
     $scope.otherDocumentType = documentTypes.other;
     $scope.journalInput = $scope.externalInput = $scope.internalInput = $scope.technicalInput = $scope.otherInput = true;
+
+    $scope.sortTypes = {
+      papers: {
+        names: ['most collaborative', 'citation count', 'most recent', 'name'],
+        values: ['weight', 'citationCount', 'date', 'name'],
+        show: [false, true, false, false],
+        reverse: ['-', '-', '-', '+']
+      },
+      authors: {
+        names: ['external paper count', 'ITA citation count', 'ITA h-index', 'co-author count', 'name'],
+        values: ['externalCount', 'citationCount', 'hIndex', 'coAuthorCount', 'name'],
+        show: [true, true, true, true, false],
+        reverse: ['-', '-', '-', '-', '+']
+      },
+      organisations: {
+        names: ['authors', 'paper count', 'citation count', 'name'],
+        values: ['authorCount', 'paperCount', 'citationCount', 'name'],
+        show: [true, true, true, false],
+        reverse: ['-', '-', '-', '+']
+      },
+    };
 
     var unknown = "Unknown";
     var lastHighlight;
@@ -41,6 +61,17 @@ angular.module('itapapersApp')
 
     $scope.showView = function (view) {
       $scope.currentView = view;
+
+      if (view === $scope.views[0]) {
+        $scope.sort = $scope.sortTypes.papers;
+        $scope.header = $scope.papersHeader;
+      } else if (view === $scope.views[1]) {
+        $scope.sort = $scope.sortTypes.authors;
+        $scope.header = $scope.authorsHeader;
+      } else if (view === $scope.views[2]) {
+        $scope.sort = $scope.sortTypes.organisations;
+        $scope.header = $scope.orgsHeader;
+      }
       // generateCSVData();
     };
 
@@ -111,6 +142,10 @@ angular.module('itapapersApp')
           }
         }
 
+        $scope.authorsHeader = 'Authors who wrote about ' + $scope.name;
+        $scope.papersHeader = 'Papers about ' + $scope.name;
+        $scope.orgsHeader = 'Organisations who wrote about ' + $scope.name;
+
         // Sort through documents to find variants
         $scope.authors = [];
         $scope.organisations = [];
@@ -149,18 +184,22 @@ angular.module('itapapersApp')
               var paperType = utils.getType(instance.direct_concept_names);
               if (!variantFound) {
                 documentMap[id] = {
-                  citations: citations,
                   title: paperProps.title ? paperProps.title[0] : unknown,
+                  citations: citations,
+                  date: paperProps["final date"] ? Date.parse(paperProps["final date"][0]) : 0,
                   types: [paperType],
+                  weight: paperProps.weight ? paperProps.weight[0] : -1
                 };
               } else {
                 if (maxCitations < citations) {
                   var variantTypes = documentMap[variantFound].types.slice();
                   documentMap[variantFound] = null;
                   documentMap[id] = {
-                    citations: citations,
                     title: paperProps.title ? paperProps.title[0] : unknown,
+                    citations: citations,
+                    date: paperProps["final date"] ? Date.parse(paperProps["final date"][0]) : 0,
                     types: [paperType].concat(variantTypes),
+                    weight: paperProps.weight ? paperProps.weight[0] : -1
                   };
                 } else {
                   documentMap[variantFound].types.push(paperType);
@@ -175,24 +214,39 @@ angular.module('itapapersApp')
             if (author !== unknown) {
               var authorProps = relatedInstances[author].property_values;
 
+              var authorName = authorProps["full name"] ? authorProps["full name"][0] : id;
+              var totalExternalCount = authorProps["external document count"] ? parseInt(authorProps["external document count"][0], 10) : 0;
+              var citationCount = authorProps["local citation count"] ? authorProps["local citation count"][0] : 0;
+              var hIndex = authorProps["local h-index"] ? authorProps["local h-index"][0] : 0;
+              var coAuthorCount = authorProps["co-author count"] ? authorProps["co-author count"][0] : 0;
+
               $scope.authors.push({
                 id: author,
-                name: authorProps["full name"] ? authorProps["full name"][0] : id,
-                papers: authorDocs
+                name: authorName,
+                externalCount: parseInt(totalExternalCount, 10),
+                citationCount: parseInt(citationCount, 10),
+                hIndex: parseInt(hIndex, 10),
+                coAuthorCount: parseInt(coAuthorCount, 10)
               });
             }
           } else if (instance.direct_concept_names.indexOf("topic-organisation statistic") > -1) {
             topicProps = instance.property_values;
             var org = topicProps.organisation ? topicProps.organisation[0] : unknown;
-            var orgDocs = topicProps.document.length;
 
             if (org !== unknown) {
               var orgProps = relatedInstances[org].property_values;
 
+              var name = orgProps["name"] ? orgProps["name"][0] : id;
+              var paperCount = orgProps["document count"] ? orgProps["document count"][0] : 0;
+              var authorCount = orgProps["employs"] ? orgProps["employs"].length : 0;
+              var orgCitationCount = orgProps["citation count"] ? orgProps["citation count"][0] : 0;
+
               $scope.organisations.push({
                 id: org,
-                name: orgProps["name"] ? orgProps["name"][0] : id,
-                papers: orgDocs
+                name: name,
+                authorCount: parseInt(authorCount, 10),
+                paperCount: parseInt(paperCount, 10),
+                citationCount: parseInt(orgCitationCount, 10)
               });
             }
           }
@@ -215,9 +269,11 @@ angular.module('itapapersApp')
           var paperItem = {
             id: docId,
             name: doc.title,
-            citations: parseInt(doc.citations, 10),
+            date: doc.date,
+            citationCount: parseInt(doc.citations, 10),
             type: utils.sortTypes(doc.types),
-            class: []
+            class: [],
+            weight: parseInt(doc.weight, 10)
           };
 
           for (var k = 0; k < paperItem.type.length; ++k) {
@@ -252,5 +308,7 @@ angular.module('itapapersApp')
           label: types[$scope.otherDocumentType],
           value: $scope.paperCounts.other
         }];
+
+        $scope.showView($scope.views[0]);
       });
   }]);

@@ -44,8 +44,6 @@ items in lists or in tables:
  + topic - # authors, # papers and # local citations
 
 1. Topic details page
- + Add list of authors who write on that topic (showing relative size)
- + Add list of organisations who write on that topic (showing relative size)
  + Add list of venues where that topic is published (showing relative size)
 
 1. Topics on non-topic pages
@@ -213,6 +211,10 @@ by name
 1. Organisation page -> list papers
 Provide the same sort options as for the overall papers home page
 Add author sorting on organisation detail page
+
+1. Topic details page
+ + Add list of authors who write on that topic (showing relative size)
+ + Add list of organisations who write on that topic (showing relative size)
 
 # Hudson
 

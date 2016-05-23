@@ -42,7 +42,7 @@ angular.module('itapapersApp')
       },
       'projects': {},
       'organisations': {
-        names: ['authors', 'papers', 'citation count', 'name'],
+        names: ['authors', 'paper count', 'citation count', 'name'],
         values: ['value', 'papers', 'citations', 'name'],
         show: [true, true, true, false],
         reverse: ['-', '-', '-', '+']
