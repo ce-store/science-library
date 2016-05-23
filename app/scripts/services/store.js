@@ -377,8 +377,8 @@ angular.module('itapapersApp')
       }
     }
 
-    function getOrganisationDetails () {
-      var key = "organisation details";
+    function getOrganisationPublications () {
+      var key = "organisation publications";
 
       if (localStorageService.isSupported) {
         var val = localStorageService.get(key + "-" + ceStore);
@@ -386,7 +386,7 @@ angular.module('itapapersApp')
         if (val) {
           return $q.when(val);
         } else {
-          var url = server + ceStore + "/queries/" + key + "/execute?showStats=false&suppressCe=true";
+          var url = server + ceStore + "/queries/" + key + "/execute?returnInstances=true";
 
           return $http.get(url)
             .then(function(response) {
@@ -506,6 +506,28 @@ angular.module('itapapersApp')
       }
     }
 
+    function getEventSeriesDetails () {
+      var key = 'event series details';
+
+      if (localStorageService.isSupported) {
+        var val = localStorageService.get(key + "-" + ceStore);
+
+        if (val) {
+          return $q.when(val);
+        } else {
+          var url = server + ceStore + "/queries/" + key + "/execute?returnInstances=true";
+
+          return $http.get(url)
+            .then(function(response) {
+              localStorageService.set(key + "-" + ceStore, response.data);
+              return response.data;
+            }, function(err) {
+              return err;
+            });
+        }
+      }
+    }
+
     function getVoiceAcceptance () {
       var key = "voice";
 
@@ -539,16 +561,12 @@ angular.module('itapapersApp')
       getVenue: getVenue,
       getOrganisation: getOrganisation,
       getTopic: getTopic,
-      getOrganisationPublications: getOrganisationPublications,
-      getOrganisationDetails: getOrganisationDetails,
       getPersonDetails: getPersonDetails,
       getPeopleOrgs: getPeopleOrgs,
       getPersonDocument: getPersonDocument,
       getDocumentDetails: getDocumentDetails,
       getProject: getProject,
       getEventSeriesDetails: getEventSeriesDetails,
-      getComments: getComments,
-      getIssues: getIssues,
       getVoiceAcceptance: getVoiceAcceptance,
       setVoiceAcceptance: setVoiceAcceptance,
       getStatistics: getStatistics,
