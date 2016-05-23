@@ -14,4 +14,7 @@ angular.module('itapapersApp')
   // .constant('hudson', '/ITAHudson/QuestionAnalyser?debug=true')
   .constant('ceStore', '/ce-store/stores/DEFAULT')
   // .constant('store', '/ce-store/stores/extonly')
-  .constant('keywordSearch', '/special/keyword-search?keywords=');
+  .constant('keywordSearch', {
+    keywords: '/special/keyword-search?keywords=',
+    restrictions: '&returnInstances=true&restrictToConcepts=document,person,organisation,topic,event&restrictToProperties=writes about,abstract,title,name,short name,full name,marker,description'
+  });

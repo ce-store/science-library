@@ -5,18 +5,24 @@
     <p class="description" ng-if="!keywords">Try searching for something</p>
   </div>
 
-  <div class="row" ng-if="results">
+  <div class="row">
     <div class="list-view">
-      <h3>
-        View top <input class="highlight bold list-num" ng-model="listLength"></input> results
-      </h3>
+      <div class="col-md-12">
+        <h3>
+          View top <input class="highlight bold list-num" ng-model="listLength"></input> results
+        </h3>
+      </div>
 
-      <!-- Results list -->
-      <ul class="results-list">
-        <li ng-repeat="item in results | limitTo : listLength">
-          <a ng-href="{{item.instance_name}}" class="list-name">{{item.instance_name}}</a>
-        </li>
-      </ul>
+      <div class="col-md-12">
+        <!-- Results list -->
+        <ul class="results-list">
+          <li ng-repeat="item in results | orderBy: 'name' | limitTo : listLength">
+            <a ng-href="{{item.id}}" class="list-name">{{item.name | capitaliseFirst}}</a>
+            <small class="highlight">({{item.type | capitalise}})</small>
+          </li>
+          <p ng-if="!instances">No things found.</p>
+        </ul>
+      </div>
     </div>
   </div>
 </div>
