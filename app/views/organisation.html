@@ -49,12 +49,15 @@
         </div>
 
         <div ng-show="currentView === views[2]" id="org-authors-list">
-          <h3>Authors</h3>
+          <div class="col-md-12">
+            <top-header headertext="header"></top-header>
+          </div>
 
           <!-- Results list -->
           <ul class="results-list" ng-class="[{'answer-highlight': employsHighlight}]">
-            <li ng-repeat="item in employees | limitTo : listLength | orderObjectBy : 'value' : '-name'">
-              <a ng-href="author/{{item.id}}" class="list-name">{{item.name}}</a> <!-- <small ng-show="item.value" class="highlight" uib-tooltip="Total External Publications">({{item.value}})</small> -->
+            <li ng-repeat="item in authorsList | limitTo : listLength | orderBy : 'name' | orderBy : sortCommand">
+              <a ng-href="author/{{item.id}}" class="list-name">{{item.name}}</a>
+              <small ng-if="item[sortValue] && sortShow" class="highlight">({{item[sortValue]}})</small>
             </li>
           </ul>
         </div>

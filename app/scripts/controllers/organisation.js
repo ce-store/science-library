@@ -25,11 +25,11 @@ angular.module('itapapersApp')
         show: [false, true, false, false],
         reverse: ['-', '-', '-', '+']
       },
-      authors: { // TODO
-        // names: ['shared paper count', 'name'],
-        // values: ['count', 'name'],
-        // show: [true, false],
-        // reverse: ['-', '+']
+      authors: {
+        names: ['external paper count', 'ITA citation count', 'ITA h-index', 'co-author count', 'name'],
+        values: ['externalCount', 'citationCount', 'hIndex', 'coAuthorCount', 'name'],
+        show: [true, true, true, true, false],
+        reverse: ['-', '-', '-', '-', '+']
       }
     };
 
@@ -130,6 +130,7 @@ angular.module('itapapersApp')
         $scope.totalInternalPublications = properties["internal document count"] ? parseInt(properties["internal document count"][0], 10) : 0;
 
         $scope.papersList = [];
+        $scope.authorsList = [];
         var employees = properties.employs;
         var documentMap = {};
         var csvData = [];
@@ -146,6 +147,9 @@ angular.module('itapapersApp')
           var documentCount = authorProps["document count"] ? parseInt(authorProps["document count"][0], 10) : 0;
           var totalExternalCount = authorProps["external document count"] ? parseInt(authorProps["external document count"][0], 10) : 0;
           var totalInternalCount = authorProps["internal document count"] ? parseInt(authorProps["internal document count"][0], 10) : 0;
+          var citationCount = authorProps["local citation count"] ? authorProps["local citation count"][0] : 0;
+          var hIndex = authorProps["local h-index"] ? authorProps["local h-index"][0] : 0;
+          var coAuthorCount = authorProps["co-author count"] ? authorProps["co-author count"][0] : 0;
 
           // add author to employee list
           $scope.employees[authorId] = {
@@ -153,6 +157,15 @@ angular.module('itapapersApp')
             name: authorName,
             value: documentCount
           };
+          $scope.authorsList.push({
+            id: authorId,
+            name: authorName,
+            documentCount: parseInt(documentCount, 10),
+            externalCount: parseInt(totalExternalCount, 10),
+            citationCount: parseInt(citationCount, 10),
+            hIndex: parseInt(hIndex, 10),
+            coAuthorCount: parseInt(coAuthorCount, 10)
+          });
 
           var papers = authorProps.wrote;
 

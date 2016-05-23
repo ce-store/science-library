@@ -10,7 +10,7 @@ Requires updates on CE for completion
  by # papers (default)
  by recency (date of most recent event)
  by duration (number of years contributed)
- by # citations (total paper citations) (new properties added - event->citation count and event series->citation count) 
+ by # citations (total paper citations) (new properties added - event->citation count and event series->citation count)
 
  + Organisations
  by citation
@@ -31,14 +31,6 @@ e.g. don_towsley should be 83 but is 123?
  + Show icons for authors to be consistent with elsewhere
  + Add checkboxes to allow authors to be filtered by types
  + Can we also show a summary list of organisations that are co-authored with
-
-1. Organisation page -> list papers
-Provide the same sort options as for the overall papers home page
-
-1. Organisation page -> list authors
-Sort should be on external paper count not total paper count.
-Can we show numbers in brackets too.
-Should we allow sorts on this page (to match main author list page)?
 
 1. Icons for authors - whenever authors are rendered can we show the icon that
 corresponds to their type (industrial, academic etc)
@@ -108,7 +100,7 @@ details if needed.
 
 1. On the co-authors wheel page the following HTTP requests for queries seem to
 be made twice: "person details", "published person -> organisation",
-"person -> document" 
+"person -> document"
 
 1. Try to minimise JSON volumes for pages (Dave)
 Review each request and try to minimize size by specifying only the required
@@ -217,6 +209,10 @@ Provide the same sort options as for the overall papers home page
  + Default sort should be *number of co-authored papers* but also allow sorting
 by name
  + Show number of co-authorships in brackets after author name
+
+1. Organisation page -> list papers
+Provide the same sort options as for the overall papers home page
+Add author sorting on organisation detail page
 
 # Hudson
 
