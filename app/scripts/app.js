@@ -37,6 +37,11 @@ angular
         templateUrl: "views/main.html",
         controller: "MainCtrl"
       })
+      .state('help', {
+        url: "/help",
+        templateUrl: "views/help.html",
+        controller: "HelpCtrl"
+      })
       .state('author', {
         url: "/author/:authorId",
         templateUrl: "views/author.html",

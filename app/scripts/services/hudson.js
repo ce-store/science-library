@@ -162,7 +162,9 @@ angular.module('itapapersApp')
       var words = question.split(' ');
       var questionWords = ['what', 'who', 'list', 'show', 'draw'];
 
-      if (questionWords.indexOf(words[0]) > -1) {
+      if (words.indexOf('help') > -1) {
+        $location.url('help');
+      } else if (questionWords.indexOf(words[0]) > -1) {
         // Question - send to Hudson
         $http.post(server + questionAnalyser, question)
           .then(function(response) {

@@ -106,12 +106,6 @@ properties to be returned
 
 # Hudson
 
-1. Add *help* mode
-Can be a hardcoded response but should be shown if you say *help* or something
-Note that the keyword search has been updated to support quoted values, AND, OR
-and NOT operators (with AND being the default), e.g.
-"Controlled English +Gain -"Information Fabric"
-
 1. Add *list* commands
 e.g. * list papers *, *list government papers* etc, showing a list of instances
 based on simple matching to a concept
@@ -233,3 +227,9 @@ matches worth listing in the UI would be:
 we may want to add new meta-model concepts for "searchable thing" and mark
 specific CE concepts and properties as searchable, but for now it seems to work
 fine if we use it as is.
+
+1. Add *help* mode
+Can be a hardcoded response but should be shown if you say *help* or something
+Note that the keyword search has been updated to support quoted values, AND, OR
+and NOT operators (with AND being the default), e.g.
+"Controlled English +Gain -"Information Fabric"
