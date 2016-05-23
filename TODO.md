@@ -56,10 +56,6 @@ items in lists or in tables:
 Can we show numbers in brackets for Papers, Organisations, Authors - it's hard
 to immediately see how many may be in each area, especially for the ACITA events.
 
-1. Remove old code
-e.g. some queries are marked as "not used".  I've removed them from SL_data
-and everything still works so I think the ScienceLibrary JS can be removed too.
-
 # Model related
 
 1. Integrating Legacy text
@@ -209,6 +205,10 @@ Add author sorting on organisation detail page
 1. Topic details page
  + Add list of authors who write on that topic (showing relative size)
  + Add list of organisations who write on that topic (showing relative size)
+
+1. Remove old code
+e.g. some queries are marked as "not used".  I've removed them from SL_data
+and everything still works so I think the ScienceLibrary JS can be removed too.
 
 # Hudson
 

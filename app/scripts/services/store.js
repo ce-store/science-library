@@ -94,7 +94,6 @@ angular.module('itapapersApp')
         if (val) {
           return $q.when(val);
         } else {
-          //DSB - switch request to open source ce-store
           var url = server + ceStore + "/queries/" + key + "/execute?returnInstances=true";
 
           return $http.get(url)
@@ -128,41 +127,10 @@ angular.module('itapapersApp')
     }
 
     function getPublishedPeople () {
-      // This isn't working for some reason ???
-
-      // var key = "published person citations";
-
-      // if (localStorageService.isSupported) {
-      //   var val = localStorageService.get(key);
-
-      //   if (val) {
-      //     console.log('published');
-      //     console.log(val);
-      //     return $q.when(val);
-      //   } else {
-      //     console.log('no published');
-      //     var url = server + ceStore + "/queries/" + key + "/execute";
-
-      //     return $http.get(url)
-      //       .then(function(response) {
-      //         var filtered = filterData(response.data.results, 3);
-      //         filtered.sort(sortByHIndex);
-      //         localStorageService.set(key, filtered);
-      //         console.log(filtered);
-
-      //         return filtered;
-      //       }, function(err) {
-      //         return err;
-      //       });
-      //   }
-      // }
-
-      //DSB - switch request to open source ce-store
       var url = server + ceStore + "/queries/published person citations/execute?returnInstances=true";
 
       return $http.get(url)
         .then(function(response) {
-          // var filtered = filterData(response.data.results, 3);
           var filtered = response.data.results;
 
           return {
@@ -184,7 +152,6 @@ angular.module('itapapersApp')
         if (val) {
           return $q.when(val);
         } else {
-          //DSB - switch request to open source ce-store
           var url = server + ceStore + "/queries/" + key + "/execute";
 
           return $http.get(url)
@@ -209,7 +176,6 @@ angular.module('itapapersApp')
         if (val) {
           return $q.when(val);
         } else {
-          //DSB - switch request to open source ce-store
           var url = server + ceStore + "/queries/" + key + "/execute?returnInstances=true";
 
           return $http.get(url)
@@ -232,7 +198,6 @@ angular.module('itapapersApp')
         if (val) {
           return $q.when(val);
         } else {
-          //DSB - switch request to open source ce-store
           var url = server + ceStore + "/queries/" + key + "/execute?returnInstances=true";
 
           return $http.get(url)
@@ -255,7 +220,6 @@ angular.module('itapapersApp')
         if (val) {
           return $q.when(val);
         } else {
-          //DSB - switch request to open source ce-store
           var url = server + ceStore + "/queries/" + key + "/execute?returnInstances=true";
 
           return $http.get(url)
@@ -278,7 +242,6 @@ angular.module('itapapersApp')
         if (val) {
           return $q.when(val);
         } else {
-          //DSB - switch request to open source ce-store
           var url = server + ceStore + "/queries/" + key + "/execute?returnInstances=true";
 
           return $http.get(url)
@@ -301,7 +264,6 @@ angular.module('itapapersApp')
         if (val) {
           return $q.when(val);
         } else {
-          //DSB - switch request to open source ce-store
           var url = server + ceStore + "/queries/" + key + "/execute";
 
           return $http.get(url)
@@ -322,7 +284,6 @@ angular.module('itapapersApp')
         if (val) {
           return $q.when(val);
         } else {
-          //DSB - switch request to open source ce-store
           var url = server + ceStore + "/instances/" + authorName + "?showStats=true&steps=2&style=summary&referringInstances=false&limitRelationships=is%20employed%20by,wrote,author,final%20date,citation%20count,co-author,co-author%20statistic";
 
           return $http.get(url)
@@ -343,7 +304,6 @@ angular.module('itapapersApp')
         if (val) {
           return $q.when(val);
         } else {
-          //DSB - switch request to open source ce-store
           var url = server + ceStore + "/instances/" + paperName + "?style=summary&steps=2&referringInstances=false";
 
           return $http.get(url)
@@ -364,7 +324,6 @@ angular.module('itapapersApp')
         if (val) {
           return $q.when(val);
         } else {
-          //DSB - switch request to open source ce-store
           var url = server + ceStore + "/instances/" + location;
 
           return $http.get(url)
@@ -385,7 +344,6 @@ angular.module('itapapersApp')
         if (val) {
           return $q.when(val);
         } else {
-          //DSB - switch request to open source ce-store
           var url = server + ceStore + "/instances/" + organisation + "?style=summary&referringInstances=false&steps=3&limitRelationships=is%20located%20at,employs,citation%20count,wrote,final%20date";
 
           return $http.get(url)
@@ -406,36 +364,11 @@ angular.module('itapapersApp')
         if (val) {
           return $q.when(val);
         } else {
-          //DSB - switch request to open source ce-store
           var url = server + ceStore + "/instances/" + topic + "?style=summary&referringInstances=false&steps=3&limitRelationships=topic%20statistic,person,document,citation%20count,organisation";
 
           return $http.get(url)
             .then(function(response) {
               localStorageService.set(topic, response.data);
-              return response.data;
-            }, function(err) {
-              return err;
-            });
-        }
-      }
-    }
-
-    // Not used
-    function getOrganisationPublications () {
-      var key = "organisation publications";
-
-      if (localStorageService.isSupported) {
-        var val = localStorageService.get(key + "-" + ceStore);
-
-        if (val) {
-          return $q.when(val);
-        } else {
-          //DSB - switch request to open source ce-store
-          var url = server + ceStore + "/queries/" + key + "/execute?returnInstances=true";
-
-          return $http.get(url)
-            .then(function(response) {
-              localStorageService.set(key + "-" + ceStore, response.data);
               return response.data;
             }, function(err) {
               return err;
@@ -453,7 +386,6 @@ angular.module('itapapersApp')
         if (val) {
           return $q.when(val);
         } else {
-          //DSB - switch request to open source ce-store
           var url = server + ceStore + "/queries/" + key + "/execute?showStats=false&suppressCe=true";
 
           return $http.get(url)
@@ -476,7 +408,6 @@ angular.module('itapapersApp')
         if (val) {
           return $q.when(val);
         } else {
-          //DSB - switch request to open source ce-store
           var url = server + ceStore + "/queries/" + key + "/execute?showStats=false&suppressCe=true";
 
           return $http.get(url)
@@ -499,7 +430,6 @@ angular.module('itapapersApp')
         if (val) {
           return $q.when(val);
         } else {
-          //DSB - switch request to open source ce-store
           var url = server + ceStore + "/queries/" + key + "/execute?showStats=false&suppressCe=true";
 
           return $http.get(url)
@@ -522,7 +452,6 @@ angular.module('itapapersApp')
         if (val) {
           return $q.when(val);
         } else {
-          //DSB - switch request to open source ce-store
           var url = server + ceStore + "/queries/" + key + "/execute?showStats=false&suppressCe=true";
 
           return $http.get(url)
@@ -545,7 +474,6 @@ angular.module('itapapersApp')
         if (val) {
           return $q.when(val);
         } else {
-          //DSB - switch request to open source ce-store
           var url = server + ceStore + "/queries/" + key + "/execute?showStats=false&suppressCe=true";
 
           return $http.get(url)
@@ -566,81 +494,10 @@ angular.module('itapapersApp')
         if (val) {
           return $q.when(val);
         } else {
-          //DSB - switch request to open source ce-store
           var url = server + ceStore + "/instances/" + project + "?steps=2&style=summary&referringInstances=false&limitRelationships=paper,technical%20area,citation%20count";
           return $http.get(url)
             .then(function(response) {
               localStorageService.set(project, response.data);
-              return response.data;
-            }, function(err) {
-              return err;
-            });
-        }
-      }
-    }
-
-    // Not used
-    function getEventSeriesDetails () {
-      var key = 'event series details';
-
-      if (localStorageService.isSupported) {
-        var val = localStorageService.get(key + "-" + ceStore);
-
-        if (val) {
-          return $q.when(val);
-        } else {
-          //DSB - switch request to open source ce-store
-          var url = server + ceStore + "/queries/" + key + "/execute?returnInstances=true";
-
-          return $http.get(url)
-            .then(function(response) {
-              localStorageService.set(key + "-" + ceStore, response.data);
-              return response.data;
-            }, function(err) {
-              return err;
-            });
-        }
-      }
-    }
-
-    function getComments () {
-      var key = "comment";
-
-      if (localStorageService.isSupported) {
-        var val = localStorageService.get(key + "-" + ceStore);
-
-        if (val) {
-          return $q.when(val);
-        } else {
-          //DSB - switch request to open source ce-store
-          var url = server + ceStore + "/concepts/" + key + "/instances";
-
-          return $http.get(url)
-            .then(function(response) {
-              localStorageService.set(key + "-" + ceStore, response.data);
-              return response.data;
-            }, function(err) {
-              return err;
-            });
-        }
-      }
-    }
-
-    function getIssues () {
-      var key = "issue";
-
-      if (localStorageService.isSupported) {
-        var val = localStorageService.get(key + "-" + ceStore);
-
-        if (val) {
-          return $q.when(val);
-        } else {
-          //DSB - switch request to open source ce-store
-          var url = server + ceStore + "/concepts/" + key + "/instances";
-
-          return $http.get(url)
-            .then(function(response) {
-              localStorageService.set(key + "-" + ceStore, response.data);
               return response.data;
             }, function(err) {
               return err;
