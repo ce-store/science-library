@@ -17,7 +17,7 @@
         <!-- Results list -->
         <ul class="results-list">
           <li ng-repeat="item in results | orderBy: 'name' | limitTo : listLength">
-            <a ng-href="{{item.id}}" class="list-name">{{item.name | capitaliseFirst}}</a>
+            <a ng-href="{{item.type}}/{{item.id}}" class="list-name">{{item.name | capitaliseFirst}}</a>
             <small class="highlight">({{item.type | capitalise}})</small>
           </li>
           <p ng-if="!instances">No things found.</p>
