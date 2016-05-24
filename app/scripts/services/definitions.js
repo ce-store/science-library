@@ -100,7 +100,7 @@ angular.module('itapapersApp')
         name: 'name'
       },
       topic: {
-        marker:         'marker',
+        markerList:     'marker',
         topicStatistic: 'topic statistic',
         documentCount:  'number of documents',
         authorCount:    'number of authors',
@@ -112,10 +112,20 @@ angular.module('itapapersApp')
         hIndex: 'h-index',
         date:   'date checked'
       },
+      series: {
+        name:   'full name',
+        years:  'years ran',
+        documentCount: 'paper count',
+        citationCount: 'citation count'
+      },
       statistic: {
         mainAuthor:     'main-author',
         coAuthorList:   'co-author',
-        coAuthorCount:  'co-author count'
+        coAuthorCount:  'co-author count',
+        person:       'person',
+        organisation: 'organisation',
+        topic:        'topic',
+        documentList: 'document'
       },
       orderedAuthor: {
         index:  'author index',

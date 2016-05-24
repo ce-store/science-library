@@ -61,6 +61,8 @@ angular.module('itapapersApp')
         url = '/venue/' + instance._id + '/';
       } else if (type === types.event) {
         url = '/venue/' + instance.property_values['is part of'][0] + '/' + instance._id;
+      } else if (type === types.topic) {
+        url = '/topic/' + instance._id;
       } else if (type === types.organisation) {
         url = '/organisation/' + instance._id;
       } else if (type === types.project) {
@@ -94,6 +96,8 @@ angular.module('itapapersApp')
             type = types.event;
           } else if (domainName.indexOf(types.organisation) > -1) {
             type = types.organisation;
+          } else if (domainName.indexOf(types.topic) > -1) {
+            type = types.topic;
           } else if (domainName.indexOf(types.project) > -1) {
             type = types.project;
           }
@@ -103,11 +107,13 @@ angular.module('itapapersApp')
       // highlight
       if (propertyName) {
         for (word in data.instances) {
-          for (var i = 0; i < data.instances[word].length; ++i) {
-            if (data.instances[word][i].direct_concept_names.indexOf(type) > -1 ||
-              data.instances[word][i].inherited_concept_names.indexOf(type) > -1) {
-              instance = data.instances[word][i];
-              break;
+          if (data.instances.hasOwnProperty(word)) {
+            for (var i = 0; i < data.instances[word].length; ++i) {
+              if (data.instances[word][i].direct_concept_names.indexOf(type) > -1 ||
+                data.instances[word][i].inherited_concept_names.indexOf(type) > -1) {
+                instance = data.instances[word][i];
+                break;
+              }
             }
           }
         }
@@ -121,16 +127,18 @@ angular.module('itapapersApp')
         var insts = data.answer_instances ? data.answer_instances : data.instances;
 
         for (word in insts) {
-          var inst;
-          if (insts[word][0]) {
-            inst = insts[word][0];
-          } else {
-            inst = insts[word];
-          }
+          if (insts.hasOwnProperty(word)) {
+            var inst;
+            if (insts[word][0]) {
+              inst = insts[word][0];
+            } else {
+              inst = insts[word];
+            }
 
-          if (hasUsefulConceptName(inst)) {
-            instance = inst;
-            break;
+            if (hasUsefulConceptName(inst)) {
+              instance = inst;
+              break;
+            }
           }
         }
 
