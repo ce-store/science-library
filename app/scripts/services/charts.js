@@ -8,7 +8,7 @@
  * Service in the itapapersApp.
  */
 angular.module('itapapersApp')
-  .service('charts', function () {
+  .service('charts', ['utils', 'definitions', function (utils, ce) {
     var getScatterData = function(results, server) {
       var data = results.data;
       var instances = results.instances;
@@ -29,78 +29,73 @@ angular.module('itapapersApp')
           var orgProps = instances[data[i][2]].property_values;
 
           var id = data[i][0];
-          var citations = personProps["local citation count"] ? personProps["local citation count"][0] : 0;
-          var hIndex = personProps["local h-index"] ? personProps["local h-index"][0] : 0;
-          var googleCitation = personProps["citation count"] ? personProps["citation count"][0] : null;
 
-          var googleCitations = 0;
-          var googleHIndex = 0;
+          // person properties
+          var citations = utils.getIntProperty(personProps, ce.author.localCitationCount);
+          var hIndex = utils.getIntProperty(personProps, ce.author.localHIndex);
+          var googleCitation = utils.getProperty(personProps, ce.author.googleCitationCount);
+          var totalPubs = utils.getIntProperty(personProps, ce.author.externalDocumentCount);
+          var profilePicture = utils.getProperty(personProps, ce.author.profilePicture);
 
-          if (googleCitation && instances[googleCitation]) {
-            googleCitations = citationProps["citation count"] ? citationProps["citation count"][0] : 0;
-            googleHIndex = citationProps["h-index"] ? citationProps["h-index"][0] : 0;
-          }
-          var industry = orgProps.type ? orgProps.type[0] : "Unknown";
+          // citation properties
+          var googleCitations = utils.getIntProperty(citationProps, ce.citation.count);
+          var googleHIndex = utils.getIntProperty(citationProps, ce.citation.hIndex);
 
-          var journals = personProps["journal paper count"] ? parseInt(personProps["journal paper count"][0], 10) : 0;
-          var conferences = personProps["conference paper count"] ? parseInt(personProps["conference paper count"][0], 10) : 0;
-          var totalPubs = journals + conferences;
+          // organisation properties
+          var industry = utils.getUnknownProperty(orgProps, ce.organisation.affiliation);
 
           var c = {
             id: id,
-            employer: data[i][2],
-            name: data[i][3],
-            totalPubs: totalPubs,
-            citations: parseInt(citations, 10),
-            hIndex: parseInt(hIndex, 10),
-            googleCitations: parseInt(googleCitations, 10),
-            googleHIndex: parseInt(googleHIndex, 10),
-            industry: industry,
-            yValue: parseInt(citations, 10)
+            employer:   data[i][2],
+            name:       data[i][3],
+            totalPubs:  totalPubs,
+            citations:  citations,
+            hIndex:     hIndex,
+            picture:    profilePicture,
+            googleCitations:  googleCitations,
+            googleHIndex:     googleHIndex,
+            industry:   industry,
+            yValue:     citations,
           };
           var h = {
             id: id,
-            employer: data[i][2],
-            name: data[i][3],
-            totalPubs: totalPubs,
-            citations: parseInt(citations, 10),
-            hIndex: parseInt(hIndex, 10),
-            googleCitations: parseInt(googleCitations, 10),
-            googleHIndex: parseInt(googleHIndex, 10),
-            industry: industry,
-            yValue: parseInt(hIndex, 10)
+            employer:   data[i][2],
+            name:       data[i][3],
+            totalPubs:  totalPubs,
+            citations:  citations,
+            hIndex:     hIndex,
+            picture:    profilePicture,
+            googleCitations:  googleCitations,
+            googleHIndex:     googleHIndex,
+            industry:   industry,
+            yValue:     hIndex
           };
           var gc = {
             id: id,
-            employer: data[i][2],
-            name: data[i][3],
-            totalPubs: totalPubs,
-            citations: parseInt(citations, 10),
-            hIndex: parseInt(hIndex, 10),
-            googleCitations: parseInt(googleCitations, 10),
-            googleHIndex: parseInt(googleHIndex, 10),
-            industry: industry,
-            yValue: parseInt(googleCitations, 10)
+            employer:   data[i][2],
+            name:       data[i][3],
+            totalPubs:  totalPubs,
+            citations:  citations,
+            hIndex:     hIndex,
+            picture:    profilePicture,
+            googleCitations:  googleCitations,
+            googleHIndex:     googleHIndex,
+            industry:   industry,
+            yValue:     googleCitations
           };
           var gh = {
             id: id,
-            employer: data[i][2],
-            name: data[i][3],
-            totalPubs: totalPubs,
-            citations: parseInt(citations, 10),
-            hIndex: parseInt(hIndex, 10),
-            googleCitations: parseInt(googleCitations, 10),
-            googleHIndex: parseInt(googleHIndex, 10),
-            industry: industry,
-            yValue: parseInt(googleHIndex, 10)
+            employer:   data[i][2],
+            name:       data[i][3],
+            totalPubs:  totalPubs,
+            citations:  citations,
+            hIndex:     hIndex,
+            picture:    profilePicture,
+            googleCitations:  googleCitations,
+            googleHIndex:     googleHIndex,
+            industry:   industry,
+            yValue:     googleHIndex
           };
-
-          var profilePicture = results.instances[id].property_values["profile picture"];
-          if (profilePicture) {
-            profilePicture[0] = server + profilePicture[0];
-            c.picture = profilePicture[0];
-            h.picture = profilePicture[0];
-          }
 
           citationData.push(c);
           hIndexData.push(h);
@@ -109,10 +104,10 @@ angular.module('itapapersApp')
         }
 
         scatterOptions = {
-          citations: citationData,
-          hIndex: hIndexData,
-          googleCitations: googleCitationData,
-          googleHIndex: googleHIndexData
+          citations:        citationData,
+          hIndex:           hIndexData,
+          googleCitations:  googleCitationData,
+          googleHIndex:     googleHIndexData
         };
         localStorage.setItem("scatterOptions", JSON.stringify(scatterOptions));
       }
@@ -122,25 +117,30 @@ angular.module('itapapersApp')
 
     var getSunburstData = function (data) {
       var children = {
-        "IND": [],
-        "AC": [],
-        "GOV": [],
-        "Unknown": []
+        "IND":      [],
+        "AC":       [],
+        "GOV":      [],
+        "Unknown":  []
       };
 
       for (var i = 0; i < data.results.length; ++i) {
         var id = data.results[i][0];
         var orgProps = data.instances[id].property_values;
 
-        var name = orgProps.name ? orgProps.name[0] : id;
-        var type = orgProps.type ? orgProps.type[0] : "Unknown";
-        var employees = orgProps.employs ? orgProps.employs.length : 0;
-        var papers = orgProps["paper count"] ? orgProps["paper count"] : 0;
+        // organisation properties
+        var name = utils.getProperty(orgProps, ce.organisation.name);
+        var type = utils.getUnknownProperty(orgProps, ce.properties.affiliation);
+        var employeeList = utils.getListProperty(orgProps, ce.properties.employeeList);
+        var documentCount = utils.getIntProperty(orgProps, ce.properties.documentCount);
+
+        if (!employeeList.length) {
+          employeeList = [];
+        }
 
         children[type].push({
-          name: name,
-          employees: employees,
-          papers: papers
+          name:       name,
+          employees:  employeeList.length,
+          papers:     documentCount
         });
       }
 
@@ -165,4 +165,4 @@ angular.module('itapapersApp')
       getScatterData: getScatterData,
       getSunburstData: getSunburstData
     };
-  });
+  }]);
