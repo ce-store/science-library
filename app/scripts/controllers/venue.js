@@ -8,15 +8,14 @@
  * Controller of the itapapersApp
  */
 angular.module('itapapersApp')
-  .controller('VenueCtrl', ['$scope', '$stateParams', 'store', 'hudson', 'colours', 'documentTypes', 'utils', 'csv', function ($scope, $stateParams, store, hudson, colours, documentTypes, utils, csv) {
+  .controller('VenueCtrl', ['$scope', '$stateParams', 'store', 'hudson', 'colours', 'documentTypes', 'utils', 'csv', 'definitions', function ($scope, $stateParams, store, hudson, colours, documentTypes, utils, csv, ce) {
     $scope.map = {};
     $scope.multiplier = 3;
-    var bubblesData = {};
-    var arcData = {};
-    var papersData = {};
-    var authorsData = {};
-    var csvDataYears = {};
-    var unknown = 'Unknown';
+    var bubblesData   = {};
+    var arcData       = {};
+    var papersData    = {};
+    var authorsData   = {};
+    var csvDataYears  = {};
     var lastHighlight = null;
 
     $scope.$on('question:added', function() {
@@ -42,14 +41,14 @@ angular.module('itapapersApp')
         bubbles: bubblesData[year],
         arc: arcData[year]
       };
-      $scope.papers = papersData[year];
+      $scope.papers  = papersData[year];
       $scope.authors = authorsData[year];
       $scope.bubbles = bubblesData[year];
 
-      var thisEvent = bubblesData[year][bubblesData[year].length - 1];
+      var thisEvent    = bubblesData[year][bubblesData[year].length - 1];
       $scope.startDate = thisEvent.startDate;
-      $scope.endDate = thisEvent.endDate;
-      $scope.url = thisEvent.url;
+      $scope.endDate   = thisEvent.endDate;
+      $scope.url       = thisEvent.url;
 
       csv.setData(csvDataYears[year]);
     };
@@ -123,11 +122,16 @@ angular.module('itapapersApp')
             var eventLocProps = instances[eventLocationId].property_values;
             var orgLocProps = instances[organisationLocationId].property_values;
 
-            var authorName = authorProps['full name'] ? authorProps['full name'][0] : unknown;
-            var eventLatitude = eventLocProps.latitude ? eventLocProps.latitude[0] : unknown;
-            var eventLongitude = eventLocProps.longitude ? eventLocProps.longitude[0] : unknown;
-            var organisationLatitude = orgLocProps.latitude ? orgLocProps.latitude[0] : unknown;
-            var organisationLongitude = orgLocProps.longitude ? orgLocProps.longitude[0] : unknown;
+            // author properties
+            var authorName = utils.getUnknownProperty(authorProps, ce.author.fullName);
+
+            // event location properties
+            var eventLat = utils.getProperty(eventLocProps, ce.location.lat);
+            var eventLon = utils.getProperty(eventLocProps, ce.location.lon);
+
+            // organisation location properties
+            var orgLat = utils.getProperty(orgLocProps, ce.location.lat);
+            var orgLon = utils.getProperty(orgLocProps, ce.location.lon);
 
             // Sort bubbles
             if (bubblesData[eventYearId]) {
@@ -137,7 +141,7 @@ angular.module('itapapersApp')
                 if (bubbleForYear.id === organisationId) {
                   bubbleForYear.radius += $scope.multiplier;
                   bubbleForYear.authors.push({
-                    id: authorId,
+                    id:   authorId,
                     name: authorName
                   });
 
@@ -145,7 +149,7 @@ angular.module('itapapersApp')
                     authorsData[eventYearId][authorId].count++;
                   } else {
                     authorsData[eventYearId][authorId] = {
-                      id: authorId,
+                      id:   authorId,
                       name: authorName,
                       count: 1
                     };
@@ -158,47 +162,56 @@ angular.module('itapapersApp')
               var seriesProps = instances[eventSeriesId].property_values;
               var yearProps = instances[eventYearId].property_values;
 
-              $scope.venueName = seriesProps['full name'] ? seriesProps['full name'][0] : unknown;
-              $scope.yearsRan = seriesProps['years ran'] ? seriesProps['years ran'][0] : 0;
-              var eventName = yearProps['full name'] ? yearProps['full name'][0] : unknown;
-              var eventLocation = yearProps['occurs at'] ? yearProps['occurs at'][0] : unknown;
-              var startDate = yearProps['start date'] ? yearProps['start date'][0] : unknown;
-              var endDate = yearProps['end date'] ? yearProps['end date'][0] : unknown;
-              var url = yearProps.url ? yearProps.url[0] : unknown;
+              // event series properties
+              var seriesName = utils.getUnknownProperty(seriesProps, ce.series.name);
+              var seriesYears = utils.getUnknownProperty(seriesProps, ce.series.years);
+
+              // venue properties
+              var venueName = utils.getUnknownProperty(yearProps, ce.venue.name);
+              var venueLocation = utils.getUnknownProperty(yearProps, ce.venue.location);
+              var venueStartDate = utils.getUnknownProperty(yearProps, ce.venue.startDate);
+              var venueEndDate = utils.getUnknownProperty(yearProps, ce.venue.endDate);
+              var venueUrl = utils.getProperty(yearProps, ce.venue.url);
+
+              $scope.venueName = seriesName;
+              $scope.yearsRan = seriesYears;
 
               var eventBubble = {
-                name: eventName + ": " + eventLocation,
-                location: eventLocationId,
-                startDate: startDate,
-                endDate: endDate,
-                url: url,
-                radius: $scope.multiplier * 5,
-                latitude: eventLatitude,
-                longitude: eventLongitude,
-                fillKey: 'EVENT'
+                name:       venueName + ": " + venueLocation,
+                location:   eventLocationId,
+                startDate:  venueStartDate,
+                endDate:    venueEndDate,
+                url:        venueUrl,
+                radius:     $scope.multiplier * 5,
+                latitude:   eventLat,
+                longitude:  eventLon,
+                fillKey:    'EVENT'
               };
 
               eventBubbles[eventYearId] = eventBubble;
-              bubblesData[eventYearId] = [];
-              authorsData[eventYearId] = {};
-              csvDataYears[eventYearId] = [$stateParams.venueId, $stateParams.year, $scope.venueName, $scope.yearsRan, eventName, eventLocation, eventLatitude, eventLongitude, startDate, endDate, url];
+              bubblesData[eventYearId]  = [];
+              authorsData[eventYearId]  = {};
+              csvDataYears[eventYearId] = [$stateParams.venueId, $stateParams.year, $scope.venueName, $scope.yearsRan, venueName, venueLocation, eventLat, eventLon, venueStartDate, venueEndDate, venueUrl];
             }
 
             if (!found) {
-              var organisationName = instances[organisationId].property_values.name ? instances[organisationId].property_values.name[0] : unknown;
-              var industry = instances[organisationId].property_values.type ? instances[organisationId].property_values.type[0] : unknown;
+              var orgProps = instances[organisationId].property_values;
+
+              // organisation properties
+              var orgName = utils.getUnknownProperty(orgProps, ce.organisation.name);
+              var orgAffiliation = utils.getUnknownProperty(orgProps, ce.organisation.affiliation);
 
               var bubble = {
-                id: organisationId,
-                name: organisationName,
-                latitude: organisationLatitude,
-                longitude: organisationLongitude,
-                radius: $scope.multiplier,
+                id:         organisationId,
+                name:       orgName,
+                latitude:   orgLat,
+                longitude:  orgLon,
+                radius:     $scope.multiplier,
+                fillKey:    orgAffiliation,
                 authors: [{
                   id: authorId,
                   name: authorName
-                }],
-                fillKey: industry
+                }]
               };
 
               bubblesData[eventYearId].push(bubble);
@@ -207,7 +220,7 @@ angular.module('itapapersApp')
                 authorsData[eventYearId][authorId].count++;
               } else {
                 authorsData[eventYearId][authorId] = {
-                  id: authorId,
+                  id:   authorId,
                   name: authorName,
                   count: 1
                 };
@@ -221,28 +234,31 @@ angular.module('itapapersApp')
 
             var arc = {
               origin: {
-                latitude: organisationLatitude,
-                longitude: organisationLongitude
+                latitude:   orgLat,
+                longitude:  orgLon
               },
               destination: {
-                latitude: eventLatitude,
-                longitude: eventLongitude
+                latitude:   eventLat,
+                longitude:  eventLon
               }
             };
 
             arcData[eventYearId].push(arc);
 
-            var paperName = instances[paperId].property_values.title ?instances[paperId].property_values.title[0] : unknown;
+            var paperProps = instances[paperId].property_values;
+
+            // paper properties
+            var paperName = utils.getUnknownProperty(paperProps, ce.paper.title);
             var paperType = utils.getType(instances[paperId].direct_concept_names);
-            var citations = instances[citationId].property_values['citation count'] ? instances[citationId].property_values['citation count'][0] : unknown;
+            var paperCitationCount = utils.getIntProperty(paperProps, ce.paper.citationCount);
 
             // Sort papers
             var paper = {
-              id: paperId,
-              name: paperName,
-              citations: parseInt(citations, 10),
-              type: paperType,
-              class: utils.getClassName(paperType)
+              id:         paperId,
+              name:       paperName,
+              citations:  paperCitationCount,
+              type:       paperType,
+              class:      utils.getClassName(paperType)
             };
 
             if (papersData[eventYearId]) {
@@ -265,7 +281,9 @@ angular.module('itapapersApp')
 
         // add event bubbles on top
         for (var year in eventBubbles) {
-          bubblesData[year].push(eventBubbles[year]);
+          if (eventBubbles.hasOwnProperty(year)) {
+            bubblesData[year].push(eventBubbles[year]);
+          }
         }
 
         // Set elements
