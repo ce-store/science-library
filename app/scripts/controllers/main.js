@@ -20,7 +20,6 @@ angular.module('itapapersApp')
       topics:     'topics'
     };
     $scope.listLength = 50;
-    // TODO: Complete these!
     $scope.sortTypes = {
       'papers': {
         names:    ['most collaborative', 'citation count', 'most recent', 'name'],
@@ -49,7 +48,7 @@ angular.module('itapapersApp')
       },
       'co-authors': {},
       'topics': {
-        names:    ['collaborations', 'paper count', 'author count', 'citation count', 'name'],
+        names:    ['collaborations', 'paper count'], //, 'author count', 'citation count', 'name'],
         values:   ['collaborations', 'papers'],
         show:     [true, true],
         reverse:  ['-', '-']
