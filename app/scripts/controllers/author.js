@@ -8,7 +8,7 @@
  * Controller of the itapapersApp
  */
 angular.module('itapapersApp')
-  .controller('AuthorCtrl', ['$scope', '$stateParams', '$timeout', 'store', 'server', 'hudson', 'documentTypes', 'utils', 'csv', 'colours', function ($scope, $stateParams, $timeout, store, server, hudson, documentTypes, utils, csv, colours) {
+  .controller('AuthorCtrl', ['$scope', '$stateParams', '$timeout', 'store', 'server', 'hudson', 'documentTypes', 'utils', 'csv', 'colours', 'definitions', function ($scope, $stateParams, $timeout, store, server, hudson, documentTypes, utils, csv, colours, ce) {
     $scope.views = ['graph', 'papers', 'co-authors', 'co-authors-graph'];
     $scope.journalType = documentTypes.journal;
     $scope.externalConferenceType = documentTypes.external;
@@ -45,9 +45,13 @@ angular.module('itapapersApp')
       var csvData = [];
       if ($scope.currentView === $scope.views[0] || $scope.currentView === $scope.views[1]) {
         for (var paper in $scope.papersList) {
-          var p = $scope.papersList[paper];
-          for (var i in p.type) {
-            csvData.push([p.id, p.name, p.citations, p.type[i], p.venue, p.authors]);
+          if ($scope.papersList.hasOwnProperty(paper)) {
+            var p = $scope.papersList[paper];
+            for (var i in p.type) {
+              if (p.type.hasOwnProperty(i)) {
+                csvData.push([p.id, p.name, p.citations, p.type[i], p.venue, p.authors]);
+              }
+            }
           }
         }
 
@@ -56,8 +60,10 @@ angular.module('itapapersApp')
         csv.setName($stateParams.authorId + "_papers");
       } else {
         for (var coAuthor in $scope.coauthorsList) {
-          var ca = $scope.coauthorsList[coAuthor];
-          csvData.push([ca.id, ca.name, ca.count]);
+          if ($scope.coauthorsList.hasOwnProperty(coAuthor)) {
+            var ca = $scope.coauthorsList[coAuthor];
+            csvData.push([ca.id, ca.name, ca.count]);
+          }
         }
 
         csv.setData(csvData);
@@ -158,50 +164,69 @@ angular.module('itapapersApp')
     store.getAuthor($stateParams.authorId)
       .then(function(data) {
         $scope.data = data;
-        var unknown = "Unknown";
-
         var properties = data.structured_response.main_instance.property_values;
         var relatedInstances = data.structured_response.related_instances;
 
+        // get properties
+        var fullName = utils.getUnknownProperty(properties, ce.author.fullName);
+        var organisation = utils.getUnknownProperty(properties, ce.author.organisation);
+        var coAuthorList = utils.getListProperty(properties, ce.author.coAuthorList);
+        var documentList = utils.getListProperty(properties, ce.author.documentList);
+        var documentCount = utils.getIntProperty(properties, ce.author.documentCount);
+        var externalDocumentCount = utils.getIntProperty(properties, ce.author.externalDocumentCount);
+        var internalDocumentCount = utils.getIntProperty(properties, ce.author.internalDocumentCount);
+        var journalCount = utils.getIntProperty(properties, ce.author.externalDocumentCount);
+        var patentCount = utils.getIntProperty(properties, ce.author.externalDocumentCount);
+        var externalConferencePaperCount = utils.getIntProperty(properties, ce.author.externalConferencePaperCount);
+        var internalConferencePaperCount = utils.getIntProperty(properties, ce.author.internalConferencePaperCount);
+        var technicalReportCount = utils.getIntProperty(properties, ce.author.technicalReportCount);
+        var otherCount = utils.getIntProperty(properties, ce.author.otherCount);
+        var coAuthorCount = utils.getIntProperty(properties, ce.author.otherCount);
+        var governmentCoAuthorCount = utils.getIntProperty(properties, ce.author.governmentCoAuthorCount);
+        var googleCitationCount = utils.getIntProperty(properties, ce.author.googleCitationCount);
+        var localCitationCount = utils.getIntProperty(properties, ce.author.localCitationCount);
+        var localHIndex = utils.getIntProperty(properties, ce.author.localHIndex);
+        var writesFor = utils.getIntProperty(properties, ce.author.writesFor);
+        var writesAbout = utils.getUnknownProperty(properties, ce.author.writesAbout);
+        var coAuthorStatistic = utils.getListProperty(properties, ce.author.coAuthorStatistic);
+        var topicPersonStatistic = utils.getListProperty(properties, ce.author.topicPersonStatistic);
+
         // Set data
         $scope.authorId = $stateParams.authorId;
-        $scope.author = properties["full name"] ? properties["full name"][0] : unknown;
+        $scope.author = fullName;
         $scope.coAuthorsHeader = $scope.author + "'s co-authors";
         $scope.papersHeader = $scope.author + "'s papers";
 
         // Employer
         $scope.employer = {};
-        if (properties["is employed by"]) {
-          var relatedEmployer = relatedInstances[properties["is employed by"][0]];
+        var relatedEmployer = relatedInstances[writesFor];
+        if (relatedEmployer) {
+          if (relatedEmployer.property_values.name) {
+            $scope.employer = {
+              id: relatedEmployer._id,
+              name: relatedEmployer.property_values.name[0]
+            };
+          } else {
+            $scope.employer = {
+              id: relatedEmployer._id,
+              name: relatedEmployer._id
+            };
+          }
 
-          if (relatedEmployer) {
-            if (relatedEmployer.property_values.name) {
-              $scope.employer = {
-                id: relatedEmployer._id,
-                name: relatedEmployer.property_values.name[0]
-              };
-            } else {
-              $scope.employer = {
-                id: relatedEmployer._id,
-                name: relatedEmployer._id
-              };
-            }
-
-            if (relatedEmployer.property_values.type) {
-              $scope.type = relatedEmployer.property_values.type[0];
-            }
+          if (relatedEmployer.property_values.type) {
+            $scope.type = relatedEmployer.property_values.type[0];
           }
         }
 
         // Publications
-        $scope.journalPapers = properties["journal paper count"] ? parseInt(properties["journal paper count"][0], 10) : 0;
-        $scope.externalPapers = properties["external conference paper count"] ? parseInt(properties["external conference paper count"][0], 10) : 0;
-        $scope.patents = properties["patent count"] ? parseInt(properties["patent count"][0], 10) : 0;
-        $scope.internalPapers = properties["internal conference paper count"] ? parseInt(properties["internal conference paper count"][0], 10) : 0;
-        $scope.technicalReports = properties["technical report count"] ? parseInt(properties["technical report count"][0], 10) : 0;
-        $scope.otherDocuments = properties["other document count"] ? parseInt(properties["other document count"][0], 10) : 0;
-        $scope.totalExternalPublications = properties["external document count"] ? parseInt(properties["external document count"][0], 10) : 0;
-        $scope.totalInternalPublications = properties["internal document count"] ? parseInt(properties["internal document count"][0], 10) : 0;
+        $scope.journalPapers    = journalCount;
+        $scope.externalPapers   = externalConferencePaperCount;
+        $scope.patents          = patentCount;
+        $scope.internalPapers   = internalConferencePaperCount;
+        $scope.technicalReports = technicalReportCount;
+        $scope.otherDocuments   = otherCount;
+        $scope.totalExternalPublications = externalDocumentCount;
+        $scope.totalInternalPublications = internalDocumentCount;
 
         $scope.pieData = [{
           label: types[$scope.journalType],
@@ -226,32 +251,29 @@ angular.module('itapapersApp')
         // citations
         $scope.scholarLink = "https://scholar.google.co.uk/scholar?q=" + properties["full name"][0] + "&btnG=&hl=en&as_sdt=0%2C5";
 
-        if (properties["citation count"]) {
-          var citationCount = relatedInstances[properties["citation count"][0]].property_values;
+        if (relatedInstances[googleCitationCount]) {
+          var googleCitationCountProperties = relatedInstances[googleCitationCount].property_values;
 
           // local and google citation count && h-index
-          var url = citationCount.url ? citationCount.url[0] : null;
-
-         var googleCount = citationCount["citation count"] ? citationCount["citation count"][0] : 0;
-         var googleHIndex = citationCount["h-index"] ? citationCount["h-index"][0] : 0;
-          var count = properties["local citation count"] ? properties["local citation count"][0] : 0;
-          var hIndex = properties["local h-index"] ? properties["local h-index"][0] : 0;
+          var url = utils.getProperty(googleCitationCountProperties, ce.citation.url);
+          var googleCount = utils.getIntProperty(googleCitationCountProperties, ce.citation.count);
+          var googleHIndex = utils.getIntProperty(googleCitationCountProperties, ce.citation.hIndex);
 
           $scope.citationCount = {
             url: url,
-            count: parseInt(count, 10)
+            count: localCitationCount
           };
           $scope.hIndex = {
             url: url,
-            index: parseInt(hIndex, 10)
+            index: localHIndex
           };
           $scope.googleCitationCount = {
             url: url,
-            count: parseInt(googleCount, 10)
+            count: googleCount
           };
           $scope.googleHIndex = {
             url: url,
-            index: parseInt(googleHIndex, 10)
+            index: googleHIndex
           };
         }
 
@@ -259,23 +281,31 @@ angular.module('itapapersApp')
         // papers
         $scope.papersList = [];
         var documentMap = {};
-        if (properties.wrote) {
-          for (i = 0; i < properties.wrote.length; ++i) {
-            var paperId = properties.wrote[i];
-            var paper = relatedInstances[paperId];
+        if (documentList) {
+          for (i = 0; i < documentList.length; ++i) {
+            var paperId   = documentList[i];
+            var paper     = relatedInstances[paperId];
             var paperType = utils.getType(paper.direct_concept_names);
             var paperProps = paper.property_values;
-            var citationId = paperProps["citation count"];
-            var paperCitationCount = 0;
+
+            // paper properties
+            var paperTitle    = utils.getUnknownProperty(paperProps, ce.paper.title);
+            var paperVenue    = utils.getUnknownProperty(paperProps, ce.paper.venue);
+            var paperWeight   = utils.getIntProperty(paperProps, ce.paper.weight);
+            var paperVariant  = utils.getProperty(paperProps, ce.paper.variant);
+            var paperFinalDate  = utils.getDateProperty(paperProps, ce.paper.finalDate);
+            var paperNoteworthy = utils.getProperty(paperProps, ce.paper.noteworthyReason);
+            var paperCitationCount = utils.getIntProperty(paperProps, ce.paper.citationCount);
+            var paperFullAuthorString = utils.getUnknownProperty(paperProps, ce.paper.fullAuthorString);
 
             if (!documentMap[paperId]) {
               var variantFound = false;
               var maxCitations = 0;
 
               // find max variant
-              if (paperProps.variant) {
-                for (j = 0; j < paperProps.variant.length; ++j) {
-                  var variantId = paperProps.variant[j];
+              if (paperVariant) {
+                for (j = 0; j < paperVariant.length; ++j) {
+                  var variantId = paperVariant[j];
 
                   if (documentMap[variantId]) {
                     maxCitations = documentMap[variantId].citations > maxCitations ? documentMap[variantId].citations : maxCitations;
@@ -284,63 +314,58 @@ angular.module('itapapersApp')
                 }
               }
 
-              if (citationId) {
-                var citationProps = relatedInstances[citationId].property_values;
-
-                // set citation count in map
-                paperCitationCount = citationProps["citation count"] ? parseInt(citationProps["citation count"][0], 10) : 0;
-                if (!variantFound) {
+              // set citation count in map
+              if (!variantFound) {
+                documentMap[paperId] = {
+                  citations:  paperCitationCount,
+                  index:      i,
+                  title:      paperTitle,
+                  noteworthy: paperNoteworthy,
+                  date:       paperFinalDate,
+                  types:      [paperType],
+                  venue:      paperVenue,
+                  authors:    paperFullAuthorString,
+                  weight:     paperWeight
+                };
+              } else {
+                if (maxCitations < paperCitationCount) {
+                  var variantTypes = documentMap[variantFound].types.slice();
+                  documentMap[variantFound] = null;
                   documentMap[paperId] = {
                     citations: paperCitationCount,
-                    index: i,
-                    title: paperProps.title ? paperProps.title[0] : unknown,
-                    noteworthy: paperProps["noteworthy reason"] ? paperProps["noteworthy reason"][0] : null,
-                    date: paperProps["final date"] ? Date.parse(paperProps["final date"][0]) : 0,
-                    types: [paperType],
-                    venue: paperProps.venue ? paperProps.venue[0] : (paperProps["old venue"] ? paperProps["old venue"][0] : ""),
-                    authors: paperProps["original authors string"] ? paperProps["original authors string"][0] : "",
-                    weight: paperProps.weight ? paperProps.weight[0] : -1
+                    index:      i,
+                    title:      paperTitle,
+                    noteworthy: paperNoteworthy,
+                    date:       paperFinalDate,
+                    types:      [paperType].concat(variantTypes),
+                    venue:      paperVenue,
+                    authors:    paperFullAuthorString,
+                    weight:     paperWeight
                   };
                 } else {
-                  if (maxCitations < paperCitationCount) {
-                    var variantTypes = documentMap[variantFound].types.slice();
-                    documentMap[variantFound] = null;
-                    documentMap[paperId] = {
-                      citations: paperCitationCount,
-                      index: i,
-                      title: paperProps.title ? paperProps.title[0] : unknown,
-                      noteworthy: paperProps["noteworthy reason"] ? paperProps["noteworthy reason"][0] : null,
-                      date: paperProps["final date"] ? Date.parse(paperProps["final date"][0]) : 0,
-                      types: [paperType].concat(variantTypes),
-                      venue: paperProps.venue ? paperProps.venue[0] : (paperProps["old venue"] ? paperProps["old venue"][0] : ""),
-                      authors: paperProps["original authors string"] ? paperProps["original authors string"][0] : "",
-                      weight: paperProps.weight ? paperProps.weight[0] : -1
-                    };
-                  } else {
-                    documentMap[variantFound].types.push(paperType);
-                  }
+                  documentMap[variantFound].types.push(paperType);
                 }
               }
             }
           }
 
           // recreate array - test for index to remove duplicate citations
-          for (i = 0; i < properties.wrote.length; ++i) {
-            var thisPaperId = properties.wrote[i];
+          for (i = 0; i < documentList.length; ++i) {
+            var thisPaperId = documentList[i];
             var thisPaper = documentMap[thisPaperId];
 
             if (thisPaper && thisPaper.index === i) {
               var paperItem = {
-                id: thisPaperId,
-                name: thisPaper.title,
+                id:         thisPaperId,
+                name:       thisPaper.title,
                 noteworthy: thisPaper.noteworthy,
-                date: thisPaper.date,
-                citations: thisPaper.citations,
-                type: utils.sortTypes(thisPaper.types),
-                venue: thisPaper.venue,
-                authors: thisPaper.authors,
-                class: [],
-                weight: thisPaper.weight
+                date:       thisPaper.date,
+                citations:  thisPaper.citations,
+                type:       utils.sortTypes(thisPaper.types),
+                venue:      thisPaper.venue,
+                authors:    thisPaper.authors,
+                weight:     thisPaper.weight,
+                class:      []
               };
 
               for (j = 0; j < paperItem.type.length; ++j) {
@@ -357,67 +382,71 @@ angular.module('itapapersApp')
         $scope.nodes = [];
 
         $scope.nodes.push({
-          id: $scope.authorId,
+          id:   $scope.authorId,
           name: $scope.author,
           group: $scope.type,
           count: $scope.totalPublications
         });
 
-        if (properties['co-author statistic'] !== null) {
-          for (i = 0; i < properties['co-author statistic'].length; ++i) {
-            var statId = properties['co-author statistic'][i];
+        if (coAuthorStatistic) {
+          for (i = 0; i < coAuthorStatistic.length; ++i) {
+            var statId = coAuthorStatistic[i];
             var coAuthorStatProps = relatedInstances[statId].property_values;
 
-            var coAuthorIds = coAuthorStatProps["co-author"];
-            var coAuthorId = coAuthorIds[0] === $scope.authorId ? coAuthorIds[1] : coAuthorIds[0];
-            var coAuthorCount = coAuthorStatProps["co-author count"] ? parseInt(coAuthorStatProps["co-author count"][0], 10) : 1;
+            // co-author statistic properties
+            var statCoAuthorList = utils.getListProperty(coAuthorStatProps, ce.statistic.coAuthorList);
+            var statCoAuthorCount = utils.getIntProperty(coAuthorStatProps, ce.statistic.coAuthorCount);
+            var coAuthorId = statCoAuthorList[0] === $scope.authorId ? statCoAuthorList[1] : statCoAuthorList[0];
+
+            // co-author properties
             var coAuthorProps = relatedInstances[coAuthorId].property_values;
-            var coAuthorName = coAuthorProps["full name"] ? coAuthorProps["full name"][0] : unknown;
-            var coAuthorEmployer = coAuthorProps["is employed by"] ? coAuthorProps["is employed by"][0] : unknown;
-            var coAuthorType;
-            if (coAuthorEmployer !== unknown) {
-              if (relatedInstances[coAuthorEmployer].property_values.type) {
-                coAuthorType = relatedInstances[coAuthorEmployer].property_values.type[0];
-              }
-            } else {
-              coAuthorType = unknown;
+            var coAuthorName = utils.getUnknownProperty(coAuthorProps, ce.author.fullName);
+            var coAuthorEmployer = utils.getProperty(coAuthorProps, ce.author.writesFor);
+            var coAuthorCoAuthorList = utils.getListProperty(coAuthorProps, ce.author.coAuthorStatistic);
+            var coAuthorType = null;
+
+            if (coAuthorEmployer) {
+              var employerProps = relatedInstances[coAuthorEmployer].property_values;
+              coAuthorType = utils.getUnknownProperty(employerProps, ce.organisation.type);
             }
 
             $scope.coauthorsList.push({
-              id: coAuthorId,
-              name: coAuthorName,
-              count: coAuthorCount
+              id:     coAuthorId,
+              name:   coAuthorName,
+              count:  statCoAuthorCount
             });
 
-            var coAuthorCoAuthors = coAuthorProps["co-author statistic"];
+            // build co-co-authors stats
             var coCoAuthorStats = [];
 
             // remove root author's stats
-            for (j in coAuthorCoAuthors) {
-              var coCoAuthorStatProps = relatedInstances[coAuthorCoAuthors[j]].property_values;
-              var found = false;
+            for (j in coAuthorCoAuthorList) {
+              if (coAuthorCoAuthorList.hasOwnProperty(j)) {
+                var coCoAuthorStatProps = relatedInstances[coAuthorCoAuthorList[j]].property_values;
 
-              for (var k in coCoAuthorStatProps["co-author"]) {
-                if (coCoAuthorStatProps["co-author"][k] === $scope.authorId) {
-                  found = true;
-                }
-              }
+                // co-author co-author properties
+                var coCoAuthorCoAuthorList = utils.getListProperty(coCoAuthorStatProps, ce.author.coAuthorList);
+                var coCoAuthorCoAuthorCount = utils.getIntProperty(coCoAuthorStatProps, ce.author.coAuthorCount);
 
-              if (!found) {
-                var caCount = 1;
-                if (coCoAuthorStatProps["co-author count"]) {
-                  caCount = coCoAuthorStatProps["co-author count"][0];
+                var found = false;
+                for (var k in coCoAuthorCoAuthorList) {
+                  if (coCoAuthorCoAuthorList[k] === $scope.authorId) {
+                    found = true;
+                  }
                 }
-                coCoAuthorStats.push({
-                  id: coAuthorCoAuthors[j],
-                  authors: coCoAuthorStatProps["co-author"],
-                  count: caCount
-                });
+
+                if (!found) {
+                  coCoAuthorStats.push({
+                    id:       coAuthorCoAuthorList[j],
+                    authors:  coCoAuthorCoAuthorList,
+                    count:    coCoAuthorCoAuthorCount
+                  });
+                }
               }
             }
 
             $scope.nodes.push({
-              id: coAuthorId,
+              id:   coAuthorId,
               name: coAuthorName,
               group: coAuthorType,
               count: coAuthorCount,

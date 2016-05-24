@@ -60,6 +60,22 @@ angular.module('itapapersApp')
         });
 
         return docTypes;
+      },
+      getProperty: function(propertiesList, propertyName) {
+        return propertiesList[propertyName] ? propertiesList[propertyName][0] : null;
+      },
+      getListProperty: function(propertiesList, propertyName) {
+        return propertiesList[propertyName] ? propertiesList[propertyName] : null;
+      },
+      getUnknownProperty: function(propertiesList, propertyName) {
+        var unknown = 'unknown';
+        return propertiesList[propertyName] ? propertiesList[propertyName][0] : unknown;
+      },
+      getIntProperty: function(propertiesList, propertyName) {
+        return propertiesList[propertyName] ? parseInt(propertiesList[propertyName][0], 10) : 0;
+      },
+      getDateProperty: function(propertiesList, propertyName) {
+        return propertiesList[propertyName] ? Date.parse(propertiesList[propertyName][0]) : 0;
       }
     };
   }]);
