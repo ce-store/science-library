@@ -8,10 +8,11 @@
  * Controller of the itapapersApp
  */
 angular.module('itapapersApp')
-  .controller('CollaborationCtrl', ['$scope', '$stateParams', '$q', '$document', 'store', 'utils', 'documentTypes', 'csv', 'colours', function ($scope, $stateParams, $q, $document, store, utils, documentTypes, csv, colours) {
-    $scope.authors = [];
-    $scope.views = ["chart", "list"];
-    $scope.currentView = $scope.views[0];
+  .controller('CollaborationCtrl', ['$scope', '$stateParams', '$q', '$document', 'store', 'utils', 'documentTypes', 'csv', 'colours', 'definitions', function ($scope, $stateParams, $q, $document, store, utils, documentTypes, csv, colours, ce) {
+    $scope.views    = ["chart", "list"];
+    $scope.authors  = [];
+    $scope.papers   = [];
+    $scope.currentView  = $scope.views[0];
     $scope.journalInput = $scope.externalInput = $scope.patentInput = $scope.internalInput = $scope.technicalInput = $scope.otherInput = true;
 
     var types = documentTypes.nameMap;
@@ -19,15 +20,15 @@ angular.module('itapapersApp')
     var min, max;
 
     $scope.typeCount = {};
-    $scope.typeCount[types[documentTypes.journal]] = 0;
-    $scope.typeCount[types[documentTypes.external]] = 0;
-    $scope.typeCount[types[documentTypes.patent]] = 0;
-    $scope.typeCount[types[documentTypes.internal]] = 0;
-    $scope.typeCount[types[documentTypes.technical]] = 0;
-    $scope.typeCount[types[documentTypes.other]] = 0;
+    $scope.typeCount[types[documentTypes.journal]]    = 0;
+    $scope.typeCount[types[documentTypes.external]]   = 0;
+    $scope.typeCount[types[documentTypes.patent]]     = 0;
+    $scope.typeCount[types[documentTypes.internal]]   = 0;
+    $scope.typeCount[types[documentTypes.technical]]  = 0;
+    $scope.typeCount[types[documentTypes.other]]      = 0;
 
     // get window size
-    $scope.width = window.innerWidth;
+    $scope.width  = window.innerWidth;
     $scope.height = window.innerHeight;
 
     var height = $scope.height - 270;
@@ -69,7 +70,7 @@ angular.module('itapapersApp')
 
     $q.all(promises)
       .then(function(results) {
-        var papers = [];
+        var documentList = [];
 
         // find papers written by all authors
         for (i = 0; i < results.length; ++i) {
@@ -77,45 +78,56 @@ angular.module('itapapersApp')
           var authorId = result.structured_response.main_instance._id;
           var props = result.structured_response.main_instance.property_values;
 
-          // names
-          var name = props["full name"] ? props["full name"][0] : null;
+          // author properties
+          var name = utils.getProperty(props, ce.author.fullName);
+
           $scope.authors.push({
             id: authorId,
             name: name
           });
 
           // papers
+          var documentListProperty = utils.getListProperty(props, ce.author.documentList);
           if (i === 0) {
-            papers = props.wrote;
+            documentList = documentListProperty;
           } else {
             var deleteIndexes = [];
-            for (j = 0; j < papers.length; ++j) {
-              var paper = papers[j];
-              if (props.wrote) {
-                if (props.wrote.indexOf(paper) < 0) {
+
+            for (j = 0; j < documentList.length; ++j) {
+              var paper = documentList[j];
+
+              if (documentListProperty) {
+                if (documentListProperty.indexOf(paper) < 0) {
                   deleteIndexes.push(j);
                 }
               }
             }
 
             for (var k = deleteIndexes.length - 1; k >= 0; --k) {
-              papers.splice(deleteIndexes[k], 1);
+              documentList.splice(deleteIndexes[k], 1);
             }
           }
         }
 
         var relatedInstances = results[0].structured_response.related_instances;
-        $scope.papers = [];
         var documentMap = {};
         var csvData = [];
 
         // generate papers list with details
-        for (i = 0; i < papers.length; ++i) {
-          var paperId = papers[i];
+        for (i = 0; i < documentList.length; ++i) {
+          var paperId = documentList[i];
           var paperType = utils.getType(relatedInstances[paperId].direct_concept_names);
           var paperProps = relatedInstances[paperId].property_values;
-          var paperName = paperProps.title ? paperProps.title[0] : null;
-          var citations = 0;
+
+          // paper properties
+          var paperName     = utils.getProperty(paperProps, ce.paper.title);
+          var paperVariants = utils.getListProperty(paperProps, ce.paper.variant);
+          var paperVenue    = utils.getProperty(paperProps, ce.paper.venue);
+          var paperWeight   = utils.getIntProperty(paperProps, ce.paper.weight);
+          var paperFinalDate = utils.getProperty(paperProps, ce.paper.finalDate);
+          var paperCitationCount = utils.getIntProperty(paperProps, ce.paper.citationCount);
+          var paperFullAuthorsString = utils.getUnknownProperty(paperProps, ce.paper.fullAuthorsString);
+          var paperNoteworthy = utils.getProperty(paperProps, ce.paper.noteworthyReason);
           $scope.typeCount[paperType]++;
 
           if (!documentMap[paperId]) {
@@ -123,9 +135,9 @@ angular.module('itapapersApp')
             var maxCitations = 0;
 
             // find max variant
-            if (paperProps.variant) {
-              for (j = 0; j < paperProps.variant.length; ++j) {
-                var variantId = paperProps.variant[j];
+            if (paperVariants) {
+              for (j = 0; j < paperVariants.length; ++j) {
+                var variantId = paperVariants[j];
 
                 if (documentMap[variantId]) {
                   maxCitations = documentMap[variantId].citations > maxCitations ? documentMap[variantId].citations : maxCitations;
@@ -134,49 +146,41 @@ angular.module('itapapersApp')
               }
             }
 
-            var citationId = paperProps["citation count"] ? paperProps["citation count"][0] : null;
-
-            if (citationId) {
-              var citationProps = relatedInstances[citationId].property_values;
-              citations = citationProps["citation count"] ? citationProps["citation count"][0] : 0;
-
-              if (!variantFound) {
+            if (!variantFound) {
+              documentMap[paperId] = {
+                index:      i,
+                title:      paperName,
+                citations:  paperCitationCount,
+                noteworthy: paperNoteworthy,
+                types:      [paperType],
+                venue:      paperVenue,
+                authors:    paperFullAuthorsString,
+                weight:     paperWeight
+              };
+            } else {
+              if (maxCitations < paperCitationCount) {
+                var variantTypes = documentMap[variantFound].types.slice();
+                documentMap[variantFound] = null;
                 documentMap[paperId] = {
-                  citations: citations,
-                  index: i,
-                  title: paperName,
-                  noteworthy: paperProps["noteworthy reason"] ? paperProps["noteworthy reason"][0] : null,
-                  types: [paperType],
-                  venue: paperProps.venue ? paperProps.venue[0] : (paperProps["old venue"] ? paperProps["old venue"][0] : ""),
-                  authors: paperProps["original authors string"] ? paperProps["original authors string"][0] : "",
-                  weight: paperProps.weight ? paperProps.weight[0] : -1
+                  index:      i,
+                  title:      paperName,
+                  citations:  paperCitationCount,
+                  noteworthy: paperNoteworthy,
+                  types:      [paperType].concat(variantTypes),
+                  venue:      paperVenue,
+                  authors:    paperFullAuthorsString,
+                  weight:     paperWeight
                 };
               } else {
-                if (maxCitations < citations) {
-                  var variantTypes = documentMap[variantFound].types.slice();
-                  documentMap[variantFound] = null;
-                  documentMap[paperId] = {
-                    citations: citations,
-                    index: i,
-                    title: paperName,
-                    noteworthy: paperProps["noteworthy reason"] ? paperProps["noteworthy reason"][0] : null,
-                    types: [paperType].concat(variantTypes),
-                    venue: paperProps.venue ? paperProps.venue[0] : (paperProps["old venue"] ? paperProps["old venue"][0] : ""),
-                    authors: paperProps["original authors string"] ? paperProps["original authors string"][0] : "",
-                    weight: paperProps.weight ? paperProps.weight[0] : -1
-                  };
-                } else {
-                  documentMap[variantFound].types.push(paperType);
-                }
+                documentMap[variantFound].types.push(paperType);
               }
             }
           }
 
           // get date properties
-          var dateId = paperProps["final date"] ? paperProps["final date"][0] : null;
-          if (dateId) {
-            var month = relatedInstances[dateId].property_values.month;
-            var year = relatedInstances[dateId].property_values.year;
+          if (paperFinalDate) {
+            var month = relatedInstances[paperFinalDate].property_values.month;
+            var year = relatedInstances[paperFinalDate].property_values.year;
 
             if (!month) {
               month = '1';
@@ -194,38 +198,38 @@ angular.module('itapapersApp')
 
             if (!buckets[date]) {
               buckets[date] = {};
-              buckets[date][types[documentTypes.journal]] = [];
-              buckets[date][types[documentTypes.external]] = [];
-              buckets[date][types[documentTypes.patent]] = [];
-              buckets[date][types[documentTypes.internal]] = [];
+              buckets[date][types[documentTypes.journal]]   = [];
+              buckets[date][types[documentTypes.external]]  = [];
+              buckets[date][types[documentTypes.patent]]    = [];
+              buckets[date][types[documentTypes.internal]]  = [];
               buckets[date][types[documentTypes.technical]] = [];
-              buckets[date][types[documentTypes.other]] = [];
+              buckets[date][types[documentTypes.other]]     = [];
             }
 
             buckets[date][paperType].push({
-              id: paperId,
-              title: paperName,
-              citations: parseInt(citations, 10)
+              id:         paperId,
+              title:      paperName,
+              citations:  paperCitationCount
             });
           }
         }
 
         // recreate array - test for index to remove duplicate citations
-        for (i = 0; i < papers.length; ++i) {
-          var thisPaperId = papers[i];
+        for (i = 0; i < documentList.length; ++i) {
+          var thisPaperId = documentList[i];
           var thisPaper = documentMap[thisPaperId];
 
           if (thisPaper && thisPaper.index === i) {
             var paperItem = {
-              id: thisPaperId,
-              name: thisPaper.title,
+              id:         thisPaperId,
+              name:       thisPaper.title,
               noteworthy: thisPaper.noteworthy,
-              value: thisPaper.citations,
-              type: utils.sortTypes(thisPaper.types),
-              venue: thisPaper.venue,
-              authors: thisPaper.authors,
-              class: [],
-              weight: thisPaper.weight
+              value:      thisPaper.citations,
+              type:       utils.sortTypes(thisPaper.types),
+              venue:      thisPaper.venue,
+              authors:    thisPaper.authors,
+              weight:     thisPaper.weight,
+              class:      []
             };
 
             for (j = 0; j < paperItem.type.length; ++j) {
@@ -242,12 +246,12 @@ angular.module('itapapersApp')
         csv.setName($stateParams.author[0] + "_" + $stateParams.author[1] + "_collaborations");
 
         // calculate stats
-        $scope.journalPapers = $scope.typeCount[types[documentTypes.journal]];
-        $scope.externalPapers = $scope.typeCount[types[documentTypes.external]];
-        $scope.patents = $scope.typeCount[types[documentTypes.patent]];
-        $scope.internalPapers = $scope.typeCount[types[documentTypes.internal]];
+        $scope.journalPapers    = $scope.typeCount[types[documentTypes.journal]];
+        $scope.externalPapers   = $scope.typeCount[types[documentTypes.external]];
+        $scope.patents          = $scope.typeCount[types[documentTypes.patent]];
+        $scope.internalPapers   = $scope.typeCount[types[documentTypes.internal]];
         $scope.technicalReports = $scope.typeCount[types[documentTypes.technical]];
-        $scope.otherDocuments = $scope.typeCount[types[documentTypes.other]];
+        $scope.otherDocuments   = $scope.typeCount[types[documentTypes.other]];
         $scope.totalExternalPublications = $scope.journalPapers + $scope.externalPapers + $scope.patents;
         $scope.totalInternalPublications = $scope.internalPapers + $scope.technicalReports + $scope.otherDocuments;
 
@@ -278,15 +282,17 @@ angular.module('itapapersApp')
 
           $scope.chartData = [];
           for (var d in buckets) {
-            $scope.chartData.push({
-              date: d,
-              journal: buckets[d][types[documentTypes.journal]],
-              external: buckets[d][types[documentTypes.external]],
-              patent: buckets[d][types[documentTypes.patent]],
-              internal: buckets[d][types[documentTypes.internal]],
-              technical: buckets[d][types[documentTypes.technical]],
-              other: buckets[d][types[documentTypes.other]]
-            });
+            if (buckets.hasOwnProperty(d)) {
+              $scope.chartData.push({
+                date: d,
+                journal:    buckets[d][types[documentTypes.journal]],
+                external:   buckets[d][types[documentTypes.external]],
+                patent:     buckets[d][types[documentTypes.patent]],
+                internal:   buckets[d][types[documentTypes.internal]],
+                technical:  buckets[d][types[documentTypes.technical]],
+                other:      buckets[d][types[documentTypes.other]]
+              });
+            }
           }
         }
 
