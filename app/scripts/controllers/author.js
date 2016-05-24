@@ -186,7 +186,7 @@ angular.module('itapapersApp')
         var googleCitationCount = utils.getIntProperty(properties, ce.author.googleCitationCount);
         var localCitationCount = utils.getIntProperty(properties, ce.author.localCitationCount);
         var localHIndex = utils.getIntProperty(properties, ce.author.localHIndex);
-        var writesFor = utils.getIntProperty(properties, ce.author.writesFor);
+        var writesFor = utils.getListProperty(properties, ce.author.writesFor);
         var writesAbout = utils.getUnknownProperty(properties, ce.author.writesAbout);
         var coAuthorStatistic = utils.getListProperty(properties, ce.author.coAuthorStatistic);
         var topicPersonStatistic = utils.getListProperty(properties, ce.author.topicPersonStatistic);
@@ -197,24 +197,33 @@ angular.module('itapapersApp')
         $scope.coAuthorsHeader = $scope.author + "'s co-authors";
         $scope.papersHeader = $scope.author + "'s papers";
 
-        // Employer
-        $scope.employer = {};
-        var relatedEmployer = relatedInstances[writesFor];
-        if (relatedEmployer) {
-          if (relatedEmployer.property_values.name) {
-            $scope.employer = {
-              id: relatedEmployer._id,
-              name: relatedEmployer.property_values.name[0]
-            };
-          } else {
-            $scope.employer = {
-              id: relatedEmployer._id,
-              name: relatedEmployer._id
-            };
-          }
+        // Organisations
+        $scope.organisations = [];
 
-          if (relatedEmployer.property_values.type) {
-            $scope.type = relatedEmployer.property_values.type[0];
+        for (var i = 0; i < writesFor.length; ++i) {
+          var org = writesFor[i];
+          var relatedOrganisation = relatedInstances[org];
+
+          if (relatedOrganisation) {
+            var organisationProps = relatedOrganisation.property_values;
+
+            // organisation properties
+            var orgID   = relatedOrganisation._id;
+            var orgName = utils.getProperty(organisationProps, ce.organisation.name);
+            var orgType = utils.getProperty(organisationProps, ce.organisation.type);
+
+            var organisationToAdd = {
+              id: orgID,
+              type: orgType
+            };
+
+            if (orgName) {
+              organisationToAdd.name = orgName;
+            } else {
+              organisationToAdd.name = orgID;
+            }
+
+            $scope.organisations.push(organisationToAdd);
           }
         }
 

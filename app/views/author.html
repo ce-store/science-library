@@ -2,7 +2,11 @@
   <div class="row">
     <!-- Title -->
     <p class="center">
-      <span class="highlight" ng-class="[{'answer-highlight': full_nameHighlight}]">{{author}}</span> is affiliated to <span class="highlight"><a ng-href="organisation/{{employer.id}}" ng-class="[{'answer-highlight': is_employed_byHighlight}]">{{employer.name}}</a></span>
+      <span class="highlight" ng-class="[{'answer-highlight': full_nameHighlight}]">{{author}}</span>
+      writes for
+      <span ng-repeat="org in organisations">
+        <a class="highlight" ng-href="organisation/{{org.id}}" ng-class="[{'answer-highlight': is_employed_byHighlight}]">{{org.name}}</a><span ng-if="$index < organisations.length - 2">, </span><span ng-if="$index === organisations.length - 2"> and </span>
+      </span>
     </p>
   </div>
 
