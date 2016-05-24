@@ -301,9 +301,9 @@ angular.module('itapapersApp')
             var paperTitle    = utils.getUnknownProperty(paperProps, ce.paper.title);
             var paperVenue    = utils.getUnknownProperty(paperProps, ce.paper.venue);
             var paperWeight   = utils.getIntProperty(paperProps, ce.paper.weight);
-            var paperVariant  = utils.getProperty(paperProps, ce.paper.variant);
             var paperFinalDate  = utils.getDateProperty(paperProps, ce.paper.finalDate);
             var paperNoteworthy = utils.getProperty(paperProps, ce.paper.noteworthyReason);
+            var paperVariantList = utils.getListProperty(paperProps, ce.paper.variantList);
             var paperCitationCount = utils.getIntProperty(paperProps, ce.paper.citationCount);
             var paperFullAuthorString = utils.getUnknownProperty(paperProps, ce.paper.fullAuthorString);
 
@@ -312,9 +312,9 @@ angular.module('itapapersApp')
               var maxCitations = 0;
 
               // find max variant
-              if (paperVariant) {
-                for (j = 0; j < paperVariant.length; ++j) {
-                  var variantId = paperVariant[j];
+              if (paperVariantList) {
+                for (j = 0; j < paperVariantList.length; ++j) {
+                  var variantId = paperVariantList[j];
 
                   if (documentMap[variantId]) {
                     maxCitations = documentMap[variantId].citations > maxCitations ? documentMap[variantId].citations : maxCitations;

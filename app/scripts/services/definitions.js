@@ -17,7 +17,7 @@ angular.module('itapapersApp')
         weight:   'weight',
         topic:    'is on',
         project:  'project',
-        variant:  'variant',
+        variantList:      'variant',
         noteworthyReason: 'noteworthy reason',
         finalDate:        'final date',
         publishDate:      'publish date',
