@@ -79,7 +79,7 @@ angular.module('itapapersApp')
         angular.element("svg.chart").remove();
         // Wait for doms to be created
         $timeout(function() {
-          drawNarrativeChart($stateParams.authorId, true, false, false, $scope.data);
+          drawNarrativeChart($stateParams.authorId, true, false, false, $scope.data, server);
         }, 100);
       }
 

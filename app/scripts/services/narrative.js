@@ -647,9 +647,7 @@ function styleLinkedAuthors(from, chars, focus, visited, iteration) {
   }
 
   function setFuturePapers(to, chars, focus, futureVisitors) {
-    if (futureVisitors.indexOf(to.id) > -1) {
-      console.log ("visited");
-    } else {
+    if (futureVisitors.indexOf(to.id) < 0) {
       futureVisitors.push(to.id);
       if (!to.char_node) {
         d3.selectAll("[scene_id=\"" + to.id + "\"] .scene")
