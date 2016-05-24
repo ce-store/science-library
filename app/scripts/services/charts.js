@@ -129,9 +129,9 @@ angular.module('itapapersApp')
 
         // organisation properties
         var name = utils.getProperty(orgProps, ce.organisation.name);
-        var type = utils.getUnknownProperty(orgProps, ce.properties.affiliation);
-        var employeeList = utils.getListProperty(orgProps, ce.properties.employeeList);
-        var documentCount = utils.getIntProperty(orgProps, ce.properties.documentCount);
+        var type = utils.getUnknownProperty(orgProps, ce.organisation.type);
+        var employeeList = utils.getListProperty(orgProps, ce.organisation.employeeList);
+        var documentCount = utils.getIntProperty(orgProps, ce.organisation.documentCount);
 
         if (!employeeList.length) {
           employeeList = [];

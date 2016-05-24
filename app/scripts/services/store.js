@@ -378,6 +378,28 @@ angular.module('itapapersApp')
       }
     }
 
+    function getOrganisationDetails () {
+      var key = "organisation details";
+
+      if (localStorageService.isSupported) {
+        var val = localStorageService.get(key + "-" + ceStore);
+
+        if (val) {
+          return $q.when(val);
+        } else {
+          var url = server + ceStore + "/queries/" + key + "/execute?showStats=false&suppressCe=true";
+
+          return $http.get(url)
+            .then(function(response) {
+              localStorageService.set(key + "-" + ceStore, response.data);
+              return response.data;
+            }, function(err) {
+              return err;
+            });
+        }
+      }
+    }
+
     function getOrganisationPublications () {
       var key = "organisation publications";
 
@@ -562,6 +584,7 @@ angular.module('itapapersApp')
       getVenue: getVenue,
       getOrganisation: getOrganisation,
       getTopic: getTopic,
+      getOrganisationDetails: getOrganisationDetails,
       getPersonDetails: getPersonDetails,
       getPeopleOrgs: getPeopleOrgs,
       getPersonDocument: getPersonDocument,
