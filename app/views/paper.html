@@ -67,7 +67,8 @@
           <!-- Status -->
           <dl class="dl-horizontal" ng-class="[{'answer-highlight': statusHighlight}]">
             <dt>Status</dt>
-            <dd ng-class="[{'status-warning': status !== accepted}]">{{status | capitalise}}</dd>
+            <dd ng-if="status" class="status-warning">{{status | capitalise}}</dd>
+            <dd ng-if="!status">Accepted</dd>
           </dl>
 
           <!-- Paper Type -->
@@ -95,12 +96,6 @@
                 </ul>
                 <span ng-if="variants.length === 0" class="details">None</span>
               </dd>
-            </dl>
-
-            <!-- Old Venue -->
-            <dl class="dl-horizontal">
-              <dt>Venue</dt>
-              <dd>{{oldVenue}}</dd>
             </dl>
 
             <!-- Download Link -->

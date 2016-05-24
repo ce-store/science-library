@@ -8,14 +8,13 @@
  * Controller of the itapapersApp
  */
 angular.module('itapapersApp')
-  .controller('PaperCtrl', ['$scope', '$stateParams', '$http', 'store', 'hudson', 'server', 'documentTypes', 'utils', 'csv', function ($scope, $stateParams, $http, store, hudson, server, documentTypes, utils, csv) {
-    $scope.journalType = documentTypes.journal;
+  .controller('PaperCtrl', ['$scope', '$stateParams', '$http', 'store', 'hudson', 'server', 'documentTypes', 'utils', 'csv', 'definitions', function ($scope, $stateParams, $http, store, hudson, server, documentTypes, utils, csv, ce) {
+    $scope.journalType            = documentTypes.journal;
     $scope.externalConferenceType = documentTypes.external;
     $scope.internalConferenceType = documentTypes.internal;
-    $scope.technicalReportType = documentTypes.technical;
-    $scope.otherDocumentType = documentTypes.other;
-    $scope.conferenceType = documentTypes.conference;
-    $scope.accepted = 'accepted';
+    $scope.technicalReportType    = documentTypes.technical;
+    $scope.otherDocumentType      = documentTypes.other;
+    $scope.conferenceType         = documentTypes.conference;
 
     var lastHighlight = null;
     var types = documentTypes.nameMap;
@@ -58,36 +57,65 @@ angular.module('itapapersApp')
     store.getPaper($stateParams.paperId)
       .then(function(data) {
         var i = 0;
-        var unknown = "Unknown";
         var csvData = [];
 
         var directConceptNames = data.main_instance.direct_concept_names;
         var properties = data.main_instance.property_values;
         var relatedInstances = data.related_instances;
 
+        // paper properties
+        var title     = utils.getUnknownProperty(properties, ce.paper.title);
+        var abstract  = utils.getUnknownProperty(properties, ce.paper.title);
+        var status    = utils.getProperty(properties, ce.paper.status);
+        var venue     = utils.getProperty(properties, ce.paper.venue);
+        var finalDate = utils.getProperty(properties, ce.paper.finalDate);
+        var project   = utils.getUnknownProperty(properties, ce.paper.project);
+        var authorList  = utils.getListProperty(properties, ce.paper.authorList);
+        var variantList = utils.getListProperty(properties, ce.paper.variantList);
+        var noteworthy  = utils.getProperty(properties, ce.paper.noteworthyReason);
+        var googleCitationCount = utils.getProperty(properties, ce.paper.googleCitationCount);
+        var paperFile       = utils.getProperty(properties, ce.paper.paperFile);
+        var paperThumbnail  = utils.getProperty(properties, ce.paper.paperThumbnail);
+        var presentationFile = utils.getProperty(properties, ce.paper.presentationFile);
+        var presentationThumbnail = utils.getProperty(properties, ce.paper.presentationThumbnail);
+        var posterFile = utils.getProperty(properties, ce.paper.posterFile);
+        var posterThumbnail = utils.getProperty(properties, ce.paper.posterThumbnail);
+
+        $scope.title      = title;
+        $scope.noteworthy = noteworthy;
+        $scope.status     = status;
+        $scope.paperSource        = paperThumbnail;
+        $scope.presentationSource = presentationThumbnail;
+        $scope.posterSource       = posterThumbnail;
+        $scope.source = paperFile;
+        $scope.paperType  = utils.getType(directConceptNames);
+        $scope.paperClass = utils.getClassName($scope.paperType);
+
         // Order authors
         $scope.orderedAuthors = [];
-        if (properties.author) {
-          for (i = 0; i < properties.author.length; ++i) {
-            var author = relatedInstances[properties.author[i]].property_values;
+        if (authorList) {
+          for (i = 0; i < authorList.length; ++i) {
+            var orderedAuthorProps = relatedInstances[authorList[i]].property_values;
 
-            var id, name;
-            if (author["author person"]) {
-              id = author["author person"] ? author["author person"][0] : "";
-              name = relatedInstances[author["author person"][0]].property_values["full name"][0];
-            } else if (author["original author string"]) {
-              id = "";
-              name = author["original author string"][0];
-            } else {
-              id = "";
-              name = properties.author[i];
-            }
+            // ordered author properties
+            var orderedAuthorIndex = utils.getProperty(orderedAuthorProps, ce.orderedAuthor.index);
+            var orderedAuthorPerson = utils.getProperty(orderedAuthorProps, ce.orderedAuthor.person);
+            var orderedAuthorOrg = utils.getProperty(orderedAuthorProps, ce.orderedAuthor.organisation);
 
             var unknownIndex = 99;
+            if (!orderedAuthorIndex) {
+              orderedAuthorIndex = unknownIndex;
+            }
+
+            var authorProps = relatedInstances[orderedAuthorPerson].property_values;
+
+            // author properties
+            var authorName = utils.getUnknownProperty(authorProps, ce.author.fullName);
+
             $scope.orderedAuthors.push({
-              index: author["author index"] ? author["author index"][0] : unknownIndex,
-              id: id,
-              name: name
+              index:  orderedAuthorIndex,
+              id:     orderedAuthorPerson,
+              name:   authorName
             });
           }
         }
@@ -96,65 +124,60 @@ angular.module('itapapersApp')
           return a.index - b.index;
         });
 
-        $scope.title = properties.title ? properties.title[0] : unknown;
-        $scope.noteworthy = properties["noteworthy reason"] ? properties["noteworthy reason"][0] : null;
-        $scope.status = properties.status ? properties.status[0] : unknown;
-
-        // sources
-        $scope.paperSource = properties["paper thumbnail"] ? server + properties["paper thumbnail"][0] : null;
-        $scope.presentationSource = properties["presentation thumbnail"] ? server + properties["presentation thumbnail"][0] : null;
-        $scope.posterSource = properties["poster thumbnail"] ? server + properties["poster thumbnail"][0] : null;
-
-        $scope.source = $scope.paperSource;
-
         // citations
-        $scope.scholarLink = "https://scholar.google.co.uk/scholar?q=%22" + properties.title[0] + "%22&btnG=&hl=en&as_sdt=0%2C5";
+        $scope.scholarLink = "https://scholar.google.co.uk/scholar?q=%22" + title + "%22&btnG=&hl=en&as_sdt=0%2C5";
 
-        if (properties["citation count"]) {
-          var citationCount = relatedInstances[properties["citation count"][0]].property_values;
-          if (citationCount.url && citationCount["citation count"]) {
-            $scope.citationCount = {
-              url: citationCount.url[0],
-              count: citationCount["citation count"][0]
-            };
-          }
+        if (googleCitationCount) {
+          var citationProps = relatedInstances[googleCitationCount].property_values;
+
+          // citation properties
+          var citationUrl = utils.getProperty(citationProps, ce.citation.url);
+          var citationCount = utils.getProperty(citationProps, ce.citation.count);
+
+          $scope.citationCount = {
+            url:    citationUrl,
+            count:  citationCount
+          };
         }
 
-        // paper type
-        $scope.paperType = utils.getType(directConceptNames);
-        $scope.paperClass = utils.getClassName($scope.paperType);
-
         // venue
-        if (properties.venue) {
-          var eventId = properties.venue;
-          var event = relatedInstances[eventId];
-          var eventSeriesId = event.property_values['is part of'][0];
+        if (venue) {
+          var event = relatedInstances[venue];
+          var eventProps = event.property_values;
+
+          // event properties
+          var eventSeriesId = utils.getProperty(eventProps, ce.venue.eventSeries);
+          var eventLocation = utils.getProperty(eventProps, ce.venue.location);
           var eventSeries = relatedInstances[eventSeriesId];
-          var venueYear = properties.venue[0];
-          var venueArr = venueYear.split(" ");
+
           $scope.showVenue = true;
           $scope.venue = {
-            id: eventSeries._id,
+            id:   eventSeries._id,
             year: event._id,
             name: event._id
           };
 
           // Get venue data
-          var location = relatedInstances[venueYear].property_values["occurs at"];
-          store.getVenue(location)
+          store.getVenue(eventLocation)
             .then(function(data) {
-              var locationVals = data.property_values;
+              var locationProps = data.property_values;
+
+              // venue properties
+              var lon = utils.getProperty(locationProps, ce.location.lon);
+              var lat = utils.getProperty(locationProps, ce.location.lat);
+
               var center = {
-                latitude: locationVals.latitude[0],
-                longitude: locationVals.longitude[0]
+                latitude:   lon,
+                longitude:  lat
               };
+              console.log(center);
 
               $scope.map = {
                 center: center,
-                zoom: 8
+                zoom:   8
               };
               $scope.marker = {
-                id: data._id,
+                idKey:  data._id,
                 coords: center
               };
             });
@@ -181,54 +204,64 @@ angular.module('itapapersApp')
           }
         }
 
-        // old venue
-        if (properties["old venue"]) {
-          $scope.oldVenue = properties["old venue"][0];
-        }
+        // final date
+        if (finalDate) {
+          var dateProps = relatedInstances[finalDate].property_values;
 
-        // publish date
-        var dateVals = properties["final date"] ? relatedInstances[properties["final date"][0]].property_values : null;
-        if (dateVals) {
-          if (dateVals["original date string"]) {
-            $scope.published = dateVals["original date string"][0];
-          } else if (dateVals.month && dateVals.year) {
+          // date properties
+          var dateString  = utils.getProperty(dateProps, ce.date.string);
+          var dateDay     = utils.getProperty(dateProps, ce.date.day);
+          var dateMonth   = utils.getProperty(dateProps, ce.date.month);
+          var dateYear    = utils.getProperty(dateProps, ce.date.year);
+
+          if (dateString) {
+            $scope.published = dateString;
+          } else if (dateMonth && dateYear) {
             var date;
-            if (dateVals.day) {
-              date = new Date(dateVals.year, dateVals.month - 1, dateVals.day);
+
+            if (dateDay) {
+              date = new Date(dateYear, dateMonth - 1, dateDay);
             } else {
-              date = new Date(dateVals.year, dateVals.month - 1);
+              date = new Date(dateYear, dateMonth - 1);
             }
+
             $scope.published = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
           }
-          $scope.year = dateVals.year[0];
-        } else {
-          $scope.published = unknown;
-          $scope.year = unknown;
+          $scope.year = dateYear;
         }
 
         // project
-        if (properties.project) {
+        if (project && relatedInstances[project]) {
+          var projectProps = relatedInstances[project].property_values;
+
+          // project properties
+          var projectName = utils.getUnknownProperty(projectProps, ce.project.name);
+
           $scope.project = {
-            id: properties.project[0],
-            name: relatedInstances[properties.project[0]].property_values.name[0]
+            id:   project,
+            name: projectName
           };
         }
 
         // abstract
-        if (properties.abstract) {
-          $scope.abstract = properties.abstract[0];
+        if (abstract) {
+          $scope.abstract = abstract;
         }
 
         // variants
         $scope.variants = [];
-        if (properties.variant) {
-          for (var j = 0; j < properties.variant.length; ++j) {
-            var variantId = properties.variant[j];
+        if (variantList) {
+          for (var k = 0; k < variantList.length; ++k) {
+            var variantId = variantList[k];
             var type = utils.getType(relatedInstances[variantId].direct_concept_names);
+            var variantProps = relatedInstances[variantId].property_values;
+
+            // variant properties
+            var variantName = utils.getUnknownProperty(variantProps, ce.paper.title);
 
             var variant = {
-              id: variantId,
-              name: relatedInstances[variantId].property_values.title[0],
+              id:   variantId,
+              name: variantName,
               className: utils.getClassName(type)
             };
 
@@ -237,27 +270,29 @@ angular.module('itapapersApp')
         }
 
         // download links
-        if (properties["paper file"]) {
-          $scope.paperDownloadUrl = server + properties["paper file"][0];
+        if (paperFile) {
+          $scope.paperDownloadUrl = server + paperFile;
         }
-        if (properties["poster file"]) {
-          $scope.posterDownloadUrl = server + properties["poster file"][0];
+        if (posterFile) {
+          $scope.posterDownloadUrl = server + posterFile;
         }
-        if (properties["presentation file"]) {
-          $scope.presentationDownloadUrl = server + properties["presentation file"][0];
+        if (presentationFile) {
+          $scope.presentationDownloadUrl = server + presentationFile;
         }
 
         for (var oa in $scope.orderedAuthors) {
-          var a = $scope.orderedAuthors[oa];
-          var projId = $scope.project ? $scope.project.id : "";
-          var projName = $scope.project ? $scope.project.name : "";
-          var cUrl = $scope.citationCount ? $scope.citationCount.url : "";
-          var cCount = $scope.citationCount ? $scope.citationCount.count : "";
-          var vId = $scope.venue ? $scope.venue.id : $scope["old venue"];
-          var vYear = $scope.venue ? $scope.venue.year : "";
-          var vName = $scope.venue ? $scope.venue.name : "";
+          if ($scope.orderedAuthors.hasOwnProperty(oa)) {
+            var a         = $scope.orderedAuthors[oa];
+            var projId    = $scope.project ? $scope.project.id : "";
+            var projName  = $scope.project ? $scope.project.name : "";
+            var cUrl      = $scope.citationCount ? $scope.citationCount.url : "";
+            var cCount    = $scope.citationCount ? $scope.citationCount.count : "";
+            var vId       = $scope.venue ? $scope.venue.id : $scope["old venue"];
+            var vYear     = $scope.venue ? $scope.venue.year : "";
+            var vName     = $scope.venue ? $scope.venue.name : "";
 
-          csvData.push([$stateParams.paperId, $scope.title, $scope.published, a.id, a.name, projId, projName, cUrl, cCount, $scope.paperType, vId, vYear, vName]);
+            csvData.push([$stateParams.paperId, $scope.title, $scope.published, a.id, a.name, projId, projName, cUrl, cCount, $scope.paperType, vId, vYear, vName]);
+          }
         }
 
         csv.setData(csvData);
@@ -266,72 +301,4 @@ angular.module('itapapersApp')
 
         refreshHighlight();
     });
-
-    var encodeForCe = function(pValue) {
-      var result = null;
-
-      if (pValue !== null) {
-        result = pValue;
-        result = result.replace(/\\/g, '\\\\');
-        result = result.replace(new RegExp('\'', 'g'), '\\\'');
-        result = result.replace(new RegExp('‘', 'g'), '\\‘');
-        result = result.replace(new RegExp('’', 'g'), '\\’');
-        result = result.replace(new RegExp('“', 'g'), '\\“');
-        result = result.replace(new RegExp('”', 'g'), '\\”');
-        result = result.replace(/(?:\r\n|\r|\n)/g, ' ');
-      } else {
-        result = '';
-      }
-
-      return result;
-    };
-
-    $scope.addAbstract = function() {
-      var abstractText = prompt("Please enter the abstract", "some abstract text");
-      if (abstractText !== null) {
-      	  //DSB - switch request to open source ce-store
-          var url = server + "/ce-store/stores/DEFAULT/sources/generalCeForm?showStats=true&action=save";
-          var ce = "the document '" + $stateParams.paperId + "' has '" + encodeForCe(abstractText) + "' as abstract.";
-          $scope.abstract = abstractText;
-          console.log(ce);
-
-          $.ajax({
-            type: "POST",
-            url: url,
-            data: ce,
-            contentType: "text/plain;charset=UTF-8"
-          });
-      }
-    };
-
-    $scope.addCitationCount = function() {
-      var citationCount = prompt("Please enter the citation count", "42");
-      if (citationCount !== null) {
-      	//DSB - switch request to open source ce-store
-        var url = server + "/ce-store/stores/DEFAULT/sources/generalCeForm?showStats=true&action=save";
-        var date = new Date();
-        var formattedDate = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
-
-        var ce = "the paper citation count 'citation:" + $stateParams.paperId + "-01'" +
-          "\n  has '" + $scope.scholarLink + "' as url and" +
-          "\n  has '" + formattedDate + "' as date checked and" +
-          "\n  has '" + citationCount + "' as citation count.";
-
-        var paperCe = "\n\nthe document '" + $stateParams.paperId + "'" +
-          "\n  has the paper citation count 'citation:" + $stateParams.paperId + "-01' as citation count.";
-
-        $scope.citationCount = {
-              url: $scope.scholarLink,
-              count: citationCount
-            };
-        console.log(ce + paperCe);
-
-        $.ajax({
-          type: "POST",
-          url: url,
-          data: ce + " " + paperCe,
-          contentType: "text/plain;charset=UTF-8"
-        });
-      }
-    };
   }]);

@@ -96,6 +96,9 @@ angular.module('itapapersApp')
         documentCount: 'paper count',
         citationCount: 'citation count'
       },
+      project: {
+        name: 'name'
+      },
       topic: {
         marker:         'marker',
         topicStatistic: 'topic statistic',
@@ -113,6 +116,21 @@ angular.module('itapapersApp')
         mainAuthor:     'main-author',
         coAuthorList:   'co-author',
         coAuthorCount:  'co-author count'
+      },
+      orderedAuthor: {
+        index:  'author index',
+        person: 'author person',
+        organisation: 'author organisation'
+      },
+      location: {
+        lat: 'latitude',
+        lon: 'longitude'
+      },
+      date: {
+        string: 'original date string',
+        day:    'day',
+        month:  'month',
+        year:   'year'
       }
     };
   });
