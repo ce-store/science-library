@@ -131,6 +131,20 @@ angular.module('itapapersApp')
         day:    'day',
         month:  'month',
         year:   'year'
+      },
+      total: {
+        scope:                'scope',
+        documentCount:        'total paper count',
+        singleInstituteCount: 'single institute paper count',
+        collaborativeCount:   'collaborative paper count',
+        internationalCount:   'international paper count',
+        governmentCount:      'government paper count',
+        journalCount:         'journal paper count',
+        externalConferencePaperCount: 'external conference paper count',
+        patentCount:          'patent count',
+        activeItaAuthors:     'active ITA authors',
+        activeNonItaAuthors:  'active non-ITA authors',
+        citationCount:        'total citations'
       }
     };
   });
