@@ -8,7 +8,7 @@
  * Factory in the itapapersApp.
  */
 angular.module('itapapersApp')
-  .factory('store', ['$http', '$q', 'server', 'localStorageService', 'utils', 'ceStore', function ($http, $q, server, localStorageService, utils, ceStore) {
+  .factory('store', ['$http', '$q', 'server', 'localStorageService', 'utils', 'ceStore', 'definitions', function ($http, $q, server, localStorageService, utils, ceStore, ce) {
 
     function filterData (data) {
       var documentMap = {};
@@ -21,8 +21,10 @@ angular.module('itapapersApp')
       for (i = 0; i < data.results.length; ++i) {
         paperId = data.results[i][0];
         var paperProps = data.instances[paperId].property_values;
-        var citationId = paperProps["citation count"][0]; // take latest
-        var citationProps = data.instances[citationId].property_values;
+
+        // paper properties
+        var citationCount = utils.getIntProperty(paperProps, ce.paper.citationCount);
+        var variantList = utils.getListProperty(paperProps, ce.paper.variantList);
         var paperType = utils.getType(data.instances[paperId].direct_concept_names);
 
         // ignore duplicates
@@ -31,9 +33,9 @@ angular.module('itapapersApp')
           var maxCitations = 0;
 
           // find max variant
-          if (paperProps.variant) {
-            for (var j = 0; j < paperProps.variant.length; ++j) {
-              var variantId = paperProps.variant[j];
+          if (variantList) {
+            for (var j = 0; j < variantList.length; ++j) {
+              var variantId = variantList[j];
 
               if (documentMap[variantId]) {
                 maxCitations = documentMap[variantId].citations > maxCitations ? documentMap[variantId].citations : maxCitations;
@@ -43,7 +45,6 @@ angular.module('itapapersApp')
           }
 
           // set citation count in map
-          var citationCount = citationProps["citation count"] ? parseInt(citationProps["citation count"][0], 10) : 0;
           if (!variantFound) {
             documentMap[paperId] = {
               citations: citationCount,
