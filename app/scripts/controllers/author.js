@@ -10,26 +10,26 @@
 angular.module('itapapersApp')
   .controller('AuthorCtrl', ['$scope', '$stateParams', '$timeout', 'store', 'server', 'hudson', 'documentTypes', 'utils', 'csv', 'colours', 'definitions', function ($scope, $stateParams, $timeout, store, server, hudson, documentTypes, utils, csv, colours, ce) {
     $scope.views = ['graph', 'papers', 'co-authors', 'co-authors-graph'];
-    $scope.journalType = documentTypes.journal;
+    $scope.journalType            = documentTypes.journal;
     $scope.externalConferenceType = documentTypes.external;
-    $scope.patentType = documentTypes.patent;
+    $scope.patentType             = documentTypes.patent;
     $scope.internalConferenceType = documentTypes.internal;
-    $scope.technicalReportType = documentTypes.technical;
-    $scope.otherDocumentType = documentTypes.other;
+    $scope.technicalReportType    = documentTypes.technical;
+    $scope.otherDocumentType      = documentTypes.other;
     $scope.journalInput = $scope.externalInput = $scope.patentInput = $scope.internalInput = $scope.technicalInput = $scope.otherInput = $scope.acInput = $scope.indInput = $scope.govInput = true;
 
     $scope.sortTypes = {
       papers: {
-        names: ['most collaborative', 'citation count', 'most recent', 'name'],
-        values: ['weight', 'citations', 'date', 'name'],
-        show: [false, true, false, false],
-        reverse: ['-', '-', '-', '+']
+        names:    ['most collaborative', 'citation count', 'most recent', 'name'],
+        values:   ['weight', 'citations', 'date', 'name'],
+        show:     [false, true, false, false],
+        reverse:  ['-', '-', '-', '+']
       },
       coAuthors: {
-        names: ['shared paper count', 'name'],
-        values: ['count', 'name'],
-        show: [true, false],
-        reverse: ['-', '+']
+        names:    ['shared paper count', 'name'],
+        values:   ['count', 'name'],
+        show:     [true, false],
+        reverse:  ['-', '+']
       }
     };
 
@@ -84,10 +84,10 @@ angular.module('itapapersApp')
       }
 
       if (view === $scope.views[1]) {
-        $scope.sort = $scope.sortTypes.papers;
+        $scope.sort   = $scope.sortTypes.papers;
         $scope.header = $scope.papersHeader;
       } else if (view === $scope.views[2]) {
-        $scope.sort = $scope.sortTypes.coAuthors;
+        $scope.sort   = $scope.sortTypes.coAuthors;
         $scope.header = $scope.coAuthorsHeader;
       }
 
