@@ -8,28 +8,28 @@
  * Controller of the itapapersApp
  */
 angular.module('itapapersApp')
-  .controller('OrganisationCtrl', ['$scope', '$stateParams', '$document', 'store', 'hudson', 'documentTypes', 'utils', 'csv', 'colours', function ($scope, $stateParams, $document, store, hudson, documentTypes, utils, csv, colours) {
+  .controller('OrganisationCtrl', ['$scope', '$stateParams', '$document', 'store', 'hudson', 'documentTypes', 'utils', 'csv', 'colours', 'definitions', function ($scope, $stateParams, $document, store, hudson, documentTypes, utils, csv, colours, ce) {
     $scope.views = ["chart", "list", "authors"];
-    $scope.journalType = documentTypes.journal;
+    $scope.journalType            = documentTypes.journal;
+    $scope.patentType             = documentTypes.patent;
     $scope.externalConferenceType = documentTypes.external;
-    $scope.patentType = documentTypes.patent;
     $scope.internalConferenceType = documentTypes.internal;
-    $scope.technicalReportType = documentTypes.technical;
-    $scope.otherDocumentType = documentTypes.other;
+    $scope.technicalReportType    = documentTypes.technical;
+    $scope.otherDocumentType      = documentTypes.other;
     $scope.journalInput = $scope.externalInput = $scope.patentInput = $scope.internalInput = $scope.technicalInput = $scope.otherInput = true;
 
     $scope.sortTypes = {
       papers: {
-        names: ['most collaborative', 'citation count', 'most recent', 'name'],
-        values: ['weight', 'value', 'date', 'name'],
-        show: [false, true, false, false],
-        reverse: ['-', '-', '-', '+']
+        names:    ['most collaborative', 'citation count', 'most recent', 'name'],
+        values:   ['weight', 'value', 'date', 'name'],
+        show:     [false, true, false, false],
+        reverse:  ['-', '-', '-', '+']
       },
       authors: {
-        names: ['external paper count', 'ITA citation count', 'ITA h-index', 'co-author count', 'name'],
-        values: ['externalCount', 'citationCount', 'hIndex', 'coAuthorCount', 'name'],
-        show: [true, true, true, true, false],
-        reverse: ['-', '-', '-', '-', '+']
+        names:    ['external paper count', 'ITA citation count', 'ITA h-index', 'co-author count', 'name'],
+        values:   ['externalCount', 'citationCount', 'hIndex', 'coAuthorCount', 'name'],
+        show:     [true, true, true, true, false],
+        reverse:  ['-', '-', '-', '-', '+']
       }
     };
 
@@ -44,10 +44,10 @@ angular.module('itapapersApp')
       $scope.currentView = view;
 
       if (view === $scope.views[1]) {
-        $scope.sort = $scope.sortTypes.papers;
+        $scope.sort   = $scope.sortTypes.papers;
         $scope.header = $scope.papersHeader;
       } else if (view === $scope.views[2]) {
-        $scope.sort = $scope.sortTypes.authors;
+        $scope.sort   = $scope.sortTypes.authors;
         $scope.header = $scope.authorsHeader;
       }
     };
@@ -105,81 +105,99 @@ angular.module('itapapersApp')
     store.getOrganisation($stateParams.organisationId)
       .then(function(data) {
         var buckets = {};
-        $scope.papers = {};
-        $scope.variants = {};
-        $scope.employees = {};
+        $scope.papers     = {};
+        $scope.variants   = {};
+        $scope.employees  = {};
         var min, max;
 
         var properties = data.main_instance.property_values;
         var relatedInstances = data.related_instances;
 
-        $scope.name = properties.name ? properties.name[0] : null;
-        $scope.industry = properties.type ? properties.type[0] : null;
-        $scope.country = properties["is located at"] ? properties["is located at"][0] : null;
-        $scope.authorsHeader = $scope.name + "'s authors";
-        $scope.papersHeader = $scope.name + "'s papers";
+        // organisation properties
+        var name = utils.getUnknownProperty(properties, ce.organisation.name);
+        var type = utils.getProperty(properties, ce.organisation.type);
+        var affiliation = utils.getProperty(properties, ce.organisation.affiliation);
+        var employeeList = utils.getListProperty(properties, ce.organisation.employeeList);
+        var externalDocumentCount = utils.getIntProperty(properties, ce.organisation.externalDocumentCount);
+        var internalDocumentCount = utils.getIntProperty(properties, ce.organisation.internalDocumentCount);
+        var journalCount = utils.getIntProperty(properties, ce.organisation.journalCount);
+        var patentCount = utils.getIntProperty(properties, ce.organisation.patentCount);
+        var externalConferencePaperCount = utils.getIntProperty(properties, ce.organisation.externalConferencePaperCount);
+        var internalConferencePaperCount = utils.getIntProperty(properties, ce.organisation.internalConferencePaperCount);
+        var technicalReportCount = utils.getIntProperty(properties, ce.organisation.technicalReportCount);
+        var otherCount = utils.getIntProperty(properties, ce.organisation.otherCount);
 
-        $scope.journalPapers = properties["journal paper count"] ? parseInt(properties["journal paper count"][0], 10) : 0;
-        $scope.externalPapers = properties["external conference paper count"] ? parseInt(properties["external conference paper count"][0], 10) : 0;
-        $scope.patents = properties["patent count"] ? parseInt(properties["patent count"][0], 10) : 0;
-        $scope.internalPapers = properties["internal conference paper count"] ? parseInt(properties["internal conference paper count"][0], 10) : 0;
-        $scope.technicalReports = properties["technical report count"] ? parseInt(properties["technical report count"][0], 10) : 0;
-        $scope.otherDocuments = properties["other document count"] ? parseInt(properties["other document count"][0], 10) : 0;
+        $scope.name     = name;
+        $scope.industry = type;
+        $scope.country  = affiliation;
+        $scope.authorsHeader  = $scope.name + "'s authors";
+        $scope.papersHeader   = $scope.name + "'s papers";
 
-        $scope.totalExternalPublications = properties["external document count"] ? parseInt(properties["external document count"][0], 10) : 0;
-        $scope.totalInternalPublications = properties["internal document count"] ? parseInt(properties["internal document count"][0], 10) : 0;
+        $scope.journalPapers    = journalCount;
+        $scope.patents          = patentCount;
+        $scope.externalPapers   = externalConferencePaperCount;
+        $scope.internalPapers   = internalConferencePaperCount;
+        $scope.technicalReports = technicalReportCount;
+        $scope.otherDocuments   = otherCount;
 
-        $scope.papersList = [];
-        $scope.authorsList = [];
-        var employees = properties.employs;
+        $scope.totalExternalPublications = externalDocumentCount;
+        $scope.totalInternalPublications = internalDocumentCount;
+
+        $scope.papersList   = [];
+        $scope.authorsList  = [];
         var documentMap = {};
-        var csvData = [];
+        var csvData     = [];
 
         // loop through employees
-        for (var i = 0; i < employees.length; ++i) {
-          var authorId = employees[i];
+        for (var i = 0; i < employeeList.length; ++i) {
+          var authorId = employeeList[i];
           var author = relatedInstances[authorId];
           var authorProps = author.property_values;
 
-          var authorName = authorProps["full name"] ? authorProps["full name"][0] : null;
-
-          // count papers
-          var documentCount = authorProps["document count"] ? parseInt(authorProps["document count"][0], 10) : 0;
-          var totalExternalCount = authorProps["external document count"] ? parseInt(authorProps["external document count"][0], 10) : 0;
-          var totalInternalCount = authorProps["internal document count"] ? parseInt(authorProps["internal document count"][0], 10) : 0;
-          var citationCount = authorProps["local citation count"] ? authorProps["local citation count"][0] : 0;
-          var hIndex = authorProps["local h-index"] ? authorProps["local h-index"][0] : 0;
-          var coAuthorCount = authorProps["co-author count"] ? authorProps["co-author count"][0] : 0;
+          // author properties
+          var authorName = utils.getProperty(authorProps, ce.author.fullName);
+          var authorDocumentList = utils.getListProperty(authorProps, ce.author.documentList);
+          var authorDocumentCount = utils.getIntProperty(authorProps, ce.author.documentCount);
+          var authorExternalDocumentCount = utils.getIntProperty(authorProps, ce.author.externalDocumentCount);
+          var authorLocalCitationCount = utils.getIntProperty(authorProps, ce.author.localCitationCount);
+          var authorLocalHIndex = utils.getIntProperty(authorProps, ce.author.localHIndex);
+          var authorCoAuthorCount = utils.getIntProperty(authorProps, ce.author.coAuthorCount);
 
           // add author to employee list
           $scope.employees[authorId] = {
-            id: authorId,
-            name: authorName,
-            value: documentCount
+            id:     authorId,
+            name:   authorName,
+            value:  authorDocumentCount
           };
           $scope.authorsList.push({
-            id: authorId,
-            name: authorName,
-            documentCount: parseInt(documentCount, 10),
-            externalCount: parseInt(totalExternalCount, 10),
-            citationCount: parseInt(citationCount, 10),
-            hIndex: parseInt(hIndex, 10),
-            coAuthorCount: parseInt(coAuthorCount, 10)
+            id:             authorId,
+            name:           authorName,
+            documentCount:  authorDocumentCount,
+            externalCount:  authorExternalDocumentCount,
+            citationCount:  authorLocalCitationCount,
+            hIndex:         authorLocalHIndex,
+            coAuthorCount:  authorCoAuthorCount
           });
 
-          var papers = authorProps.wrote;
-
           // loop through papers
-          if (papers) {
+          if (authorDocumentList) {
             var j, k;
-            for (j = 0; j < papers.length; ++j) {
-              var paperId = papers[j];
-              var paper = relatedInstances[paperId];
+            for (j = 0; j < authorDocumentList.length; ++j) {
+              var paperId = authorDocumentList[j];
+              var paper   = relatedInstances[paperId];
               var paperProps = paper.property_values;
 
-              var paperTitle = paperProps.title ? paperProps.title[0] : null;
-              var paperType = utils.getType(paper.direct_concept_names);
-              var paperCitationCount = 0;
+              // paper properties
+              var paperTitle  = utils.getUnknownProperty(paperProps, ce.paper.title);
+              var paperType   = utils.getType(paper.direct_concept_names);
+              var paperVenue  = utils.getProperty(paperProps, ce.paper.venue);
+              var paperWeight = utils.getIntProperty(paperProps, ce.paper.weight);
+              var paperVariantList = utils.getListProperty(paperProps, ce.paper.variantList);
+              var paperCitationCount = utils.getIntProperty(paperProps, ce.paper.citationCount);
+              var paperNoteworthy = utils.getProperty(paperProps, ce.paper.noteworthyReason);
+              var paperFinalDate = utils.getDateProperty(paperProps, ce.paper.finalDate);
+              var paperFinalDateString = utils.getProperty(paperProps, ce.paper.finalDate);
+              var paperFullAuthorString = utils.getUnknownProperty(paperProps, ce.paper.fullAuthorString);
 
               // check variant hasn't already been added
               if (!documentMap[paperId]) {
@@ -187,9 +205,9 @@ angular.module('itapapersApp')
                 var maxCitations = 0;
 
                 // find max variant
-                if (paperProps.variant) {
-                  for (k = 0; k < paperProps.variant.length; ++k) {
-                    var variantId = paperProps.variant[k];
+                if (paperVariantList) {
+                  for (k = 0; k < paperVariantList.length; ++k) {
+                    var variantId = paperVariantList[k];
 
                     if (documentMap[variantId]) {
                       maxCitations = documentMap[variantId].citations > maxCitations ? documentMap[variantId].citations : maxCitations;
@@ -198,44 +216,36 @@ angular.module('itapapersApp')
                   }
                 }
 
-                var citationId = paperProps["citation count"] ? paperProps["citation count"][0] : null;
-
-                if (citationId) {
-                  var citation = relatedInstances[citationId];
-                  var citationProps = citation.property_values;
-
-                  // set citation count in map
-                  paperCitationCount = citationProps["citation count"] ? parseInt(citationProps["citation count"][0], 10) : 0;
-                  if (!variantFound) {
+                // set citation count in map
+                if (!variantFound) {
+                  documentMap[paperId] = {
+                    index:      j,
+                    title:      paperTitle,
+                    citations:  paperCitationCount,
+                    noteworthy: paperNoteworthy,
+                    date:       paperFinalDate,
+                    types:      [paperType],
+                    venue:      paperVenue,
+                    authors:    paperFullAuthorString,
+                    weight:     paperWeight
+                  };
+                } else {
+                  if (maxCitations < paperCitationCount) {
+                    var variantTypes = documentMap[variantFound].types.slice();
+                    documentMap[variantFound] = null;
                     documentMap[paperId] = {
-                      citations: paperCitationCount,
-                      index: j,
-                      title: paperTitle,
-                      noteworthy: paperProps["noteworthy reason"] ? paperProps["noteworthy reason"][0] : null,
-                      date: paperProps["final date"] ? Date.parse(paperProps["final date"][0]) : 0,
-                      types: [paperType],
-                      venue: paperProps.venue ? paperProps.venue[0] : (paperProps["old venue"] ? paperProps["old venue"][0] : ""),
-                      authors: paperProps["original authors string"] ? paperProps["original authors string"][0] : "",
-                      weight: paperProps.weight ? paperProps.weight[0] : -1
+                      index:      j,
+                      title:      paperTitle,
+                      citations:  paperCitationCount,
+                      noteworthy: paperNoteworthy,
+                      date:       paperFinalDate,
+                      types:      [paperType].concat(variantTypes),
+                      venue:      paperVenue,
+                      authors:    paperFullAuthorString,
+                      weight:     paperWeight
                     };
                   } else {
-                    if (maxCitations < paperCitationCount) {
-                      var variantTypes = documentMap[variantFound].types.slice();
-                      documentMap[variantFound] = null;
-                      documentMap[paperId] = {
-                        citations: paperCitationCount,
-                        index: j,
-                        title: paperTitle,
-                        noteworthy: paperProps["noteworthy reason"] ? paperProps["noteworthy reason"][0] : null,
-                        date: paperProps["final date"] ? Date.parse(paperProps["final date"][0]) : 0,
-                        types: [paperType].concat(variantTypes),
-                        venue: paperProps.venue ? paperProps.venue[0] : (paperProps["old venue"] ? paperProps["old venue"][0] : ""),
-                        authors: paperProps["original authors string"] ? paperProps["original authors string"][0] : "",
-                        weight: paperProps.weight ? paperProps.weight[0] : -1
-                      };
-                    } else {
-                      documentMap[variantFound].types.push(paperType);
-                    }
+                    documentMap[variantFound].types.push(paperType);
                   }
 
                   // get date properties
@@ -243,10 +253,9 @@ angular.module('itapapersApp')
                   var month = null;
                   var year = null;
 
-                  if (paperProps["final date"]) {
-                    dateId = paperProps["final date"][0];
-                    month = relatedInstances[dateId].property_values.month;
-                    year = relatedInstances[dateId].property_values.year;
+                  if (paperFinalDateString) {
+                    month = relatedInstances[paperFinalDateString].property_values.month;
+                    year = relatedInstances[paperFinalDateString].property_values.year;
                   }
 
                   if (!month) {
@@ -284,22 +293,22 @@ angular.module('itapapersApp')
             }
 
             // recreate array - test for index to remove duplicate citations
-            for (j = 0; j < papers.length; ++j) {
-              var thisPaperId = papers[j];
+            for (j = 0; j < authorDocumentList.length; ++j) {
+              var thisPaperId = authorDocumentList[j];
               var thisPaper = documentMap[thisPaperId];
 
               if (thisPaper && thisPaper.index === j) {
                 var paperItem = {
-                  id: thisPaperId,
-                  name: thisPaper.title,
+                  id:         thisPaperId,
+                  name:       thisPaper.title,
                   noteworthy: thisPaper.noteworthy,
-                  date: thisPaper.date,
-                  value: thisPaper.citations,
-                  type: utils.sortTypes(thisPaper.types),
-                  venue: thisPaper.venue,
-                  authors: thisPaper.authors,
-                  class: [],
-                  weight: parseInt(thisPaper.weight, 10)
+                  date:       thisPaper.date,
+                  value:      thisPaper.citations,
+                  type:       utils.sortTypes(thisPaper.types),
+                  venue:      thisPaper.venue,
+                  authors:    thisPaper.authors,
+                  weight:     thisPaper.weight,
+                  class:      []
                 };
 
                 for (k = 0; k < paperItem.type.length; ++k) {
@@ -325,12 +334,12 @@ angular.module('itapapersApp')
           while (thisDate.getTime() !== max.getTime()) {
             if (!buckets[thisDate]) {
               buckets[thisDate] = {};
-              buckets[thisDate][types[$scope.journalType]] = [];
+              buckets[thisDate][types[$scope.journalType]]            = [];
+              buckets[thisDate][types[$scope.patentType]]             = [];
               buckets[thisDate][types[$scope.externalConferenceType]] = [];
-              buckets[thisDate][types[$scope.patentType]] = [];
               buckets[thisDate][types[$scope.internalConferenceType]] = [];
-              buckets[thisDate][types[$scope.technicalReportType]] = [];
-              buckets[thisDate][types[$scope.otherDocumentType]] = [];
+              buckets[thisDate][types[$scope.technicalReportType]]    = [];
+              buckets[thisDate][types[$scope.otherDocumentType]]      = [];
             }
 
             var thisMonth = thisDate.getMonth();
@@ -344,16 +353,18 @@ angular.module('itapapersApp')
           }
 
           $scope.chartData = [];
-          for (var date in buckets) {
-            $scope.chartData.push({
-              date: date,
-              journal: buckets[date][types[$scope.journalType]],
-              external: buckets[date][types[$scope.externalConferenceType]],
-              patent: buckets[date][types[$scope.patentType]],
-              internal: buckets[date][types[$scope.internalConferenceType]],
-              technical: buckets[date][types[$scope.technicalReportType]],
-              other: buckets[date][types[$scope.otherDocumentType]]
-            });
+          for (var d in buckets) {
+            if (buckets.hasOwnProperty(d)) {
+              $scope.chartData.push({
+                date:       d,
+                journal:    buckets[d][types[$scope.journalType]],
+                patent:     buckets[d][types[$scope.patentType]],
+                external:   buckets[d][types[$scope.externalConferenceType]],
+                internal:   buckets[d][types[$scope.internalConferenceType]],
+                technical:  buckets[d][types[$scope.technicalReportType]],
+                other:      buckets[d][types[$scope.otherDocumentType]]
+              });
+            }
           }
 
           $scope.pieData = [{
