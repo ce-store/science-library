@@ -115,8 +115,10 @@ angular.module('itapapersApp')
 
         // organisation properties
         var name = utils.getUnknownProperty(properties, ce.organisation.name);
+        var shortName = utils.getUnknownProperty(properties, ce.organisation.shortName);
         var type = utils.getProperty(properties, ce.organisation.type);
         var affiliation = utils.getProperty(properties, ce.organisation.affiliation);
+        var documentList = utils.getListProperty(properties, ce.organisation.documentList);
         var employeeList = utils.getListProperty(properties, ce.organisation.employeeList);
         var externalDocumentCount = utils.getIntProperty(properties, ce.organisation.externalDocumentCount);
         var internalDocumentCount = utils.getIntProperty(properties, ce.organisation.internalDocumentCount);
@@ -130,8 +132,8 @@ angular.module('itapapersApp')
         $scope.name     = name;
         $scope.industry = type;
         $scope.country  = affiliation;
-        $scope.authorsHeader  = $scope.name + "'s authors";
-        $scope.papersHeader   = $scope.name + "'s papers";
+        $scope.authorsHeader  = shortName + "'s authors";
+        $scope.papersHeader   = shortName + "'s papers";
 
         $scope.journalPapers    = journalCount;
         $scope.patents          = patentCount;
@@ -156,7 +158,6 @@ angular.module('itapapersApp')
 
           // author properties
           var authorName = utils.getProperty(authorProps, ce.author.fullName);
-          var authorDocumentList = utils.getListProperty(authorProps, ce.author.documentList);
           var authorDocumentCount = utils.getIntProperty(authorProps, ce.author.documentCount);
           var authorExternalDocumentCount = utils.getIntProperty(authorProps, ce.author.externalDocumentCount);
           var authorLocalCitationCount = utils.getIntProperty(authorProps, ce.author.localCitationCount);
@@ -178,147 +179,147 @@ angular.module('itapapersApp')
             hIndex:         authorLocalHIndex,
             coAuthorCount:  authorCoAuthorCount
           });
+        }
 
-          // loop through papers
-          if (authorDocumentList) {
-            var j, k;
-            for (j = 0; j < authorDocumentList.length; ++j) {
-              var paperId = authorDocumentList[j];
-              var paper   = relatedInstances[paperId];
-              var paperProps = paper.property_values;
+        // loop through papers
+        if (documentList) {
+          var j, k;
+          for (j = 0; j < documentList.length; ++j) {
+            var paperId = documentList[j];
+            var paper   = relatedInstances[paperId];
+            var paperProps = paper.property_values;
 
-              // paper properties
-              var paperTitle  = utils.getUnknownProperty(paperProps, ce.paper.title);
-              var paperType   = utils.getType(paper.direct_concept_names);
-              var paperVenue  = utils.getProperty(paperProps, ce.paper.venue);
-              var paperWeight = utils.getIntProperty(paperProps, ce.paper.weight);
-              var paperVariantList = utils.getListProperty(paperProps, ce.paper.variantList);
-              var paperCitationCount = utils.getIntProperty(paperProps, ce.paper.citationCount);
-              var paperNoteworthy = utils.getProperty(paperProps, ce.paper.noteworthyReason);
-              var paperFinalDate = utils.getDateProperty(paperProps, ce.paper.finalDate);
-              var paperFinalDateString = utils.getProperty(paperProps, ce.paper.finalDate);
-              var paperFullAuthorString = utils.getUnknownProperty(paperProps, ce.paper.fullAuthorString);
+            // paper properties
+            var paperTitle  = utils.getUnknownProperty(paperProps, ce.paper.title);
+            var paperType   = utils.getType(paper.direct_concept_names);
+            var paperVenue  = utils.getProperty(paperProps, ce.paper.venue);
+            var paperWeight = utils.getIntProperty(paperProps, ce.paper.weight);
+            var paperVariantList = utils.getListProperty(paperProps, ce.paper.variantList);
+            var paperCitationCount = utils.getIntProperty(paperProps, ce.paper.citationCount);
+            var paperNoteworthy = utils.getProperty(paperProps, ce.paper.noteworthyReason);
+            var paperFinalDate = utils.getDateProperty(paperProps, ce.paper.finalDate);
+            var paperFinalDateString = utils.getProperty(paperProps, ce.paper.finalDate);
+            var paperFullAuthorString = utils.getUnknownProperty(paperProps, ce.paper.fullAuthorString);
 
-              // check variant hasn't already been added
-              if (!documentMap[paperId]) {
-                var variantFound = false;
-                var maxCitations = 0;
+            // check variant hasn't already been added
+            if (!documentMap[paperId]) {
+              var variantFound = false;
+              var maxCitations = 0;
 
-                // find max variant
-                if (paperVariantList) {
-                  for (k = 0; k < paperVariantList.length; ++k) {
-                    var variantId = paperVariantList[k];
+              // find max variant
+              if (paperVariantList) {
+                for (k = 0; k < paperVariantList.length; ++k) {
+                  var variantId = paperVariantList[k];
 
-                    if (documentMap[variantId]) {
-                      maxCitations = documentMap[variantId].citations > maxCitations ? documentMap[variantId].citations : maxCitations;
-                      variantFound = variantId;
-                    }
+                  if (documentMap[variantId]) {
+                    maxCitations = documentMap[variantId].citations > maxCitations ? documentMap[variantId].citations : maxCitations;
+                    variantFound = variantId;
                   }
                 }
+              }
 
-                // set citation count in map
-                if (!variantFound) {
+              // set citation count in map
+              if (!variantFound) {
+                documentMap[paperId] = {
+                  index:      j,
+                  title:      paperTitle,
+                  citations:  paperCitationCount,
+                  noteworthy: paperNoteworthy,
+                  date:       paperFinalDate,
+                  types:      [paperType],
+                  venue:      paperVenue,
+                  authors:    paperFullAuthorString,
+                  weight:     paperWeight
+                };
+              } else {
+                if (maxCitations < paperCitationCount) {
+                  var variantTypes = documentMap[variantFound].types.slice();
+                  documentMap[variantFound] = null;
                   documentMap[paperId] = {
                     index:      j,
                     title:      paperTitle,
                     citations:  paperCitationCount,
                     noteworthy: paperNoteworthy,
                     date:       paperFinalDate,
-                    types:      [paperType],
+                    types:      [paperType].concat(variantTypes),
                     venue:      paperVenue,
                     authors:    paperFullAuthorString,
                     weight:     paperWeight
                   };
                 } else {
-                  if (maxCitations < paperCitationCount) {
-                    var variantTypes = documentMap[variantFound].types.slice();
-                    documentMap[variantFound] = null;
-                    documentMap[paperId] = {
-                      index:      j,
-                      title:      paperTitle,
-                      citations:  paperCitationCount,
-                      noteworthy: paperNoteworthy,
-                      date:       paperFinalDate,
-                      types:      [paperType].concat(variantTypes),
-                      venue:      paperVenue,
-                      authors:    paperFullAuthorString,
-                      weight:     paperWeight
-                    };
-                  } else {
-                    documentMap[variantFound].types.push(paperType);
-                  }
-
-                  // get date properties
-                  var dateId = null;
-                  var month = null;
-                  var year = null;
-
-                  if (paperFinalDateString) {
-                    month = relatedInstances[paperFinalDateString].property_values.month;
-                    year = relatedInstances[paperFinalDateString].property_values.year;
-                  }
-
-                  if (!month) {
-                    month = '1';
-                  }
-
-                  // month indexed from 1 in CE
-                  var date = new Date(year, month - 1);
-
-                  if (!min || date < min) {
-                    min = date;
-                  }
-                  if (!max || date > max) {
-                    max = date;
-                  }
-
-                  if (!buckets[date]) {
-                    buckets[date] = {};
-                    buckets[date][types[$scope.journalType]] = [];
-                    buckets[date][types[$scope.externalConferenceType]] = [];
-                    buckets[date][types[$scope.patentType]] = [];
-                    buckets[date][types[$scope.internalConferenceType]] = [];
-                    buckets[date][types[$scope.technicalReportType]] = [];
-                    buckets[date][types[$scope.otherDocumentType]] = [];
-                  }
-
-                  // buckets[date][paperType]++;
-                  buckets[date][paperType].push({
-                    id: paperId,
-                    title: paperTitle,
-                    citations: paperCitationCount
-                  });
+                  documentMap[variantFound].types.push(paperType);
                 }
               }
+
+              // get date properties
+              var dateId = null;
+              var month = null;
+              var year = null;
+
+              if (paperFinalDateString) {
+                month = relatedInstances[paperFinalDateString].property_values.month;
+                year = relatedInstances[paperFinalDateString].property_values.year;
+              }
+
+              if (!month) {
+                month = '1';
+              }
+
+              // month indexed from 1 in CE
+              var date = new Date(year, month - 1);
+
+              if (!min || date < min) {
+                min = date;
+              }
+              if (!max || date > max) {
+                max = date;
+              }
+
+              if (!buckets[date]) {
+                buckets[date] = {};
+                buckets[date][types[$scope.journalType]] = [];
+                buckets[date][types[$scope.externalConferenceType]] = [];
+                buckets[date][types[$scope.patentType]] = [];
+                buckets[date][types[$scope.internalConferenceType]] = [];
+                buckets[date][types[$scope.technicalReportType]] = [];
+                buckets[date][types[$scope.otherDocumentType]] = [];
+              }
+
+              // buckets[date][paperType]++;
+              buckets[date][paperType].push({
+                id: paperId,
+                title: paperTitle,
+                citations: paperCitationCount
+              });
             }
+          }
 
-            // recreate array - test for index to remove duplicate citations
-            for (j = 0; j < authorDocumentList.length; ++j) {
-              var thisPaperId = authorDocumentList[j];
-              var thisPaper = documentMap[thisPaperId];
+          // recreate array - test for index to remove duplicate citations
+          for (j = 0; j < documentList.length; ++j) {
+            var thisPaperId = documentList[j];
+            var thisPaper = documentMap[thisPaperId];
 
-              if (thisPaper && thisPaper.index === j) {
-                var paperItem = {
-                  id:         thisPaperId,
-                  name:       thisPaper.title,
-                  noteworthy: thisPaper.noteworthy,
-                  date:       thisPaper.date,
-                  value:      thisPaper.citations,
-                  type:       utils.sortTypes(thisPaper.types),
-                  venue:      thisPaper.venue,
-                  authors:    thisPaper.authors,
-                  weight:     thisPaper.weight,
-                  class:      []
-                };
+            if (thisPaper && thisPaper.index === j) {
+              var paperItem = {
+                id:         thisPaperId,
+                name:       thisPaper.title,
+                noteworthy: thisPaper.noteworthy,
+                date:       thisPaper.date,
+                value:      thisPaper.citations,
+                type:       utils.sortTypes(thisPaper.types),
+                venue:      thisPaper.venue,
+                authors:    thisPaper.authors,
+                weight:     thisPaper.weight,
+                class:      []
+              };
 
-                for (k = 0; k < paperItem.type.length; ++k) {
-                  paperItem.class.push(utils.getClassName(paperItem.type[k]));
-                  csvData.push([paperItem.id, paperItem.name, paperItem.value, paperItem.type[k], paperItem.venue, paperItem.authors]);
-                }
-
-                $scope.papers[thisPaperId] = (paperItem);
-                $scope.papersList.push(paperItem);
+              for (k = 0; k < paperItem.type.length; ++k) {
+                paperItem.class.push(utils.getClassName(paperItem.type[k]));
+                csvData.push([paperItem.id, paperItem.name, paperItem.value, paperItem.type[k], paperItem.venue, paperItem.authors]);
               }
+
+              $scope.papers[thisPaperId] = (paperItem);
+              $scope.papersList.push(paperItem);
             }
           }
         }
@@ -358,8 +359,8 @@ angular.module('itapapersApp')
               $scope.chartData.push({
                 date:       d,
                 journal:    buckets[d][types[$scope.journalType]],
-                patent:     buckets[d][types[$scope.patentType]],
                 external:   buckets[d][types[$scope.externalConferenceType]],
+                patent:     buckets[d][types[$scope.patentType]],
                 internal:   buckets[d][types[$scope.internalConferenceType]],
                 technical:  buckets[d][types[$scope.technicalReportType]],
                 other:      buckets[d][types[$scope.otherDocumentType]]

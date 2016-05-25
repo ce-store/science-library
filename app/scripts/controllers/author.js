@@ -178,7 +178,6 @@ angular.module('itapapersApp')
         var journalCount = utils.getIntProperty(properties, ce.author.journalCount);
         var patentCount = utils.getIntProperty(properties, ce.author.patentCount);
         var externalConferencePaperCount = utils.getIntProperty(properties, ce.author.externalConferencePaperCount);
-        console.log(ce.author.externalConferencePaperCount);
         var internalConferencePaperCount = utils.getIntProperty(properties, ce.author.internalConferencePaperCount);
         var technicalReportCount = utils.getIntProperty(properties, ce.author.technicalReportCount);
         var otherCount = utils.getIntProperty(properties, ce.author.otherCount);
@@ -415,7 +414,7 @@ angular.module('itapapersApp')
             var coAuthorCoAuthorList = utils.getListProperty(coAuthorProps, ce.author.coAuthorStatistic);
             var coAuthorType = null;
 
-            if (coAuthorEmployer) {
+            if (coAuthorEmployer && relatedInstances[coAuthorEmployer]) {
               var employerProps = relatedInstances[coAuthorEmployer].property_values;
               coAuthorType = utils.getUnknownProperty(employerProps, ce.organisation.type);
             }
@@ -459,7 +458,7 @@ angular.module('itapapersApp')
               id:   coAuthorId,
               name: coAuthorName,
               group: coAuthorType,
-              count: coAuthorCount,
+              count: statCoAuthorCount,
               links: coCoAuthorStats
             });
           }

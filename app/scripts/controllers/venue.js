@@ -10,7 +10,7 @@
 angular.module('itapapersApp')
   .controller('VenueCtrl', ['$scope', '$stateParams', 'store', 'hudson', 'colours', 'documentTypes', 'utils', 'csv', 'definitions', function ($scope, $stateParams, store, hudson, colours, documentTypes, utils, csv, ce) {
     $scope.map = {};
-    $scope.multiplier = 3;
+    $scope.multiplier = 8;
     var bubblesData   = {};
     var arcData       = {};
     var papersData    = {};
@@ -78,22 +78,23 @@ angular.module('itapapersApp')
         highlightFillColor: '#fff'
       },
       bubblesConfig: {
-        borderWidth: 0,
+        borderWidth: 1,
+        borderColor: '#22394A',
         highlightBorderWidth: 0,
         highlightFillColor: '#84c142'
       },
       arcConfig: {
-        strokeColor: '#fde876',
-        strokeWidth: 1,
+        strokeColor: '#41D6C3',
+        strokeWidth: 2,
         arcSharpness: 1,
         animationSpeed: 1000
       },
       fills: {
         defaultFill: "#f0f0f0",
         'EVENT': '#fde876',
-        'AC': colours.AC,
-        'IND': colours.IND,
-        'GOV': colours.GOV
+        'AC': colours.areas[0],
+        'IND': colours.areas[1],
+        'GOV': colours.areas[2]
       }
     };
 
@@ -199,7 +200,7 @@ angular.module('itapapersApp')
 
               // organisation properties
               var orgName = utils.getUnknownProperty(orgProps, ce.organisation.name);
-              var orgAffiliation = utils.getUnknownProperty(orgProps, ce.organisation.affiliation);
+              var orgType = utils.getUnknownProperty(orgProps, ce.organisation.type);
 
               var bubble = {
                 id:         organisationId,
@@ -207,7 +208,7 @@ angular.module('itapapersApp')
                 latitude:   orgLat,
                 longitude:  orgLon,
                 radius:     $scope.multiplier,
-                fillKey:    orgAffiliation,
+                fillKey:    orgType,
                 authors: [{
                   id: authorId,
                   name: authorName

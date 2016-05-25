@@ -12,19 +12,14 @@
     restrict:'EA',
     template:"<div id='edge-bundle-chart'></div>",
     link: function postLink(scope, elem, attrs) {
-      var expAuthors = $parse(attrs.numAuthors);
       var expAc = $parse(attrs.ac);
       var expInd = $parse(attrs.ind);
       var expGov = $parse(attrs.gov);
-      var listLength = expAuthors(scope);
       var acInput = expAc(scope);
       var indInput = expInd(scope);
       var govInput = expGov(scope);
+      var listLength = 50;
 
-      scope.$watchCollection(expAuthors, function(newVal) {
-        listLength = newVal;
-        filterData();
-      });
       scope.$watchCollection(expAc, function(newVal) {
         acInput = newVal;
         filterData();
@@ -352,7 +347,7 @@
           }
         }
 
-        sortedAuthors = sortedAuthors.sort(compareCoAuthors).slice(0, scope.listLength);
+        sortedAuthors = sortedAuthors.sort(compareCoAuthors).slice(0, listLength);
 
         for (i = 0; i < sortedAuthors.length; ++i) {
           var author = sortedAuthors[i];

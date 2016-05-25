@@ -29,7 +29,7 @@
           <div class="clear">
             <div class="col-md-12">
               <ul class="results-list no-bullets">
-                <li ng-repeat="item in list | orderBy : 'name' | orderBy : sortCommand | filter : filterPapers | limitTo : listLength">
+                <li ng-repeat="item in list | orderBy : 'name' | orderBy : sortCommand | filter : filterPapers">
                   <span ng-class="[className, ('document-' + $index)]" ng-repeat="className in item.class track by $index"></span>
                   <a ng-href="{{listName | limitTo : listName.length - 1}}/{{item.id}}" class="list-name"><span ng-show="item.status">[{{item.status}}] </span>{{item.name}}</a>
                   <small ng-if="item.noteworthy"><span class="glyphicon glyphicon-star-empty highlight" aria-hidden="true"></span> ({{item.noteworthy}})</small>
@@ -94,7 +94,7 @@
           <top-header></top-header>
 
           <ul class="results-list clear" style="padding-top: 15px">
-            <li ng-repeat="item in list | orderBy : 'name' | orderBy : sortCommand | limitTo : listLength">
+            <li ng-repeat="item in list | orderBy : 'name' | orderBy : sortCommand">
               <a ng-href="{{listName | limitTo : listName.length - 1}}/{{item.id}}" class="list-name">{{item.name}}</a>
               <small ng-if="item[sortValue] && sortShow" class="highlight">({{item[sortValue]}})</small>
             </li>
@@ -126,7 +126,7 @@
         <div class="col-md-12">
 
           <ul class="results-list clear">
-            <li ng-repeat="item in list | orderBy : 'name' | orderBy : 'sortCommand' | limitTo : listLength">
+            <li ng-repeat="item in list | orderBy : 'name' | orderBy : sortCommand">
               <a ng-href="{{listName | limitTo : listName.length - 1}}/{{item.id}}/" class="list-name">{{item.name}}</a> <small ng-if="item[sortValue] && sortShow" class="highlight">({{item[sortValue]}})</small>
             </li>
           </ul>
@@ -167,7 +167,7 @@
 
           <div class="col-md-6 clear">
             <ul class="results-list no-bullets">
-              <li ng-repeat="item in list | orderBy : 'name' | orderBy : sortCommand | filter : filterOrganisations | limitTo : listLength">
+              <li ng-repeat="item in list | orderBy : 'name' | orderBy : sortCommand | filter : filterOrganisations">
                 <!-- Organisation list -->
                 <span ng-class="item.class"></span>
                 <a ng-href="{{listName | limitTo : listName.length - 1}}/{{item.id}}" class="list-name">{{item.name}}</a>
@@ -199,7 +199,7 @@
           </div>
         </div>
 
-        <div class="clear" edge-bundle-chart num-authors="listLength" ac="acInput" gov="govInput" ind="indInput"></div>
+        <div class="clear" edge-bundle-chart num-authors="'50'" ac="acInput" gov="govInput" ind="indInput"></div>
       </div>
 
       <!-- Topics list -->
@@ -210,7 +210,7 @@
 
         <div class="col-md-12">
           <ul class="results-list">
-            <li ng-repeat="item in list | orderBy : 'id' | orderBy : sortCommand | limitTo : listLength">
+            <li ng-repeat="item in list | orderBy : 'id' | orderBy : sortCommand">
               <!-- Topics list -->
               <a ng-href="{{listName | limitTo : listName.length - 1}}/{{item.id}}" class="list-name">{{ item.id | capitaliseFirst }}</a>
               <small ng-if="item[sortValue] && sortShow" class="highlight">({{item[sortValue]}})</small>

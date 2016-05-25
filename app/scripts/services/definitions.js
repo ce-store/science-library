@@ -79,7 +79,7 @@ angular.module('itapapersApp')
         journalCount:           'journal paper count',
         patentCount:            'patent count',
         conferencePaperCount:         'conference paper count',
-        exteralConferencePaperCount:  'external conference paper count',
+        externalConferencePaperCount:  'external conference paper count',
         internalConferencePaperCount: 'internal conference paper count',
         technicalReportCount:         'technical report count',
         otherCount:                   'other document count',

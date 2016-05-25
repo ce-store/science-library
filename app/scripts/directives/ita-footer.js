@@ -15,9 +15,6 @@ angular.module('itapapersApp')
         scope.question = "";
 
         scope.submit = function () {
-          console.log('submit');
-          console.log(scope.question);
-
           hudson.askQuestion(scope.question);
         };
 
@@ -25,10 +22,8 @@ angular.module('itapapersApp')
         var listener;
 
         var reset = function() {
-          console.log("reset listener");
           listener = new webspeech.Listener();
           listener.listen("en", function(text) {
-            console.log(text);
             scope.question = text;
             angular.element("#question-box")[0].value = text;
             hudson.askQuestion(text);
@@ -51,8 +46,6 @@ angular.module('itapapersApp')
                 modalInstance.result.then(function () {
                   store.setVoiceAcceptance(true);
                   reset();
-                }, function () {
-                  console.log('Modal dismissed at: ' + new Date());
                 });
               }
             });

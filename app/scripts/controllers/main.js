@@ -19,7 +19,6 @@ angular.module('itapapersApp')
       coauthors:  'co-authors',
       topics:     'topics'
     };
-    $scope.listLength = 50;
     $scope.sortTypes = {
       'papers': {
         names:    ['most collaborative', 'citation count', 'most recent', 'name'],
@@ -28,8 +27,8 @@ angular.module('itapapersApp')
         reverse: ['-', '-', '-', '+']
       },
       'authors': {
-        names:    ['external paper count', 'ITA citation count', 'ITA h-index', 'co-author count', 'name'],
-        values:   ['totalPubs', 'citations', 'hIndex', 'coAuthors', 'name'],
+        names:    ['external paper count', 'local citation count', 'local h-index', 'co-author count', 'name'],
+        values:   ['externalCount', 'citations', 'hIndex', 'coAuthors', 'name'],
         show:     [true, true, true, true, false],
         reverse:  ['-', '-', '-', '-', '+']
       },
@@ -41,8 +40,8 @@ angular.module('itapapersApp')
       },
       'projects': {},
       'organisations': {
-        names:    ['authors', 'paper count', 'citation count', 'name'],
-        values:   ['value', 'papers', 'citations', 'name'],
+        names:    ['authors', 'external paper count', 'citation count', 'name'],
+        values:   ['value', 'externalCount', 'citations', 'name'],
         show:     [true, true, true, false],
         reverse:  ['-', '-', '-', '+']
       },
@@ -212,6 +211,7 @@ angular.module('itapapersApp')
           var authorCitationCount = utils.getIntProperty(authorProps, ce.author.localCitationCount);
           var authorHIndex = utils.getIntProperty(authorProps, ce.author.localHIndex);
           var authorDocumentCount = utils.getIntProperty(authorProps, ce.author.documentCount);
+          var authorExternalCount = utils.getIntProperty(authorProps, ce.author.externalDocumentCount);
           var authorCoAuthorCount = utils.getIntProperty(authorProps, ce.author.coAuthorCount);
 
           csvData.push([id, authorName, authorCitationCount, authorHIndex]);
@@ -223,7 +223,8 @@ angular.module('itapapersApp')
             citations:  authorCitationCount,
             hIndex:     authorHIndex,
             coAuthors:  authorCoAuthorCount,
-            totalPubs:  authorDocumentCount
+            totalPubs:  authorDocumentCount,
+            externalCount: authorExternalCount
           });
         } else if ($scope.listName === $scope.listTypes.venues) {
           // venues page
@@ -270,6 +271,7 @@ angular.module('itapapersApp')
           var orgName = utils.getProperty(orgProps, ce.organisation.name);
           var orgEmployeeList = utils.getListProperty(orgProps, ce.organisation.employeeList);
           var orgDocumentCount = utils.getIntProperty(orgProps, ce.organisation.documentCount);
+          var orgExternalCount = utils.getIntProperty(orgProps, ce.organisation.externalDocumentCount);
           var orgCitationCount = utils.getIntProperty(orgProps, ce.organisation.citationCount);
           var orgType = utils.getProperty(orgProps, ce.organisation.type);
 
@@ -285,6 +287,7 @@ angular.module('itapapersApp')
             name:   orgName,
             value:  orgEmployeeList.length,
             papers: orgDocumentCount,
+            externalCount: orgExternalCount,
             citations: orgCitationCount,
             area:   orgType,
             class:  className
