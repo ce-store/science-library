@@ -3,9 +3,6 @@ Science Library
 
 # UI changes
 
-1. Embedded map on paper details page not showing correct location
-(console.log message plus map related JS errors appear for this page)
-
 1. Author list page - the coloured squares for the key are repeated many times
 down the page.
 

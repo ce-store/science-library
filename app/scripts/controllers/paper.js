@@ -150,7 +150,6 @@ angular.module('itapapersApp')
           var eventLocation = utils.getProperty(eventProps, ce.venue.location);
           var eventSeries = relatedInstances[eventSeriesId];
 
-          $scope.showVenue = true;
           $scope.venue = {
             id:   eventSeries._id,
             year: event._id,
@@ -167,17 +166,16 @@ angular.module('itapapersApp')
               var lat = utils.getProperty(locationProps, ce.location.lat);
 
               var center = {
-                latitude:   lon,
-                longitude:  lat
+                latitude:   lat,
+                longitude:  lon
               };
-              console.log(center);
 
               $scope.map = {
                 center: center,
                 zoom:   8
               };
               $scope.marker = {
-                idKey:  data._id,
+                id:  data._id,
                 coords: center
               };
             });

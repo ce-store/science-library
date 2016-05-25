@@ -83,7 +83,7 @@
             <dd>{{noteworthy}}</dd>
           </dl>
 
-          <div ng-if="!showVenue">
+          <div ng-if="!venue">
             <!-- Variants -->
             <dl class="dl-horizontal" class="paper-variants" ng-class="[{'answer-highlight': variantHighlight}]">
               <dt>Variants</dt>
@@ -110,7 +110,7 @@
         </div>
       </div>
 
-      <div ng-if="showVenue" class="row">
+      <div ng-if="venue" class="row">
         <!-- Venue -->
         <div class="col-md-6">
           <div ng-class="[{'answer-highlight': venueHighlight}]">
@@ -135,11 +135,6 @@
             </ul>
 
             <span ng-if="variants.length === 0" class="details">None</span>
-          </div>
-
-          <div ng-if="oldVenue">
-            <h5>Venue</h5>
-            <span class="details">{{oldVenue}}</span>
           </div>
 
           <!-- Download Link -->
