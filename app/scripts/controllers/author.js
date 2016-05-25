@@ -175,13 +175,14 @@ angular.module('itapapersApp')
         var documentCount = utils.getIntProperty(properties, ce.author.documentCount);
         var externalDocumentCount = utils.getIntProperty(properties, ce.author.externalDocumentCount);
         var internalDocumentCount = utils.getIntProperty(properties, ce.author.internalDocumentCount);
-        var journalCount = utils.getIntProperty(properties, ce.author.externalDocumentCount);
-        var patentCount = utils.getIntProperty(properties, ce.author.externalDocumentCount);
+        var journalCount = utils.getIntProperty(properties, ce.author.journalCount);
+        var patentCount = utils.getIntProperty(properties, ce.author.patentCount);
         var externalConferencePaperCount = utils.getIntProperty(properties, ce.author.externalConferencePaperCount);
+        console.log(ce.author.externalConferencePaperCount);
         var internalConferencePaperCount = utils.getIntProperty(properties, ce.author.internalConferencePaperCount);
         var technicalReportCount = utils.getIntProperty(properties, ce.author.technicalReportCount);
         var otherCount = utils.getIntProperty(properties, ce.author.otherCount);
-        var coAuthorCount = utils.getIntProperty(properties, ce.author.otherCount);
+        var coAuthorCount = utils.getIntProperty(properties, ce.author.coAuthorCount);
         var governmentCoAuthorCount = utils.getIntProperty(properties, ce.author.governmentCoAuthorCount);
         var googleCitationCount = utils.getIntProperty(properties, ce.author.googleCitationCount);
         var localCitationCount = utils.getIntProperty(properties, ce.author.localCitationCount);

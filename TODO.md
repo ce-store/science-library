@@ -3,12 +3,6 @@ Science Library
 
 # UI changes
 
-1. External paper totals are wrong on author details page.
-e.g. for me:
-It is showing: 0 ext conf, 42 journal, 42 patents.
-I should have 39 ext conf, 3 journal, 0 patents.
-(Internal totals are correct)
-
 1. Embedded map on paper details page not showing correct location
 (console.log message plus map related JS errors appear for this page)
 
