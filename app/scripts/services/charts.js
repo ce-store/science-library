@@ -42,7 +42,7 @@ angular.module('itapapersApp')
           var googleHIndex = utils.getIntProperty(citationProps, ce.citation.hIndex);
 
           // organisation properties
-          var industry = utils.getUnknownProperty(orgProps, ce.organisation.affiliation);
+          var industry = utils.getUnknownProperty(orgProps, ce.organisation.type);
 
           var c = {
             id: id,

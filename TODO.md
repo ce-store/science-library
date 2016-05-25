@@ -3,9 +3,6 @@ Science Library
 
 # UI changes
 
-1. Author list page - the coloured squares for the key are repeated many times
-down the page.
-
 1. When sorting by most recent, show date in brackets
 
 1. Add zoom in/out buttons to narrative chart?
