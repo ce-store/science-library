@@ -3,17 +3,56 @@ Science Library
 
 # UI changes
 
+1. External paper totals are wrong on author details page.
+e.g. for me:
+It is showing: 0 ext conf, 42 journal, 42 patents.
+I should have 39 ext conf, 3 journal, 0 patents.
+(Internal totals are correct)
+
+1. Embedded map on paper details page not showing correct location
+(console.log message plus map related JS errors appear for this page)
+
+1. Author list page - the coloured squares for the key are repeated many times
+down the page.
+
+1. Author list page - switching between the various graph contents (local
+citation count etc) makes all dots disappear from the graph. (No JS errors)
+
+1. Author list page - totals in brackets should be "external paper count" but
+they are actually "document count" (overall total)
+
+1. Author list page - in the dropdown list change "ITA citation count" to
+"local citation count" (and same for "ITA h-index")
+
+1. Organisation list page - paper count should be external document count
+
+1. Organisation detail page - external conference papers not being shown in
+summary stats or rendered on the graph.  Patents and Tech reports don't seem to
+be rendered on the graph either, e.g. http://localhost:3000/organisation/IBM-UK
+
+1. Co-authors chart - changing the number does not affect the chart anymore.
+Actually this is a problem for all the main list pages.
+
+1. When sorting by most recent, show date in brackets
+
+1. Console.log messages appearing when keyword searching
+
+1. Sometimes the organisation circles are very small on the venue map chart.
+e.g. CoNEXT 2007 at http://localhost:3000/venue/CoNEXT/
+
+1. Add zoom in/out buttons to narrative chart?
+
 1. Additional sorts for pages:
 Requires updates on CE for completion
 
  + Venues
- by # papers (default)
- by recency (date of most recent event)
- by duration (number of years contributed)
- by # citations (total paper citations) (new properties added - event->citation count and event series->citation count)
+ by # papers (default) - "paper count" property is available on event and event series
+ by recency (date of most recent event) - I will add "most recent event date" property to event series ("corresponds to" property is already available on event)
+ by duration (number of years contributed) - "years ran" property is available on event series
+ by # citations (total paper citations) "citation count" property is available on event and event series
 
  + Organisations
- by citation
+ by citation -  "citation count" property is available on organisation
 
  + Topics
  by collaborations (default)
