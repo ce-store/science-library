@@ -8,7 +8,7 @@
  * Controller of the itapapersApp
  */
 angular.module('itapapersApp')
-  .controller('MainCtrl', ['$scope', '$stateParams', '$location', '$sce', 'store', 'charts', 'documentTypes', 'utils', 'csv', 'colours', 'localStorageService', 'server', 'definitions', function ($scope, $stateParams, $location, $sce, store, charts, documentTypes, utils, csv, colours, localStorageService, server, ce) {
+  .controller('MainCtrl', ['$scope', '$stateParams', '$location', '$sce', 'store', 'charts', 'documentTypes', 'utils', 'csv', 'colours', 'localStorageService', 'urls', 'definitions', function ($scope, $stateParams, $location, $sce, store, charts, documentTypes, utils, csv, colours, localStorageService, urls, ce) {
     $scope.accepted = 'accepted';
     $scope.listTypes = {
       papers:   'papers',
@@ -399,7 +399,7 @@ angular.module('itapapersApp')
         store.getPublishedPeople()
           .then(function(results) {
             populateList(results.data, results.instances);
-            $scope.options = charts.getScatterData(results, server);
+            $scope.options = charts.getScatterData(results, urls.server);
           });
       } else if ($scope.listName === $scope.listTypes.venues) {
         store.getEventSeries()

@@ -8,7 +8,7 @@
  * Controller of the itapapersApp
  */
 angular.module('itapapersApp')
-  .controller('ComputeCtrl', ['$scope', '$stateParams', 'store', 'server', function ($scope, $stateParams, store, server) {
+  .controller('ComputeCtrl', ['$scope', '$stateParams', 'store', 'urls', function ($scope, $stateParams, store, urls) {
 
     store.getDataForCompute()
       .then(function(results) {
@@ -148,7 +148,7 @@ angular.module('itapapersApp')
       });
 
       function saveCeToStore() {
-        var url = server + "/ce-store/stores/DEFAULT/sources/computedCe?showStats=true&action=save";
+        var url = urls.server + "/ce-store/stores/DEFAULT/sources/computedCe?showStats=true&action=save";
         var ce = "";
 
         for (var i in $scope.computedCe) {
@@ -391,7 +391,7 @@ angular.module('itapapersApp')
               var person = paper.instances["written by"][personId];
 
               var org = person.instances["writes documents for"];
-              
+
               if (org) {
                 if (allOrgs.indexOf(org) == -1) {
                   allOrgs.push(org);

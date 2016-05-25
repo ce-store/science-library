@@ -1,7 +1,10 @@
 <div class="page-header">
-  <a ng-href="." ng-click="refresh()"><h1>Science Library</h1></a>
-  <button ng-click="reset()" class="btn reset-btn">Reset</button>
+  <h1>
+    <div class="inline-block">
+      <a ui-sref="home" class="nav-link">Home</a>
+      <a ui-sref="main" class="nav-link no-border">Science Library</a>
+    </div>
+  </h1>
+
   <button ng-csv="getCSVData" csv-header="getCSVHeader()" field-separator="," filename="{{ csvFileName() }}" tooltip-placement="bottom" uib-tooltip="{{ tooltipHTML() }}" class="btn reset-btn">Export</button>
-  <a ng-href="statistics"><button class="btn reset-btn">Statistics</button></a>
-  <a ng-if="debug" ng-href="compute"><button class="btn reset-btn">Compute CE</button></a>
 </div>

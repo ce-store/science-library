@@ -8,13 +8,13 @@
  * Controller of the itapapersApp
  */
 angular.module('itapapersApp')
-  .controller('ResultsCtrl', ['$scope', '$stateParams', '$http', 'server', 'ceStore', 'keywordSearch', function ($scope, $stateParams, $http, server, ceStore, keywordSearch) {
+  .controller('ResultsCtrl', ['$scope', '$stateParams', '$http', 'urls', function ($scope, $stateParams, $http, urls) {
     $scope.listLength = 25;
 
     if ($stateParams.keywords) {
       $scope.keywords = $stateParams.keywords;
 
-      var url = server + ceStore + keywordSearch.keywords + $scope.keywords + keywordSearch.restrictions;
+      var url = urls.server + urls.ceStore + urls.keywordSearch.keywords + $scope.keywords + urls.keywordSearch.restrictions;
       $http.get(url)
         .then(function(response) {
 

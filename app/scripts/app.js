@@ -32,69 +32,114 @@ angular
     //
     // Now set up the states
     $stateProvider
-      .state('main', {
+      .state('home', {
         url: "/",
-        templateUrl: "views/main.html",
+        templateUrl: "views/home.html",
+        controller: "HomeCtrl"
+      })
+      .state('assets', {
+        url: "/assets",
+        templateUrl: "views/legacy/assets.html",
+        controller: "AssetsCtrl"
+      })
+      .state('book', {
+        url: "/book",
+        templateUrl: "views/legacy/book.html",
+        controller: "BookCtrl"
+      })
+      .state('capstone', {
+        url: "/capstone",
+        templateUrl: "views/legacy/capstone.html",
+        controller: "CapstoneCtrl"
+      })
+      .state('cmc', {
+        url: "/cmc",
+        templateUrl: "views/legacy/cmc.html",
+        controller: "CmcCtrl"
+      })
+      .state('experimentation', {
+        url: "/experimentation",
+        templateUrl: "views/legacy/experimentation.html",
+        controller: "ExperimentationCtrl"
+      })
+      .state('peer-review', {
+        url: "/peer-review",
+        templateUrl: "views/legacy/peer-review.html",
+        controller: "PeerReviewCtrl"
+      })
+      .state('plans', {
+        url: "/plans",
+        templateUrl: "views/legacy/plans.html",
+        controller: "PlansCtrl"
+      })
+      .state('qprs', {
+        url: "/qprs",
+        templateUrl: "views/legacy/qprs.html",
+        controller: "QprsCtrl"
+      })
+      .state('main', {
+        url: "/ScienceLibrary",
+        templateUrl: "views/science-library/main.html",
         controller: "MainCtrl"
       })
       .state('help', {
-        url: "/help",
-        templateUrl: "views/help.html",
+        url: "/ScienceLibrary/help",
+        templateUrl: "views/science-library/help.html",
         controller: "HelpCtrl"
       })
       .state('author', {
-        url: "/author/:authorId",
-        templateUrl: "views/author.html",
+        url: "/ScienceLibrary/author/:authorId",
+        templateUrl: "views/science-library/author.html",
         controller: "AuthorCtrl"
       })
       .state('paper', {
-        url: "/paper/:paperId",
-        templateUrl: "views/paper.html",
+        url: "/ScienceLibrary/paper/:paperId",
+        templateUrl: "views/science-library/paper.html",
         controller: "PaperCtrl"
       })
       .state('venue', {
-        url: "/venue/:venueId/:year",
-        templateUrl: "views/venue.html",
+        url: "/ScienceLibrary/venue/:venueId/:year",
+        templateUrl: "views/science-library/venue.html",
         controller: "VenueCtrl"
       })
       .state('organisation', {
-        url: "/organisation/:organisationId",
-        templateUrl: "views/organisation.html",
+        url: "/ScienceLibrary/organisation/:organisationId",
+        templateUrl: "views/science-library/organisation.html",
         controller: "OrganisationCtrl"
       })
       .state('topic', {
-        url: "/topic/:topicId",
-        templateUrl: "views/topic.html",
+        url: "/ScienceLibrary/topic/:topicId",
+        templateUrl: "views/science-library/topic.html",
         controller: "TopicCtrl"
       })
       .state('project', {
-        url: "/project/:projectId",
-        templateUrl: "views/project.html",
+        url: "/ScienceLibrary/project/:projectId",
+        templateUrl: "views/science-library/project.html",
         controller: "ProjectCtrl"
       })
       .state('collaboration', {
-        url: "/collaboration?author",
-        templateUrl: "views/collaboration.html",
+        url: "/ScienceLibrary/collaboration?author",
+        templateUrl: "views/science-library/collaboration.html",
         controller: "CollaborationCtrl"
       })
       .state('results', {
-        url: "/results?keywords",
-        templateUrl: "views/results.html",
+        url: "/ScienceLibrary/results?keywords",
+        templateUrl: "views/science-library/results.html",
         controller: "ResultsCtrl"
       })
       .state('statistics', {
-        url: "/statistics",
-        templateUrl: "views/statistics.html",
+        url: "/ScienceLibrary/statistics",
+        templateUrl: "views/science-library/statistics.html",
         controller: "StatisticsCtrl"
       })
       .state('compute', {
         url: "/compute",
-        templateUrl: "views/compute.html",
+        templateUrl: "views/science-library/compute.html",
         controller: "ComputeCtrl"
       })
       .state('category', {
-        url: "/:category",
-        templateUrl: "views/main.html",
+        url: "/ScienceLibrary/:category",
+        templateUrl: "views/science-library/main.html",
         controller: "MainCtrl"
       });
 

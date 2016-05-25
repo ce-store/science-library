@@ -8,7 +8,7 @@
  * Controller of the itapapersApp
  */
 angular.module('itapapersApp')
-  .controller('PaperCtrl', ['$scope', '$stateParams', '$http', 'store', 'hudson', 'server', 'documentTypes', 'utils', 'csv', 'definitions', function ($scope, $stateParams, $http, store, hudson, server, documentTypes, utils, csv, ce) {
+  .controller('PaperCtrl', ['$scope', '$stateParams', '$http', 'store', 'hudson', 'urls', 'documentTypes', 'utils', 'csv', 'definitions', function ($scope, $stateParams, $http, store, hudson, urls, documentTypes, utils, csv, ce) {
     $scope.journalType            = documentTypes.journal;
     $scope.externalConferenceType = documentTypes.external;
     $scope.internalConferenceType = documentTypes.internal;
@@ -269,13 +269,13 @@ angular.module('itapapersApp')
 
         // download links
         if (paperFile) {
-          $scope.paperDownloadUrl = server + paperFile;
+          $scope.paperDownloadUrl = urls.server + paperFile;
         }
         if (posterFile) {
-          $scope.posterDownloadUrl = server + posterFile;
+          $scope.posterDownloadUrl = urls.server + posterFile;
         }
         if (presentationFile) {
-          $scope.presentationDownloadUrl = server + presentationFile;
+          $scope.presentationDownloadUrl = urls.server + presentationFile;
         }
 
         for (var oa in $scope.orderedAuthors) {

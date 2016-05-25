@@ -7,7 +7,7 @@
  * # itaHeader
  */
 angular.module('itapapersApp')
-  .directive('itaHeader', ['$uibModal', '$location', '$sce', 'localStorageService', 'server', 'csv', function ($uibModal, $location, $sce, localStorageService, server, csv) {
+  .directive('itaHeader', ['$uibModal', '$location', '$sce', 'localStorageService', 'csv', function ($uibModal, $location, $sce, localStorageService, csv) {
     return {
       templateUrl: 'views/ita-header.html',
       restrict: 'E',

@@ -2,11 +2,11 @@
 
 /**
  * @ngdoc function
- * @name itapapersApp.controller:HelpCtrl
+ * @name itapapersApp.controller:CmcCtrl
  * @description
- * # HelpCtrl
+ * # CmcCtrl
  * Controller of the itapapersApp
  */
 angular.module('itapapersApp')
-  .controller('HelpCtrl', function () {
+  .controller('CmcCtrl', function () {
   });

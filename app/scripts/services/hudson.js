@@ -8,7 +8,7 @@
  * Factory in the itapapersApp.
  */
 angular.module('itapapersApp')
-  .factory('hudson', ['$http', '$location', '$rootScope', 'server', 'questionAnalyser', 'ceStore', 'keywordSearch', function ($http, $location, $rootScope, server, questionAnalyser, ceStore, keywordSearch) {
+  .factory('hudson', ['$http', '$location', '$rootScope', 'urls', function ($http, $location, $rootScope, urls) {
     var questions = [];
     var types = {
       document: 'document',
@@ -174,7 +174,7 @@ angular.module('itapapersApp')
         $location.url('help');
       } else if (questionWords.indexOf(words[0]) > -1) {
         // Question - send to Hudson
-        $http.post(server + questionAnalyser, question)
+        $http.post(urls.server + urls.questionAnalyser, question)
           .then(function(response) {
             handleAnswer(response.data);
           }, function(response) {

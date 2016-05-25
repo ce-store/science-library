@@ -8,7 +8,7 @@
  * Factory in the itapapersApp.
  */
 angular.module('itapapersApp')
-  .factory('store', ['$http', '$q', 'server', 'localStorageService', 'utils', 'ceStore', 'definitions', function ($http, $q, server, localStorageService, utils, ceStore, ce) {
+  .factory('store', ['$http', '$q', 'urls', 'localStorageService', 'utils', 'definitions', function ($http, $q, urls, localStorageService, utils, ce) {
 
     function filterData (data) {
       var documentMap = {};
@@ -90,17 +90,17 @@ angular.module('itapapersApp')
       var key = "document citations";
 
       if (localStorageService.isSupported) {
-        var val = localStorageService.get(key + "-" + ceStore);
+        var val = localStorageService.get(key + "-" + urls.ceStore);
 
         if (val) {
           return $q.when(val);
         } else {
-          var url = server + ceStore + "/queries/" + key + "/execute?returnInstances=true";
+          var url = urls.server + urls.ceStore + "/queries/" + key + "/execute?returnInstances=true";
 
           return $http.get(url)
             .then(function(response) {
               var filtered = filterData(response.data);
-              localStorageService.set(key + "-" + ceStore, filtered);
+              localStorageService.set(key + "-" + urls.ceStore, filtered);
 
               return filtered;
             }, function(err) {
@@ -122,13 +122,13 @@ angular.module('itapapersApp')
       conNames += "topic-person statistic,";
       conNames += "topic-organisation statistic";
 
-      var url = server + ceStore + "/special/instances-for-multiple-concepts?conceptNames=" + conNames + '&style=summary';
+      var url = urls.server + urls.ceStore + "/special/instances-for-multiple-concepts?conceptNames=" + conNames + '&style=summary';
 
       return $http.get(url);
     }
 
     function getPublishedPeople () {
-      var url = server + ceStore + "/queries/published person citations/execute?returnInstances=true";
+      var url = urls.server + urls.ceStore + "/queries/published person citations/execute?returnInstances=true";
 
       return $http.get(url)
         .then(function(response) {
@@ -148,17 +148,17 @@ angular.module('itapapersApp')
       var key = "event series";
 
       if (localStorageService.isSupported) {
-        var val = localStorageService.get(key + "-" + ceStore);
+        var val = localStorageService.get(key + "-" + urls.ceStore);
 
         if (val) {
           return $q.when(val);
         } else {
-          var url = server + ceStore + "/queries/" + key + "/execute";
+          var url = urls.server + urls.ceStore + "/queries/" + key + "/execute";
 
           return $http.get(url)
             .then(function(response) {
               var filtered = response.data.results;
-              localStorageService.set(key + "-" + ceStore, filtered);
+              localStorageService.set(key + "-" + urls.ceStore, filtered);
 
               return filtered;
             }, function(err) {
@@ -172,16 +172,16 @@ angular.module('itapapersApp')
       var key = "projects";
 
       if (localStorageService.isSupported) {
-        var val = localStorageService.get(key + "-" + ceStore);
+        var val = localStorageService.get(key + "-" + urls.ceStore);
 
         if (val) {
           return $q.when(val);
         } else {
-          var url = server + ceStore + "/queries/" + key + "/execute?returnInstances=true";
+          var url = urls.server + urls.ceStore + "/queries/" + key + "/execute?returnInstances=true";
 
           return $http.get(url)
             .then(function(response) {
-              localStorageService.set(key + "-" + ceStore, response.data);
+              localStorageService.set(key + "-" + urls.ceStore, response.data);
               return response.data;
             }, function(err) {
               return err;
@@ -194,16 +194,16 @@ angular.module('itapapersApp')
       var key = "organisations";
 
       if (localStorageService.isSupported) {
-        var val = localStorageService.get(key + "-" + ceStore);
+        var val = localStorageService.get(key + "-" + urls.ceStore);
 
         if (val) {
           return $q.when(val);
         } else {
-          var url = server + ceStore + "/queries/" + key + "/execute?returnInstances=true";
+          var url = urls.server + urls.ceStore + "/queries/" + key + "/execute?returnInstances=true";
 
           return $http.get(url)
             .then(function(response) {
-              localStorageService.set(key + "-" + ceStore, response.data);
+              localStorageService.set(key + "-" + urls.ceStore, response.data);
               return response.data;
             }, function(err) {
               return err;
@@ -216,16 +216,16 @@ angular.module('itapapersApp')
       var key = "topics";
 
       if (localStorageService.isSupported) {
-        var val = localStorageService.get(key + "-" + ceStore);
+        var val = localStorageService.get(key + "-" + urls.ceStore);
 
         if (val) {
           return $q.when(val);
         } else {
-          var url = server + ceStore + "/queries/" + key + "/execute?returnInstances=true";
+          var url = urls.server + urls.ceStore + "/queries/" + key + "/execute?returnInstances=true";
 
           return $http.get(url)
             .then(function(response) {
-              localStorageService.set(key + "-" + ceStore, response.data);
+              localStorageService.set(key + "-" + urls.ceStore, response.data);
               return response.data;
             }, function(err) {
               return err;
@@ -238,16 +238,16 @@ angular.module('itapapersApp')
       var key = "totals";
 
       if (localStorageService.isSupported) {
-        var val = localStorageService.get(key + "-" + ceStore);
+        var val = localStorageService.get(key + "-" + urls.ceStore);
 
         if (val) {
           return $q.when(val);
         } else {
-          var url = server + ceStore + "/queries/" + key + "/execute?returnInstances=true";
+          var url = urls.server + urls.ceStore + "/queries/" + key + "/execute?returnInstances=true";
 
           return $http.get(url)
             .then(function(response) {
-              localStorageService.set(key + "-" + ceStore, response.data);
+              localStorageService.set(key + "-" + urls.ceStore, response.data);
               return response.data;
             }, function(err) {
               return err;
@@ -260,16 +260,16 @@ angular.module('itapapersApp')
       var key = "last updated";
 
       if (localStorageService.isSupported) {
-        var val = localStorageService.get(key + "-" + ceStore);
+        var val = localStorageService.get(key + "-" + urls.ceStore);
 
         if (val) {
           return $q.when(val);
         } else {
-          var url = server + ceStore + "/queries/" + key + "/execute";
+          var url = urls.server + urls.ceStore + "/queries/" + key + "/execute";
 
           return $http.get(url)
             .then(function(response) {
-              localStorageService.set(key + "-" + ceStore, response.data);
+              localStorageService.set(key + "-" + urls.ceStore, response.data);
               return response.data;
             }, function(err) {
               return err;
@@ -285,7 +285,7 @@ angular.module('itapapersApp')
         if (val) {
           return $q.when(val);
         } else {
-          var url = server + ceStore + "/instances/" + authorName + "?showStats=true&steps=2&style=summary&referringInstances=false&limitRelationships=default%20organisation,wrote,author,final%20date,citation%20count,co-author,co-author%20statistic";
+          var url = urls.server + urls.ceStore + "/instances/" + authorName + "?showStats=true&steps=2&style=summary&referringInstances=false&limitRelationships=default%20organisation,wrote,author,final%20date,citation%20count,co-author,co-author%20statistic";
 
           return $http.get(url)
             .then(function(response) {
@@ -305,7 +305,7 @@ angular.module('itapapersApp')
         if (val) {
           return $q.when(val);
         } else {
-          var url = server + ceStore + "/instances/" + paperName + "?style=summary&steps=2&referringInstances=false";
+          var url = urls.server + urls.ceStore + "/instances/" + paperName + "?style=summary&steps=2&referringInstances=false";
 
           return $http.get(url)
             .then(function(response) {
@@ -325,7 +325,7 @@ angular.module('itapapersApp')
         if (val) {
           return $q.when(val);
         } else {
-          var url = server + ceStore + "/instances/" + location;
+          var url = urls.server + urls.ceStore + "/instances/" + location;
 
           return $http.get(url)
             .then(function(response) {
@@ -345,7 +345,7 @@ angular.module('itapapersApp')
         if (val) {
           return $q.when(val);
         } else {
-          var url = server + ceStore + "/instances/" + organisation + "?style=summary&referringInstances=false&steps=3&limitRelationships=is%20located%20at,employs,citation%20count,wrote,final%20date";
+          var url = urls.server + urls.ceStore + "/instances/" + organisation + "?style=summary&referringInstances=false&steps=3&limitRelationships=is%20located%20at,employs,citation%20count,wrote,final%20date";
 
           return $http.get(url)
             .then(function(response) {
@@ -365,7 +365,7 @@ angular.module('itapapersApp')
         if (val) {
           return $q.when(val);
         } else {
-          var url = server + ceStore + "/instances/" + topic + "?style=summary&referringInstances=false&steps=3&limitRelationships=topic%20statistic,person,document,citation%20count,organisation";
+          var url = urls.server + urls.ceStore + "/instances/" + topic + "?style=summary&referringInstances=false&steps=3&limitRelationships=topic%20statistic,person,document,citation%20count,organisation";
 
           return $http.get(url)
             .then(function(response) {
@@ -382,16 +382,16 @@ angular.module('itapapersApp')
       var key = "organisation details";
 
       if (localStorageService.isSupported) {
-        var val = localStorageService.get(key + "-" + ceStore);
+        var val = localStorageService.get(key + "-" + urls.ceStore);
 
         if (val) {
           return $q.when(val);
         } else {
-          var url = server + ceStore + "/queries/" + key + "/execute?showStats=false&suppressCe=true";
+          var url = urls.server + urls.ceStore + "/queries/" + key + "/execute?showStats=false&suppressCe=true";
 
           return $http.get(url)
             .then(function(response) {
-              localStorageService.set(key + "-" + ceStore, response.data);
+              localStorageService.set(key + "-" + urls.ceStore, response.data);
               return response.data;
             }, function(err) {
               return err;
@@ -404,16 +404,16 @@ angular.module('itapapersApp')
       var key = "organisation publications";
 
       if (localStorageService.isSupported) {
-        var val = localStorageService.get(key + "-" + ceStore);
+        var val = localStorageService.get(key + "-" + urls.ceStore);
 
         if (val) {
           return $q.when(val);
         } else {
-          var url = server + ceStore + "/queries/" + key + "/execute?returnInstances=true";
+          var url = urls.server + urls.ceStore + "/queries/" + key + "/execute?returnInstances=true";
 
           return $http.get(url)
             .then(function(response) {
-              localStorageService.set(key + "-" + ceStore, response.data);
+              localStorageService.set(key + "-" + urls.ceStore, response.data);
               return response.data;
             }, function(err) {
               return err;
@@ -426,16 +426,16 @@ angular.module('itapapersApp')
       var key = "person details";
 
       if (localStorageService.isSupported) {
-        var val = localStorageService.get(key + "-" + ceStore);
+        var val = localStorageService.get(key + "-" + urls.ceStore);
 
         if (val) {
           return $q.when(val);
         } else {
-          var url = server + ceStore + "/queries/" + key + "/execute?showStats=false&suppressCe=true";
+          var url = urls.server + urls.ceStore + "/queries/" + key + "/execute?showStats=false&suppressCe=true";
 
           return $http.get(url)
             .then(function(response) {
-              localStorageService.set(key + "-" + ceStore, response.data);
+              localStorageService.set(key + "-" + urls.ceStore, response.data);
               return response.data;
             }, function(err) {
               return err;
@@ -448,16 +448,16 @@ angular.module('itapapersApp')
       var key = "published person -> organisation";
 
       if (localStorageService.isSupported) {
-        var val = localStorageService.get(key + "-" + ceStore);
+        var val = localStorageService.get(key + "-" + urls.ceStore);
 
         if (val) {
           return $q.when(val);
         } else {
-          var url = server + ceStore + "/queries/" + key + "/execute?showStats=false&suppressCe=true";
+          var url = urls.server + urls.ceStore + "/queries/" + key + "/execute?showStats=false&suppressCe=true";
 
           return $http.get(url)
             .then(function(response) {
-              localStorageService.set(key + "-" + ceStore, response.data);
+              localStorageService.set(key + "-" + urls.ceStore, response.data);
               return response.data;
             }, function(err) {
               return err;
@@ -470,16 +470,16 @@ angular.module('itapapersApp')
       var key = "person -> document";
 
       if (localStorageService.isSupported) {
-        var val = localStorageService.get(key + "-" + ceStore);
+        var val = localStorageService.get(key + "-" + urls.ceStore);
 
         if (val) {
           return $q.when(val);
         } else {
-          var url = server + ceStore + "/queries/" + key + "/execute?showStats=false&suppressCe=true";
+          var url = urls.server + urls.ceStore + "/queries/" + key + "/execute?showStats=false&suppressCe=true";
 
           return $http.get(url)
             .then(function(response) {
-              localStorageService.set(key + "-" + ceStore, response.data);
+              localStorageService.set(key + "-" + urls.ceStore, response.data);
               return response.data;
             }, function(err) {
               return err;
@@ -492,16 +492,16 @@ angular.module('itapapersApp')
       var key = "document details";
 
       if (localStorageService.isSupported) {
-        var val = localStorageService.get(key + "-" + ceStore);
+        var val = localStorageService.get(key + "-" + urls.ceStore);
 
         if (val) {
           return $q.when(val);
         } else {
-          var url = server + ceStore + "/queries/" + key + "/execute?showStats=false&suppressCe=true";
+          var url = urls.server + urls.ceStore + "/queries/" + key + "/execute?showStats=false&suppressCe=true";
 
           return $http.get(url)
             .then(function(response) {
-              localStorageService.set(key + "-" + ceStore, response.data);
+              localStorageService.set(key + "-" + urls.ceStore, response.data);
               return response.data;
             }, function(err) {
               return err;
@@ -517,7 +517,7 @@ angular.module('itapapersApp')
         if (val) {
           return $q.when(val);
         } else {
-          var url = server + ceStore + "/instances/" + project + "?steps=2&style=summary&referringInstances=false&limitRelationships=paper,technical%20area,citation%20count";
+          var url = urls.server + urls.ceStore + "/instances/" + project + "?steps=2&style=summary&referringInstances=false&limitRelationships=paper,technical%20area,citation%20count";
           return $http.get(url)
             .then(function(response) {
               localStorageService.set(project, response.data);
@@ -533,16 +533,16 @@ angular.module('itapapersApp')
       var key = 'event series details';
 
       if (localStorageService.isSupported) {
-        var val = localStorageService.get(key + "-" + ceStore);
+        var val = localStorageService.get(key + "-" + urls.ceStore);
 
         if (val) {
           return $q.when(val);
         } else {
-          var url = server + ceStore + "/queries/" + key + "/execute?returnInstances=true";
+          var url = urls.server + urls.ceStore + "/queries/" + key + "/execute?returnInstances=true";
 
           return $http.get(url)
             .then(function(response) {
-              localStorageService.set(key + "-" + ceStore, response.data);
+              localStorageService.set(key + "-" + urls.ceStore, response.data);
               return response.data;
             }, function(err) {
               return err;

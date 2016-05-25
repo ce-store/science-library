@@ -38,7 +38,7 @@ angular.module('itapapersApp')
               } else {
                 var modalInstance = $uibModal.open({
                   animation: true,
-                  templateUrl: 'views/voice-warning.html',
+                  templateUrl: 'views/science-library/voice-warning.html',
                   controller: 'VoiceWarningCtrl',
                   size: 'sm'
                 });

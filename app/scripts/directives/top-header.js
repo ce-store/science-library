@@ -10,7 +10,7 @@ angular.module('itapapersApp')
   .directive('topHeader', ['$parse', function ($parse) {
     return {
       restrict: 'E',
-      templateUrl: 'views/top-header.html',
+      templateUrl: 'views/science-library/top-header.html',
       link: function postLink(scope, element, attrs) {
         var expHeader = $parse(attrs.headertext);
         scope.header = expHeader(scope);

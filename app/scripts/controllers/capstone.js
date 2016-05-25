@@ -2,11 +2,11 @@
 
 /**
  * @ngdoc function
- * @name itapapersApp.controller:HelpCtrl
+ * @name itapapersApp.controller:CapstoneCtrl
  * @description
- * # HelpCtrl
+ * # CapstoneCtrl
  * Controller of the itapapersApp
  */
 angular.module('itapapersApp')
-  .controller('HelpCtrl', function () {
+  .controller('CapstoneCtrl', function () {
   });
