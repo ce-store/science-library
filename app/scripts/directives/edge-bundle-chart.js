@@ -7,7 +7,8 @@
  * # edgeBundleChart
  */
  angular.module('itapapersApp')
- .directive('edgeBundleChart', ['$parse', '$window', 'store', 'csv', function ($parse, $window, store, csv) {
+ .directive('edgeBundleChart', ['$parse', '$window', 'store', 'csv', 'urls', function ($parse, $window, store, csv, urls) {
+
   return {
     restrict:'EA',
     template:"<div id='edge-bundle-chart'></div>",
@@ -647,7 +648,7 @@
           .on("mouseover", function(d) { wheelMouseover("org", d.data.id, d.data.id); })
           .on("mouseout", function(d) { wheelMouseout("org", d.data.id, d.data.id); })
           .on("click", function(d) {
-            var url = "organisation/" + d.data.id;
+            var url = urls.scienceLibrary + "/organisation/" + d.data.id;
             window.location.href = url;
           });
         g.append("text")
@@ -728,7 +729,7 @@
           .on("mouseover", function(d) { wheelMouseover("author", d.key); })
           .on("mouseout", function(d) { wheelMouseout("author", d.key); })
           .on("click", function(d) {
-            var url = "author/" + d.key;
+            var url = urls.scienceLibrary + "/author/" + d.key;
             window.location.href = url;
           });
 

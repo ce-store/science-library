@@ -7,8 +7,8 @@
  * # forceDirectedGraph
  */
 angular.module('itapapersApp')
-  .directive('forceDirectedGraph', ['$parse', '$window', function ($parse, $window) {
-    return {
+  .directive('forceDirectedGraph', ['$parse', '$window', 'urls', function ($parse, $window, urls) {
+  return {
       template: "<div id='force-directed-graph'></div>",
       restrict: 'E',
       link: function postLink(scope, element, attrs) {
@@ -295,7 +295,7 @@ angular.module('itapapersApp')
               .on('mousemove', mousemove)
               .on('mouseout', mouseout)
               .on('click', function(d) {
-                var url = "collaboration?author=" + nodes[0].id + "&author=" + d.id;
+                var url = urls.scienceLibrary + "/collaboration?author=" + nodes[0].id + "&author=" + d.id;
                 window.location.href = url;
               });
 
