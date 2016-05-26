@@ -78,57 +78,57 @@ angular
         controller: "QprsCtrl"
       })
       .state('main', {
-        url: "/ScienceLibrary",
+        url: "/science-library",
         templateUrl: "views/science-library/main.html",
         controller: "MainCtrl"
       })
       .state('help', {
-        url: "/ScienceLibrary/help",
+        url: "/science-library/help",
         templateUrl: "views/science-library/help.html",
         controller: "HelpCtrl"
       })
       .state('author', {
-        url: "/ScienceLibrary/author/:authorId",
+        url: "/science-library/author/:authorId",
         templateUrl: "views/science-library/author.html",
         controller: "AuthorCtrl"
       })
       .state('paper', {
-        url: "/ScienceLibrary/paper/:paperId",
+        url: "/science-library/paper/:paperId",
         templateUrl: "views/science-library/paper.html",
         controller: "PaperCtrl"
       })
       .state('venue', {
-        url: "/ScienceLibrary/venue/:venueId/:year",
+        url: "/science-library/venue/:venueId/:year",
         templateUrl: "views/science-library/venue.html",
         controller: "VenueCtrl"
       })
       .state('organisation', {
-        url: "/ScienceLibrary/organisation/:organisationId",
+        url: "/science-library/organisation/:organisationId",
         templateUrl: "views/science-library/organisation.html",
         controller: "OrganisationCtrl"
       })
       .state('topic', {
-        url: "/ScienceLibrary/topic/:topicId",
+        url: "/science-library/topic/:topicId",
         templateUrl: "views/science-library/topic.html",
         controller: "TopicCtrl"
       })
       .state('project', {
-        url: "/ScienceLibrary/project/:projectId",
+        url: "/science-library/project/:projectId",
         templateUrl: "views/science-library/project.html",
         controller: "ProjectCtrl"
       })
       .state('collaboration', {
-        url: "/ScienceLibrary/collaboration?author",
+        url: "/science-library/collaboration?author",
         templateUrl: "views/science-library/collaboration.html",
         controller: "CollaborationCtrl"
       })
       .state('results', {
-        url: "/ScienceLibrary/results?keywords",
+        url: "/science-library/results?keywords",
         templateUrl: "views/science-library/results.html",
         controller: "ResultsCtrl"
       })
       .state('statistics', {
-        url: "/ScienceLibrary/statistics",
+        url: "/science-library/statistics",
         templateUrl: "views/science-library/statistics.html",
         controller: "StatisticsCtrl"
       })
@@ -138,7 +138,7 @@ angular
         controller: "ComputeCtrl"
       })
       .state('category', {
-        url: "/ScienceLibrary/:category",
+        url: "/science-library/:category",
         templateUrl: "views/science-library/main.html",
         controller: "MainCtrl"
       });
