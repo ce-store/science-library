@@ -35,6 +35,7 @@
                   <small ng-if="item.noteworthy"><span class="glyphicon glyphicon-star-empty highlight" aria-hidden="true"></span> ({{item.noteworthy}})</small>
                   <small ng-if="item[sortValue] && sortShow" class="highlight">({{item[sortValue]}})</small>
                 </li>
+
                 <div class="center">
                   <button class="btn see-more" ng-click="seeMore()">See more</button>
                 </div>
@@ -97,10 +98,14 @@
           <top-header></top-header>
 
           <ul class="results-list clear" style="padding-top: 15px">
-            <li ng-repeat="item in list | orderBy : 'name' | orderBy : sortCommand">
+            <li ng-repeat="item in list | orderBy : 'name' | orderBy : sortCommand | limitTo : listLength">
               <a ng-href="{{scienceLibrary}}/{{listName | limitTo : listName.length - 1}}/{{item.id}}" class="list-name">{{item.name}}</a>
               <small ng-if="item[sortValue] && sortShow" class="highlight">({{item[sortValue]}})</small>
             </li>
+
+            <div class="center">
+              <button class="btn see-more" ng-click="seeMore()">See more</button>
+            </div>
           </ul>
         </div>
 
