@@ -650,6 +650,10 @@ td {
   text-decoration: none;
 }
 
+.see-more {
+  margin-top: 10px;
+}
+
 .right-btn {
   float: right;
 }

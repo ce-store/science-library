@@ -29,12 +29,15 @@
           <div class="clear">
             <div class="col-md-12">
               <ul class="results-list no-bullets">
-                <li ng-repeat="item in list | orderBy : 'name' | orderBy : sortCommand | filter : filterPapers">
+                <li ng-repeat="item in list | orderBy : 'name' | orderBy : sortCommand | filter : filterPapers | limitTo : listLength">
                   <span ng-class="[className, ('document-' + $index)]" ng-repeat="className in item.class track by $index"></span>
                   <a ng-href="{{scienceLibrary}}/{{listName | limitTo : listName.length - 1}}/{{item.id}}" class="list-name"><span ng-show="item.status">[{{item.status}}] </span>{{item.name}}</a>
                   <small ng-if="item.noteworthy"><span class="glyphicon glyphicon-star-empty highlight" aria-hidden="true"></span> ({{item.noteworthy}})</small>
                   <small ng-if="item[sortValue] && sortShow" class="highlight">({{item[sortValue]}})</small>
                 </li>
+                <div class="center">
+                  <button class="btn see-more" ng-click="seeMore()">See more</button>
+                </div>
               </ul>
             </div>
           </div>
