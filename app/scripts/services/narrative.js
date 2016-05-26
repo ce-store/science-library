@@ -49,6 +49,8 @@ var authorIndex = {};
 // Set drag offset
 var drag_offset = 0;
 
+var scienceLibrary = null;
+
 // Opacity
 var opacity = {
   opaqueNodes: {
@@ -696,13 +698,13 @@ function draw_nodes(scenes, svg) {
     var url;
 
     if (paper) {
-      url = "paper/" + paper;
+      url = scienceLibrary + "/paper/" + paper;
       window.location.href = url;
     } else {
       var character = d.chars[0];
       var characterName = authorIndex[character];
 
-      url = "collaboration?author=" + characterName + "&author=" + authorIndex[0];
+      url = scienceLibrary + "/collaboration?author=" + characterName + "&author=" + authorIndex[0];
       window.location.href = url;
     }
   }
@@ -942,13 +944,14 @@ function draw_links(links, svg) {
     .on("mouseout", mouseout_cb);
 } // draw_links
 
-function drawNarrativeChart(safe_name, tie_breaker, center_sort, collapse, data, svr) {
+function drawNarrativeChart(safe_name, tie_breaker, center_sort, collapse, data, svr, sl) {
   var vals = data.structured_response.main_instance.property_values;
   rels = data.structured_response.related_instances;
   var i = 0;
 
   var authorMap = {};
 
+  scienceLibrary = sl;
   server = svr;
 
   // build character list

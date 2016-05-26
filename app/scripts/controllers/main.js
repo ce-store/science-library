@@ -9,6 +9,7 @@
  */
 angular.module('itapapersApp')
   .controller('MainCtrl', ['$scope', '$stateParams', '$location', '$sce', 'store', 'charts', 'documentTypes', 'utils', 'csv', 'colours', 'localStorageService', 'urls', 'definitions', function ($scope, $stateParams, $location, $sce, store, charts, documentTypes, utils, csv, colours, localStorageService, urls, ce) {
+    $scope.scienceLibrary = urls.scienceLibrary;
     $scope.accepted = 'accepted';
     $scope.listTypes = {
       papers:   'papers',

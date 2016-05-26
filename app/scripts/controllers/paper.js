@@ -9,6 +9,7 @@
  */
 angular.module('itapapersApp')
   .controller('PaperCtrl', ['$scope', '$stateParams', '$http', 'store', 'hudson', 'urls', 'documentTypes', 'utils', 'csv', 'definitions', function ($scope, $stateParams, $http, store, hudson, urls, documentTypes, utils, csv, ce) {
+    $scope.scienceLibrary = urls.scienceLibrary;
     $scope.journalType            = documentTypes.journal;
     $scope.externalConferenceType = documentTypes.external;
     $scope.internalConferenceType = documentTypes.internal;

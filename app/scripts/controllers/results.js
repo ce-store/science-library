@@ -9,6 +9,7 @@
  */
 angular.module('itapapersApp')
   .controller('ResultsCtrl', ['$scope', '$stateParams', '$http', 'urls', function ($scope, $stateParams, $http, urls) {
+    $scope.scienceLibrary = urls.scienceLibrary;
     $scope.listLength = 25;
 
     if ($stateParams.keywords) {

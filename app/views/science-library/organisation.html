@@ -42,7 +42,7 @@
           <ul class="results-list clear">
             <li class="no-bullets" ng-repeat="item in papersList | limitTo : listLength | orderBy : 'name' | orderBy : sortCommand | filter : filterPapers">
               <span ng-class="[className, ('document-' + $index)]" ng-repeat="className in item.class track by $index"></span>
-              <a ng-href="paper/{{item.id}}" class="list-name">{{item.name}}</a>
+              <a ng-href="{{scienceLibrary}}/paper/{{item.id}}" class="list-name">{{item.name}}</a>
               <small ng-if="item.noteworthy"><span class="glyphicon glyphicon-star-empty highlight" aria-hidden="true"></span> ({{item.noteworthy}})</small> <small ng-if="item[sortValue] && sortShow" class="highlight">({{item[sortValue]}})</small>
             </li>
           </ul>
@@ -56,7 +56,7 @@
           <!-- Results list -->
           <ul class="results-list" ng-class="[{'answer-highlight': employsHighlight}]">
             <li ng-repeat="item in authorsList | limitTo : listLength | orderBy : 'name' | orderBy : sortCommand">
-              <a ng-href="author/{{item.id}}" class="list-name">{{item.name}}</a>
+              <a ng-href="{{scienceLibrary}}/author/{{item.id}}" class="list-name">{{item.name}}</a>
               <small ng-if="item[sortValue] && sortShow" class="highlight">({{item[sortValue]}})</small>
             </li>
           </ul>

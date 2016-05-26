@@ -34,21 +34,21 @@
     <h3>Papers</h3>
     <ul class="mini results-list">
       <li class="no-bullets" ng-repeat="paper in papers | orderBy : 'name' | orderBy : '-citations'">
-        <span ng-class="paper.class"></span><a ng-href="paper/{{paper.id}}" class="list-name">{{paper.name}}</a> <!-- <small class="highlight">({{paper.citations}})</small> -->
+        <span ng-class="paper.class"></span><a ng-href="{{scienceLibrary}}/paper/{{paper.id}}" class="list-name">{{paper.name}}</a> <!-- <small class="highlight">({{paper.citations}})</small> -->
       </li>
     </ul>
 
     <h3>Organisations</h3>
     <ul class="mini results-list">
       <li ng-if="org.fillKey !== 'EVENT'" ng-repeat="org in bubbles | orderBy : 'name' | orderBy : '-radius'">
-        <a ng-href="organisation/{{org.id}}" class="list-name">{{org.name}}</a> <!-- <small class="highlight">({{org.radius / multiplier}})</small> -->
+        <a ng-href="{{sciencLibrary}}/organisation/{{org.id}}" class="list-name">{{org.name}}</a> <!-- <small class="highlight">({{org.radius / multiplier}})</small> -->
       </li>
     </ul>
 
     <h3>Authors</h3>
     <ul class="mini results-list">
       <li ng-repeat="(id, author) in authors | orderObjectBy : 'count' : '-name'">
-        <a ng-href="author/{{author.id}}" class="list-name">{{author.name}}</a> <!-- <small class="highlight">({{author.count}})</small> -->
+        <a ng-href="{{scienceLibrary}}/author/{{author.id}}" class="list-name">{{author.name}}</a> <!-- <small class="highlight">({{author.count}})</small> -->
       </li>
     </ul>
 

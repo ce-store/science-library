@@ -33,7 +33,7 @@
           <ul class="results-list clear">
             <li class="no-bullets" ng-repeat="item in publications | orderBy : 'name' | orderBy : sortCommand | filter : filterPapers">
               <span ng-class="[className, ('document-' + $index)]" ng-repeat="className in item.class track by $index"></span>
-              <a ng-href="paper/{{item.id}}" class="list-name">{{item.name}}</a>
+              <a ng-href="{{scienceLibrary}}/paper/{{item.id}}" class="list-name">{{item.name}}</a>
               <small ng-if="item[sortValue] && sortShow" class="highlight">({{item[sortValue]}})</small>
             </li>
             <p ng-if="publications.length === 0">No publications found.</p>
@@ -51,7 +51,7 @@
           <!-- Results list -->
           <ul class="results-list clear">
             <li ng-repeat="item in authors | orderBy : 'name' | orderBy : sortCommand">
-              <a ng-href="author/{{item.id}}" class="list-name">{{item.name}}</a>
+              <a ng-href="{{scienceLibrary}}/author/{{item.id}}" class="list-name">{{item.name}}</a>
               <small ng-if="item[sortValue] && sortShow" class="highlight">({{item[sortValue]}})</small>
             </li>
             <p ng-if="authors.length === 0">No authors found.</p>
@@ -69,7 +69,7 @@
         <div class="col-md-12">
           <ul class="results-list">
             <li ng-repeat="item in organisations | orderBy : 'name' | orderBy : sortCommand">
-              <a ng-href="organisation/{{item.id}}" class="list-name">{{item.name}}</a>
+              <a ng-href="{{scienceLibrary}}/organisation/{{item.id}}" class="list-name">{{item.name}}</a>
               <small ng-if="item[sortValue] && sortShow" class="highlight">({{item[sortValue]}})</small>
             </li>
             <p ng-if="organisation.length === 0">No organisations found.</p>

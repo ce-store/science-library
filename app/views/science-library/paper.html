@@ -29,14 +29,14 @@
             <dt>Authors</dt>
             <dd>
               <span ng-repeat="author in orderedAuthors">
-                <a ng-href="author/{{author.id}}">{{author.name}}</a><span ng-if="$index !== orderedAuthors.length - 1">, </span>
+                <a ng-href="{{scienceLibrary}}/author/{{author.id}}">{{author.name}}</a><span ng-if="$index !== orderedAuthors.length - 1">, </span>
               </span>
               <small>({{orderedAuthors.length}})</small>
             </dd>
           </dl>
           <dl class="dl-horizontal" ng-class="[{'answer-highlight': projectHighlight}]">
             <dt>Project</dt>
-            <!-- <dd ng-if="project"><a ng-href="project/{{project.id}}">{{project.name}}</a></dd> -->
+            <!-- <dd ng-if="project"><a ng-href="{{scienceLibrary}}/project/{{project.id}}">{{project.name}}</a></dd> -->
             <dd ng-if="project">{{project.name}}</dd>
             <dd ng-if="!project">Unknown</dd>
           </dl>
@@ -91,7 +91,7 @@
                 <ul ng-if="variants.length > 0" class="results-list no-bullets no-min-list">
                   <li ng-repeat="variant in variants">
                     <span ng-class="variant.className"></span>
-                    <a ng-href="paper/{{variant.id}}">{{variant.name}}</a>
+                    <a ng-href="{{scienceLibrary}}/paper/{{variant.id}}">{{variant.name}}</a>
                   </li>
                 </ul>
                 <span ng-if="variants.length === 0" class="details">None</span>
@@ -118,7 +118,7 @@
             <ui-gmap-google-map center='map.center' zoom='map.zoom'>
               <ui-gmap-marker idkey='marker.id' coords='marker.coords'></ui-gmap-marker>
             </ui-gmap-google-map>
-            <a ng-href="venue/{{venue.id}}/{{venue.name}}">{{venue.name}}</a>
+            <a ng-href="{{scienceLibrary}}/venue/{{venue.id}}/{{venue.name}}">{{venue.name}}</a>
           </div>
         </div>
 
@@ -130,7 +130,7 @@
             <ul ng-if="variants.length > 0" class="results-list no-bullets no-min-list">
               <li ng-repeat="variant in variants">
                 <span ng-class="variant.className"></span>
-                <a ng-href="paper/{{variant.id}}">{{variant.name}}</a>
+                <a ng-href="{{scienceLibrary}}/paper/{{variant.id}}">{{variant.name}}</a>
               </li>
             </ul>
 

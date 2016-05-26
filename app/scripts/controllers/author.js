@@ -10,6 +10,7 @@
 angular.module('itapapersApp')
   .controller('AuthorCtrl', ['$scope', '$stateParams', '$timeout', 'store', 'urls', 'hudson', 'documentTypes', 'utils', 'csv', 'colours', 'definitions', function ($scope, $stateParams, $timeout, store, urls, hudson, documentTypes, utils, csv, colours, ce) {
     $scope.views = ['graph', 'papers', 'co-authors', 'co-authors-graph'];
+    $scope.scienceLibrary = urls.scienceLibrary;
     $scope.journalType            = documentTypes.journal;
     $scope.externalConferenceType = documentTypes.external;
     $scope.patentType             = documentTypes.patent;
@@ -79,7 +80,7 @@ angular.module('itapapersApp')
         angular.element("svg.chart").remove();
         // Wait for doms to be created
         $timeout(function() {
-          drawNarrativeChart($stateParams.authorId, true, false, false, $scope.data, urls.server);
+          drawNarrativeChart($stateParams.authorId, true, false, false, $scope.data, urls.server, $scope.scienceLibrary);
         }, 100);
       }
 
@@ -466,7 +467,7 @@ angular.module('itapapersApp')
 
         // Draw charts
         if ($scope.currentView === $scope.views[0]) {
-          drawNarrativeChart($stateParams.authorId, true, false, false, data, urls.server);
+          drawNarrativeChart($stateParams.authorId, true, false, false, data, urls.server, $scope.scienceLibrary);
         }
 
         generateCSVData();

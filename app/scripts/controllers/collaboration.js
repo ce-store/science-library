@@ -8,8 +8,9 @@
  * Controller of the itapapersApp
  */
 angular.module('itapapersApp')
-  .controller('CollaborationCtrl', ['$scope', '$stateParams', '$q', '$document', 'store', 'utils', 'documentTypes', 'csv', 'colours', 'definitions', function ($scope, $stateParams, $q, $document, store, utils, documentTypes, csv, colours, ce) {
+  .controller('CollaborationCtrl', ['$scope', '$stateParams', '$q', '$document', 'store', 'utils', 'documentTypes', 'csv', 'colours', 'urls', 'definitions', function ($scope, $stateParams, $q, $document, store, utils, documentTypes, csv, colours, urls, ce) {
     $scope.views    = ["chart", "list"];
+    $scope.scienceLibrary = urls.scienceLibrary;
     $scope.authors  = [];
     $scope.papers   = [];
     $scope.currentView  = $scope.views[0];

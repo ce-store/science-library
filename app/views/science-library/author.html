@@ -5,7 +5,7 @@
       <span class="highlight" ng-class="[{'answer-highlight': full_nameHighlight}]">{{author}}</span>
       writes for
       <span ng-repeat="org in organisations">
-        <a class="highlight" ng-href="organisation/{{org.id}}" ng-class="[{'answer-highlight': is_employed_byHighlight}]">{{org.name}}</a><span ng-if="$index < organisations.length - 2">, </span><span ng-if="$index === organisations.length - 2"> and </span>
+        <a class="highlight" ng-href="{{scienceLibrary}}/organisation/{{org.id}}" ng-class="[{'answer-highlight': is_employed_byHighlight}]">{{org.name}}</a><span ng-if="$index < organisations.length - 2">, </span><span ng-if="$index === organisations.length - 2"> and </span>
       </span>
     </p>
   </div>
@@ -38,7 +38,7 @@
         <ul class="results-list clear" id="publications-results-list">
           <li class="no-bullets" ng-repeat="paper in papersList | orderBy : 'name' | orderBy : sortCommand | filter : filterPapers">
             <span ng-class="[className, ('document-' + $index)]" ng-repeat="className in paper.class track by $index"></span>
-            <a ng-href="paper/{{paper.id}}" class="list-name">{{paper.name}}</a>
+            <a ng-href="{{scienceLibrary}}/paper/{{paper.id}}" class="list-name">{{paper.name}}</a>
             <small ng-if="paper.noteworthy"><span class="glyphicon glyphicon-star-empty highlight" aria-hidden="true"></span> ({{paper.noteworthy}})</small>
             <small ng-if="paper[sortValue] && sortShow" class="highlight">({{paper[sortValue]}})</small>
           </li>
@@ -52,7 +52,7 @@
 
         <ul class="results-list" id="coauthors-results-list">
           <li ng-repeat="coauthor in coauthorsList | orderBy : 'name' | orderBy : sortCommand">
-            <a ng-href="collaboration?author={{authorId}}&author={{coauthor.id}}" class="list-name">{{coauthor.name}}</a>
+            <a ng-href="{{scienceLibrary}}/collaboration?author={{authorId}}&author={{coauthor.id}}" class="list-name">{{coauthor.name}}</a>
             <small ng-show="coauthor[sortValue] && sortShow" class="highlight">({{coauthor[sortValue]}})</small>
           </li>
         </ul>

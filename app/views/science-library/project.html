@@ -29,7 +29,7 @@
         <ul class="results-list" id="publications-results-list">
           <li class="no-bullets" ng-repeat="item in publications | orderBy : 'name' | orderBy : '-citations' | filter : filterPapers">
             <span ng-class="[className, ('document-' + $index)]" ng-repeat="className in item.class track by $index"></span>
-            <a ng-href="paper/{{item.id}}" class="list-name">{{item.name}}</a> <!-- <small class="highlight">({{item.citations}})</small> -->
+            <a ng-href="{{scienceLibrary}}/paper/{{item.id}}" class="list-name">{{item.name}}</a> <!-- <small class="highlight">({{item.citations}})</small> -->
           </li>
           <p ng-if="publications.length === 0">No publications found.</p>
         </ul>

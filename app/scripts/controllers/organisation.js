@@ -8,8 +8,9 @@
  * Controller of the itapapersApp
  */
 angular.module('itapapersApp')
-  .controller('OrganisationCtrl', ['$scope', '$stateParams', '$document', 'store', 'hudson', 'documentTypes', 'utils', 'csv', 'colours', 'definitions', function ($scope, $stateParams, $document, store, hudson, documentTypes, utils, csv, colours, ce) {
+  .controller('OrganisationCtrl', ['$scope', '$stateParams', '$document', 'store', 'hudson', 'documentTypes', 'utils', 'csv', 'colours', 'urls', 'definitions', function ($scope, $stateParams, $document, store, hudson, documentTypes, utils, csv, colours, urls, ce) {
     $scope.views = ["chart", "list", "authors"];
+    $scope.scienceLibrary = urls.scienceLibrary;
     $scope.journalType            = documentTypes.journal;
     $scope.patentType             = documentTypes.patent;
     $scope.externalConferenceType = documentTypes.external;

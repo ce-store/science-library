@@ -8,7 +8,8 @@
  * Controller of the itapapersApp
  */
 angular.module('itapapersApp')
-  .controller('VenueCtrl', ['$scope', '$stateParams', 'store', 'hudson', 'colours', 'documentTypes', 'utils', 'csv', 'definitions', function ($scope, $stateParams, store, hudson, colours, documentTypes, utils, csv, ce) {
+  .controller('VenueCtrl', ['$scope', '$stateParams', 'store', 'hudson', 'colours', 'documentTypes', 'utils', 'csv', 'urls', 'definitions', function ($scope, $stateParams, store, hudson, colours, documentTypes, utils, csv, urls, ce) {
+    $scope.scienceLibrary = urls.scienceLibrary;
     $scope.map = {};
     $scope.multiplier = 8;
     var bubblesData   = {};

@@ -181,7 +181,7 @@ angular.module('itapapersApp')
             console.log('failed: ' + response);
         });
       } else {
-        $location.url('results?keywords=' + question);
+        $location.url(urls.scienceLibrary + '/results?keywords=' + question);
       }
     };
 
