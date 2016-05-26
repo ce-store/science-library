@@ -16,7 +16,7 @@ angular.module('itapapersApp')
   // .constant('hudson', '/ITAHudson/QuestionAnalyser?debug=true')
     ceStore: '/ce-store/stores/DEFAULT',
   // .constant('store', '/ce-store/stores/extonly')
-    scienceLibrary: 'ScienceLibrary',
+    scienceLibrary: 'science-library',
   // .constant('scienceLibrary', 'NewScienceLibrary')
     keywordSearch: {
       keywords: '/special/keyword-search?keywords=',
