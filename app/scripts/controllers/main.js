@@ -147,6 +147,7 @@ angular.module('itapapersApp')
       var csvData       = [];
       var csvHeader;
       var csvName;
+      var authorIds = {};
 
       resetTypeCount();
 
@@ -222,16 +223,19 @@ angular.module('itapapersApp')
 
           csvData.push([id, authorName, authorCitationCount, authorHIndex]);
 
-          // push data to list
-          $scope.list.push({
-            id:         id,
-            name:       authorName,
-            citations:  authorCitationCount,
-            hIndex:     authorHIndex,
-            coAuthors:  authorCoAuthorCount,
-            totalPubs:  authorDocumentCount,
-            externalCount: authorExternalCount
-          });
+          if (!authorIds[id]) {
+            authorIds[id] = true;
+            // push data to list
+            $scope.list.push({
+              id:         id,
+              name:       authorName,
+              citations:  authorCitationCount,
+              hIndex:     authorHIndex,
+              coAuthors:  authorCoAuthorCount,
+              totalPubs:  authorDocumentCount,
+              externalCount: authorExternalCount
+            });
+          }
         } else if ($scope.listName === $scope.listTypes.venues) {
           // venues page
           var name = data[i][1];
