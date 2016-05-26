@@ -12,7 +12,7 @@
   <div class="row">
     <!-- Paper -->
     <div class="col-md-6">
-      <img class="paper-img" id="paper-img" ng-src="{{source}}" ng-class="[{'answer-highlight': paper_thumbnailHighlight}]"/>
+      <img class="paper-img" id="paper-img" ng-src="{{paperSource}}" ng-class="[{'answer-highlight': paper_thumbnailHighlight}]"/>
       <div class="paper-buttons">
         <button ng-if="paperSource && source !== paperSource" ng-click="show('paper')" class="btn">Show Paper</button>
         <button ng-if="posterSource && source !== posterSource" ng-click="show('poster')" class="btn">Show Poster</button>
