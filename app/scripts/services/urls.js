@@ -9,15 +9,13 @@
  */
 angular.module('itapapersApp')
   .constant('urls', {
-    home: 'http://localhost:3000',
+    home: 'http://localhost:8080',
     server: 'http://localhost:8080',
-  // .constant('server', 'http://nis-ita.org')
+//    home: 'http://nis-ita.org',
+//    server: 'http://nis-ita.org',
     questionAnalyser: '/Hudson/QuestionAnalyser?debug=true',
-  // .constant('hudson', '/ITAHudson/QuestionAnalyser?debug=true')
     ceStore: '/ce-store/stores/DEFAULT',
-  // .constant('store', '/ce-store/stores/extonly')
     scienceLibrary: 'science-library',
-  // .constant('scienceLibrary', 'NewScienceLibrary')
     keywordSearch: {
       keywords: '/special/keyword-search?keywords=',
       restrictions: '&returnInstances=true&restrictToConcepts=document,person,organisation,topic,event&restrictToProperties=writes about,abstract,title,name,short name,full name,marker,description'
