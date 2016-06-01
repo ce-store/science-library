@@ -205,7 +205,6 @@ angular.module('itapapersApp')
             var gov = govInput ? govInput.property("checked") : null;
 
             var data = options[scope.scatterYAxis];
-
             var filteredData = data.filter(function (d) {
               return (ac && d.industry === "AC") ||
                 (ind && d.industry === "IND") ||
@@ -253,7 +252,7 @@ angular.module('itapapersApp')
               .on('mouseout', tip.hide)
               .on('click', function(d) {
                 tip.hide();
-                var url = '/author/' + d.id;
+                var url = scope.scienceLibrary + '/author/' + d.id;
                 $location.url(url);
                 scope.$apply();
               });

@@ -9,7 +9,6 @@
  */
 angular.module('itapapersApp')
   .controller('ComputeCtrl', ['$scope', '$stateParams', 'store', 'urls', function ($scope, $stateParams, store, urls) {
-
     store.getDataForCompute()
       .then(function(results) {
           var papers = {};
@@ -34,10 +33,8 @@ angular.module('itapapersApp')
             inst.instances["ordered authors"] = [];
             inst.instances["written by"] = [];
             inst.values["citation count"] = null;
-            inst.values["full author list"] = null;
+//            inst.values["full author list"] = null;
             inst.values["weight"] = null;
-            inst.values["alternative weight 1"] = null;
-            inst.values["alternative weight 2"] = null;
             inst.extraTypes = [];
 
             papers[inst._id] = inst;
@@ -120,7 +117,7 @@ angular.module('itapapersApp')
 
           buildLinks(papers, citations, oas, people, organisations, cas, dates);
 
-          computeDocumentOriginalAuthors(papers);
+//          computeDocumentOriginalAuthors(papers);
           computePersonCitations(people);
           computePersonHIndex(people);
           computeDocumentWeights(papers, people, organisations);
@@ -129,7 +126,7 @@ angular.module('itapapersApp')
           computeTopicPersonCounts(tps);
           computeTopicOrganisationCounts(tos);
 
-          ceForDocumentOriginalAuthors(papers);
+//          ceForDocumentOriginalAuthors(papers);
           ceForPersonCitations(people);
           ceForDocumentWeights(papers);
           ceForDocumentTypes(papers);
@@ -148,7 +145,7 @@ angular.module('itapapersApp')
       });
 
       function saveCeToStore() {
-        var url = urls.server + "/ce-store/stores/DEFAULT/sources/computedCe?showStats=true&action=save";
+        var url = urls.server + urls.ceStore + "/sources/computedCe?showStats=true&action=save";
         var ce = "";
 
         for (var i in $scope.computedCe) {
@@ -262,32 +259,32 @@ angular.module('itapapersApp')
         }
       }
 
-      function computeDocumentOriginalAuthors(papers) {
-        for (var paperId in papers) {
-          if (papers.hasOwnProperty(paperId)) {
-            var authorListText = "";
-            var paper = papers[paperId];
-
-            for (var oaId in paper.instances["ordered authors"]) {
-              var oa = paper.instances["ordered authors"][oaId];
-              var person = oa.instances["author person"];
-
-              if (person) {
-                var fullName = person.property_values["full name"][0];
-
-                if (fullName) {
-                  if (authorListText != "") {
-                    authorListText += ", ";
-                  }
-                  authorListText += fullName;
-                }
-              }
-            }
-
-            paper.values["full author list"] = authorListText;
-          }
-        }
-      }
+//      function computeDocumentOriginalAuthors(papers) {
+//        for (var paperId in papers) {
+//          if (papers.hasOwnProperty(paperId)) {
+//            var authorListText = "";
+//            var paper = papers[paperId];
+//
+//            for (var oaId in paper.instances["ordered authors"]) {
+//              var oa = paper.instances["ordered authors"][oaId];
+//              var person = oa.instances["author person"];
+//
+//              if (person) {
+//                var fullName = person.property_values["full name"][0];
+//
+//                if (fullName) {
+//                  if (authorListText != "") {
+//                    authorListText += ", ";
+//                  }
+//                  authorListText += fullName;
+//                }
+//              }
+//            }
+//
+//            paper.values["full author list"] = authorListText;
+//          }
+//        }
+//      }
 
       function computePersonCitations(people) {
         for (var personId in people) {
@@ -330,8 +327,6 @@ angular.module('itapapersApp')
         for (var paperId in papers) {
           var types = [];
           var weight = 0;
-          var altWeight1 = 0;
-          var altWeight2 = 0;
 
           if (papers.hasOwnProperty(paperId)) {
             var paper = papers[paperId];
@@ -347,37 +342,22 @@ angular.module('itapapersApp')
                   type = org.property_values["type"][0];
                 }
 
-                if (types.indexOf(type) == -1) {
-                  types.push(type);
+                if (type != null) {
+                  if (types.indexOf(type) == -1) {
+                    types.push(type);
+                  }
                 }
               }
 
               if (person.direct_concept_names.indexOf("core person") > -1) {
                 weight += 100;
-                altWeight1 += 100;
-                altWeight2 += 100;
-              } else {
-                altWeight2 -= 100;
               }
             }
           }
 
           weight += types.length * 1000;
 
-          if (types.indexOf("GOV") > -1) {
-              altWeight1 += 2000;
-              altWeight1 += (types.length -1) * 1000;
-
-              altWeight2 += 2000;
-              altWeight2 += (types.length -1) * 1000;
-          } else {
-              altWeight1 += types.length * 1000;
-              altWeight2 += types.length * 1000;
-          }
-
           paper.values["weight"] = weight;
-          paper.values["alternative weight 1"] = altWeight1;
-          paper.values["alternative weight 2"] = altWeight2;
         }
       }
 
@@ -667,26 +647,26 @@ angular.module('itapapersApp')
         return h;
       }
 
-      function ceForDocumentOriginalAuthors(papers) {
-        var hdrText = "";
-        hdrText += "--------------------------------------------\n";
-        hdrText += "-- document:full author list\n";
-        hdrText += "--------------------------------------------\n";
-        $scope.computedCe.push(hdrText);
-
-        for (var paperId in papers) {
-          if (papers.hasOwnProperty(paperId)) {
-            var paper = papers[paperId];
-            var authList = paper.values["full author list"];
-
-            var ceText = "";
-            ceText += "the document '" + encodeForCe(paperId) + "'\n";
-            ceText += "  has '" + encodeForCe(authList) + "' as full author list.";
-
-            $scope.computedCe.push(ceText);
-          }
-        }
-      }
+//      function ceForDocumentOriginalAuthors(papers) {
+//        var hdrText = "";
+//        hdrText += "--------------------------------------------\n";
+//        hdrText += "-- document:full author list\n";
+//        hdrText += "--------------------------------------------\n";
+//        $scope.computedCe.push(hdrText);
+//
+//        for (var paperId in papers) {
+//          if (papers.hasOwnProperty(paperId)) {
+//            var paper = papers[paperId];
+//            var authList = paper.values["full author list"];
+//
+//            var ceText = "";
+//            ceText += "the document '" + encodeForCe(paperId) + "'\n";
+//            ceText += "  has '" + encodeForCe(authList) + "' as full author list.";
+//
+//            $scope.computedCe.push(ceText);
+//          }
+//        }
+//      }
 
       function ceForPersonCitations(people) {
         var hdrText = "";

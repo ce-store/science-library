@@ -10,76 +10,83 @@
 angular.module('itapapersApp')
   .factory('store', ['$http', '$q', 'urls', 'localStorageService', 'utils', 'definitions', function ($http, $q, urls, localStorageService, utils, ce) {
 
-    function filterData (data) {
+    function filterData (instances) {
       var documentMap = {};
-      var i, paperId;
 
       // loop through query results
       //    - remove results with multiple citations
       //    - select citation count with most citations
       //    - collapse variants into one entry
-      for (i = 0; i < data.results.length; ++i) {
-        paperId = data.results[i][0];
-        var paperProps = data.instances[paperId].property_values;
+      for (var i in instances) {
+        var thisInst = instances[i];
 
-        // paper properties
-        var citationCount = utils.getIntProperty(paperProps, ce.paper.citationCount);
-        var variantList = utils.getListProperty(paperProps, ce.paper.variantList);
-        var paperType = utils.getType(data.instances[paperId].direct_concept_names);
+        if (utils.isConcept(thisInst, "document")) {
+          var paperId = thisInst._id;
+          var paperProps = thisInst.property_values;
 
-        // ignore duplicates
-        if (!documentMap[paperId]) {
-          var variantFound = false;
-          var maxCitations = 0;
+          // paper properties
+          var citationCount = utils.getIntProperty(paperProps, ce.paper.citationCount);
+          var variantList = utils.getListProperty(paperProps, ce.paper.variantList);
+          var paperType = utils.getType(thisInst.concept_names || thisInst.direct_concept_names);
 
-          // find max variant
-          if (variantList) {
-            for (var j = 0; j < variantList.length; ++j) {
-              var variantId = variantList[j];
+          // ignore duplicates
+          if (!documentMap[paperId]) {
+            var variantFound = false;
+            var maxCitations = 0;
 
-              if (documentMap[variantId]) {
-                maxCitations = documentMap[variantId].citations > maxCitations ? documentMap[variantId].citations : maxCitations;
-                variantFound = variantId;
+            // find max variant
+            if (variantList) {
+              for (var j = 0; j < variantList.length; ++j) {
+                var variantId = variantList[j];
+
+                if (documentMap[variantId]) {
+                  maxCitations = documentMap[variantId].citations > maxCitations ? documentMap[variantId].citations : maxCitations;
+                  variantFound = variantId;
+                }
               }
             }
-          }
 
-          // set citation count in map
-          if (!variantFound) {
-            documentMap[paperId] = {
-              citations: citationCount,
-              index: i,
-              types: [paperType]
-            };
-          } else {
-            if (maxCitations < citationCount) {
-              var variantTypes = documentMap[variantFound].types.slice();
-              documentMap[variantFound] = null;
+            // set citation count in map
+            if (!variantFound) {
               documentMap[paperId] = {
                 citations: citationCount,
                 index: i,
-                types: [paperType].concat(variantTypes)
+                types: [paperType]
               };
             } else {
-              documentMap[variantFound].types.push(paperType);
+              if (maxCitations < citationCount) {
+                var variantTypes = documentMap[variantFound].types.slice();
+                documentMap[variantFound] = null;
+                documentMap[paperId] = {
+                  citations: citationCount,
+                  index: i,
+                  types: [paperType].concat(variantTypes)
+                };
+              } else {
+                documentMap[variantFound].types.push(paperType);
+              }
             }
           }
         }
       }
 
       var filteredResults = [];
+      var instancesObj = {};
 
       // recreate array - test for index to remove duplicate citations
-      for (i = 0; i < data.results.length; ++i) {
-        paperId = data.results[i][0];
+      for (var i in instances) {
+        var thisInst = instances[i];
+        paperId = thisInst._id;
+
+        instancesObj[paperId] = thisInst;
+
         if (documentMap[paperId] && documentMap[paperId].index === i) {
-          data.results[i].push(documentMap[paperId].types);
-          filteredResults.push(data.results[i]);
+          filteredResults.push([ paperId, documentMap[paperId].types ]);
         }
       }
 
       var filteredData = {
-        instances: data.instances,
+        instances: instancesObj,
         data: filteredResults
       };
 
@@ -87,7 +94,7 @@ angular.module('itapapersApp')
     }
 
     function getDocuments () {
-      var key = "document citations";
+      var key = "document";
 
       if (localStorageService.isSupported) {
         var val = localStorageService.get(key + "-" + urls.ceStore);
@@ -95,7 +102,7 @@ angular.module('itapapersApp')
         if (val) {
           return $q.when(val);
         } else {
-          var url = urls.server + urls.ceStore + "/queries/" + key + "/execute?returnInstances=true";
+          var url = urls.server + urls.ceStore + "/concepts/" + key + "/instances?style=minimal&onlyProperties=title,final date,number of citations,status,programme,weight,noteworthy reason,variant";
 
           return $http.get(url)
             .then(function(response) {
@@ -128,19 +135,46 @@ angular.module('itapapersApp')
     }
 
     function getPublishedPeople () {
-      var url = urls.server + urls.ceStore + "/queries/published person citations/execute?returnInstances=true";
+      var key = "core person";
 
-      return $http.get(url)
-        .then(function(response) {
-          var filtered = response.data.results;
+      if (localStorageService.isSupported) {
+        var val = localStorageService.get(key + "-" + urls.ceStore);
 
-          return {
-            data: filtered,
-            instances: response.data.instances
-          };
-        }, function(err) {
-          return err;
-        });
+        if (val) {
+          return $q.when(val);
+        } else {
+          var url = urls.server + urls.ceStore + "/concepts/" + key + "/instances?style=minimal&onlyProperties=full name,profile picture,writes documents for,local citation count,local h-index,overall citation count,overall h-index,document count,external document count,co-author count";
+
+          return $http.get(url)
+            .then(function(response) {
+              var filtered = preparePublishedPeople(response.data);
+
+              localStorageService.set(key + "-" + urls.ceStore, filtered);
+
+              return filtered;
+            }, function(err) {
+              return err;
+            });
+        }
+      }
+    }
+
+    function preparePublishedPeople(data) {
+      var idList = [];
+      var instObj = {}
+
+      for (var i in data) {
+        var thisInst = data[i];
+        idList.push([thisInst._id]);
+        instObj[thisInst._id] = thisInst;
+      }
+
+      var result = {
+        data: idList,
+        instances: instObj
+      };
+
+      return result;
     }
 
     // Not used
@@ -378,8 +412,8 @@ angular.module('itapapersApp')
       }
     }
 
-    function getOrganisationDetails () {
-      var key = "organisation details";
+    function getGovOrganisationDetails () {
+      var key = "gov organisation details";
 
       if (localStorageService.isSupported) {
         var val = localStorageService.get(key + "-" + urls.ceStore);
@@ -399,6 +433,50 @@ angular.module('itapapersApp')
         }
       }
     }
+
+    function getAcOrganisationDetails () {
+        var key = "ac organisation details";
+
+        if (localStorageService.isSupported) {
+          var val = localStorageService.get(key + "-" + urls.ceStore);
+
+          if (val) {
+            return $q.when(val);
+          } else {
+            var url = urls.server + urls.ceStore + "/queries/" + key + "/execute?showStats=false&suppressCe=true";
+
+            return $http.get(url)
+              .then(function(response) {
+                localStorageService.set(key + "-" + urls.ceStore, response.data);
+                return response.data;
+              }, function(err) {
+                return err;
+              });
+          }
+        }
+      }
+
+    function getIndOrganisationDetails () {
+        var key = "ind organisation details";
+
+        if (localStorageService.isSupported) {
+          var val = localStorageService.get(key + "-" + urls.ceStore);
+
+          if (val) {
+            return $q.when(val);
+          } else {
+            var url = urls.server + urls.ceStore + "/queries/" + key + "/execute?showStats=false&suppressCe=true";
+
+            return $http.get(url)
+              .then(function(response) {
+                localStorageService.set(key + "-" + urls.ceStore, response.data);
+                return response.data;
+              }, function(err) {
+                return err;
+              });
+          }
+        }
+      }
 
     function getOrganisationPublications () {
       var key = "organisation publications";
@@ -584,7 +662,9 @@ angular.module('itapapersApp')
       getVenue: getVenue,
       getOrganisation: getOrganisation,
       getTopic: getTopic,
-      getOrganisationDetails: getOrganisationDetails,
+      getGovOrganisationDetails: getGovOrganisationDetails,
+      getAcOrganisationDetails: getAcOrganisationDetails,
+      getIndOrganisationDetails: getIndOrganisationDetails,
       getPersonDetails: getPersonDetails,
       getPeopleOrgs: getPeopleOrgs,
       getPersonDocument: getPersonDocument,

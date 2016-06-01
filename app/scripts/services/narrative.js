@@ -1,6 +1,7 @@
 "use strict";
 
 var server = null;
+var ceStore = null;
 var rels;
 
 // Link dimensions
@@ -528,6 +529,7 @@ function calculate_node_positions(chars, scenes, total_panels, chart_width,
           if (!y) {
             continue;
           }
+
           if (c.group.id === scene.median_group.id) {
             sum1 += y;
             den1 += 1;
@@ -721,7 +723,7 @@ function draw_nodes(scenes, svg) {
     // TODO: Show posters on mouseover
     if (d.char_node !== true) {
       //DSB - switch request to open source ce-store (and remove hardcoded localhost)
-      var url = server + "/ce-store/stores/DEFAULT/instances/" + d.paper;
+      var url = server + ceStore + "/instances/" + d.paper;
 
       d3.json(url, function(error, data) {
         if (error) {
@@ -944,7 +946,7 @@ function draw_links(links, svg) {
     .on("mouseout", mouseout_cb);
 } // draw_links
 
-function drawNarrativeChart(safe_name, tie_breaker, center_sort, collapse, data, svr, sl) {
+function drawNarrativeChart(safe_name, tie_breaker, center_sort, collapse, data, svr, ces, sl, utils) {
   var vals = data.structured_response.main_instance.property_values;
   rels = data.structured_response.related_instances;
   var i = 0;
@@ -953,6 +955,7 @@ function drawNarrativeChart(safe_name, tie_breaker, center_sort, collapse, data,
 
   scienceLibrary = sl;
   server = svr;
+  ceStore = ces;
 
   // build character list
   var xchars = [];
@@ -962,16 +965,14 @@ function drawNarrativeChart(safe_name, tie_breaker, center_sort, collapse, data,
     "GOV": 2
   };
 
-  var employerType = rels[vals["default organisation"][0]].property_values.type;
+  var defOrg = rels[vals["default organisation"][0]];
+  var employerType = utils.getIndustryFor(defOrg);
+
   var character = {
     name: vals["full name"][0],
     id: 0,
-    group: employerType ? types[employerType[0]] : null
+    group: employerType
   };
-
-  if (!character.group && character.group !== 0) {
-    character.group = types.UNKNOWN;
-  }
 
   xchars.push(character);
   authorMap[data.structured_response.main_instance._id] = character.id;
@@ -983,7 +984,7 @@ function drawNarrativeChart(safe_name, tie_breaker, center_sort, collapse, data,
       org = org ? org[0] : "unknown";
       var type;
       if (rels[org]) {
-        type = rels[org].property_values.type ? rels[org].property_values.type[0] : null;
+        type = utils.getIndustryFor(rels[org]);
       }
 
       var c = rels[vals["co-author"][i]];
@@ -992,7 +993,7 @@ function drawNarrativeChart(safe_name, tie_breaker, center_sort, collapse, data,
       character = {
         name: cName,
         id: i + 1,
-        group: type ? types[type] : types.UNKNOWN
+        group: type
       };
 
       xchars.push(character);

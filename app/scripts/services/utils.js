@@ -64,6 +64,9 @@ angular.module('itapapersApp')
       getProperty: function(propertiesList, propertyName) {
         return propertiesList[propertyName] ? propertiesList[propertyName][0] : null;
       },
+      getPropertyList: function(propertiesList, propertyName) {
+          return propertiesList[propertyName];
+        },
       getListProperty: function(propertiesList, propertyName) {
         return propertiesList[propertyName] ? propertiesList[propertyName] : null;
       },
@@ -76,6 +79,30 @@ angular.module('itapapersApp')
       },
       getDateProperty: function(propertiesList, propertyName) {
         return propertiesList[propertyName] ? Date.parse(propertiesList[propertyName][0]) : 0;
+      },
+      getIndustryFor: function (instance) {
+        var result = null;
+        var conceptNames = instance.direct_concept_names || instance.concept_names;
+
+        if ((conceptNames.indexOf("government organisation") > -1) || (conceptNames.indexOf("government person") > -1)){
+          result = "GOV";
+        } else if ((conceptNames.indexOf("academic organisation") > -1) || (conceptNames.indexOf("academic person") > -1)){
+          result = "AC";
+        } else if ((conceptNames.indexOf("industrial organisation") > -1) || (conceptNames.indexOf("industry person") > -1)){
+          result = "IND";
+        } else {
+          result = "Unknown";
+        }
+
+        return result;
+      },
+      isConcept: function (inst, conName) {
+        var result =
+          ((inst.concept_names != null) && (inst.concept_names.indexOf(conName) > -1)) ||
+          ((inst.direct_concept_names != null) && (inst.direct_concept_names.indexOf(conName) > -1)) ||
+          ((inst.inherited_concept_names != null) && (inst.inherited_concept_names.indexOf(conName) > -1))
+
+          return result;
       }
     };
   }]);

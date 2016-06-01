@@ -80,7 +80,7 @@ angular.module('itapapersApp')
         angular.element("svg.chart").remove();
         // Wait for doms to be created
         $timeout(function() {
-          drawNarrativeChart($stateParams.authorId, true, false, false, $scope.data, urls.server, $scope.scienceLibrary);
+          drawNarrativeChart($stateParams.authorId, true, false, false, $scope.data, urls.server, urls.ceStore, $scope.scienceLibrary, utils);
         }, 100);
       }
 
@@ -211,7 +211,7 @@ angular.module('itapapersApp')
             // organisation properties
             var orgID   = relatedOrganisation._id;
             var orgName = utils.getProperty(organisationProps, ce.organisation.name);
-            var orgType = utils.getProperty(organisationProps, ce.organisation.type);
+            var orgType = utils.getIndustryFor(relatedOrganisation);
 
             var organisationToAdd = {
               id: orgID,
@@ -416,8 +416,9 @@ angular.module('itapapersApp')
             var coAuthorType = null;
 
             if (coAuthorEmployer && relatedInstances[coAuthorEmployer]) {
-              var employerProps = relatedInstances[coAuthorEmployer].property_values;
-              coAuthorType = utils.getUnknownProperty(employerProps, ce.organisation.type);
+              var employer = relatedInstances[coAuthorEmployer];
+              var employerProps = employer.property_values;
+              coAuthorType = utils.getIndustryFor(employer);
             }
 
             $scope.coauthorsList.push({
@@ -467,7 +468,7 @@ angular.module('itapapersApp')
 
         // Draw charts
         if ($scope.currentView === $scope.views[0]) {
-          drawNarrativeChart($stateParams.authorId, true, false, false, data, urls.server, $scope.scienceLibrary);
+          drawNarrativeChart($stateParams.authorId, true, false, false, data, urls.server, urls.ceStore, $scope.scienceLibrary, utils);
         }
 
         generateCSVData();

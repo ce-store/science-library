@@ -144,11 +144,10 @@ angular.module('itapapersApp')
       $scope.list       = [];
       $scope.areaNames  = [];
       $scope.projects   = {};
-      var csvData       = [];
-      var csvHeader;
-      var csvName;
+//      var csvData       = [];
+//      var csvHeader;
+//      var csvName;
       var authorIds = {};
-
       resetTypeCount();
 
       // loop through results and extract relevant data
@@ -160,8 +159,8 @@ angular.module('itapapersApp')
 
         if ($scope.listName === $scope.listTypes.papers) {
           // papers page
-          var paperProps = instances[data[i][0]].property_values;
-          citationProps = instances[data[i][1]].property_values;
+          var paperProps = instances[id].property_values;
+          //citationProps = instances[data[i][1]].property_values;
 
           // paper properties
           var paperName = utils.getUnknownProperty(paperProps, ce.paper.title);
@@ -174,7 +173,7 @@ angular.module('itapapersApp')
           var paperAuthorString = utils.getProperty(paperProps, ce.paper.fullAuthorString);
 
           // set types for duplicates and non-duplicates
-          var types = data[i][3];
+          var types = data[i][1];
           var j;
           if (types.length > 1) {
             type = utils.sortTypes(types);
@@ -193,7 +192,7 @@ angular.module('itapapersApp')
           for (j = 0; j < type.length; ++j) {
             className.push(utils.getClassName(type[j]));
 
-            csvData.push([id, paperName, paperCitationCount, type[j], paperVenue, paperAuthorString]);
+//            csvData.push([id, paperName, paperCitationCount, type[j], paperVenue, paperAuthorString]);
           }
 
           // push data to list
@@ -211,17 +210,17 @@ angular.module('itapapersApp')
         } else if ($scope.listName === $scope.listTypes.authors) {
           // authors page
           var authorProps = instances[data[i][0]].property_values;
-          citationProps = instances[data[i][1]].property_values;
+//          citationProps = instances[data[i][1]].property_values;
 
           // author properties
-          var authorName = data[i][3];
+          var authorName = utils.getProperty(authorProps, ce.author.fullName);
           var authorCitationCount = utils.getIntProperty(authorProps, ce.author.localCitationCount);
           var authorHIndex = utils.getIntProperty(authorProps, ce.author.localHIndex);
           var authorDocumentCount = utils.getIntProperty(authorProps, ce.author.documentCount);
           var authorExternalCount = utils.getIntProperty(authorProps, ce.author.externalDocumentCount);
           var authorCoAuthorCount = utils.getIntProperty(authorProps, ce.author.coAuthorCount);
 
-          csvData.push([id, authorName, authorCitationCount, authorHIndex]);
+  //        csvData.push([id, authorName, authorCitationCount, authorHIndex]);
 
           if (!authorIds[id]) {
             authorIds[id] = true;
@@ -240,7 +239,7 @@ angular.module('itapapersApp')
           // venues page
           var name = data[i][1];
 
-          csvData.push([id, name]);
+//          csvData.push([id, name]);
 
           // push data to list
           $scope.list.push({
@@ -283,13 +282,13 @@ angular.module('itapapersApp')
           var orgDocumentCount = utils.getIntProperty(orgProps, ce.organisation.documentCount);
           var orgExternalCount = utils.getIntProperty(orgProps, ce.organisation.externalDocumentCount);
           var orgCitationCount = utils.getIntProperty(orgProps, ce.organisation.citationCount);
-          var orgType = utils.getProperty(orgProps, ce.organisation.type);
+          var orgType = utils.getIndustryFor(instances[id]);
 
           if (orgType) {
             className = utils.getClassName(orgType);
           }
 
-          csvData.push([id, orgName, orgType, orgEmployeeList.length, orgDocumentCount]);
+//          csvData.push([id, orgName, orgType, orgEmployeeList.length, orgDocumentCount]);
 
           // push data to list
           $scope.list.push({
@@ -309,7 +308,7 @@ angular.module('itapapersApp')
           // topic properties
           var topicDocumentCount = utils.getIntProperty(topicProps, ce.topic.documentCount);
 
-          csvData.push([id, topicDocumentCount]);
+//          csvData.push([id, topicDocumentCount]);
 
           // push data to list
           $scope.list.push({
@@ -318,29 +317,6 @@ angular.module('itapapersApp')
           });
         }
       }
-
-      // add CSV data
-      if ($scope.listName === $scope.listTypes.papers) {
-        csvHeader = ["paper id", "name", "citation count", "paper type", "venue", "authors"];
-        csvName = "papers";
-      } else if ($scope.listName === $scope.listTypes.authors) {
-        csvHeader = ["author id", "name", "citation count", "h-index count"];
-        csvName = "authors";
-      } else if ($scope.listName === $scope.listTypes.venues) {
-        csvHeader = ["venue id", "name"];
-        csvName = "venues";
-      } else if ($scope.listName === $scope.listTypes.projects) {
-        csvHeader = ["technical area id", "technical area name", "project id", "project name", "papers count"];
-        csvName = "projects";
-      } else if ($scope.listName === $scope.listTypes.organisations) {
-        csvHeader = ["organisation id", "name", "type", "employee count", "papers count"];
-        csvName = "organisations";
-      }
-      // TODO: add CSV data for coauthors and topics
-
-      csv.setName(csvName);
-      csv.setHeader(csvHeader);
-      csv.setData(csvData);
     };
 
     var getData = function() {

@@ -201,7 +201,7 @@ angular.module('itapapersApp')
 
               // organisation properties
               var orgName = utils.getUnknownProperty(orgProps, ce.organisation.name);
-              var orgType = utils.getUnknownProperty(orgProps, ce.organisation.type);
+              var orgType = utils.getIndustryFor(instances[organisationId]);
 
               var bubble = {
                 id:         organisationId,

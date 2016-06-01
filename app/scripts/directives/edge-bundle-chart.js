@@ -43,7 +43,9 @@
       var sectors = {};
       var secList = [];
 
-      var orgsData;
+      var govOrgsData;
+      var acOrgsData;
+      var indOrgsData;
       var peopleData;
       var peopleOrgsData;
       var papersData;
@@ -157,7 +159,9 @@
       var secColor = d3.scale.ordinal().domain(Object.keys(sectorNames)).range(baseColors);
 
       function getData() {
-        loadOrgs()
+        loadGovOrgs()
+          .then(loadAcOrgs)
+          .then(loadIndOrgs)
           .then(loadPeople)
           .then(loadPeopleOrgs)
           .then(loadPapers)
@@ -169,12 +173,26 @@
 
       getData();
 
-      function loadOrgs() {
-        return store.getOrganisationDetails()
+      function loadGovOrgs() {
+        return store.getGovOrganisationDetails()
           .then(function (data) {
-            orgsData = data;
+            govOrgsData = data;
           });
       }
+
+      function loadAcOrgs() {
+          return store.getAcOrganisationDetails()
+            .then(function (data) {
+              acOrgsData = data;
+            });
+        }
+
+      function loadIndOrgs() {
+          return store.getIndOrganisationDetails()
+            .then(function (data) {
+              indOrgsData = data;
+            });
+        }
 
       function loadPeople() {
         return store.getPersonDetails()
@@ -237,14 +255,14 @@
         }
       }
 
-      function buildOrgs() {
-        if (orgsData && orgsData.results) {
-          orgsData.results.forEach(function(el) {
+      function buildGovOrgs() {
+        if (govOrgsData && govOrgsData.results) {
+          govOrgsData.results.forEach(function(el) {
             var org = el[0];
             var name = el[1];
-            var shortName = el[2];
-            var sector = el[3];
-            var country = el[4];
+            var shortName = el[0];
+            var sector = "GOV";
+            var country = el[2];
 
             orgs[org] = {
               id: org,
@@ -258,6 +276,50 @@
           });
         }
       }
+
+      function buildIndOrgs() {
+          if (indOrgsData && indOrgsData.results) {
+            indOrgsData.results.forEach(function(el) {
+              var org = el[0];
+              var name = el[1];
+              var shortName = el[0];
+              var sector = "IND";
+              var country = el[2];
+
+              orgs[org] = {
+                id: org,
+                name: name,
+                shortName: shortName,
+                sector: sector,
+                country: country,
+                authors: []
+              };
+              sectors[sector] = sectors[sector] || {id:sector, orgs:[]};
+            });
+          }
+        }
+
+      function buildAcOrgs() {
+          if (acOrgsData && acOrgsData.results) {
+            acOrgsData.results.forEach(function(el) {
+              var org = el[0];
+              var name = el[1];
+              var shortName = el[0];
+              var sector = "AC";
+              var country = el[2];
+
+              orgs[org] = {
+                id: org,
+                name: name,
+                shortName: shortName,
+                sector: sector,
+                country: country,
+                authors: []
+              };
+              sectors[sector] = sectors[sector] || {id:sector, orgs:[]};
+            });
+          }
+        }
 
       function buildAuthorOrgs() {
         if (peopleOrgsData && peopleOrgsData.results) {
@@ -324,7 +386,9 @@
 
         buildPeople();
         buildPapers();
-        buildOrgs();
+        buildGovOrgs();
+        buildAcOrgs();
+        buildIndOrgs();
         buildAuthorOrgs();
 
         var compareCoAuthors = function(a, b) {

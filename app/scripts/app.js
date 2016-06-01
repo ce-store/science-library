@@ -133,7 +133,7 @@ angular
         controller: "StatisticsCtrl"
       })
       .state('compute', {
-        url: "/compute",
+        url: "/science-library/compute",
         templateUrl: "views/science-library/compute.html",
         controller: "ComputeCtrl"
       })

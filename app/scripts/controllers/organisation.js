@@ -116,8 +116,8 @@ angular.module('itapapersApp')
 
         // organisation properties
         var name = utils.getUnknownProperty(properties, ce.organisation.name);
-        var shortName = utils.getUnknownProperty(properties, ce.organisation.shortName);
-        var type = utils.getProperty(properties, ce.organisation.type);
+        var shortName = data.main_instance._id;
+        var type = utils.getIndustryFor(data.main_instance);
         var affiliation = utils.getProperty(properties, ce.organisation.affiliation);
         var documentList = utils.getListProperty(properties, ce.organisation.documentList);
         var employeeList = utils.getListProperty(properties, ce.organisation.employeeList);
