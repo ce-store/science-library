@@ -251,7 +251,7 @@ angular.module('itapapersApp')
 
             // paper properties
             var paperName = utils.getUnknownProperty(paperProps, ce.paper.title);
-            var paperType = utils.getType(instances[paperId].direct_concept_names);
+            var paperType = utils.getType(instances[paperId].direct_concept_names || instances[paperId].concept_names);
             var paperCitationCount = utils.getIntProperty(paperProps, ce.paper.citationCount);
 
             // Sort papers

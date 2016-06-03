@@ -27,7 +27,7 @@ angular.module('itapapersApp')
           // paper properties
           var citationCount = utils.getIntProperty(paperProps, ce.paper.citationCount);
           var variantList = utils.getListProperty(paperProps, ce.paper.variantList);
-          var paperType = utils.getType(thisInst.concept_names || thisInst.direct_concept_names);
+          var paperType = utils.getType(thisInst.direct_concept_names || thisInst.concept_names);
 
           // ignore duplicates
           if (!documentMap[paperId]) {
@@ -312,14 +312,35 @@ angular.module('itapapersApp')
       }
     }
 
-    function getAuthor (authorName) {
+    function getAuthor (authorName, ce) {
       if (localStorageService.isSupported) {
         var val = localStorageService.get(authorName);
 
         if (val) {
           return $q.when(val);
         } else {
-          var url = urls.server + urls.ceStore + "/instances/" + authorName + "?showStats=true&steps=2&style=summary&referringInstances=false&limitRelationships=default%20organisation,wrote,author,final%20date,citation%20count,co-author,co-author%20statistic";
+          var limRels = "";
+          var onlyProps = "";
+          var url = null;
+
+          limRels += ce.author.organisation + ",";
+          limRels += ce.author.writesFor + ",";;
+          limRels += ce.author.documentList + ",";;
+          limRels += ce.author.writesAbout + ",";
+          limRels += ce.author.coAuthorList + ",";
+          limRels += ce.author.coAuthorStatistic + ",";
+          limRels += ce.paper.finalDate + ",";
+          limRels += ce.paper.authorList + ",";
+
+          onlyProps += ce.author.fullName;
+
+          url = urls.server + urls.ceStore + "/instances/" + authorName;
+          url += "?showStats=false";
+          url += "&steps=2";
+          url += "&style=minimal";
+          url += "&referringInstances=false";
+          url += "&limitRelationships=" + limRels;
+//          url += "&onlyProperties=" + onlyProps;
 
           return $http.get(url)
             .then(function(response) {

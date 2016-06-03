@@ -25,7 +25,7 @@ angular.module('itapapersApp')
           for (var id in response.data.instances) {
             if (response.data.instances.hasOwnProperty(id)) {
               var instance = response.data.instances[id];
-              var concepts = instance.direct_concept_names;
+              var concepts = instance.direct_concept_names || instance.concept_names;
               var properties = instance.property_values;
 
               if (processedIds.indexOf(id) < 0) {

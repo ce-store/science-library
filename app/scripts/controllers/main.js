@@ -103,11 +103,6 @@ angular.module('itapapersApp')
       getData();
     };
 
-    $scope.reset = function () {
-      localStorageService.clearAll();
-      localStorage.clear();
-    };
-
     // get window size
     $scope.width  = window.innerWidth;
     $scope.height = window.innerHeight;

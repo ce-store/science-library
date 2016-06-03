@@ -41,37 +41,37 @@ angular.module('itapapersApp')
       refreshHighlight();
     });
 
-    var generateCSVData = function() {
-      // csv
-      var csvData = [];
-      if ($scope.currentView === $scope.views[0] || $scope.currentView === $scope.views[1]) {
-        for (var paper in $scope.papersList) {
-          if ($scope.papersList.hasOwnProperty(paper)) {
-            var p = $scope.papersList[paper];
-            for (var i in p.type) {
-              if (p.type.hasOwnProperty(i)) {
-                csvData.push([p.id, p.name, p.citations, p.type[i], p.venue, p.authors]);
-              }
-            }
-          }
-        }
-
-        csv.setData(csvData);
-        csv.setHeader(["paper id", "paper name", "citation count", "paper type", "venue", "authors"]);
-        csv.setName($stateParams.authorId + "_papers");
-      } else {
-        for (var coAuthor in $scope.coauthorsList) {
-          if ($scope.coauthorsList.hasOwnProperty(coAuthor)) {
-            var ca = $scope.coauthorsList[coAuthor];
-            csvData.push([ca.id, ca.name, ca.count]);
-          }
-        }
-
-        csv.setData(csvData);
-        csv.setHeader(["author id", "author name", "co-authored papers count"]);
-        csv.setName($stateParams.authorId + "_coauthors");
-      }
-    };
+//    var generateCSVData = function() {
+//      // csv
+//      var csvData = [];
+//      if ($scope.currentView === $scope.views[0] || $scope.currentView === $scope.views[1]) {
+//        for (var paper in $scope.papersList) {
+//          if ($scope.papersList.hasOwnProperty(paper)) {
+//            var p = $scope.papersList[paper];
+//            for (var i in p.type) {
+//              if (p.type.hasOwnProperty(i)) {
+//                csvData.push([p.id, p.name, p.citations, p.type[i], p.venue, p.authors]);
+//              }
+//            }
+//          }
+//        }
+//
+//        csv.setData(csvData);
+//        csv.setHeader(["paper id", "paper name", "citation count", "paper type", "venue", "authors"]);
+//        csv.setName($stateParams.authorId + "_papers");
+//      } else {
+//        for (var coAuthor in $scope.coauthorsList) {
+//          if ($scope.coauthorsList.hasOwnProperty(coAuthor)) {
+//            var ca = $scope.coauthorsList[coAuthor];
+//            csvData.push([ca.id, ca.name, ca.count]);
+//          }
+//        }
+//
+//        csv.setData(csvData);
+//        csv.setHeader(["author id", "author name", "co-authored papers count"]);
+//        csv.setName($stateParams.authorId + "_coauthors");
+//      }
+//    };
 
     $scope.showView = function (view) {
       $scope.currentView = view;
@@ -80,7 +80,7 @@ angular.module('itapapersApp')
         angular.element("svg.chart").remove();
         // Wait for doms to be created
         $timeout(function() {
-          drawNarrativeChart($stateParams.authorId, true, false, false, $scope.data, urls.server, urls.ceStore, $scope.scienceLibrary, utils);
+          drawNarrativeChart($stateParams.authorId, true, false, false, $scope.data, urls.server, urls.ceStore, $scope.scienceLibrary, utils, ce);
         }, 100);
       }
 
@@ -92,7 +92,7 @@ angular.module('itapapersApp')
         $scope.header = $scope.coAuthorsHeader;
       }
 
-      generateCSVData();
+//      generateCSVData();
     };
 
     var refreshHighlight = function() {
@@ -162,11 +162,11 @@ angular.module('itapapersApp')
     elem.css("height", height + "px");
     elem.css("max-height", height + "px");
 
-    store.getAuthor($stateParams.authorId)
+    store.getAuthor($stateParams.authorId, ce)
       .then(function(data) {
         $scope.data = data;
-        var properties = data.structured_response.main_instance.property_values;
-        var relatedInstances = data.structured_response.related_instances;
+        var properties = data.main_instance.property_values;
+        var relatedInstances = data.related_instances;
 
         // get properties
         var fullName = utils.getUnknownProperty(properties, ce.author.fullName);
@@ -295,7 +295,7 @@ angular.module('itapapersApp')
           for (i = 0; i < documentList.length; ++i) {
             var paperId   = documentList[i];
             var paper     = relatedInstances[paperId];
-            var paperType = utils.getType(paper.direct_concept_names);
+            var paperType = utils.getType(paper.direct_concept_names || paper.concept_names);
             var paperProps = paper.property_values;
 
             // paper properties
@@ -468,10 +468,10 @@ angular.module('itapapersApp')
 
         // Draw charts
         if ($scope.currentView === $scope.views[0]) {
-          drawNarrativeChart($stateParams.authorId, true, false, false, data, urls.server, urls.ceStore, $scope.scienceLibrary, utils);
+          drawNarrativeChart($stateParams.authorId, true, false, false, data, urls.server, urls.ceStore, $scope.scienceLibrary, utils, ce);
         }
 
-        generateCSVData();
+//        generateCSVData();
         refreshHighlight();
 
         $scope.showView($scope.views[0]);

@@ -76,8 +76,8 @@ angular.module('itapapersApp')
         // find papers written by all authors
         for (i = 0; i < results.length; ++i) {
           var result = results[i];
-          var authorId = result.structured_response.main_instance._id;
-          var props = result.structured_response.main_instance.property_values;
+          var authorId = result.main_instance._id;
+          var props = result.main_instance.property_values;
 
           // author properties
           var name = utils.getProperty(props, ce.author.fullName);
@@ -110,14 +110,14 @@ angular.module('itapapersApp')
           }
         }
 
-        var relatedInstances = results[0].structured_response.related_instances;
+        var relatedInstances = results[0].related_instances;
         var documentMap = {};
         var csvData = [];
 
         // generate papers list with details
         for (i = 0; i < documentList.length; ++i) {
           var paperId = documentList[i];
-          var paperType = utils.getType(relatedInstances[paperId].direct_concept_names);
+          var paperType = utils.getType(relatedInstances[paperId].direct_concept_names || relatedInstances[paperId].concept_names);
           var paperProps = relatedInstances[paperId].property_values;
 
           // paper properties

@@ -156,8 +156,9 @@ angular.module('itapapersApp')
         for (var id in relatedInstances) {
           if (relatedInstances.hasOwnProperty(id)) {
             var instance = relatedInstances[id];
+            var conNames = instance.direct_concept_names || instance.concept_names;
 
-            if (instance.direct_concept_names.indexOf("document") > -1) {
+            if (conNames.indexOf("document") > -1) {
               var paperProps = instance.property_values;
 
               // paper properties
@@ -184,7 +185,7 @@ angular.module('itapapersApp')
                 }
 
                 // get paper type and collapse variants
-                var paperType = utils.getType(instance.direct_concept_names);
+                var paperType = utils.getType(instance.direct_concept_names || instance.concept_names);
                 if (!variantFound) {
                   documentMap[id] = {
                     title:      paperName,
@@ -209,7 +210,7 @@ angular.module('itapapersApp')
                   }
                 }
               }
-            } else if (instance.direct_concept_names.indexOf("topic-person statistic") > -1) {
+            } else if (conNames.indexOf("topic-person statistic") > -1) {
               topicProps = instance.property_values;
 
               // topic-person statistic properties
@@ -239,7 +240,7 @@ angular.module('itapapersApp')
                   coAuthorCount:  authorCoAuthorCount
                 });
               }
-            } else if (instance.direct_concept_names.indexOf("topic-organisation statistic") > -1) {
+            } else if (conNames.indexOf("topic-organisation statistic") > -1) {
               topicProps = instance.property_values;
 
               // topic-organisation statistic properties

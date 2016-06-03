@@ -80,7 +80,7 @@ angular.module('itapapersApp')
             var paperId = properties.paper[i];
             var paperInst = relatedInstances[paperId];
             var paperProps = paperInst.property_values;
-            var paperType = utils.getType(paperInst.direct_concept_names);
+            var paperType = utils.getType(paperInst.direct_concept_names || paperInst.concept_names);
 
             var citationsId = paperInst.property_values["citation count"];
             var citations = 0;

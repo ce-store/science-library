@@ -60,7 +60,7 @@ angular.module('itapapersApp')
         var i = 0;
         var csvData = [];
 
-        var directConceptNames = data.main_instance.direct_concept_names;
+        var directConceptNames = data.main_instance.direct_concept_names || data.main_instance.concept_names;
         var properties = data.main_instance.property_values;
         var relatedInstances = data.related_instances;
 
@@ -252,7 +252,7 @@ angular.module('itapapersApp')
         if (variantList) {
           for (var k = 0; k < variantList.length; ++k) {
             var variantId = variantList[k];
-            var type = utils.getType(relatedInstances[variantId].direct_concept_names);
+            var type = utils.getType(relatedInstances[variantId].direct_concept_names || relatedInstances[variantId].concept_names);
             var variantProps = relatedInstances[variantId].property_values;
 
             // variant properties

@@ -722,26 +722,15 @@ function draw_nodes(scenes, svg) {
 
     // TODO: Show posters on mouseover
     if (d.char_node !== true) {
-      //DSB - switch request to open source ce-store (and remove hardcoded localhost)
-      var url = server + ceStore + "/instances/" + d.paper;
+      // Remove other titles (overlapping may cause this)
+      d3.selectAll("[class=\"paper-title\"]").remove();
+      d3.selectAll("[class=\"paper-title-placeholder\"]")
+        .attr("class", "hidden paper-title-placeholder");
 
-      d3.json(url, function(error, data) {
-        if (error) {
-          throw error;
-        }
-
-        var title = data.property_values.title[0];
-
-        // Remove other titles (overlapping may cause this)
-        d3.selectAll("[class=\"paper-title\"]").remove();
-        d3.selectAll("[class=\"paper-title-placeholder\"]")
-          .attr("class", "hidden paper-title-placeholder");
-
-        d3.select("#title-box")
-          .append("text")
-            .attr("class", "paper-title")
-            .text(title);
-      });
+      d3.select("#title-box")
+        .append("text")
+          .attr("class", "paper-title")
+          .text(d.title);
     }
   } // mouseover
 
@@ -799,7 +788,7 @@ function draw_nodes(scenes, svg) {
     .attr("class", "scene")
     .style("fill", function(d) {
       if (d.paper) {
-        var directConceptNames = rels[d.paper].direct_concept_names;
+        var directConceptNames = rels[d.paper].direct_concept_names || rels[d.paper].concept_names;
         var inheritedConceptNames = rels[d.paper].inherited_concept_names;
         var papers = ["#5596e6", "#00b299", "#7c56a5", "#f49c4e", "#cc3f40", "#94a3ab"];
 
@@ -946,9 +935,9 @@ function draw_links(links, svg) {
     .on("mouseout", mouseout_cb);
 } // draw_links
 
-function drawNarrativeChart(safe_name, tie_breaker, center_sort, collapse, data, svr, ces, sl, utils) {
-  var vals = data.structured_response.main_instance.property_values;
-  rels = data.structured_response.related_instances;
+function drawNarrativeChart(safe_name, tie_breaker, center_sort, collapse, data, svr, ces, sl, utils, ce) {
+  var vals = data.main_instance.property_values;
+  rels = data.related_instances;
   var i = 0;
 
   var authorMap = {};
@@ -965,30 +954,30 @@ function drawNarrativeChart(safe_name, tie_breaker, center_sort, collapse, data,
     "GOV": 2
   };
 
-  var defOrg = rels[vals["default organisation"][0]];
+  var defOrg = rels[vals[ce.author.organisation][0]];
   var employerType = utils.getIndustryFor(defOrg);
 
   var character = {
-    name: vals["full name"][0],
+    name: vals[ce.author.fullName][0],
     id: 0,
     group: employerType
   };
 
   xchars.push(character);
-  authorMap[data.structured_response.main_instance._id] = character.id;
-  authorIndex[character.id] = data.structured_response.main_instance._id;
+  authorMap[data.main_instance._id] = character.id;
+  authorIndex[character.id] = data.main_instance._id;
 
-  if (vals["co-author"]) {
-    for (i = 0; i < vals["co-author"].length; ++i) {
-      var org = rels[vals["co-author"][i]].property_values["default organisation"];
+  if (vals[ce.author.coAuthorList]) {
+    for (i = 0; i < vals[ce.author.coAuthorList].length; ++i) {
+      var org = rels[vals[ce.author.coAuthorList][i]].property_values[ce.author.organisation];
       org = org ? org[0] : "unknown";
       var type;
       if (rels[org]) {
         type = utils.getIndustryFor(rels[org]);
       }
 
-      var c = rels[vals["co-author"][i]];
-      var cName = c.property_values["full name"] ? c.property_values["full name"][0] : c._id;
+      var c = rels[vals[ce.author.coAuthorList][i]];
+      var cName = c.property_values[ce.author.fullName] ? c.property_values[ce.author.fullName][0] : c._id;
 
       character = {
         name: cName,
@@ -1009,16 +998,16 @@ function drawNarrativeChart(safe_name, tie_breaker, center_sort, collapse, data,
 
   var paperAndDates = [];
 
-  if (vals.wrote) {
-  for (i = 0; i < vals.wrote.length; ++i) {
-      if (rels[vals.wrote[i]].property_values["final date"]) {
-        var paperDate = rels[vals.wrote[i]].property_values["final date"][0];
+  if (vals[ce.author.documentList]) {
+  for (i = 0; i < vals[ce.author.documentList].length; ++i) {
+      if (rels[vals[ce.author.documentList][i]].property_values[ce.paper.finalDate]) {
+        var paperDate = rels[vals[ce.author.documentList][i]].property_values[ce.paper.finalDate][0];
         var dateVals = rels[paperDate].property_values;
         var date;
 
-        var year = dateVals.year[0];
-        var month = dateVals.month ? dateVals.month[0] : 1;
-        var day = dateVals.day ? dateVals.day[0] : 1;
+        var year = dateVals[ce.date.year][0];
+        var month = dateVals[ce.date.month] ? dateVals[ce.date.month][0] : 1;
+        var day = dateVals[ce.date.day] ? dateVals[ce.date.day][0] : 1;
 
         //Javascript dates have month numbers starting at 0 but the
         //value from the ce-store has month numbers starting at 1
@@ -1030,7 +1019,8 @@ function drawNarrativeChart(safe_name, tie_breaker, center_sort, collapse, data,
 
         paperAndDates.push({
           date: date,
-          paper: vals.wrote[i]
+          paper: vals[ce.author.documentList][i],
+          title: rels[vals[ce.author.documentList][i]].property_values[ce.paper.title][0]
         });
       }
     }
@@ -1068,14 +1058,15 @@ function drawNarrativeChart(safe_name, tie_breaker, center_sort, collapse, data,
         duration: nextTimestamp - currentTimestamp,
         start: currentTimestamp,
         paper: paperAndDates[i].paper,
+        title: paperAndDates[i].title,
         id: i
       };
 
       var paperVals = rels[paperAndDates[i].paper].property_values;
 
-      for (var j = 0; j < paperVals.author.length; ++j) {
-        var authorVals = rels[paperVals.author[j]].property_values;
-        var authorId = authorVals["author person"];
+      for (var j = 0; j < paperVals[ce.paper.authorList].length; ++j) {
+        var authorVals = rels[paperVals[ce.paper.authorList][j]].property_values;
+        var authorId = authorVals[ce.orderedAuthor.person];
 
         if (authorId) {
           scene.chars.push(authorMap[authorId]);
@@ -1108,12 +1099,14 @@ function drawNarrativeChart(safe_name, tie_breaker, center_sort, collapse, data,
       } else {
         start = parseInt(jscenes[i].start, 10);
       }
+
       var chars = jscenes[i].chars;
       //if (chars.length == 0) continue;
       scenes[scenes.length] = new SceneNode(jscenes[i].chars,
         start, duration,
         parseInt(jscenes[i].id, 10), jscenes[i].paper);
       scenes[scenes.length - 1].comic_name = safe_name;
+      scenes[scenes.length - 1].title = jscenes[i].title;
       total_panels += duration;
     } // for
 
@@ -1218,7 +1211,6 @@ function drawNarrativeChart(safe_name, tie_breaker, center_sort, collapse, data,
         }
       }
     });
-
 
     calculate_node_positions(charsArr, scenes, total_panels,
       width, height, char_scenes, groups, panel_width,

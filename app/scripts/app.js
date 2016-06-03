@@ -137,6 +137,11 @@ angular
         templateUrl: "views/science-library/compute.html",
         controller: "ComputeCtrl"
       })
+      .state('special', {
+        url: "/science-library/special",
+        templateUrl: "views/science-library/special.html",
+        controller: "SpecialCtrl"
+      })
       .state('category', {
         url: "/science-library/:category",
         templateUrl: "views/science-library/main.html",
