@@ -8,7 +8,7 @@
  * Controller of the itapapersApp
  */
 angular.module('itapapersApp')
-  .controller('ComputeCtrl', ['$scope', '$stateParams', 'store', 'urls', function ($scope, $stateParams, store, urls) {
+  .controller('ComputeCtrl', ['$scope', '$stateParams', 'store', 'urls', 'utils', 'definitions', function ($scope, $stateParams, store, urls, utils, ce) {
     store.getDataForCompute()
       .then(function(results) {
           var papers = {};
@@ -24,8 +24,8 @@ angular.module('itapapersApp')
 
           $scope.computedCe = [];
 
-          for (var i in results.data["document"]) {
-            var inst = results.data["document"][i];
+          for (var i in results[ce.concepts.document]) {
+            var inst = results[ce.concepts.document][i];
             inst.instances = {};
             inst.values = {};
 
@@ -39,13 +39,13 @@ angular.module('itapapersApp')
 
             papers[inst._id] = inst;
 
-            if ((inst.direct_concept_names.indexOf("external document") > -1) || (inst.inherited_concept_names.indexOf("external document") > -1)) {
+            if ((inst.concept_names.indexOf(ce.concepts.externalDocument) > -1)) {
                 external_papers[inst._id] = inst;
             }
           }
 
-          for (var i in results.data["ordered author"]) {
-            var inst = results.data["ordered author"][i];
+          for (var i in results[ce.concepts.orderedAuthor]) {
+            var inst = results[ce.concepts.orderedAuthor][i];
             inst.instances = {};
             inst.values = {};
 
@@ -54,8 +54,8 @@ angular.module('itapapersApp')
             oas[inst._id] = inst;
           }
 
-          for (var i in results.data["published person"]) {
-            var inst = results.data["published person"][i];
+          for (var i in results[ce.concepts.publishedPerson]) {
+            var inst = results[ce.concepts.publishedPerson][i];
             inst.instances = {};
             inst.values = {};
 
@@ -67,8 +67,8 @@ angular.module('itapapersApp')
             people[inst._id] = inst;
           }
 
-          for (var i in results.data["published organisation"]) {
-            var inst = results.data["published organisation"][i];
+          for (var i in results[ce.concepts.publishedOrganisation]) {
+            var inst = results[ce.concepts.publishedOrganisation][i];
             inst.instances = {};
             inst.values = {};
 
@@ -77,16 +77,16 @@ angular.module('itapapersApp')
             organisations[inst._id] = inst;
           }
 
-          for (var i in results.data["paper citation count"]) {
-              var inst = results.data["paper citation count"][i];
+          for (var i in results[ce.concepts.paperCitationCount]) {
+              var inst = results[ce.concepts.paperCitationCount][i];
               inst.instances = {};
               inst.values = {};
 
               citations[inst._id] = inst;
           }
 
-          for (var i in results.data["co-author statistic"]) {
-            var inst = results.data["co-author statistic"][i];
+          for (var i in results[ce.concepts.coAuthorStatistic]) {
+            var inst = results[ce.concepts.coAuthorStatistic][i];
             inst.instances = {};
             inst.values = {};
 
@@ -95,8 +95,8 @@ angular.module('itapapersApp')
             cas[inst._id] = inst;
           }
 
-          for (var i in results.data["topic-person statistic"]) {
-            var inst = results.data["topic-person statistic"][i];
+          for (var i in results[ce.concepts.topicPersonStatistic]) {
+            var inst = results[ce.concepts.topicPersonStatistic][i];
             inst.instances = {};
             inst.values = {};
 
@@ -105,8 +105,8 @@ angular.module('itapapersApp')
             tps[inst._id] = inst;
           }
 
-          for (var i in results.data["topic-organisation statistic"]) {
-            var inst = results.data["topic-organisation statistic"][i];
+          for (var i in results[ce.concepts.topicOrganisationStatistic]) {
+            var inst = results[ce.concepts.topicOrganisationStatistic][i];
             inst.instances = {};
             inst.values = {};
 
@@ -338,9 +338,7 @@ angular.module('itapapersApp')
               var type = null;
 
               if (org) {
-                if (org.property_values["type"]) {
-                  type = org.property_values["type"][0];
-                }
+                type = utils.getIndustryFor(org);
 
                 if (type != null) {
                   if (types.indexOf(type) == -1) {
@@ -349,7 +347,7 @@ angular.module('itapapersApp')
                 }
               }
 
-              if (person.direct_concept_names.indexOf("core person") > -1) {
+              if (person.concept_names.indexOf(ce.concepts.corePerson) > -1) {
                 weight += 100;
               }
             }
@@ -380,7 +378,7 @@ angular.module('itapapersApp')
             }
 
             if (allOrgs.length == 1) {
-              paper.extraTypes.push("a single institute document");
+              paper.extraTypes.push("a " + ce.concepts.singleInstituteDocument);
             } else {
               var countries = []
 
@@ -401,11 +399,11 @@ angular.module('itapapersApp')
               }
 
               if (allOrgs.length > 1) {
-                paper.extraTypes.push("a collaborative document");
+                paper.extraTypes.push("a " + ce.concepts.collaborativeDocument);
               }
 
               if (countries.length > 1) {
-                  paper.extraTypes.push("an international document");
+                  paper.extraTypes.push("an " + ce.concepts.internationalDocument);
               }
             }
           }
@@ -515,7 +513,7 @@ angular.module('itapapersApp')
               var person = paper.instances["written by"][k];
 
               if (person) {
-                if (person.direct_concept_names.indexOf("core person") > -1) {
+                if (person.concept_names.indexOf(ce.concepts.corePerson) > -1) {
                   if (itaAuthors.indexOf(person) == -1) {
                     itaAuthors.push(person);
                   }
@@ -533,25 +531,25 @@ angular.module('itapapersApp')
               }
             }
 
-            if (paper.extraTypes.indexOf("a single institute document") > -1) {
+            if (paper.extraTypes.indexOf("a " + ce.concepts.singleInstituteDocument) > -1) {
               ++siCount;
             }
-            if (paper.extraTypes.indexOf("a collaborative document") > -1) {
+            if (paper.extraTypes.indexOf("a " + ce.concepts.collaborativeDocument) > -1) {
               ++cCount;
             }
-            if (paper.extraTypes.indexOf("an international document") > -1) {
+            if (paper.extraTypes.indexOf("an " + ce.concepts.internationalDocument) > -1) {
               ++iCount;
             }
-            if (paper.direct_concept_names.indexOf("government document") > -1) {
+            if (paper.concept_names.indexOf(ce.concepts.governmentDocument) > -1) {
               ++gCount;
             }
-            if (paper.direct_concept_names.indexOf("journal paper") > -1) {
+            if (paper.concept_names.indexOf(ce.concepts.journalPaper) > -1) {
               ++jCount;
             }
-            if (paper.direct_concept_names.indexOf("external conference paper") > -1) {
+            if (paper.concept_names.indexOf(ce.concepts.externalConferencePaper) > -1) {
               ++ecCount;
             }
-            if (paper.direct_concept_names.indexOf("patent") > -1) {
+            if (paper.concept_names.indexOf(ce.concepts.patent) > -1) {
               ++pCount;
             }
 

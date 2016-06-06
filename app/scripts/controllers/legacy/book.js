@@ -9,5 +9,4 @@
  */
 angular.module('itapapersApp')
   .controller('BookCtrl', function ($scope, urls) {
-    $scope.home = urls.home;
   });

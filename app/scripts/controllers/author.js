@@ -106,9 +106,9 @@ angular.module('itapapersApp')
         $scope[qa.property + 'Highlight'] = true;
         lastHighlight = qa.property + 'Highlight';
 
-        if (qa.property === 'wrote') {
+        if (qa.property === ce.author.documentList) {
           $scope.showView($scope.views[1]);
-        } else if (qa.property === 'co-author') {
+        } else if (qa.property === ce.author.coAuthorList) {
           $scope.showView($scope.views[2]);
         }
       }
@@ -162,7 +162,7 @@ angular.module('itapapersApp')
     elem.css("height", height + "px");
     elem.css("max-height", height + "px");
 
-    store.getAuthor($stateParams.authorId, ce)
+    store.getAuthor($stateParams.authorId)
       .then(function(data) {
         $scope.data = data;
         var properties = data.main_instance.property_values;
@@ -259,7 +259,7 @@ angular.module('itapapersApp')
         }];
 
         // citations
-        $scope.scholarLink = "https://scholar.google.co.uk/scholar?q=" + properties["full name"][0] + "&btnG=&hl=en&as_sdt=0%2C5";
+        $scope.scholarLink = "https://scholar.google.co.uk/scholar?q=" + properties[ce.author.fullName][0] + "&btnG=&hl=en&as_sdt=0%2C5";
 
         if (relatedInstances[googleCitationCount]) {
           var googleCitationCountProperties = relatedInstances[googleCitationCount].property_values;

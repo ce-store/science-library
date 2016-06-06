@@ -112,7 +112,7 @@ angular.module('itapapersApp')
 
         var relatedInstances = results[0].related_instances;
         var documentMap = {};
-        var csvData = [];
+//        var csvData = [];
 
         // generate papers list with details
         for (i = 0; i < documentList.length; ++i) {
@@ -180,8 +180,8 @@ angular.module('itapapersApp')
 
           // get date properties
           if (paperFinalDate) {
-            var month = relatedInstances[paperFinalDate].property_values.month;
-            var year = relatedInstances[paperFinalDate].property_values.year;
+            var month = relatedInstances[paperFinalDate].property_values[ce.date.month];
+            var year = relatedInstances[paperFinalDate].property_values[ce.date.year];
 
             if (!month) {
               month = '1';
@@ -235,16 +235,16 @@ angular.module('itapapersApp')
 
             for (j = 0; j < paperItem.type.length; ++j) {
               paperItem.class.push(utils.getClassName(paperItem.type[j]));
-              csvData.push([paperItem.id, paperItem.name, paperItem.value, paperItem.type[j], paperItem.venue, paperItem.authors]);
+//              csvData.push([paperItem.id, paperItem.name, paperItem.value, paperItem.type[j], paperItem.venue, paperItem.authors]);
             }
 
             $scope.papers.push(paperItem);
           }
         }
 
-        csv.setData(csvData);
-        csv.setHeader(["paper id", "paper name", "citation count", "paper type", "venue", "authors"]);
-        csv.setName($stateParams.author[0] + "_" + $stateParams.author[1] + "_collaborations");
+//        csv.setData(csvData);
+//        csv.setHeader(["paper id", "paper name", "citation count", "paper type", "venue", "authors"]);
+//        csv.setName($stateParams.author[0] + "_" + $stateParams.author[1] + "_collaborations");
 
         // calculate stats
         $scope.journalPapers    = $scope.typeCount[types[documentTypes.journal]];

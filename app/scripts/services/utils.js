@@ -8,7 +8,7 @@
  * Factory in the itapapersApp.
  */
 angular.module('itapapersApp')
-  .factory('utils', ['documentTypes', function (documentTypes) {
+  .factory('utils', ['documentTypes', 'definitions', function (documentTypes, ce) {
     var types = documentTypes.nameMap;
 
     return {
@@ -84,11 +84,11 @@ angular.module('itapapersApp')
         var result = null;
         var conceptNames = instance.direct_concept_names || instance.concept_names;
 
-        if ((conceptNames.indexOf("government organisation") > -1) || (conceptNames.indexOf("government person") > -1)){
+        if ((conceptNames.indexOf(ce.concepts.governmentOrganisation) > -1) || (conceptNames.indexOf(ce.concepts.governmentPerson) > -1)) {
           result = "GOV";
-        } else if ((conceptNames.indexOf("academic organisation") > -1) || (conceptNames.indexOf("academic person") > -1)){
+        } else if ((conceptNames.indexOf(ce.concepts.academicOrganisation) > -1) || (conceptNames.indexOf(ce.concepts.academicPerson) > -1)) {
           result = "AC";
-        } else if ((conceptNames.indexOf("industrial organisation") > -1) || (conceptNames.indexOf("industry person") > -1)){
+        } else if ((conceptNames.indexOf(ce.concepts.industryOrganisation) > -1) || (conceptNames.indexOf(ce.concepts.industryPerson) > -1)) {
           result = "IND";
         } else {
           result = "Unknown";

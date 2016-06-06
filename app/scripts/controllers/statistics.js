@@ -17,9 +17,9 @@ angular.module('itapapersApp')
     var populateStatistics = function(data) {
       $scope.statistics = [];
 
-      for (var total in data.instances) {
-        if (data.instances.hasOwnProperty(total)) {
-          var properties = data.instances[total].property_values;
+      for (var total in data) {
+        if (data.hasOwnProperty(total)) {
+          var properties = data[total].property_values;
 
           // total properties
           var scope = utils.getProperty(properties, ce.total.scope);

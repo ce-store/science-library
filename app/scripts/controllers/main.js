@@ -135,6 +135,107 @@ angular.module('itapapersApp')
       ($scope.govInput && value.area === "GOV");
     };
 
+    var filterData = function(instances) {
+        var documentMap = {};
+
+        // loop through query results
+        //    - remove results with multiple citations
+        //    - select citation count with most citations
+        //    - collapse variants into one entry
+        for (var i in instances) {
+          var thisInst = instances[i];
+
+          if (utils.isConcept(thisInst, ce.concepts.document)) {
+            var paperId = thisInst._id;
+            var paperProps = thisInst.property_values;
+
+            // paper properties
+            var citationCount = utils.getIntProperty(paperProps, ce.paper.citationCount);
+            var variantList = utils.getListProperty(paperProps, ce.paper.variantList);
+            var paperType = utils.getType(thisInst.direct_concept_names || thisInst.concept_names);
+
+            // ignore duplicates
+            if (!documentMap[paperId]) {
+              var variantFound = false;
+              var maxCitations = 0;
+
+              // find max variant
+              if (variantList) {
+                for (var j = 0; j < variantList.length; ++j) {
+                  var variantId = variantList[j];
+
+                  if (documentMap[variantId]) {
+                    maxCitations = documentMap[variantId].citations > maxCitations ? documentMap[variantId].citations : maxCitations;
+                    variantFound = variantId;
+                  }
+                }
+              }
+
+              // set citation count in map
+              if (!variantFound) {
+                documentMap[paperId] = {
+                  citations: citationCount,
+                  index: i,
+                  types: [paperType]
+                };
+              } else {
+                if (maxCitations < citationCount) {
+                  var variantTypes = documentMap[variantFound].types.slice();
+                  documentMap[variantFound] = null;
+                  documentMap[paperId] = {
+                    citations: citationCount,
+                    index: i,
+                    types: [paperType].concat(variantTypes)
+                  };
+                } else {
+                  documentMap[variantFound].types.push(paperType);
+                }
+              }
+            }
+          }
+        }
+
+        var filteredResults = [];
+        var instancesObj = {};
+
+        // recreate array - test for index to remove duplicate citations
+        for (var i in instances) {
+          var thisInst = instances[i];
+          paperId = thisInst._id;
+
+          instancesObj[paperId] = thisInst;
+
+          if (documentMap[paperId] && documentMap[paperId].index === i) {
+            filteredResults.push([ paperId, documentMap[paperId].types ]);
+          }
+        }
+
+        var filteredData = {
+          instances: instancesObj,
+          data: filteredResults
+        };
+
+        return filteredData;
+      };
+
+      var convertInstancesToResults = function(data) {
+          var idList = [];
+          var instObj = {}
+
+          for (var i in data) {
+            var thisInst = data[i];
+            idList.push([thisInst._id]);
+            instObj[thisInst._id] = thisInst;
+          }
+
+          var result = {
+            results: idList,
+            instances: instObj
+          };
+
+          return result;
+        };
+
     var populateList = function(data, instances) {
       $scope.list       = [];
       $scope.areaNames  = [];
@@ -232,13 +333,14 @@ angular.module('itapapersApp')
           }
         } else if ($scope.listName === $scope.listTypes.venues) {
           // venues page
-          var name = data[i][1];
+          var esInst = instances[data[i][0]];
+          var name = utils.getProperty(esInst.property_values, ce.series.name);
 
 //          csvData.push([id, name]);
 
           // push data to list
           $scope.list.push({
-            id:   id,
+            id:   esInst._id,
             name: name
           });
         } else if ($scope.listName === $scope.listTypes.projects) {
@@ -345,7 +447,9 @@ angular.module('itapapersApp')
 
       if ($scope.listName === $scope.listTypes.papers) {
         store.getDocuments()
-          .then(function(results) {
+          .then(function(rawResults) {
+            var results = filterData(rawResults);
+
             populateList(results.data, results.instances);
 
             $scope.journalPapers = $scope.typeCount[types[$scope.journalType]];
@@ -378,29 +482,34 @@ angular.module('itapapersApp')
           });
       } else if ($scope.listName === $scope.listTypes.authors) {
         store.getPublishedPeople()
-          .then(function(results) {
-            populateList(results.data, results.instances);
-            $scope.options = charts.getScatterData(results, urls.server);
+          .then(function(rawData) {
+            var data = convertInstancesToResults(rawData);
+            populateList(data.results, data.instances);
+            $scope.options = charts.getScatterData(data, urls.server);
           });
       } else if ($scope.listName === $scope.listTypes.venues) {
         store.getEventSeries()
-          .then(function(data) {
-            populateList(data);
+          .then(function(rawData) {
+            var data = convertInstancesToResults(rawData);
+            populateList(data.results, data.instances);
           });
       } else if ($scope.listName === $scope.listTypes.projects) {
         store.getProjects()
-          .then(function(data) {
+          .then(function(rawData) {
+            var data = convertInstancesToResults(rawData);
             populateList(data.results, data.instances);
           });
       } else if ($scope.listName === $scope.listTypes.organisations) {
         store.getOrganisations()
-          .then(function(data) {
+          .then(function(rawData) {
+            var data = convertInstancesToResults(rawData);
             populateList(data.results, data.instances);
             $scope.sunburstData = charts.getSunburstData(data);
           });
       } else if ($scope.listName === $scope.listTypes.topics) {
         store.getTopics()
-          .then(function(data) {
+          .then(function(rawData) {
+            var data = convertInstancesToResults(rawData);
             populateList(data.results, data.instances);
           });
       }

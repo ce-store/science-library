@@ -10,7 +10,7 @@
 angular.module('itapapersApp')
   .service('charts', ['utils', 'definitions', function (utils, ce) {
     var getScatterData = function(results, server) {
-      var data = results.data;
+      var data = results.results;
       var instances = results.instances;
 
       var useStorage = typeof(Storage) !== "undefined";

@@ -3,7 +3,7 @@
     <!-- Title -->
     <p class="center">
       <span class="highlight" ng-class="[{'answer-highlight': full_nameHighlight}]">{{venueName}}</span>
-      ran for
+      contributions over
       <span class="highlight" ng-class="[{'answer-highlight': years_ranHighlight}]">{{yearsRan}} years</span>
     </p>
   </div>
@@ -41,7 +41,7 @@
     <h3>Organisations</h3>
     <ul class="mini results-list">
       <li ng-if="org.fillKey !== 'EVENT'" ng-repeat="org in bubbles | orderBy : 'name' | orderBy : '-radius'">
-        <a ng-href="{{sciencLibrary}}/organisation/{{org.id}}" class="list-name">{{org.name}}</a> <!-- <small class="highlight">({{org.radius / multiplier}})</small> -->
+        <a ng-href="{{scienceLibrary}}/organisation/{{org.id}}" class="list-name">{{org.name}}</a> <!-- <small class="highlight">({{org.radius / multiplier}})</small> -->
       </li>
     </ul>
 

@@ -7,7 +7,7 @@
  * # edgeBundleChart
  */
  angular.module('itapapersApp')
- .directive('edgeBundleChart', ['$parse', '$window', 'store', 'csv', 'urls', function ($parse, $window, store, csv, urls) {
+ .directive('edgeBundleChart', ['$parse', '$window', 'store', 'csv', 'urls', 'definitions', function ($parse, $window, store, csv, urls, ce) {
 
   return {
     restrict:'EA',
@@ -174,49 +174,49 @@
       getData();
 
       function loadGovOrgs() {
-        return store.getGovOrganisationDetails()
+        return store.runCoAuthorQuery(ce.queries.coAuthor.govOrgDetails)
           .then(function (data) {
             govOrgsData = data;
           });
       }
 
       function loadAcOrgs() {
-          return store.getAcOrganisationDetails()
+          return store.runCoAuthorQuery(ce.queries.coAuthor.acOrgDetails)
             .then(function (data) {
               acOrgsData = data;
             });
         }
 
       function loadIndOrgs() {
-          return store.getIndOrganisationDetails()
+          return store.runCoAuthorQuery(ce.queries.coAuthor.indOrgDetails)
             .then(function (data) {
               indOrgsData = data;
             });
         }
 
       function loadPeople() {
-        return store.getPersonDetails()
+        return store.runCoAuthorQuery(ce.queries.coAuthor.personDetails)
           .then(function (data) {
             peopleData = data;
           });
       }
 
       function loadPeopleOrgs() {
-        return store.getPeopleOrgs()
+        return store.runCoAuthorQuery(ce.queries.coAuthor.pubPersonToOrg)
           .then(function (data) {
             peopleOrgsData = data;
           });
       }
 
       function loadPapers() {
-        return store.getPersonDocument()
+        return store.runCoAuthorQuery(ce.queries.coAuthor.personToDoc)
           .then(function (data) {
             papersData = data;
           });
       }
 
       function loadPaperDetails() {
-        return store.getDocumentDetails()
+        return store.runCoAuthorQuery(ce.queries.coAuthor.documentDetails)
           .then(function (data) {
             paperDetailsData = data;
           });

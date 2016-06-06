@@ -11,12 +11,13 @@ angular.module('itapapersApp')
   .service('definitions', function () {
     return {
       paper: {
-        title:    'title',
-        abstract: 'abstract',
-        status:   'status',
-        weight:   'weight',
-        topic:    'is on',
-        project:  'project',
+        title:     'title',
+        abstract:  'abstract',
+        status:    'status',
+        programme: 'programme',
+        weight:    'weight',
+        topic:     'is on',
+        project:   'project',
         variantList:      'variant',
         noteworthyReason: 'noteworthy reason',
         finalDate:        'final date',
@@ -92,13 +93,16 @@ angular.module('itapapersApp')
         endDate:    'end date',
         date:       'corresponds to',
         location:   'occurs at',
+        documentList:   'includes',
         url:        'url',
         eventSeries:   'is part of',
         documentCount: 'paper count',
         citationCount: 'citation count'
       },
       project: {
-        name: 'name'
+        name: 'name',
+        paper: 'paper',
+        technicalArea: 'technical area'
       },
       topic: {
         markerList:     'marker',
@@ -117,7 +121,8 @@ angular.module('itapapersApp')
         name:   'full name',
         years:  'years ran',
         documentCount: 'paper count',
-        citationCount: 'citation count'
+        citationCount: 'citation count',
+        eventList: 'comprises'
       },
       statistic: {
         mainAuthor:     'main-author',
@@ -156,6 +161,50 @@ angular.module('itapapersApp')
         activeItaAuthors:     'active ITA authors',
         activeNonItaAuthors:  'active non-ITA authors',
         citationCount:        'total citations'
+      },
+      concepts: {
+        governmentOrganisation: "government organisation",
+        governmentPerson: "government person",
+        academicOrganisation: "academic organisation",
+        academicPerson: "academic person",
+        industryOrganisation: "industrial organisation",
+        industryPerson: "industry person",
+        document: "document",
+        externalDocument: "external document",
+        orderedAuthor: "ordered author",
+        publishedPerson: "published person",
+        publishedOrganisation: "published organisation",
+        paperCitationCount: "paper citation count",
+        coAuthorStatistic: "co-author statistic",
+        topicPersonStatistic: "topic-person statistic",
+        topicOrganisationStatistic: "topic-organisation statistic",
+        corePerson: "core person",
+        coreOrganisation: "core organisation",
+        singleInstituteDocument: "single institute document",
+        collaborativeDocument: "collaborative document",
+        internationalDocument: "international document",
+        governmentDocument: "government document",
+        journalPaper: "journal paper",
+        externalConferencePaper: "external conference paper",
+        patent: "patent",
+        eventSeries: "event series",
+        total: "total",
+        organisation: "organisation",
+        topic: "topic",
+        project: "project"
+      },
+      queries: {
+        lastUpdated: "last updated",
+        coAuthor: {
+          govOrgDetails: "gov organisation details",
+          acOrgDetails: "ac organisation details",
+          indOrgDetails: "ind organisation details",
+          orgPubs: "organisation publications",
+          personDetails: "person details",
+          pubPersonToOrg: "published person -> organisation",
+          personToDoc: "person -> document",
+          documentDetails: "document details"
+        }
       }
     };
   });
