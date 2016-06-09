@@ -108,21 +108,64 @@ angular.module('itapapersApp')
 
         return url;
       },
-      authorDetails: function (authorId) {
+      authorMainDetails: function (authorId) {
         var url = null;
         var limRels = null;
         var onlyProps = null;
 
-        limRels = ce.author.organisation + ",";
-        limRels += ce.author.writesFor + ",";
-        limRels += ce.author.documentList + ",";
+        limRels = ce.author.writesFor + ",";
         limRels += ce.author.writesAbout + ",";
-        limRels += ce.author.coAuthorList + ",";
-        limRels += ce.author.coAuthorStatistic + ",";
-        limRels += ce.paper.finalDate + ",";
-        limRels += ce.paper.authorList + ",";
+        limRels += ce.author.coAuthorList;
 
-        onlyProps = ce.author.fullName;
+        onlyProps = ce.author.fullName + ",";
+        onlyProps += ce.author.documentList + ",";
+        onlyProps += ce.paper.title;
+
+        url = target + "/instances/" + authorId;
+        url += "?showStats=false";
+        url += "&steps=1";
+        url += "&style=minimal";
+        url += "&referringInstances=false";
+        url += "&limitRelationships=" + limRels;
+        url += "&onlyProperties=" + onlyProps;
+
+        return url;
+      },
+      authorPaperDetails: function (authorId) {
+          var url = null;
+          var limRels = null;
+          var onlyProps = null;
+
+          limRels = ce.author.documentList + ",";
+          limRels += ce.paper.finalDate + ",";
+          limRels += ce.paper.authorList;
+
+          onlyProps = ce.author.fullName + ",";
+          onlyProps += ce.paper.title + ",";
+          onlyProps += ce.date.month + ",";
+          onlyProps += ce.date.year + ",";
+          onlyProps += ce.orderedAuthor.person;
+
+          url = target + "/instances/" + authorId;
+          url += "?showStats=false";
+          url += "&steps=2";
+          url += "&style=minimal";
+          url += "&referringInstances=false";
+          url += "&limitRelationships=" + limRels;
+          url += "&onlyProperties=" + onlyProps;
+
+          return url;
+        },
+      authorCoAuthorDetails: function (authorId) {
+        var url = null;
+        var limRels = null;
+        var onlyProps = null;
+
+        limRels = ce.author.coAuthorStatistic + ",";
+        limRels += ce.statistic.coAuthorList;
+
+        onlyProps = ce.statistic.coAuthorCount  + ",";
+        onlyProps += ce.author.fullName;
 
         url = target + "/instances/" + authorId;
         url += "?showStats=false";
@@ -130,7 +173,7 @@ angular.module('itapapersApp')
         url += "&style=minimal";
         url += "&referringInstances=false";
         url += "&limitRelationships=" + limRels;
-//      url += "&onlyProperties=" + onlyProps;
+        url += "&onlyProperties=" + onlyProps;
 
         return url;
       },

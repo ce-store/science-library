@@ -149,7 +149,7 @@ angular.module('itapapersApp')
         $scope.papersList   = [];
         $scope.authorsList  = [];
         var documentMap = {};
-        var csvData     = [];
+//        var csvData     = [];
 
         // loop through employees
         for (var i = 0; i < employeeList.length; ++i) {
@@ -314,10 +314,10 @@ angular.module('itapapersApp')
                 class:      []
               };
 
-              for (k = 0; k < paperItem.type.length; ++k) {
-                paperItem.class.push(utils.getClassName(paperItem.type[k]));
-                csvData.push([paperItem.id, paperItem.name, paperItem.value, paperItem.type[k], paperItem.venue, paperItem.authors]);
-              }
+//              for (k = 0; k < paperItem.type.length; ++k) {
+//                paperItem.class.push(utils.getClassName(paperItem.type[k]));
+//                csvData.push([paperItem.id, paperItem.name, paperItem.value, paperItem.type[k], paperItem.venue, paperItem.authors]);
+//              }
 
               $scope.papers[thisPaperId] = (paperItem);
               $scope.papersList.push(paperItem);
@@ -325,9 +325,9 @@ angular.module('itapapersApp')
           }
         }
 
-        csv.setData(csvData);
-        csv.setHeader(["paper id", "paper name", "citation count", "paper type", "venue", "authors"]);
-        csv.setName($stateParams.organisationId);
+//        csv.setData(csvData);
+//        csv.setHeader(["paper id", "paper name", "citation count", "paper type", "venue", "authors"]);
+//        csv.setName($stateParams.organisationId);
 
         // build chart data
         if (min && max) {

@@ -954,8 +954,8 @@ function drawNarrativeChart(safe_name, tie_breaker, center_sort, collapse, data,
     "GOV": 2
   };
 
-  var defOrg = rels[vals[ce.author.organisation][0]];
-  var employerType = utils.getIndustryFor(defOrg);
+//  var defOrg = rels[vals[ce.author.writesFor][0]];
+  var employerType = utils.getIndustryFor(data.main_instance);
 
   var character = {
     name: vals[ce.author.fullName][0],
@@ -969,12 +969,14 @@ function drawNarrativeChart(safe_name, tie_breaker, center_sort, collapse, data,
 
   if (vals[ce.author.coAuthorList]) {
     for (i = 0; i < vals[ce.author.coAuthorList].length; ++i) {
-      var org = rels[vals[ce.author.coAuthorList][i]].property_values[ce.author.organisation];
-      org = org ? org[0] : "unknown";
-      var type;
-      if (rels[org]) {
-        type = utils.getIndustryFor(rels[org]);
-      }
+      var coAuthor = rels[vals[ce.author.coAuthorList][i]];
+      var type = utils.getIndustryFor(coAuthor);
+//      var org = coAuthor.property_values[ce.author.writesFor];
+//      org = org ? org[0] : "unknown";
+//      var type;
+//      if (rels[org]) {
+//        type = utils.getIndustryFor(rels[org]);
+//      }
 
       var c = rels[vals[ce.author.coAuthorList][i]];
       var cName = c.property_values[ce.author.fullName] ? c.property_values[ce.author.fullName][0] : c._id;

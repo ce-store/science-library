@@ -46,10 +46,22 @@ angular.module('itapapersApp')
       return makeRequest(url, ce.concepts.topic);
     }
 
-    function getAuthor (authorName) {
-      var url = reqs.authorDetails(authorName);
+    function getAuthorMain (authorName) {
+      var url = reqs.authorMainDetails(authorName);
 
-      return makeRequest(url, authorName);
+      return makeRequest(url, authorName + " (main)");
+    }
+
+    function getAuthorPapers (authorName) {
+      var url = reqs.authorPaperDetails(authorName);
+
+      return makeRequest(url, authorName + " (papers)");
+    }
+
+    function getAuthorCoAuthors (authorName) {
+      var url = reqs.authorCoAuthorDetails(authorName);
+
+      return makeRequest(url, authorName + " (co-authors)");
     }
 
     function getPaper (paperName) {
@@ -116,8 +128,8 @@ angular.module('itapapersApp')
       var fullKey = key + "-" + urls.ceStore;
 
       if (localStorageService.isSupported) {
-        var val = localStorageService.get(fullKey);
-
+//        var val = localStorageService.get(fullKey);
+var val = null;
         if (val) {
           return $q.when(val);
         } else {
@@ -160,7 +172,9 @@ angular.module('itapapersApp')
       getProjects: getProjects,
       getOrganisations: getOrganisations,
       getTopics: getTopics,
-      getAuthor: getAuthor,
+      getAuthorMain: getAuthorMain,
+      getAuthorPapers: getAuthorPapers,
+      getAuthorCoAuthors: getAuthorCoAuthors,
       getPaper: getPaper,
       getVenue: getVenue,
       getOrganisation: getOrganisation,

@@ -9,6 +9,10 @@
  */
 angular.module('itapapersApp')
   .controller('AuthorCtrl', ['$scope', '$stateParams', '$timeout', 'store', 'urls', 'hudson', 'documentTypes', 'utils', 'csv', 'colours', 'definitions', function ($scope, $stateParams, $timeout, store, urls, hudson, documentTypes, utils, csv, colours, ce) {
+    var dataMain = null;
+    var dataPapers = null;
+    var dataCoAuthors = null;
+
     $scope.views = ['graph', 'papers', 'co-authors', 'co-authors-graph'];
     $scope.scienceLibrary = urls.scienceLibrary;
     $scope.journalType            = documentTypes.journal;
@@ -162,15 +166,30 @@ angular.module('itapapersApp')
     elem.css("height", height + "px");
     elem.css("max-height", height + "px");
 
-    store.getAuthor($stateParams.authorId)
-      .then(function(data) {
+    store.getAuthorMain($stateParams.authorId)
+      .then(function(dm) {
+        dataMain = dm;
+//console.log("dataMain");
+//console.log(dataMain);
+        store.getAuthorPapers($stateParams.authorId)
+        .then(function(dp) {
+          dataPapers = dp;
+//console.log("dataPapers");
+//console.log(dataPapers);
+          store.getAuthorCoAuthors($stateParams.authorId)
+            .then(function(dc) {
+            dataCoAuthors = dc;
+//console.log("dataCoAuthors");
+//console.log(dataCoAuthors);
+
+            var data = mergeResponses(dataMain, dataPapers, dataCoAuthors);
+
         $scope.data = data;
         var properties = data.main_instance.property_values;
         var relatedInstances = data.related_instances;
 
         // get properties
         var fullName = utils.getUnknownProperty(properties, ce.author.fullName);
-        var organisation = utils.getUnknownProperty(properties, ce.author.organisation);
         var coAuthorList = utils.getListProperty(properties, ce.author.coAuthorList);
         var documentList = utils.getListProperty(properties, ce.author.documentList);
         var documentCount = utils.getIntProperty(properties, ce.author.documentCount);
@@ -402,24 +421,23 @@ angular.module('itapapersApp')
           for (i = 0; i < coAuthorStatistic.length; ++i) {
             var statId = coAuthorStatistic[i];
             var coAuthorStatProps = relatedInstances[statId].property_values;
-
             // co-author statistic properties
-            var statCoAuthorList = utils.getListProperty(coAuthorStatProps, ce.statistic.coAuthorList);
+            var coAuthorId = utils.getListProperty(coAuthorStatProps, ce.statistic.coAuthorList)[0];
             var statCoAuthorCount = utils.getIntProperty(coAuthorStatProps, ce.statistic.coAuthorCount);
-            var coAuthorId = statCoAuthorList[0] === $scope.authorId ? statCoAuthorList[1] : statCoAuthorList[0];
-
+//            var coAuthorId = statCoAuthorList[0] === $scope.authorId ? statCoAuthorList[1] : statCoAuthorList[0];
+console.log(coAuthorId);
             // co-author properties
             var coAuthorProps = relatedInstances[coAuthorId].property_values;
             var coAuthorName = utils.getUnknownProperty(coAuthorProps, ce.author.fullName);
             var coAuthorEmployer = utils.getProperty(coAuthorProps, ce.author.writesFor);
             var coAuthorCoAuthorList = utils.getListProperty(coAuthorProps, ce.author.coAuthorStatistic);
-            var coAuthorType = null;
+            var coAuthorType = utils.getIndustryFor(relatedInstances[coAuthorId]);
 
-            if (coAuthorEmployer && relatedInstances[coAuthorEmployer]) {
-              var employer = relatedInstances[coAuthorEmployer];
-              var employerProps = employer.property_values;
-              coAuthorType = utils.getIndustryFor(employer);
-            }
+//            if (coAuthorEmployer && relatedInstances[coAuthorEmployer]) {
+//              var employer = relatedInstances[coAuthorEmployer];
+//              var employerProps = employer.property_values;
+//              coAuthorType = utils.getIndustryFor(employer);
+//            }
 
             $scope.coauthorsList.push({
               id:     coAuthorId,
@@ -475,5 +493,101 @@ angular.module('itapapersApp')
         refreshHighlight();
 
         $scope.showView($scope.views[0]);
+          });
+        });
       });
-  }]);
+
+    var mergeResponses = function(dm, dp, dc) {
+      var result = {};
+
+      result.main_instance = dm.main_instance;
+      result.related_instances = [];
+
+      for (var i in dm.related_instances) {
+        var relInst = dm.related_instances[i];
+        result.related_instances[i] = relInst;
+      }
+
+      for (var i in dp.related_instances) {
+        var relInst = dp.related_instances[i];
+        result.related_instances[i] = relInst;
+      }
+
+      for (var i in dp.main_instance.property_values) {
+        var pv = dp.main_instance.property_values[i];
+       result.main_instance.property_values[i] = pv;
+      }
+
+      for (var i in dc.related_instances) {
+        var relInst = dc.related_instances[i];
+
+        if (relInst.concept_names.indexOf(ce.concepts.coAuthorStatistic) > -1) {
+          result.related_instances[i] = relInst;
+        }
+
+        if (relInst.concept_names.indexOf(ce.concepts.person) > -1) {
+            result.related_instances[i] = relInst;
+          }
+      }
+
+      for (var i in dc.main_instance.property_values) {
+          var pv = dc.main_instance.property_values[i];
+         result.main_instance.property_values[i] = pv;
+        }
+
+//      debugTypes(dm, "main");
+//      debugTypes(dp, "papers");
+//      debugTypes(dc, "co-authors");
+//      debugTypes(result, "merged");
+
+//      console.log("merged");
+//      console.log(result);
+
+      return result;
+    };
+
+//    var debugTypes = function(data, name) {
+//        var types = {
+//                document: [],
+//                person: [],
+//                organisation: [],
+//                topic: [],
+//                date: [],
+//                cas: [],
+//                oas: [],
+//                other: []
+//              };
+//
+//              for (var i in data.related_instances) {
+//                var thisInst = data.related_instances[i];
+//
+//                if (thisInst.concept_names.indexOf(ce.concepts.document) > -1) {
+//                  types.document.push(thisInst);
+//                } else if (thisInst.concept_names.indexOf(ce.concepts.person) > -1) {
+//                  types.person.push(thisInst);
+//                } else if (thisInst.concept_names.indexOf(ce.concepts.organisation) > -1) {
+//                  types.organisation.push(thisInst);
+//                } else if (thisInst.concept_names.indexOf(ce.concepts.topic) > -1) {
+//                  types.topic.push(thisInst);
+//                } else if (thisInst.concept_names.indexOf(ce.concepts.date) > -1) {
+//                  types.date.push(thisInst);
+//                } else if (thisInst.concept_names.indexOf(ce.concepts.coAuthorStatistic) > -1) {
+//                  types.cas.push(thisInst);
+//                } else if (thisInst.concept_names.indexOf(ce.concepts.orderedAuthor) > -1) {
+//                  types.oas.push(thisInst);
+//                } else {
+//                  types.other.push(thisInst);
+//                }
+//              }
+//console.log(name);
+//console.log("  documents: " + types.document.length);
+//console.log("  people: " + types.person.length);
+//console.log("  organisations: " + types.organisation.length);
+//console.log("  topics: " + types.topic.length);
+//console.log("  dates: " + types.date.length);
+//console.log("  co-author statistics: " + types.cas.length);
+//console.log("  ordered authors: " + types.oas.length);
+//console.log("  others: " + types.other.length);
+//              };
+  }]
+  );

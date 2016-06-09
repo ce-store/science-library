@@ -125,7 +125,7 @@ angular.module('itapapersApp')
         var properties = data.main_instance.property_values;
         var relatedInstances = data.related_instances;
         var documentMap = {};
-        var csvData = [];
+//        var csvData = [];
 
         $scope.name = $stateParams.topicId;
 
@@ -301,7 +301,7 @@ angular.module('itapapersApp')
 
               $scope.paperCounts[documentTypes.typeMap[type]]++;
               paperItem.class.push(utils.getClassName(type));
-              csvData.push([doc.id, doc.title, type]);
+//              csvData.push([doc.id, doc.title, type]);
             }
 
             $scope.publications.push(paperItem);

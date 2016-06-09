@@ -64,11 +64,8 @@ angular.module('itapapersApp')
       getProperty: function(propertiesList, propertyName) {
         return propertiesList[propertyName] ? propertiesList[propertyName][0] : null;
       },
-      getPropertyList: function(propertiesList, propertyName) {
-          return propertiesList[propertyName];
-        },
       getListProperty: function(propertiesList, propertyName) {
-        return propertiesList[propertyName] ? propertiesList[propertyName] : null;
+        return propertiesList[propertyName];
       },
       getUnknownProperty: function(propertiesList, propertyName) {
         var unknown = 'unknown';

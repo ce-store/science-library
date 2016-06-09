@@ -104,7 +104,7 @@ angular.module('itapapersApp')
         var eventBubbles = {};
         var es = data.main_instance;
         var esId = es._id;
-        var evIds = utils.getPropertyList(es.property_values, ce.series.eventList);
+        var evIds = utils.getListProperty(es.property_values, ce.series.eventList);
 
         for (var i = 0; i < evIds.length; ++i) {
           var evId = evIds[i];
@@ -112,13 +112,13 @@ angular.module('itapapersApp')
           var evLocId = utils.getProperty(ev.property_values, ce.venue.location);
           var evLoc = data.related_instances[evLocId];
 
-          var docIds = utils.getPropertyList(ev.property_values, ce.venue.documentList);
+          var docIds = utils.getListProperty(ev.property_values, ce.venue.documentList);
 
           for (var j = 0; j < docIds.length; ++j) {
             var docId = docIds[j];
             var doc = data.related_instances[docId];
 
-            var oaIds = utils.getPropertyList(doc.property_values, ce.paper.authorList);
+            var oaIds = utils.getListProperty(doc.property_values, ce.paper.authorList);
 
             for (var k = 0; k < oaIds.length; ++k) {
               var oaId = oaIds[k];

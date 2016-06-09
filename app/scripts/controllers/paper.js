@@ -58,7 +58,7 @@ angular.module('itapapersApp')
     store.getPaper($stateParams.paperId)
       .then(function(data) {
         var i = 0;
-        var csvData = [];
+//        var csvData = [];
 
         var directConceptNames = data.main_instance.direct_concept_names || data.main_instance.concept_names;
         var properties = data.main_instance.property_values;
@@ -208,24 +208,19 @@ angular.module('itapapersApp')
           var dateProps = relatedInstances[finalDate].property_values;
 
           // date properties
-          var dateString  = utils.getProperty(dateProps, ce.date.string);
           var dateDay     = utils.getProperty(dateProps, ce.date.day);
           var dateMonth   = utils.getProperty(dateProps, ce.date.month);
           var dateYear    = utils.getProperty(dateProps, ce.date.year);
 
-          if (dateString) {
-            $scope.published = dateString;
-          } else if (dateMonth && dateYear) {
-            var date;
+          var date;
 
-            if (dateDay) {
-              date = new Date(dateYear, dateMonth - 1, dateDay);
-            } else {
-              date = new Date(dateYear, dateMonth - 1);
-            }
-
-            $scope.published = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
+          if (dateDay) {
+            date = new Date(dateYear, dateMonth - 1, dateDay);
+          } else {
+            date = new Date(dateYear, dateMonth - 1);
           }
+
+          $scope.published = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
           $scope.year = dateYear;
         }
 
@@ -290,13 +285,13 @@ angular.module('itapapersApp')
             var vYear     = $scope.venue ? $scope.venue.year : "";
             var vName     = $scope.venue ? $scope.venue.name : "";
 
-            csvData.push([$stateParams.paperId, $scope.title, $scope.published, a.id, a.name, projId, projName, cUrl, cCount, $scope.paperType, vId, vYear, vName]);
+//            csvData.push([$stateParams.paperId, $scope.title, $scope.published, a.id, a.name, projId, projName, cUrl, cCount, $scope.paperType, vId, vYear, vName]);
           }
         }
 
-        csv.setData(csvData);
-        csv.setHeader(["id", "title", "publish date", "author id", "author name", "project id", "project name", "citation url", "citation count", "paper type", "venue id", "venue year", "venue name"]);
-        csv.setName($stateParams.paperId);
+//        csv.setData(csvData);
+//        csv.setHeader(["id", "title", "publish date", "author id", "author name", "project id", "project name", "citation url", "citation count", "paper type", "venue id", "venue year", "venue name"]);
+//        csv.setName($stateParams.paperId);
 
         refreshHighlight();
     });

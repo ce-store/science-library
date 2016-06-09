@@ -415,32 +415,29 @@ angular.module('itapapersApp')
           if (cas.hasOwnProperty(casId)) {
             var ca = cas[casId];
 
-            var caNames = ca.property_values["co-author"];
+            var cName = ca.property_values["co-author"][0];
+            var mName = ca.property_values["main-author"][0];
 
-            if (caNames.length == 2) {
-              var ca1 = people[caNames[0]];
-              var ca2 = people[caNames[1]];
-              var papers1 = ca1.instances["wrote"];
-              var papers2 = ca2.instances["wrote"];
-              var joint = [];
+            var cper = people[cName];
+            var mper = people[mName];
+            var papers1 = cper.instances["wrote"];
+            var papers2 = mper.instances["wrote"];
+            var joint = [];
 
-              for (var i1 in papers1) {
-                var p1 = papers1[i1];
-                for (var i2 in papers2) {
-                  var p2 = papers2[i2];
+            for (var i1 in papers1) {
+              var p1 = papers1[i1];
+              for (var i2 in papers2) {
+                var p2 = papers2[i2];
 
-                  if (p1 == p2) {
-                    if (joint.indexOf(p1) == -1) {
-                      joint.push(p1);
-                    }
+                if (p1 == p2) {
+                  if (joint.indexOf(p1) == -1) {
+                    joint.push(p1);
                   }
                 }
               }
-
-              ca.values["co-author count"] = joint.length;
-            } else {
-              console.log("Unexpected number of co-authors (" + caNames.length + ") for co-author statistic " + ca._id);
             }
+
+            ca.values["co-author count"] = joint.length;
           }
         }
       }

@@ -519,7 +519,7 @@
         });
 
         var root = {name: "", children: [], depth: 0};
-        var csvData = [];
+//        var csvData = [];
 
         index = 0;
         root.children = Object.keys(authors).map(function(n) {
@@ -528,7 +528,7 @@
           a.parent = root;
           a.depth = 1;
           a.key = n;
-          csvData.push([a.key, a.fn, a.sn, a.org, a.cc]);
+//          csvData.push([a.key, a.fn, a.sn, a.org, a.cc]);
           return authors[n];
         });
         var links = [];
@@ -544,9 +544,9 @@
           });
         });
 
-        csv.setData(csvData);
-        csv.setHeader(["id", "first name", "surname", "organisation", "coauthor count"]);
-        csv.setName("co-authors");
+//        csv.setData(csvData);
+//        csv.setHeader(["id", "first name", "surname", "organisation", "coauthor count"]);
+//        csv.setName("co-authors");
 
         doIt(root, links);
       }

@@ -39,7 +39,7 @@ angular.module('itapapersApp')
           var totalPubs = utils.getIntProperty(personProps, ce.author.externalDocumentCount);
           var profilePicture = utils.getProperty(personProps, ce.author.profilePicture);
           var fullName = utils.getProperty(personProps, ce.author.fullName);
-          var writesFor = utils.getPropertyList(personProps, ce.author.writesFor);
+          var writesFor = utils.getListProperty(personProps, ce.author.writesFor);
           var industry = utils.getIndustryFor(person);
 
 //          // citation properties

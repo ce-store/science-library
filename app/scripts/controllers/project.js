@@ -67,7 +67,7 @@ angular.module('itapapersApp')
         var properties = data.main_instance.property_values;
         var relatedInstances = data.related_instances;
         var documentMap = {};
-        var csvData = [];
+//        var csvData = [];
 
         // Set properties
         $scope.name = properties.name ? properties.name[0] : unknown;
@@ -150,19 +150,19 @@ angular.module('itapapersApp')
                 class: []
               };
 
-              for (j = 0; j < paperItem.type.length; ++j) {
-                paperItem.class.push(utils.getClassName(paperItem.type[j]));
-                csvData.push([paperItem.id, paperItem.name, paperItem.value, paperItem.type[j], paperItem.venue, paperItem.authors]);
-              }
+//              for (j = 0; j < paperItem.type.length; ++j) {
+//                paperItem.class.push(utils.getClassName(paperItem.type[j]));
+//                csvData.push([paperItem.id, paperItem.name, paperItem.value, paperItem.type[j], paperItem.venue, paperItem.authors]);
+//              }
 
               $scope.publications.push(paperItem);
             }
           }
         }
 
-        csv.setData(csvData);
-        csv.setHeader(["paper id", "paper name", "citation count", "paper type", "venue", "authors"]);
-        csv.setName($stateParams.projectId);
+//        csv.setData(csvData);
+//        csv.setHeader(["paper id", "paper name", "citation count", "paper type", "venue", "authors"]);
+//        csv.setName($stateParams.projectId);
 
         refreshHighlight();
       });

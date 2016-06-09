@@ -143,7 +143,6 @@ angular.module('itapapersApp')
         lon: 'longitude'
       },
       date: {
-        string: 'original date string',
         day:    'day',
         month:  'month',
         year:   'year'
@@ -178,7 +177,9 @@ angular.module('itapapersApp')
         coAuthorStatistic: "co-author statistic",
         topicPersonStatistic: "topic-person statistic",
         topicOrganisationStatistic: "topic-organisation statistic",
+        person: "person",
         corePerson: "core person",
+        organisation: "organisation",
         coreOrganisation: "core organisation",
         singleInstituteDocument: "single institute document",
         collaborativeDocument: "collaborative document",
@@ -189,9 +190,9 @@ angular.module('itapapersApp')
         patent: "patent",
         eventSeries: "event series",
         total: "total",
-        organisation: "organisation",
         topic: "topic",
-        project: "project"
+        project: "project",
+        date: "date"
       },
       queries: {
         lastUpdated: "last updated",
