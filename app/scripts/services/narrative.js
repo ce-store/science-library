@@ -2,6 +2,7 @@
 
 var server = null;
 var ceStore = null;
+var ce = null;
 var rels;
 
 // Link dimensions
@@ -788,21 +789,20 @@ function draw_nodes(scenes, svg) {
     .attr("class", "scene")
     .style("fill", function(d) {
       if (d.paper) {
-        var directConceptNames = rels[d.paper].direct_concept_names || rels[d.paper].concept_names;
-        var inheritedConceptNames = rels[d.paper].inherited_concept_names;
+        var conceptNames = rels[d.paper].concept_names;
         var papers = ["#5596e6", "#00b299", "#7c56a5", "#f49c4e", "#cc3f40", "#94a3ab"];
 
-        if (directConceptNames.indexOf("journal paper") > -1) {
+        if (conceptNames.indexOf(ce.concepts.journalPaper) > -1) {
           return papers[0];
-        } else if (directConceptNames.indexOf("external conference paper") > -1) {
+        } else if (conceptNames.indexOf(ce.concepts.externalConferencePaper) > -1) {
           return papers[1];
-        } else if (directConceptNames.indexOf("patent") > -1) {
+        } else if (conceptNames.indexOf(ce.concepts.patent) > -1) {
           return papers[2];
-        } else if (directConceptNames.indexOf("internal conference paper") > -1) {
+        } else if (conceptNames.indexOf(ce.concepts.internalConferencePaper) > -1) {
           return papers[3];
-        } else if (directConceptNames.indexOf("technical report") > -1) {
+        } else if (conceptNames.indexOf(ce.concepts.technicalReport) > -1) {
           return papers[4];
-        } else if (directConceptNames.indexOf("other document") > -1 || inheritedConceptNames.indexOf("other document") > -1) {
+        } else if (conceptNames.indexOf(ce.concepts.otherDocument) > -1) {
           return papers[5];
         }
       }
@@ -935,7 +935,7 @@ function draw_links(links, svg) {
     .on("mouseout", mouseout_cb);
 } // draw_links
 
-function drawNarrativeChart(safe_name, tie_breaker, center_sort, collapse, data, svr, ces, sl, utils, ce) {
+function drawNarrativeChart(safe_name, tie_breaker, center_sort, collapse, data, svr, ces, sl, utils, defs) {
   var vals = data.main_instance.property_values;
   rels = data.related_instances;
   var i = 0;
@@ -945,6 +945,7 @@ function drawNarrativeChart(safe_name, tie_breaker, center_sort, collapse, data,
   scienceLibrary = sl;
   server = svr;
   ceStore = ces;
+  ce = defs;
 
   // build character list
   var xchars = [];

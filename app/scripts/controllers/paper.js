@@ -60,7 +60,7 @@ angular.module('itapapersApp')
         var i = 0;
 //        var csvData = [];
 
-        var directConceptNames = data.main_instance.direct_concept_names || data.main_instance.concept_names;
+        var conceptNames = data.main_instance.concept_names;
         var properties = data.main_instance.property_values;
         var relatedInstances = data.related_instances;
 
@@ -89,7 +89,7 @@ angular.module('itapapersApp')
         $scope.presentationSource = presentationThumbnail;
         $scope.posterSource       = posterThumbnail;
         $scope.source = paperFile;
-        $scope.paperType  = utils.getType(directConceptNames);
+        $scope.paperType  = utils.getType(conceptNames);
         $scope.paperClass = utils.getClassName($scope.paperType);
 
         // Order authors
@@ -184,20 +184,20 @@ angular.module('itapapersApp')
 
         if ($scope.paperType === types[$scope.otherDocumentType]) {
           // set type to specific type of other document
-          for (var j = 0; j < directConceptNames.length; ++j) {
-            if (directConceptNames.indexOf(documentTypes.invitedTalk) > -1) {
+          for (var j = 0; j < conceptNames.length; ++j) {
+            if (conceptNames.indexOf(documentTypes.invitedTalk) > -1) {
               $scope.paperType = types[documentTypes.invitedTalk];
-            } else if (directConceptNames.indexOf(documentTypes.bookChapter) > -1) {
+            } else if (conceptNames.indexOf(documentTypes.bookChapter) > -1) {
               $scope.paperType = types[documentTypes.bookChapter];
-            } else if (directConceptNames.indexOf(documentTypes.phdThesis) > -1) {
+            } else if (conceptNames.indexOf(documentTypes.phdThesis) > -1) {
               $scope.paperType = types[documentTypes.phdThesis];
-            } else if (directConceptNames.indexOf(documentTypes.poster) > -1) {
+            } else if (conceptNames.indexOf(documentTypes.poster) > -1) {
               $scope.paperType = types[documentTypes.poster];
-            } else if (directConceptNames.indexOf(documentTypes.workshop) > -1) {
+            } else if (conceptNames.indexOf(documentTypes.workshop) > -1) {
               $scope.paperType = types[documentTypes.workshop];
-            } else if (directConceptNames.indexOf(documentTypes.softwareAsset) > -1) {
+            } else if (conceptNames.indexOf(documentTypes.softwareAsset) > -1) {
               $scope.paperType = types[documentTypes.softwareAsset];
-            } else if (directConceptNames.indexOf(documentTypes.demonstration) > -1) {
+            } else if (conceptNames.indexOf(documentTypes.demonstration) > -1) {
               $scope.paperType = types[documentTypes.demonstration];
             }
           }
@@ -247,7 +247,7 @@ angular.module('itapapersApp')
         if (variantList) {
           for (var k = 0; k < variantList.length; ++k) {
             var variantId = variantList[k];
-            var type = utils.getType(relatedInstances[variantId].direct_concept_names || relatedInstances[variantId].concept_names);
+            var type = utils.getType(relatedInstances[variantId].concept_names);
             var variantProps = relatedInstances[variantId].property_values;
 
             // variant properties

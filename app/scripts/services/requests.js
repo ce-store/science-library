@@ -118,6 +118,15 @@ angular.module('itapapersApp')
         limRels += ce.author.coAuthorList;
 
         onlyProps = ce.author.fullName + ",";
+        onlyProps += ce.author.documentCount + ",";
+        onlyProps += ce.author.externalDocumentCount + ",";
+        onlyProps += ce.author.internalDocumentCount + ",";
+        onlyProps += ce.author.journalCount + ",";
+        onlyProps += ce.author.patentCount + ",";
+        onlyProps += ce.author.externalConferencePaperCount + ",";
+        onlyProps += ce.author.internalConferencePaperCount + ",";
+        onlyProps += ce.author.technicalReportCount + ",";
+        onlyProps += ce.author.otherCount + ",";
         onlyProps += ce.author.documentList + ",";
         onlyProps += ce.paper.title;
 
@@ -138,6 +147,7 @@ angular.module('itapapersApp')
 
           limRels = ce.author.documentList + ",";
           limRels += ce.paper.finalDate + ",";
+          limRels += ce.paper.variantList + ",";
           limRels += ce.paper.authorList;
 
           onlyProps = ce.author.fullName + ",";

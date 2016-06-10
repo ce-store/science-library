@@ -314,7 +314,7 @@ angular.module('itapapersApp')
           for (i = 0; i < documentList.length; ++i) {
             var paperId   = documentList[i];
             var paper     = relatedInstances[paperId];
-            var paperType = utils.getType(paper.direct_concept_names || paper.concept_names);
+            var paperType = utils.getType(paper.concept_names);
             var paperProps = paper.property_values;
 
             // paper properties
@@ -425,7 +425,7 @@ angular.module('itapapersApp')
             var coAuthorId = utils.getListProperty(coAuthorStatProps, ce.statistic.coAuthorList)[0];
             var statCoAuthorCount = utils.getIntProperty(coAuthorStatProps, ce.statistic.coAuthorCount);
 //            var coAuthorId = statCoAuthorList[0] === $scope.authorId ? statCoAuthorList[1] : statCoAuthorList[0];
-console.log(coAuthorId);
+
             // co-author properties
             var coAuthorProps = relatedInstances[coAuthorId].property_values;
             var coAuthorName = utils.getUnknownProperty(coAuthorProps, ce.author.fullName);

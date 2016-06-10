@@ -152,7 +152,7 @@ angular.module('itapapersApp')
             // paper properties
             var citationCount = utils.getIntProperty(paperProps, ce.paper.citationCount);
             var variantList = utils.getListProperty(paperProps, ce.paper.variantList);
-            var paperType = utils.getType(thisInst.direct_concept_names || thisInst.concept_names);
+            var paperType = utils.getType(thisInst.concept_names);
 
             // ignore duplicates
             if (!documentMap[paperId]) {

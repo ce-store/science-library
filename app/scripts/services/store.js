@@ -128,8 +128,8 @@ angular.module('itapapersApp')
       var fullKey = key + "-" + urls.ceStore;
 
       if (localStorageService.isSupported) {
-//        var val = localStorageService.get(fullKey);
-var val = null;
+        var val = localStorageService.get(fullKey);
+
         if (val) {
           return $q.when(val);
         } else {

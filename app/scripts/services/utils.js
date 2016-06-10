@@ -79,7 +79,7 @@ angular.module('itapapersApp')
       },
       getIndustryFor: function (instance) {
         var result = null;
-        var conceptNames = instance.direct_concept_names || instance.concept_names;
+        var conceptNames = instance.concept_names;
 
         if ((conceptNames.indexOf(ce.concepts.governmentOrganisation) > -1) || (conceptNames.indexOf(ce.concepts.governmentPerson) > -1)) {
           result = "GOV";

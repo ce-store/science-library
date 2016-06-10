@@ -192,7 +192,7 @@ angular.module('itapapersApp')
 
             // paper properties
             var paperTitle  = utils.getUnknownProperty(paperProps, ce.paper.title);
-            var paperType   = utils.getType(paper.direct_concept_names || paper.concept_names);
+            var paperType   = utils.getType(paper.concept_names);
             var paperVenue  = utils.getProperty(paperProps, ce.paper.venue);
             var paperWeight = utils.getIntProperty(paperProps, ce.paper.weight);
             var paperVariantList = utils.getListProperty(paperProps, ce.paper.variantList);

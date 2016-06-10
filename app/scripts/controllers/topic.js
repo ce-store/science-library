@@ -156,7 +156,7 @@ angular.module('itapapersApp')
         for (var id in relatedInstances) {
           if (relatedInstances.hasOwnProperty(id)) {
             var instance = relatedInstances[id];
-            var conNames = instance.direct_concept_names || instance.concept_names;
+            var conNames = instance.concept_names;
 
             if (conNames.indexOf("document") > -1) {
               var paperProps = instance.property_values;
@@ -185,7 +185,7 @@ angular.module('itapapersApp')
                 }
 
                 // get paper type and collapse variants
-                var paperType = utils.getType(instance.direct_concept_names || instance.concept_names);
+                var paperType = utils.getType(instance.concept_names);
                 if (!variantFound) {
                   documentMap[id] = {
                     title:      paperName,

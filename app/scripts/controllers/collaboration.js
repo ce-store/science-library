@@ -66,7 +66,7 @@ angular.module('itapapersApp')
     var i, j;
     // get details for all authors
     for (i = 0; i < $stateParams.author.length; ++i) {
-      promises.push(store.getAuthor($stateParams.author[i]));
+      promises.push(store.getAuthorPapers($stateParams.author[i]));
     }
 
     $q.all(promises)
@@ -117,12 +117,12 @@ angular.module('itapapersApp')
         // generate papers list with details
         for (i = 0; i < documentList.length; ++i) {
           var paperId = documentList[i];
-          var paperType = utils.getType(relatedInstances[paperId].direct_concept_names || relatedInstances[paperId].concept_names);
+          var paperType = utils.getType(relatedInstances[paperId].concept_names);
           var paperProps = relatedInstances[paperId].property_values;
 
           // paper properties
           var paperName     = utils.getProperty(paperProps, ce.paper.title);
-          var paperVariants = utils.getListProperty(paperProps, ce.paper.variant);
+          var paperVariants = utils.getListProperty(paperProps, ce.paper.variantList);
           var paperVenue    = utils.getProperty(paperProps, ce.paper.venue);
           var paperWeight   = utils.getIntProperty(paperProps, ce.paper.weight);
           var paperFinalDate = utils.getProperty(paperProps, ce.paper.finalDate);
