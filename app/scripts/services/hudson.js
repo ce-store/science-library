@@ -170,6 +170,7 @@ angular.module('itapapersApp')
     var askQuestion = function (question) {
       var words = question.split(' ');
       var questionWords = ['what', 'who', 'list', 'show', 'draw'];
+      var url = urls.scienceLibrary;
 
       if (words.indexOf('help') > -1) {
         url += '/help';
