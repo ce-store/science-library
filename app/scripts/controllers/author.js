@@ -214,6 +214,7 @@ angular.module('itapapersApp')
         // Set data
         $scope.authorId = $stateParams.authorId;
         $scope.author = fullName;
+        $scope.type = utils.getIndustryFor(data.main_instance);
         $scope.coAuthorsHeader = $scope.author + "'s co-authors";
         $scope.papersHeader = $scope.author + "'s papers";
 
