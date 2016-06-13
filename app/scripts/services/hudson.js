@@ -19,6 +19,7 @@ angular.module('itapapersApp')
       topic: 'topic',
       project: 'project'
     };
+    var urls = urls;
 
     var saveQuestion = function(question, type, property) {
       var qa;
@@ -78,7 +79,7 @@ angular.module('itapapersApp')
       var instance;
       var type;
       var word;
-      var url;
+      var url = urls.scienceLibrary;
 
       // get property
       for (var property in data.properties) {
@@ -118,7 +119,7 @@ angular.module('itapapersApp')
           }
         }
 
-        url = getUrl(type, instance);
+        url += getUrl(type, instance);
         $location.url(url);
 
         saveQuestion(data.question_text, "highlight", propertyName.replace(/ /g, '_'));
@@ -145,19 +146,19 @@ angular.module('itapapersApp')
         if (instance) {
           // get url
           if (instance.direct_concept_names.indexOf(types.document) > -1) {
-            url = '/paper/' + instance._id;
+            url += '/paper/' + instance._id;
           } else if (instance.direct_concept_names.indexOf(types.person) > -1) {
-            url = '/author/' + instance._id;
+            url += '/author/' + instance._id;
           } else if (instance.direct_concept_names.indexOf(types.eventSeries) > -1) {
-            url = '/venue/' + instance._id + '/';
+            url += '/venue/' + instance._id + '/';
           } else if (instance.direct_concept_names.indexOf(types.event) > -1) {
-            url = '/venue/' + instance.property_values['is part of'][0] + '/' + instance._id;
+            url += '/venue/' + instance.property_values['is part of'][0] + '/' + instance._id;
           } else if (instance.direct_concept_names.indexOf(types.organisation) > -1) {
-            url = '/organisation/' + instance._id;
+            url += '/organisation/' + instance._id;
           } else if (instance.direct_concept_names.indexOf(types.topic) > -1) {
-            url = '/topic/' + instance._id;
+            url += '/topic/' + instance._id;
           } else if (instance.direct_concept_names.indexOf(types.project) > -1) {
-            url = '/project/' + instance._id;
+            url += '/project/' + instance._id;
           }
 
           $location.url(url);
@@ -171,7 +172,8 @@ angular.module('itapapersApp')
       var questionWords = ['what', 'who', 'list', 'show', 'draw'];
 
       if (words.indexOf('help') > -1) {
-        $location.url('help');
+        url += '/help';
+        $location.url(url);
       } else if (questionWords.indexOf(words[0]) > -1) {
         // Question - send to Hudson
         $http.post(urls.server + urls.questionAnalyser, question)
@@ -181,7 +183,8 @@ angular.module('itapapersApp')
             console.log('failed: ' + response);
         });
       } else {
-        $location.url(urls.scienceLibrary + '/results?keywords=' + question);
+        url += '/results?keywords=' + question;
+        $location.url(url);
       }
     };
 
