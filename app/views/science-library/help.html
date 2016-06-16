@@ -6,7 +6,24 @@
       </div>
 
       <div class="col-md-12">
-        <p>This is the help page</p>
+        <p>The search bar at the bottom of each page has two modes of operation:</p>
+        <ul>
+          <li>Keyword search</li>
+          <li>Semantic search</li>
+        </ul>
+        <p>For keyword search you simply type the keywords you are seeking and click go or press enter, e.g. Controlled English</p>
+        <p>By default any phrase that you type is searched for exactly, but you can specify various guidance to the search engine:</p>
+        <ul>
+          <li>Quoted values to identify a specific phrase, e.g. <span class="highlight">"Controlled English"</span></li>
+          <li>NOT operator: To exclude the phrase that follows the operator, e.g. <span class="highlight">"Controlled English" NOT Gaian</span></li>
+          <li>OR operator: To optionally include the phrase that follows the operator, e.g. <span class="highlight">"Controlled English" OR CNL</span></li>
+          <li>AND operator: To required the phrase that follows the operator, e.g. <span class="highlight">"Controlled English" AND "coalition operation"</span></li>
+        </ul>
+        <p>These operators can be used in any configuration and amount, e.g. <span class="highlight">"Controlled English" AND Gaian NOT network</span></p>
+        <p>Both keyword and semantic search are not case sensitive</p>
+        <p>The current semantic search capability is limited but enables you to specify the name of an instance such as <span class="highlight">David Mott</span> and optionally a characteristic related to that instance, such as <span class="highlight">co authors</span>.</p>
+        <p>For example <span class="highlight">"Show me David Mott co-authors"</span>.</p>
+        <p>Both keyword search and semantic search will navigate directly to the correct science library page if onl a single match is found, otherwise a list of matches are shown.</p>
       </div>
     </div>
   </div>

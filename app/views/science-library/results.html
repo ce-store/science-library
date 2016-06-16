@@ -13,16 +13,60 @@
         </h3>
       </div>
 
-      <div class="col-md-12">
-        <!-- Results list -->
-        <ul class="results-list">
-          <li ng-repeat="item in results | orderBy: 'name' | limitTo : listLength">
+      <!-- Paper results list -->
+      <div class="col-md-12" ng-if="results.papers.length > 0">
+        <h5>Papers:</h5>
+        <ul class="mini.results-list">
+          <li ng-repeat="item in results.papers | orderBy: 'name' | limitTo : listLength">
             <a ng-href="{{scienceLibrary}}/{{item.type}}/{{item.id}}" class="list-name">{{item.name | capitaliseFirst}}</a>
-            <small class="highlight">({{item.type | capitalise}})</small>
+            <small class="details">({{item.context}})</small>
           </li>
-          <p ng-if="!instances">No things found.</p>
         </ul>
       </div>
+
+      <!-- Author results list -->
+      <div class="col-md-12" ng-if="results.authors.length > 0">
+        <h5>Authors:</h5>
+        <ul class="mini.results-list">
+          <li ng-repeat="item in results.authors | orderBy: 'name' | limitTo : listLength">
+            <a ng-href="{{scienceLibrary}}/{{item.type}}/{{item.id}}" class="list-name">{{item.name | capitaliseFirst}}</a>
+            <small class="details">({{item.context}})</small>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Organisation results list -->
+      <div class="col-md-12" ng-if="results.organisations.length > 0">
+        <h5>Organisations:</h5>
+        <ul class="mini.results-list">
+          <li ng-repeat="item in results.organisations | orderBy: 'name' | limitTo : listLength">
+            <a ng-href="{{scienceLibrary}}/{{item.type}}/{{item.id}}" class="list-name">{{item.name | capitaliseFirst}}</a>
+            <small class="details">({{item.context}})</small>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Topic results list -->
+      <div class="col-md-12" ng-if="results.topics.length > 0">
+        <h5>Topics:</h5>
+        <ul class="mini.results-list">
+          <li ng-repeat="item in results.topics | orderBy: 'name' | limitTo : listLength">
+            <a ng-href="{{scienceLibrary}}/{{item.type}}/{{item.id}}" class="list-name">{{item.name | capitaliseFirst}}</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Venues results list -->
+      <div class="col-md-12" ng-if="results.venues.length > 0">
+        <h5>Venues:</h5>
+        <ul class="mini.results-list">
+          <li ng-repeat="item in results.venues | orderBy: 'name' | limitTo : listLength">
+            <a ng-href="{{scienceLibrary}}/{{item.type}}/{{item.id}}" class="list-name">{{item.name | capitaliseFirst}}</a>
+          </li>
+        </ul>
+      </div>
+
+      <p ng-if="!instances">No things found.</p>
     </div>
   </div>
 </div>

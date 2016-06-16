@@ -10,7 +10,7 @@ var link_width = 1.8;
 var link_gap = 2;
 
 var node_width = 10; // Set to panel_width later
-var color = ["#5596e6", "#ff7f0e", "#2ca02c", "#d62728"];//d3.scale.category10();
+var color = { AC: "#5596e6", IND: "#ff7f0e", GOV: "#2ca02c", Unknown: "#d62728"};//d3.scale.category10();
 var raw_chart_width = 1200;
 
 // Height of empty gaps between groups
@@ -721,7 +721,6 @@ function draw_nodes(scenes, svg) {
       .style(opacity.translucentLinks);
     styleLinkedAuthors(d, d.chars, true);
 
-    // TODO: Show posters on mouseover
     if (d.char_node !== true) {
       // Remove other titles (overlapping may cause this)
       d3.selectAll("[class=\"paper-title\"]").remove();
@@ -972,12 +971,6 @@ function drawNarrativeChart(safe_name, tie_breaker, center_sort, collapse, data,
     for (i = 0; i < vals[ce.author.coAuthorList].length; ++i) {
       var coAuthor = rels[vals[ce.author.coAuthorList][i]];
       var type = utils.getIndustryFor(coAuthor);
-//      var org = coAuthor.property_values[ce.author.writesFor];
-//      org = org ? org[0] : "unknown";
-//      var type;
-//      if (rels[org]) {
-//        type = utils.getIndustryFor(rels[org]);
-//      }
 
       var c = rels[vals[ce.author.coAuthorList][i]];
       var cName = c.property_values[ce.author.fullName] ? c.property_values[ce.author.fullName][0] : c._id;
@@ -1404,9 +1397,8 @@ function drawNarrativeChart(safe_name, tie_breaker, center_sort, collapse, data,
     for (var t in types) {
       if (types.hasOwnProperty(t)) {
         g = legend.append("g");
-
         g.append("rect")
-          .attr("fill", color[types[t]])
+          .attr("fill", color[t])
           .attr("class", "legend-key")
           .attr("transform", "translate(" + 10 + "," + (i * 15) + ")");
         g.append("text")

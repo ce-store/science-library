@@ -191,6 +191,7 @@ angular.module('itapapersApp')
         otherDocument: "other document",
         technicalReport: "technical report",
         patent: "patent",
+        event: "event",
         eventSeries: "event series",
         total: "total",
         topic: "topic",
