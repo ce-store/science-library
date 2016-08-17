@@ -66,7 +66,7 @@ angular.module('itapapersApp')
 
         // paper properties
         var title     = utils.getUnknownProperty(properties, ce.paper.title);
-        var abstract  = utils.getUnknownProperty(properties, ce.paper.title);
+        var abstract  = utils.getUnknownProperty(properties, ce.paper.abstract);
         var status    = utils.getProperty(properties, ce.paper.status);
         var venue     = utils.getProperty(properties, ce.paper.venue);
         var finalDate = utils.getProperty(properties, ce.paper.finalDate);
