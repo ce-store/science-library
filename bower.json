@@ -33,6 +33,7 @@
     }
   },
   "resolutions": {
-    "angular": "^1.2"
+    "angular": "^1.2",
+    "d3": "~3.5.10"
   }
 }

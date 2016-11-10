@@ -1,4 +1,5 @@
-"use strict";
+/* globals d3: true */
+/* globals window: true */
 
 var server = null;
 var ceStore = null;
@@ -10,7 +11,7 @@ var link_width = 1.8;
 var link_gap = 2;
 
 var node_width = 10; // Set to panel_width later
-var color = { AC: "#5596e6", IND: "#ff7f0e", GOV: "#2ca02c", Unknown: "#d62728"};//d3.scale.category10();
+var color = { AC: '#5596e6', IND: '#ff7f0e', GOV: '#2ca02c', Unknown: '#d62728'};//d3.scale.category10();
 var raw_chart_width = 1200;
 
 // Height of empty gaps between groups
@@ -56,40 +57,40 @@ var scienceLibrary = null;
 // Opacity
 var opacity = {
   opaqueNodes: {
-    "opacity": 1,
-    "transition": "opacity .25s ease-in-out",
-    "-moz-transition": "opacity .25s ease-in-out",
-    "-webkit-transition": "opacity .25s ease-in-out"
+    'opacity': 1,
+    'transition': 'opacity .25s ease-in-out',
+    '-moz-transition': 'opacity .25s ease-in-out',
+    '-webkit-transition': 'opacity .25s ease-in-out'
   },
   opaqueLinks: {
-    "stroke-opacity": 0.9,
-    "transition": "opacity .25s ease-in-out",
-    "-moz-transition": "opacity .25s ease-in-out",
-    "-webkit-transition": "opacity .25s ease-in-out"
+    'stroke-opacity': 0.9,
+    'transition': 'opacity .25s ease-in-out',
+    '-moz-transition': 'opacity .25s ease-in-out',
+    '-webkit-transition': 'opacity .25s ease-in-out'
   },
   opaqueScene: {
-    "opacity": 0.9,
-    "transition": "opacity .25s ease-in-out",
-    "-moz-transition": "opacity .25s ease-in-out",
-    "-webkit-transition": "opacity .25s ease-in-out"
+    'opacity': 0.9,
+    'transition': 'opacity .25s ease-in-out',
+    '-moz-transition': 'opacity .25s ease-in-out',
+    '-webkit-transition': 'opacity .25s ease-in-out'
   },
   translucentNodes: {
-    "opacity": 0.1,
-    "transition": "opacity .25s ease-in-out",
-    "-moz-transition": "opacity .25s ease-in-out",
-    "-webkit-transition": "opacity .25s ease-in-out"
+    'opacity': 0.1,
+    'transition': 'opacity .25s ease-in-out',
+    '-moz-transition': 'opacity .25s ease-in-out',
+    '-webkit-transition': 'opacity .25s ease-in-out'
   },
   translucentLinks: {
-    "stroke-opacity": 0.2,
-    "transition": "opacity .25s ease-in-out",
-    "-moz-transition": "opacity .25s ease-in-out",
-    "-webkit-transition": "opacity .25s ease-in-out"
+    'stroke-opacity': 0.2,
+    'transition': 'opacity .25s ease-in-out',
+    '-moz-transition': 'opacity .25s ease-in-out',
+    '-webkit-transition': 'opacity .25s ease-in-out'
   },
   translucentScene: {
-    "opacity": 0.2,
-    "transition": "opacity .25s ease-in-out",
-    "-moz-transition": "opacity .25s ease-in-out",
-    "-webkit-transition": "opacity .25s ease-in-out"
+    'opacity': 0.2,
+    'transition': 'opacity .25s ease-in-out',
+    '-moz-transition': 'opacity .25s ease-in-out',
+    '-webkit-transition': 'opacity .25s ease-in-out'
   }
 };
 
@@ -105,6 +106,7 @@ var opacity = {
 
 // d3 function
 function get_path(link) {
+  'use strict';
   var x0 = link.x0;
   var x1 = link.x1;
   var xi = d3.interpolateNumber(x0, x1);
@@ -113,11 +115,12 @@ function get_path(link) {
   var y0 = link.y0;
   var y1 = link.y1;
 
-  return "M" + x0 + "," + y0 + "C" + x2 + "," + y0 + " " + x3 + "," + y1 + " " + x1 + "," + y1;
+  return 'M' + x0 + ',' + y0 + 'C' + x2 + ',' + y0 + ' ' + x3 + ',' + y1 + ' ' + x1 + ',' + y1;
 } // get_path
 
 
 function Character_(name, id, group) {
+  'use strict';
   this.name = name;
   this.id = id;
   this.group = group;
@@ -129,6 +132,7 @@ function Character_(name, id, group) {
 
 
 function Link(from, to, group, char_id) {
+  'use strict';
   // to and from are ids of scenes
   this.from = from;
   this.to = to;
@@ -143,6 +147,7 @@ function Link(from, to, group, char_id) {
 
 
 function SceneNode(chars, start, duration, id, paper) {
+  'use strict';
   this.chars = chars; // List of characters in the Scene (ids)
   this.start = start; // Scene starts after this many panels
   this.duration = duration; // Scene lasts for this many panels
@@ -160,7 +165,7 @@ function SceneNode(chars, start, duration, id, paper) {
   this.in_links = [];
   this.out_links = [];
 
-  this.name = "";
+  this.name = '';
 
   this.has_char = function(id) {
     for (var i = 0; i < this.chars.length; i++) {
@@ -183,34 +188,8 @@ function SceneNode(chars, start, duration, id, paper) {
 
 } // SceneNode
 
-
-// function reposition_node_links(scene_id, x, y, width, height, svg, ydisp, comic_name) {
-//   //console.log(d3.selectAll("[from=\"" + scene_id + "\"]"));
-//   var counter = 0;
-//   d3.selectAll("[to=\"" + comic_name + "_" + scene_id + "\"]")
-//     .each(function(d) {
-//       d.x1 = x + width / 2;
-//       d.y1 -= ydisp;
-//       counter += 1;
-//     })
-//     .attr("d", function(d) {
-//       return get_path(d);
-//     });
-
-//   counter = 0;
-//   d3.selectAll("[from=\"" + comic_name + "_" + scene_id + "\"]")
-//     .each(function(d) {
-//       d.x0 = x + width / 2;
-//       d.y0 -= ydisp;
-//       counter += 1;
-//     })
-//     .attr("d", function(d) {
-//       return get_path(d);
-//     });
-// } // reposition_link_nodes
-
-
 function generate_links(chars, scenes) {
+  'use strict';
   var links = [];
   for (var i = 0; i < chars.length; i++) {
     // The scenes in which the character appears
@@ -231,7 +210,7 @@ function generate_links(chars, scenes) {
       links[links.length] = new Link(char_scenes[j - 1], char_scenes[j],
         chars[i].group, chars[i].id);
       links[links.length - 1].char_ptr = chars[i];
-      //console.log("char name = " + chars[i].name + ", group = " + chars[i].group);
+      //console.log('char name = ' + chars[i].name + ', group = ' + chars[i].group);
       char_scenes[j - 1].out_links[char_scenes[j - 1].out_links.length] = links[links.length - 1];
       char_scenes[j].in_links[char_scenes[j].in_links.length] = links[links.length - 1];
       //console.log(char_scenes[j].in_links[char_scenes[j].in_links.length-1].y0);
@@ -242,6 +221,7 @@ function generate_links(chars, scenes) {
 
 
 function Group() {
+  'use strict';
   this.min = -1;
   this.max = -1;
   this.id = -1;
@@ -256,6 +236,7 @@ function Group() {
 
 
 function sort_groups(groups_sorted, groups_desc, top, bottom) {
+  'use strict';
   if (groups_desc.length === 2) {
     groups_sorted[bottom] = groups_desc[0];
     groups_sorted[top] = groups_desc[1];
@@ -290,6 +271,7 @@ function sort_groups(groups_sorted, groups_desc, top, bottom) {
 
 
 function define_groups(chars) {
+  'use strict';
   var groups = [];
   chars.forEach(function(c) {
     // Put char in group
@@ -315,6 +297,7 @@ function define_groups(chars) {
 
 // TODO: Use the char_map to eliminate this
 function find_group(chars, groups, char_id) {
+  'use strict';
   // Find the char's group id
   var i;
   for (i = 0; i < chars.length; i++) {
@@ -323,7 +306,7 @@ function find_group(chars, groups, char_id) {
     }
   } // for
   if (i === chars.length) {
-    console.log("ERROR: char not found, id = " + char_id);
+    console.log('ERROR: char not found, id = ' + char_id);
   }
 
   // Find the corresponding group
@@ -336,13 +319,14 @@ function find_group(chars, groups, char_id) {
     }
   }
   if (j === groups.length) {
-    console.log("ERROR: groups not found.");
+    console.log('ERROR: groups not found.');
   }
   return j;
 } // find_group
 
 
 function find_median_groups(groups, scenes, chars, char_map, tie_breaker) {
+  'use strict';
   scenes.forEach(function(scene) {
     if (!scene.char_node) {
       var group_count = [];
@@ -408,6 +392,7 @@ function find_median_groups(groups, scenes, chars, char_map, tie_breaker) {
 
 
 function sort_groups_main(groups, center_sort) {
+  'use strict';
   groups.sort(function(a, b) {
     return b.median_count - a.median_count;
   });
@@ -453,6 +438,7 @@ function sort_groups_main(groups, center_sort) {
 
 // Called before link positions are determined
 function add_char_scenes(chars, scenes, links, groups, panel_shift, comic_name) {
+  'use strict';
   // Shit starting times for the rest of the scenes panel_shift panels to the left
   var char_scenes = [];
   scenes.forEach(function(scene) {
@@ -502,6 +488,7 @@ function add_char_scenes(chars, scenes, links, groups, panel_shift, comic_name) 
 function calculate_node_positions(chars, scenes, total_panels, chart_width,
   chart_height, char_scenes, groups, panel_width,
   panel_shift, char_map) {
+  'use strict';
 
   // Set the duration of the very last scene to something small
   // so that there isn't a lot of wasted space at the end
@@ -549,7 +536,7 @@ function calculate_node_positions(chars, scenes, total_panels, chart_width,
       } else if (den1 !== 0) {
         avg = sum1 / den1;
       } else {
-        console.log("ERROR: den1 and den2 are 0. Scene doesn't have characters?");
+        console.log('ERROR: den1 and den2 are 0. Scene doesn\'t have characters?');
         avg = scene.median_group.min;
       }
       scene.y = avg - scene.height / 2.0;
@@ -579,6 +566,7 @@ function calculate_node_positions(chars, scenes, total_panels, chart_width,
 // (The positions of the links are determined according to the positions
 // of the nodes they link.)
 function calculate_link_positions(scenes) {
+  'use strict';
   // Sort by x
   // Because the sorting of the in_links will depend on where the link
   // is coming from, so that needs to be calculated first
@@ -632,9 +620,10 @@ function calculate_link_positions(scenes) {
 } // calculate_link_positions
 
 function styleLinkedAuthors(from, chars, focus, visited, iteration) {
+  'use strict';
   if (!from.char_node) {
-    d3.selectAll("[scene_id=\"" + from.id + "\"] .scene")
-      .style({"opacity": 1});
+    d3.selectAll('[scene_id=\'' + from.id + '\'] .scene')
+      .style({'opacity': 1});
   }
 
   if (!visited) {
@@ -643,20 +632,20 @@ function styleLinkedAuthors(from, chars, focus, visited, iteration) {
 
   function addStyling(from, opacity) {
     // increase stroke width of connected links
-    d3.selectAll("[charid=\"" + from.comic_name + "_" + from.chars[0] + "\"]")
-      .style({"stroke-opacity": opacity});
+    d3.selectAll('[charid=\'' + from.comic_name + '_' + from.chars[0] + '\']')
+      .style({'stroke-opacity': opacity});
 
     // make connected authors opaque
-    d3.selectAll("[scene_id=\"" + from.id + "\"]")
-      .style({"opacity": 1});
+    d3.selectAll('[scene_id=\'' + from.id + '\']')
+      .style({'opacity': 1});
   }
 
   function setFuturePapers(to, chars, focus, futureVisitors) {
     if (futureVisitors.indexOf(to.id) < 0) {
       futureVisitors.push(to.id);
       if (!to.char_node) {
-        d3.selectAll("[scene_id=\"" + to.id + "\"] .scene")
-          .style({"opacity": 1});
+        d3.selectAll('[scene_id=\'' + to.id + '\'] .scene')
+          .style({'opacity': 1});
       }
 
       for (var k = 0; k < to.out_links.length; ++k) {
@@ -675,9 +664,9 @@ function styleLinkedAuthors(from, chars, focus, visited, iteration) {
 
     if (from.in_links.length === 0) {
       if (focus) {
-        addStyling(from, "1");
+        addStyling(from, '1');
       } else {
-        addStyling(from, "0.6");
+        addStyling(from, '0.6');
       }
     } else {
       for (var i = 0; i < from.in_links.length; ++i) {
@@ -696,100 +685,101 @@ function styleLinkedAuthors(from, chars, focus, visited, iteration) {
 }
 
 function draw_nodes(scenes, svg) {
+  'use strict';
   function click(d) {
     var paper = d.paper;
     var url;
 
     if (paper) {
-      url = scienceLibrary + "/paper/" + paper;
+      url = scienceLibrary + '/paper/' + paper;
       window.location.href = url;
     } else {
       var character = d.chars[0];
       var characterName = authorIndex[character];
 
-      url = scienceLibrary + "/collaboration?author=" + characterName + "&author=" + authorIndex[0];
+      url = scienceLibrary + '/collaboration?author=' + characterName + '&author=' + authorIndex[0];
       window.location.href = url;
     }
   }
 
   function mouseover(d) {
-    d3.selectAll(".node_char")
+    d3.selectAll('.node_char')
       .style(opacity.translucentNodes);
-    d3.selectAll(".scene")
+    d3.selectAll('.scene')
       .style(opacity.translucentScene);
-    d3.selectAll(".link")
+    d3.selectAll('.link')
       .style(opacity.translucentLinks);
     styleLinkedAuthors(d, d.chars, true);
 
     if (d.char_node !== true) {
       // Remove other titles (overlapping may cause this)
-      d3.selectAll("[class=\"paper-title\"]").remove();
-      d3.selectAll("[class=\"paper-title-placeholder\"]")
-        .attr("class", "hidden paper-title-placeholder");
+      d3.selectAll('[class=\'paper-title\']').remove();
+      d3.selectAll('[class=\'paper-title-placeholder\']')
+        .attr('class', 'hidden paper-title-placeholder');
 
-      d3.select("#title-box")
-        .append("text")
-          .attr("class", "paper-title")
+      d3.select('#title-box')
+        .append('text')
+          .attr('class', 'paper-title')
           .text(d.title);
     }
   } // mouseover
 
   function mouseout(d) {
-    d3.selectAll(".node_char")
+    d3.selectAll('.node_char')
       .style(opacity.opaqueNodes);
-    d3.selectAll(".scene")
+    d3.selectAll('.scene')
       .style(opacity.opaqueScene);
-    d3.selectAll(".link")
+    d3.selectAll('.link')
       .style(opacity.opaqueLinks);
     styleLinkedAuthors(d, d.chars, false);
 
     // Remove all paper titles
-    d3.selectAll("[class=\"paper-title\"]").remove();
-    d3.selectAll("[class=\"hidden paper-title-placeholder\"]")
-      .attr("class", "paper-title-placeholder");
+    d3.selectAll('[class=\'paper-title\']').remove();
+    d3.selectAll('[class=\'hidden paper-title-placeholder\']')
+      .attr('class', 'paper-title-placeholder');
   }
 
-  var node = svg.append("g").selectAll(".node")
+  var node = svg.append('g').selectAll('.node')
     .data(scenes)
-    .enter().append("g")
-    .attr("class", "node")
-    .attr("class", function(d) {
+    .enter().append('g')
+    .attr('class', 'node')
+    .attr('class', function(d) {
       if (d.name) {
-        return "node node_char";
+        return 'node node_char';
       } else {
-        return "node";
+        return 'node';
       }
     })
-    .attr("transform", function(d) {
-      return "translate(" + d.x + "," + d.y + ")";
+    .attr('transform', function(d) {
+      return 'translate(' + d.x + ',' + d.y + ')';
     })
-    .attr("scene_id", function(d) {
+    .attr('scene_id', function(d) {
       return d.id;
     })
-    .on("mouseover", mouseover)
-    .on("mouseout", mouseout)
-    .on("click", click);
+    .on('mouseover', mouseover)
+    .on('mouseout', mouseout)
+    .on('click', click);
     // .call(d3.behavior.drag()
     //   .origin(function(d) {
     //     return d;
     //   })
-    //   .on("dragstart", function() {
+    //   .on('dragstart', function() {
     //     this.parentNode.appendChild(this);
     //   })
-    //   .on("drag", dragmove));
+    //   .on('drag', dragmove));
 
-  node.append("rect")
-    .attr("width", function(d) {
+  node.append('rect')
+    .attr('width', function(d) {
       return d.width;
     })
-    .attr("height", function(d) {
+    .attr('height', function(d) {
       return d.height;
     })
-    .attr("class", "scene")
-    .style("fill", function(d) {
+    .attr('class', 'scene')
+    .style('fill', function(d) {
       if (d.paper) {
         var conceptNames = rels[d.paper].concept_names;
-        var papers = ["#5596e6", "#00b299", "#7c56a5", "#f49c4e", "#cc3f40", "#94a3ab"];
+        var papers = ['#5596e6', '#00b299', '#7c56a5', '#f49c4e', '#cc3f40', '#94a3ab'];
 
         if (conceptNames.indexOf(ce.concepts.journalPaper) > -1) {
           return papers[0];
@@ -806,135 +796,122 @@ function draw_nodes(scenes, svg) {
         }
       }
 
-      return "#fff";
+      return '#fff';
     })
-    // .style("stroke", function(d) { return "#0f3a58"; })
-    .append("title")
+    // .style('stroke', function(d) { return '#0f3a58'; })
+    .append('title')
     .text(function(d) {
       return d.name;
     });
 
   // White background for the names
   if (name_bg) {
-    node.append("rect")
+    node.append('rect')
       .filter(function(d) {
         return d.char_node;
       })
-      .attr("x", function(d) {
+      .attr('x', function(d) {
         return -((d.name.length + 2) * 5);
       })
-      .attr("y", function(d) {
+      .attr('y', function(d) {
         return -3;
       })
-      .attr("width", function(d) {
+      .attr('width', function(d) {
         return (d.name.length + 1) * 5;
       })
-      .attr("height", 7.5)
-      .attr("transform", null)
-      // .attr("fill", "#fff")
-      .style("opacity", 0);
+      .attr('height', 7.5)
+      .attr('transform', null)
+      // .attr('fill', '#fff')
+      .style('opacity', 0);
   }
 
   // TODO: Append something to show type of paper - too busy?
   // console.log(scenes);
-  // node.append("circle")
-  //  .attr("cx", 0)
-  //  .attr("cy", 0)
-  //  .attr("r", 5)
-  //  .style("fill", color(5));
+  // node.append('circle')
+  //  .attr('cx', 0)
+  //  .attr('cy', 0)
+  //  .attr('r', 5)
+  //  .style('fill', color(5));
 
-  node.append("text")
+  node.append('text')
     .filter(function(d) {
       return d.char_node;
     })
-    .attr("x", -6)
-    .attr("y", function(d) {
+    .attr('x', -6)
+    .attr('y', function(d) {
       return 0;
     })
-    .attr("dy", ".35em")
-    .attr("text-anchor", "end")
-    .attr("transform", null)
-    //.attr("background", "#fff")
+    .attr('dy', '.35em')
+    .attr('text-anchor', 'end')
+    .attr('transform', null)
+    //.attr('background', '#fff')
     .text(function(d) {
       return d.name;
     })
-    //.style("fill", "#000")
-    //.style("stroke", "#fff")
-    //.style("stroke-width", "0.5px")
+    //.style('fill', '#000')
+    //.style('stroke', '#fff')
+    //.style('stroke-width', '0.5px')
     .filter(function(d) {
       return false;
       //return d.x < chart_width / 2;
     })
-    .attr("x", function(d) {
+    .attr('x', function(d) {
       return 6 + d.width;
     })
-    .attr("text-anchor", "start");
-
-  // function dragmove(d) {
-  //   var newy = Math.max(0, Math.min(chart_height - d.height, d3.event.y));
-  //   var ydisp = d.y - newy;
-  //   d3.select(this).attr("transform", "translate(" + (d.x = Math.max(0, Math.min(chart_width - d.width, d3.event.x))) + "," + (d.y = Math.max(0, Math.min(chart_height - d.height, d3.event.y))) + ")");
-  //   reposition_node_links(d.id, d.x, d.y, d.width, d.height, svg, ydisp, d.comic_name);
-  // }
+    .attr('text-anchor', 'start');
 } // draw_nodes
 
-// function find_link(links, char_id) {
-//   for (var i = 0; i < links.length; i++) {
-//     if (links[i].char_id === char_id) {
-//       return links[i];
-//     }
-//   }
-//   return 0;
-// }
 
 function draw_links(links, svg) {
+  'use strict';
   function mouseover_cb(d) {
-    d3.selectAll(".node_char")
+    d3.selectAll('.node_char')
       .style(opacity.translucentNodes);
-    d3.selectAll(".scene")
+    d3.selectAll('.scene')
       .style(opacity.translucentScene);
-    d3.selectAll(".link")
+    d3.selectAll('.link')
       .style(opacity.translucentLinks);
     styleLinkedAuthors(d.from, [d.char_id], true);
   }
 
   function mouseout_cb(d) {
-    d3.selectAll(".node_char")
+    d3.selectAll('.node_char')
       .style(opacity.opaqueNodes);
-    d3.selectAll(".scene")
+    d3.selectAll('.scene')
       .style(opacity.opaqueScene);
-    d3.selectAll(".link")
+    d3.selectAll('.link')
       .style(opacity.opaqueLinks);
     styleLinkedAuthors(d.from, [d.char_id], false);
   }
 
-  svg.append("g").selectAll(".link")
+  svg.append('g').selectAll('.link')
     .data(links)
-    .enter().append("path")
-    .attr("class", "link")
-    .attr("d", function(d) {
+    .enter().append('path')
+    .attr('class', 'link')
+    .attr('d', function(d) {
       return get_path(d);
     })
-    .attr("from", function(d) {
-      return d.from.comic_name + "_" + d.from.id;
+    .attr('from', function(d) {
+      return d.from.comic_name + '_' + d.from.id;
     })
-    .attr("to", function(d) {
-      return d.to.comic_name + "_" + d.to.id;
+    .attr('to', function(d) {
+      return d.to.comic_name + '_' + d.to.id;
     })
-    .attr("charid", function(d) {
-      return d.from.comic_name + "_" + d.char_id;
+    .attr('charid', function(d) {
+      return d.from.comic_name + '_' + d.char_id;
     })
-    .style("stroke", function(d) {
+    .style('stroke', function(d) {
       return d3.rgb(color[d.group]).toString();
     })
-    .style("stroke-width", link_width)
-    .style("stroke-opacity", "0.6")
-    .style("stroke-linecap", "round")
-    .on("mouseover", mouseover_cb)
-    .on("mouseout", mouseout_cb);
+    .style('stroke-width', link_width)
+    .style('stroke-opacity', '0.6')
+    .style('stroke-linecap', 'round')
+    .on('mouseover', mouseover_cb)
+    .on('mouseout', mouseout_cb);
 } // draw_links
 
 function drawNarrativeChart(safe_name, tie_breaker, center_sort, collapse, data, svr, ces, sl, utils, defs) {
+  'use strict';
   var vals = data.main_instance.property_values;
   rels = data.related_instances;
   var i = 0;
@@ -949,9 +926,9 @@ function drawNarrativeChart(safe_name, tie_breaker, center_sort, collapse, data,
   // build character list
   var xchars = [];
   var types = {
-    "AC": 0,
-    "IND": 1,
-    "GOV": 2
+    'AC': 0,
+    'IND': 1,
+    'GOV': 2
   };
 
 //  var defOrg = rels[vals[ce.author.writesFor][0]];
@@ -1128,55 +1105,55 @@ function drawNarrativeChart(safe_name, tie_breaker, center_sort, collapse, data,
     var height = raw_chart_height - margin.top - margin.bottom;
 
     // Drag & zoom
-    function zoomed() {
+    var zoomed = function() {
       var x = d3.event.translate[0];
       var y = d3.event.translate[1] + drag_offset;
-      container.attr("transform", "translate(" + [x, y] + ")scale(" + d3.event.scale + ")");
-    }
+      container.attr('transform', 'translate(' + [x, y] + ')scale(' + d3.event.scale + ')');
+    };
 
-    function dragstarted( ) {
+    var dragstarted = function() {
       d3.event.sourceEvent.stopPropagation();
-      d3.select(this).classed("dragging", true);
-    }
+      d3.select(this).classed('dragging', true);
+    };
 
-    function dragged(d) {
+    var dragged = function(d) {
       d3.select(this)
-        .attr("cx", d.x = d3.event.x)
-        .attr("cy", d.y = d3.event.y);
-    }
+        .attr('cx', d.x = d3.event.x)
+        .attr('cy', d.y = d3.event.y);
+    };
 
-    function dragended(d) {
-      d3.select(this).classed("dragging", false);
-    }
+    var dragended = function(d) {
+      d3.select(this).classed('dragging', false);
+    };
 
     var zoom = d3.behavior.zoom()
         .scaleExtent([0, 10])
-        .on("zoom", zoomed);
+        .on('zoom', zoomed);
 
     var drag = d3.behavior.drag()
         .origin(function(d) { return d; })
-        .on("dragstart", dragstarted)
-        .on("drag", dragged)
-        .on("dragend", dragended);
+        .on('dragstart', dragstarted)
+        .on('drag', dragged)
+        .on('dragend', dragended);
 
-    var svg = d3.select("#narrative-chart").append("svg")
-        .attr("width", "100%")
-        .attr("height", "100%")
-        .attr("class", "chart")
-        .attr("id", safe_name)
-      .append("g")
+    var svg = d3.select('#narrative-chart').append('svg')
+        .attr('width', '100%')
+        .attr('height', '100%')
+        .attr('class', 'chart')
+        .attr('id', safe_name)
+      .append('g')
         .call(zoom);
 
-    var rect = svg.append("rect")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .attr("class", "chart")
-        .style("fill", "none")
-        .style("pointer-events", "all");
+    var rect = svg.append('rect')
+        .attr('width', width + margin.left + margin.right)
+        .attr('height', height + margin.top + margin.bottom)
+        .attr('class', 'chart')
+        .style('fill', 'none')
+        .style('pointer-events', 'all');
 
-    var container = svg.append("g")
-        .attr("id", "narrative-container")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")scale(1)");
+    var container = svg.append('g')
+        .attr('id', 'narrative-container')
+        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')scale(1)');
 
     var charsArr = [];
     var char_map = []; // maps id to pointer
@@ -1251,8 +1228,8 @@ function drawNarrativeChart(safe_name, tie_breaker, center_sort, collapse, data,
     draw_nodes(scenes, container);
 
     // chart elements
-    var narrativeChart = document.getElementById("narrative-chart");
-    var narrativeContainer = document.getElementById("narrative-container");
+    var narrativeChart = document.getElementById('narrative-chart');
+    var narrativeContainer = document.getElementById('narrative-container');
 
     // axis
     var t1 = paperAndDates[0].date,
@@ -1279,24 +1256,24 @@ function drawNarrativeChart(safe_name, tie_breaker, center_sort, collapse, data,
 
     var xAxis = d3.svg.axis()
       .scale(x)
-      .orient("bottom")
-      .tickFormat(d3.time.format("%b %Y"));
+      .orient('bottom')
+      .tickFormat(d3.time.format('%b %Y'));
 
-    var axisLabels = container.append("g")
-      .attr("class", "x axis")
-      .attr("transform", "translate(" + (longest_name + 20) + "," + (height + margin.top) + ")")
+    var axisLabels = container.append('g')
+      .attr('class', 'x axis')
+      .attr('transform', 'translate(' + (longest_name + 20) + ',' + (height + margin.top) + ')')
       .call(xAxis)
-    .selectAll("text")
-      .attr("y", 6)
-      .attr("x", 6)
-      .style("text-anchor", "start");
+    .selectAll('text')
+      .attr('y', 6)
+      .attr('x', 6)
+      .style('text-anchor', 'start');
 
     if (rotateAxis) {
       axisLabels
-        .attr("y", 0)
-        .attr("x", 9)
-        .attr("dy", ".35em")
-        .attr("transform", "rotate(90)");
+        .attr('y', 0)
+        .attr('x', 9)
+        .attr('dy', '.35em')
+        .attr('transform', 'rotate(90)');
     }
 
     // calculate scale
@@ -1321,7 +1298,7 @@ function drawNarrativeChart(safe_name, tie_breaker, center_sort, collapse, data,
     }
 
     // apply scale
-    container.attr("transform", "translate(" + margin.left + "," + margin.top + ")scale(" + scale + ")");
+    container.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')scale(' + scale + ')');
     zoom.scale(scale);
 
     // adjust offset
@@ -1342,67 +1319,67 @@ function drawNarrativeChart(safe_name, tie_breaker, center_sort, collapse, data,
       leftOffset = leftDiff / 2;
     }
 
-    container.attr("transform", "translate(" + (margin.left + leftOffset) + "," + (margin.top + drag_offset) + ")scale(" + scale + ")");
+    container.attr('transform', 'translate(' + (margin.left + leftOffset) + ',' + (margin.top + drag_offset) + ')scale(' + scale + ')');
 
-    function toggleListView() {
-      var narrative = d3.select("#narrative-chart");
-      var papers = d3.select("#papers-list");
-      var toggle = d3.select(".toggle-button");
+    var toggleListView = function() {
+      var narrative = d3.select('#narrative-chart');
+      var papers = d3.select('#papers-list');
+      var toggle = d3.select('.toggle-button');
 
-      if (narrative[0][0].getAttribute("class").indexOf("hidden") > -1) {
-        narrative.attr("class", "panel");
-        papers.attr("class", "hidden panel");
-        toggle.text("List view");
+      if (narrative[0][0].getAttribute('class').indexOf('hidden') > -1) {
+        narrative.attr('class', 'panel');
+        papers.attr('class', 'hidden panel');
+        toggle.text('List view');
       } else {
-        narrative.attr("class", "hidden panel");
-        papers.attr("class", "panel");
-        toggle.text("Narrative view");
+        narrative.attr('class', 'hidden panel');
+        papers.attr('class', 'panel');
+        toggle.text('Narrative view');
       }
-    }
+    };
 
     // draw toggle
-    var toggle = d3.select("#toggle-box").append("svg")
-      .attr("id", "toggle")
-      .on("click", toggleListView);
+    var toggle = d3.select('#toggle-box').append('svg')
+      .attr('id', 'toggle')
+      .on('click', toggleListView);
 
-    var g = toggle.append("g");
+    var g = toggle.append('g');
 
-    g.append("text")
-      .attr("class", "toggle-button")
-      .text("List view");
+    g.append('text')
+      .attr('class', 'toggle-button')
+      .text('List view');
 
     // draw paper title box
-    var titleBox = d3.select("#narrative-chart").append("svg")
-      .attr("id", "paper-title-box");
+    var titleBox = d3.select('#narrative-chart').append('svg')
+      .attr('id', 'paper-title-box');
 
-    g = titleBox.append("g")
-      .attr("id", "title-box")
-      .attr("transform", "translate(0, 10)");
+    g = titleBox.append('g')
+      .attr('id', 'title-box')
+      .attr('transform', 'translate(0, 10)');
 
-    g.append("text")
-      .attr("class", "paper-title-placeholder")
-      .text("Hover over a paper");
+    g.append('text')
+      .attr('class', 'paper-title-placeholder')
+      .text('Hover over a paper');
 
     // draw legend
-    var legend = d3.select("#narrative-chart").append("svg")
-      .attr("class", "narrative-legend");
+    var legend = d3.select('#narrative-chart').append('svg')
+      .attr('class', 'narrative-legend');
 
     var industryMap = {
-      "IND": "Industry",
-      "AC":  "Academia",
-      "GOV": "Government"
+      'IND': 'Industry',
+      'AC':  'Academia',
+      'GOV': 'Government'
     };
 
     i = 0;
     for (var t in types) {
       if (types.hasOwnProperty(t)) {
-        g = legend.append("g");
-        g.append("rect")
-          .attr("fill", color[t])
-          .attr("class", "legend-key")
-          .attr("transform", "translate(" + 10 + "," + (i * 15) + ")");
-        g.append("text")
-          .attr("transform", "translate(" + 30 + "," + (i * 15 + 8) + ")")
+        g = legend.append('g');
+        g.append('rect')
+          .attr('fill', color[t])
+          .attr('class', 'legend-key')
+          .attr('transform', 'translate(' + 10 + ',' + (i * 15) + ')');
+        g.append('text')
+          .attr('transform', 'translate(' + 30 + ',' + (i * 15 + 8) + ')')
           .text(industryMap[t]);
 
         i++;

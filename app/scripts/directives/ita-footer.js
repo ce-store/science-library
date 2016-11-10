@@ -1,55 +1,52 @@
-'use strict';
+/* globals webspeech: true */
 
-/**
- * @ngdoc directive
- * @name itapapersApp.directive:itaFooter
- * @description
- * # itaFooter
- */
 angular.module('itapapersApp')
-  .directive('itaFooter', ['$location', '$uibModal', 'hudson', 'store', function ($location, $uibModal, hudson, store) {
-    return {
-      templateUrl: 'views/ita-footer.html',
-      restrict: 'E',
-      link: function postLink(scope) {
-        scope.question = "";
 
-        scope.submit = function () {
-          hudson.askQuestion(scope.question);
-        };
+.directive('itaFooter', ['$location', '$uibModal', 'hudson', 'store', function ($location, $uibModal, hudson, store) {
+  'use strict';
 
-        //Voice To Text
-        var listener;
+  return {
+    templateUrl: 'views/ita-footer.html',
+    restrict: 'E',
+    link: function postLink(scope) {
+      scope.question = "";
 
-        var reset = function() {
-          listener = new webspeech.Listener();
-          listener.listen("en", function(text) {
-            scope.question = text;
-            angular.element("#question-box")[0].value = text;
-            hudson.askQuestion(text);
-          });
-        };
+      scope.submit = function () {
+        hudson.askQuestion(scope.question);
+      };
 
-        scope.resetListener = function () {
-          store.getVoiceAcceptance()
-            .then(function(accepted) {
-              if (accepted) {
+      //Voice To Text
+      var listener;
+
+      var reset = function() {
+        listener = new webspeech.Listener();
+        listener.listen("en", function(text) {
+          scope.question = text;
+          angular.element("#question-box")[0].value = text;
+          hudson.askQuestion(text);
+        });
+      };
+
+      scope.resetListener = function () {
+        store.getVoiceAcceptance()
+          .then(function(accepted) {
+            if (accepted) {
+              reset();
+            } else {
+              var modalInstance = $uibModal.open({
+                animation: true,
+                templateUrl: 'views/science-library/voice-warning.html',
+                controller: 'VoiceWarningCtrl',
+                size: 'sm'
+              });
+
+              modalInstance.result.then(function () {
+                store.setVoiceAcceptance(true);
                 reset();
-              } else {
-                var modalInstance = $uibModal.open({
-                  animation: true,
-                  templateUrl: 'views/science-library/voice-warning.html',
-                  controller: 'VoiceWarningCtrl',
-                  size: 'sm'
-                });
-
-                modalInstance.result.then(function () {
-                  store.setVoiceAcceptance(true);
-                  reset();
-                });
-              }
-            });
-        };
-      }
-    };
-  }]);
+              });
+            }
+          });
+      };
+    }
+  };
+}]);

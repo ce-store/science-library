@@ -1,0 +1,17 @@
+{
+  "curly": true,
+  "eqnull": true,
+  "eqeqeq": true,
+  "undef": true,
+  "strict": true,
+  "sub": true,
+  "globals": {
+    "require": false,
+    "console": false,
+    "module": false,
+    "exports": false,
+    "__dirname": false,
+    "angular": false,
+    "document": false
+  }
+}
