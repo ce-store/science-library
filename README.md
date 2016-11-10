@@ -20,18 +20,27 @@ git clone https://github.com/ce-store/science-library
 
 The project is built using NPM and Grunt. 
 
-To build, run:
+To install the dependancies, run:
 
 ```
 npm install
 npm install -g bower
 bower install
+```
+
+Edit the `home` and `server` properties in `app/scripts/services/urls.js` to point at your homepage and server where your CE-Store is installed.
+
+Build the minified files into the `dist` folder, by running:
+
+```
 grunt
 ```
 
-This will build the minified files into the `dist` folder.
+For preview, run:
 
-Run `grunt serve` for preview.
+```
+grunt serve
+```
 
 ## Testing
 
