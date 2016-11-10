@@ -1,14 +1,38 @@
 # ScienceLibrary
 
-This project is generated with [yo angular generator](https://github.com/yeoman/generator-angular)
-version 0.14.0.
+The Science Library is a user interface which visualises publications and the surrounding metadata such as authors, topics, organisations and venues. It runs on the [CE-Store](https://github.com/ce-store/ce-store/) and uses a model such as [SL-Data](https://github.com/ce-store/sl-data).
+
+## Installation and Setup
+
+Clone the code
+
+```
+git clone https://github.com/ce-store/science-library
+```
+
+## Prerequisites
+
+* [Node.js](https://nodejs.org/en/)
+* [Grunt](http://gruntjs.com/)
+* [CE-Store](https://github.com/ce-store/ce-store/)
 
 ## Build & development
 
-Run `bower install` and `npm install`.
+The project is built using NPM and Grunt. 
 
-Run `grunt` for building and `grunt serve` for preview.
+To build, run:
+
+```
+npm install
+npm install -g bower
+bower install
+grunt
+```
+
+This will build the minified files into the `dist` folder.
+
+Run `grunt serve` for preview.
 
 ## Testing
 
-Running `grunt test` will run the unit tests with karma.
+Running `grunt test` will JSHint your files.
