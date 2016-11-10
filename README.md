@@ -16,7 +16,7 @@ git clone https://github.com/ce-store/science-library
 * [Grunt](http://gruntjs.com/)
 * [CE-Store](https://github.com/ce-store/ce-store/)
 
-## Build & Configuration
+## Build and Configuration
 
 The project is built using NPM and Grunt. 
 
