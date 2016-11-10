@@ -15,6 +15,7 @@ git clone https://github.com/ce-store/science-library
 * [Node.js](https://nodejs.org/en/)
 * [Grunt](http://gruntjs.com/)
 * [CE-Store](https://github.com/ce-store/ce-store/)
+* CE Model loaded in CE-Store
 
 ## Build and Configuration
 
@@ -28,7 +29,7 @@ npm install -g bower
 bower install
 ```
 
-Edit the `home` and `server` properties in `app/scripts/services/urls.js` to point at your homepage and server where your CE-Store is installed.
+Edit the `home` and `server` properties in `app/scripts/services/urls.js` to point at your homepage and server where your CE-Store is running.
 
 Build the minified files into the `dist` folder, by running:
 
