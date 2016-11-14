@@ -19,13 +19,14 @@ git clone https://github.com/ce-store/science-library
 
 ## Build and Configuration
 
-The project is built using NPM and Grunt. 
+The project is built using NPM and Grunt.
 
 To install the dependancies, run:
 
 ```
 npm install
 npm install -g bower
+npm install -g grunt-cli
 bower install
 ```
 
@@ -41,6 +42,12 @@ For preview, run:
 
 ```
 grunt serve
+```
+
+To serve on a production server, run:
+
+```
+npm start
 ```
 
 ## Testing

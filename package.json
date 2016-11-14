@@ -2,7 +2,7 @@
   "name": "itapapers",
   "private": true,
   "scripts": {
-    "start": "grunt serve"
+    "start": "node server.js"
   },
   "devDependencies": {
     "autoprefixer-core": "^5.2.1",
@@ -36,6 +36,7 @@
     "node": ">=0.10.0"
   },
   "dependencies": {
-    "connect-modrewrite": "^0.8.2"
+    "connect-modrewrite": "^0.8.2",
+    "express": "^4.14.0"
   }
 }
