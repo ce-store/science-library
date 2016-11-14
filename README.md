@@ -4,6 +4,8 @@ The Science Library is a user interface which visualises publications and the su
 
 ## Installation and Setup
 
+> A complete installation guide including setting up the CE-Store and populating it with data is found [here](https://github.com/ce-store/science-library/wiki/Complete-Installation-Guide).
+
 Clone the code
 
 ```
