@@ -63,26 +63,25 @@ angular.module('itapapersApp')
           for (var j = 0; j < entities.length; ++j) {
             var entity = entities[j];
             var triples = renderableTriples[entity.domain];
+            var view;
 
-            if (special['subject instances'] &&
-                triples &&
-                triples[entity['property name']]) {
-              var view = triples[entity['property name']];
-              var subject = special['subject instances'][0].entities[0];
+            if (triples) {
+              if (special['subject instances'] &&
+                  triples[entity['property name']]) {
+                view = triples[entity['property name']];
+                var subject = special['subject instances'][0].entities[0];
 
-              return goTo(entity.domain, subject._id, {view: view});
-            } else if (specials['object instances'] &&
-                triples &&
-                triples[entity['property name']]) {
-              var view = triples[entity['property name']];
-              var object = special['object instances'][0].entities[0];
+                return goTo(entity.domain, subject._id, {view: view});
+              } else if (specials['object instances'] &&
+                  triples[entity['property name']]) {
+                view = triples[entity['property name']];
+                var object = special['object instances'][0].entities[0];
 
-              return goTo(entity.domain, object._id, {view: view});
+                return goTo(entity.domain, object._id, {view: view});
+              }
             }
           }
         }
-      } else if (special.type === multiMatch) {
-
       }
     }
   };
@@ -153,9 +152,6 @@ angular.module('itapapersApp')
       // go to list
       if (!redirected && result.concepts) {
         redirected = handleConcepts(result.concepts);
-      }
-
-      if (!redirected && result.properties) {
       }
 
       return redirected;
