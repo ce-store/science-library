@@ -2,10 +2,10 @@
 
 angular.module('itapapersApp')
 
-.controller('OrganisationCtrl', ['$scope', '$stateParams', '$document', 'store', 'hudson', 'documentTypes', 'utils', 'csv', 'colours', 'urls', 'definitions', function ($scope, $stateParams, $document, store, hudson, documentTypes, utils, csv, colours, urls, ce) {
+.controller('OrganisationCtrl', ['$scope', '$state', '$stateParams', '$document', 'store', 'hudson', 'documentTypes', 'utils', 'csv', 'colours', 'urls', 'definitions', function ($scope, $state, $stateParams, $document, store, hudson, documentTypes, utils, csv, colours, urls, ce) {
   'use strict';
 
-  $scope.views = ["chart", "list", "authors"];
+  $scope.views = ['papers', 'list', 'authors'];
   $scope.scienceLibrary = urls.scienceLibrary;
   $scope.journalType            = documentTypes.journal;
   $scope.patentType             = documentTypes.patent;
@@ -39,6 +39,8 @@ angular.module('itapapersApp')
 
   $scope.showView = function (view) {
     $scope.currentView = view;
+    $stateParams.view = view;
+    $state.go('organisation', $stateParams);
 
     if (view === $scope.views[1]) {
       $scope.sort   = $scope.sortTypes.papers;
@@ -379,6 +381,10 @@ angular.module('itapapersApp')
         refreshHighlight();
       }
 
-      $scope.showView($scope.views[0]);
+      if ($stateParams.view && $scope.views.includes($stateParams.view)) {
+        $scope.showView($stateParams.view);
+      } else {
+        $scope.showView($scope.views[0]);
+      }
     });
 }]);
