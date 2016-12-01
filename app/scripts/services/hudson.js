@@ -1,6 +1,6 @@
 angular.module('itapapersApp')
 
-.factory('hudson', ['$http', '$location', '$rootScope', 'urls', function ($http, $location, $rootScope, urls) {
+.factory('hudson', ['$http', '$location', '$rootScope', '$state', 'urls', function ($http, $location, $rootScope, $state, urls) {
   'use strict';
 
   var questions = [];
@@ -13,172 +13,156 @@ angular.module('itapapersApp')
     topic: 'topic',
     project: 'project'
   };
+  var conceptPageMap = {
+    'document': 'paper',
+    'person': 'author',
+    'event': 'venue',
+    'event series': 'venue',
+    'organisation': 'organisation',
+    'topic': 'topic',
+    'project': 'project'
+  };
+  var renderableTriples = {
+    'organisation': [
+      'employs',
+      'wrote'
+    ]
+  };
+  var matchedTriple = 'matched-triple';
+  var multiMatch = 'multi-match';
 
-  var saveQuestion = function(question, type, property) {
-    var qa;
+  var goTo = function(concept, id, year) {
+    var page = conceptPageMap[concept];
+    var params = {};
+    params[page + 'Id'] = id;
 
-    if (type === 'highlight') {
-      qa = {
-        question: question,
-        type: type,
-        property: property
-      };
-    } else if (type === 'redirect') {
-      qa = {
-        question: question,
-        type: type
-      };
+    if (year) {
+      params.year = year;
     }
 
-    questions.push(qa);
-    $rootScope.$broadcast('question:added');
+    $state.go(page, params);
+    return true;
   };
 
-  var hasUsefulConceptName = function (instance) {
-    return instance.direct_concept_names.indexOf(types.document) > -1 ||
-      instance.direct_concept_names.indexOf(types.person) > -1 ||
-      instance.direct_concept_names.indexOf(types.eventSeries) > -1 ||
-      instance.direct_concept_names.indexOf(types.event) > -1 ||
-      instance.direct_concept_names.indexOf(types.organisation) > -1 ||
-      instance.direct_concept_names.indexOf(types.topic) > -1 ||
-      instance.direct_concept_names.indexOf(types.project) > -1;
-  };
+  var handleSpecials = function(specials) {
+    for (var i = 0; i < specials.length; ++i) {
+      var special = specials[i];
 
-  var getUrl = function(type, instance) {
-    var url;
+      if (special.type === matchedTriple) {
+        if (special.predicate) {
+          var entities = special.predicate.entities;
+          for (var j = 0; j < entities.length; ++j) {
+            var entity = entities[j];
+            var triples = renderableTriples[entity.domain];
 
-    if (type === types.document) {
-      url = '/paper/' + instance._id;
-    } else if (type === types.person) {
-      url = '/author/' + instance._id;
-    } else if (type === types.eventSeries) {
-      url = '/venue/' + instance._id + '/';
-    } else if (type === types.event) {
-      url = '/venue/' + instance.property_values['is part of'][0] + '/' + instance._id;
-    } else if (type === types.topic) {
-      url = '/topic/' + instance._id;
-    } else if (type === types.organisation) {
-      url = '/organisation/' + instance._id;
-    } else if (type === types.project) {
-      url = '/project/' + instance._id;
-    }
-
-    return url;
-  };
-
-  var handleAnswer = function (data) {
-    var propertyName;
-    var domainName;
-    var instance;
-    var type;
-    var word;
-    var url = urls.scienceLibrary;
-
-    // get property
-    for (var property in data.properties) {
-      if (data.properties[property].length > 0) {
-        propertyName = data.properties[property][0].property_name;
-        domainName = data.properties[property][0].domain_name;
-
-        if (domainName.indexOf(types.document) > -1) {
-          type = types.document;
-        } else if (domainName.indexOf(types.person) > -1) {
-          type = types.person;
-        } else if (domainName.indexOf(types.eventSeries) > -1) {
-          type = types.eventSeries;
-        } else if (domainName.indexOf(types.event) > -1) {
-          type = types.event;
-        } else if (domainName.indexOf(types.organisation) > -1) {
-          type = types.organisation;
-        } else if (domainName.indexOf(types.topic) > -1) {
-          type = types.topic;
-        } else if (domainName.indexOf(types.project) > -1) {
-          type = types.project;
-        }
-      }
-    }
-
-    // highlight
-    if (propertyName) {
-      for (word in data.instances) {
-        if (data.instances.hasOwnProperty(word)) {
-          for (var i = 0; i < data.instances[word].length; ++i) {
-            if (data.instances[word][i].direct_concept_names.indexOf(type) > -1 ||
-              data.instances[word][i].inherited_concept_names.indexOf(type) > -1) {
-              instance = data.instances[word][i];
-              break;
+            if (special['subject instances'] &&
+                triples.includes(entity['property name'])) {
+              var subject = special['subject instances'][0].entities[0];
+              return goTo(entity.domain, subject._id);
+              // TODO: Extend goTo to show subpage, eg. org employs
             }
           }
         }
+      } else if (special.type === multiMatch) {
+
       }
+    }
+  };
 
-      url += getUrl(type, instance);
-      $location.url(url);
+  var handleInstances = function(instances) {
+    var matchesConcept = function(concept) {
+      return conceptPageMap[concept];
+    };
 
-      saveQuestion(data.question_text, "highlight", propertyName.replace(/ /g, '_'));
-    // redirect
-    } else {
-      var insts = data.answer_instances ? data.answer_instances : data.instances;
+    var eventSeriesFound = false;
 
-      for (word in insts) {
-        if (insts.hasOwnProperty(word)) {
-          var inst;
-          if (insts[word][0]) {
-            inst = insts[word][0];
+    for (var i = 0; i < instances.length; ++i) {
+      var instance = instances[i];
+
+      for (var j = 0; j < instance.entities.length; ++j) {
+        var entity = instance.entities[j];
+        var concept = entity._concept.find(matchesConcept);
+
+        if (concept) {
+          if (concept === types.eventSeries) {
+            eventSeriesFound = entity._id;
+          } else if (concept === types.event) {
+            eventSeriesFound = false;
+            return goTo(concept, entity['is part of'], entity._id);
           } else {
-            inst = insts[word];
-          }
-
-          if (hasUsefulConceptName(inst)) {
-            instance = inst;
-            break;
+            return goTo(concept, entity._id);
           }
         }
       }
+    }
 
-      if (instance) {
-        // get url
-        if (instance.direct_concept_names.indexOf(types.document) > -1) {
-          url += '/paper/' + instance._id;
-        } else if (instance.direct_concept_names.indexOf(types.person) > -1) {
-          url += '/author/' + instance._id;
-        } else if (instance.direct_concept_names.indexOf(types.eventSeries) > -1) {
-          url += '/venue/' + instance._id + '/';
-        } else if (instance.direct_concept_names.indexOf(types.event) > -1) {
-          url += '/venue/' + instance.property_values['is part of'][0] + '/' + instance._id;
-        } else if (instance.direct_concept_names.indexOf(types.organisation) > -1) {
-          url += '/organisation/' + instance._id;
-        } else if (instance.direct_concept_names.indexOf(types.topic) > -1) {
-          url += '/topic/' + instance._id;
-        } else if (instance.direct_concept_names.indexOf(types.project) > -1) {
-          url += '/project/' + instance._id;
+    if (eventSeriesFound) {
+      return goTo(types.eventSeries, eventSeriesFound);
+    }
+  };
+
+  var handleConcepts = function(concepts) {
+    console.log(concepts);
+    for (var i = 0; i < concepts.length; ++i) {
+      var concept = concepts[i];
+
+      for (var j = 0; j < concept.entities.length; ++j) {
+        var entity = concept.entities[j];
+        var page = conceptPageMap[entity._id];
+
+        if (page && page !== conceptPageMap.project) {
+          $state.go('category', {category: page + 's'});
+          return true;
         }
-
-        $location.url(url);
-        saveQuestion(data.question_text, 'redirect');
       }
+    }
+  };
+
+  var handleIntepretations = function(interpretations) {
+    if (interpretations && interpretations.length > 0) {
+      var result = interpretations[0].result;
+      var redirected;
+
+      // perform special lookup
+      if (result.specials) {
+        redirected = handleSpecials(result.specials);
+      }
+
+      // go to instance
+      if (!redirected && result.instances) {
+        redirected = handleInstances(result.instances);
+      }
+
+      // go to list
+      if (!redirected && result.concepts) {
+        redirected = handleConcepts(result.concepts);
+      }
+
+      if (!redirected && result.properties) {
+      }
+
+      return redirected;
     }
   };
 
   var askQuestion = function (question) {
-    var words = question.split(' ');
-    var questionWords = ['what', 'who', 'list', 'show', 'draw'];
     var url = urls.scienceLibrary;
 
-    if (words.indexOf('help') > -1) {
-      url += '/help';
-      $location.url(url);
-    } else if (questionWords.indexOf(words[0]) > -1) {
-      // Question - send to Hudson
-      $http.post(urls.server + urls.questionAnalyser, question)
-        .then(function(response) {
-          handleAnswer(response.data);
-        }, function(response) {
-          console.log('failed: ' + response);
-      });
+    if (question.includes('help')) {
+      $state.go('help');
     } else {
-      url += '/results?keywords=' + question;
-      $location.url(url);
+      $http.post(urls.server + urls.interpreter, question)
+        .then(function(response) {
+          console.log(response);
+          var redirected = handleIntepretations(response.data.interpretations);
+
+          // keyword search
+          if (!redirected) {
+            $state.go('results', {keywords: question});
+          }
+        }, function(response) {
+          console.log(response);
+        });
     }
   };
 

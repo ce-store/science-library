@@ -4,6 +4,8 @@ The Science Library is a user interface which visualises publications and the su
 
 ## Installation and Setup
 
+> A complete installation guide including setting up the CE-Store and populating it with data is found [here](https://github.com/ce-store/science-library/wiki/Complete-Installation-Guide).
+
 Clone the code
 
 ```
@@ -19,13 +21,14 @@ git clone https://github.com/ce-store/science-library
 
 ## Build and Configuration
 
-The project is built using NPM and Grunt. 
+The project is built using NPM and Grunt.
 
 To install the dependancies, run:
 
 ```
 npm install
 npm install -g bower
+npm install -g grunt-cli
 bower install
 ```
 
@@ -41,6 +44,12 @@ For preview, run:
 
 ```
 grunt serve
+```
+
+To serve on a production server, run:
+
+```
+npm start
 ```
 
 ## Testing
