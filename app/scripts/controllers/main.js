@@ -343,8 +343,8 @@ angular.module('itapapersApp')
         var orgDocumentCount = utils.getIntProperty(orgProps, ce.organisation.documentCount);
         var orgExternalCount = utils.getIntProperty(orgProps, ce.organisation.externalDocumentCount);
         var orgCitationCount = utils.getIntProperty(orgProps, ce.organisation.citationCount);
+        var empLen = orgEmployeeList.length;
         var orgType = utils.getIndustryFor(instances[id]);
-
         if (orgType) {
           className = utils.getClassName(orgType);
         }
@@ -353,7 +353,7 @@ angular.module('itapapersApp')
         $scope.list.push({
           id:     id,
           name:   orgName,
-          value:  orgEmployeeList.length,
+          value:  empLen,
           papers: orgDocumentCount,
           externalCount: orgExternalCount,
           citations: orgCitationCount,

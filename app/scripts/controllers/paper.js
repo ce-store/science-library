@@ -260,13 +260,26 @@ angular.module('itapapersApp')
 
       // download links
       if (paperFile) {
-        $scope.paperDownloadUrl = urls.server + paperFile;
+        if (paperFile.startsWith('http')) {
+          $scope.paperDownloadUrl = paperFile;
+        } else {
+          $scope.paperDownloadUrl = urls.server + paperFile;
+        }
       }
+
       if (posterFile) {
-        $scope.posterDownloadUrl = urls.server + posterFile;
+        if (posterFile.startsWith('http')) {
+          $scope.posterDownloadUrl = posterFile;
+        } else {
+          $scope.posterDownloadUrl = urls.server + posterFile;
+        }
       }
       if (presentationFile) {
-        $scope.presentationDownloadUrl = urls.server + presentationFile;
+        if (presentationFile.startsWith('http')) {
+          $scope.presentationDownloadUrl = presentationFile;
+        } else {
+          $scope.presentationDownloadUrl = urls.server + presentationFile;
+        }
       }
 
       for (var oa in $scope.orderedAuthors) {
