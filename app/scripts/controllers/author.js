@@ -3,14 +3,14 @@
 
 angular.module('itapapersApp')
 
-.controller('AuthorCtrl', ['$scope', '$stateParams', '$timeout', 'store', 'urls', 'hudson', 'documentTypes', 'utils', 'csv', 'colours', 'definitions', function ($scope, $stateParams, $timeout, store, urls, hudson, documentTypes, utils, csv, colours, ce) {
+.controller('AuthorCtrl', ['$scope', '$state', '$stateParams', '$timeout', 'store', 'urls', 'hudson', 'documentTypes', 'utils', 'csv', 'colours', 'definitions', function ($scope, $state, $stateParams, $timeout, store, urls, hudson, documentTypes, utils, csv, colours, ce) {
   'use strict';
 
   var dataMain = null;
   var dataPapers = null;
   var dataCoAuthors = null;
 
-  $scope.views = ['graph', 'papers', 'co-authors', 'co-authors-graph'];
+  $scope.views = ['narrative', 'papers', 'co-authors', 'network'];
   $scope.scienceLibrary = urls.scienceLibrary;
   $scope.journalType            = documentTypes.journal;
   $scope.externalConferenceType = documentTypes.external;
@@ -44,6 +44,8 @@ angular.module('itapapersApp')
 
   $scope.showView = function (view) {
     $scope.currentView = view;
+    $stateParams.view = view;
+    $state.go('author', $stateParams);
 
     if (view === $scope.views[0]) {
       angular.element("svg.chart").remove();
@@ -441,10 +443,14 @@ angular.module('itapapersApp')
 
       refreshHighlight();
 
-      $scope.showView($scope.views[0]);
-        });
+      if ($stateParams.view && $scope.views.includes($stateParams.view)) {
+        $scope.showView($stateParams.view);
+      } else {
+        $scope.showView($scope.views[0]);
+      }
       });
     });
+  });
 
   var mergeResponses = function(dm, dp, dc) {
     var result = {};

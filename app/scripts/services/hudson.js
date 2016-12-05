@@ -23,21 +23,30 @@ angular.module('itapapersApp')
     'project': 'project'
   };
   var renderableTriples = {
-    'organisation': [
-      'employs',
-      'wrote'
-    ]
+    'organisation': {
+      'employs': 'authors',
+      'wrote': 'papers'
+    },
+    'person': {
+      'wrote': 'papers',
+      'co-author': 'network'
+    },
+    'topic': {
+      'writes about': 'papers',
+    }
   };
   var matchedTriple = 'matched-triple';
   var multiMatch = 'multi-match';
 
-  var goTo = function(concept, id, year) {
+  var goTo = function(concept, id, extraParams) {
     var page = conceptPageMap[concept];
     var params = {};
     params[page + 'Id'] = id;
 
-    if (year) {
-      params.year = year;
+    if (extraParams) {
+      Object.keys(extraParams).forEach(function(key) {
+        params[key] = extraParams[key];
+      });
     }
 
     $state.go(page, params);
@@ -54,17 +63,25 @@ angular.module('itapapersApp')
           for (var j = 0; j < entities.length; ++j) {
             var entity = entities[j];
             var triples = renderableTriples[entity.domain];
+            var view;
 
-            if (special['subject instances'] &&
-                triples.includes(entity['property name'])) {
-              var subject = special['subject instances'][0].entities[0];
-              return goTo(entity.domain, subject._id);
-              // TODO: Extend goTo to show subpage, eg. org employs
+            if (triples) {
+              if (special['subject instances'] &&
+                  triples[entity['property name']]) {
+                view = triples[entity['property name']];
+                var subject = special['subject instances'][0].entities[0];
+
+                return goTo(entity.domain, subject._id, {view: view});
+              } else if (specials['object instances'] &&
+                  triples[entity['property name']]) {
+                view = triples[entity['property name']];
+                var object = special['object instances'][0].entities[0];
+
+                return goTo(entity.domain, object._id, {view: view});
+              }
             }
           }
         }
-      } else if (special.type === multiMatch) {
-
       }
     }
   };
@@ -88,7 +105,7 @@ angular.module('itapapersApp')
             eventSeriesFound = entity._id;
           } else if (concept === types.event) {
             eventSeriesFound = false;
-            return goTo(concept, entity['is part of'], entity._id);
+            return goTo(concept, entity['is part of'], {year: entity._id});
           } else {
             return goTo(concept, entity._id);
           }
@@ -102,7 +119,6 @@ angular.module('itapapersApp')
   };
 
   var handleConcepts = function(concepts) {
-    console.log(concepts);
     for (var i = 0; i < concepts.length; ++i) {
       var concept = concepts[i];
 
@@ -138,9 +154,6 @@ angular.module('itapapersApp')
         redirected = handleConcepts(result.concepts);
       }
 
-      if (!redirected && result.properties) {
-      }
-
       return redirected;
     }
   };
@@ -153,7 +166,6 @@ angular.module('itapapersApp')
     } else {
       $http.post(urls.server + urls.interpreter, question)
         .then(function(response) {
-          console.log(response);
           var redirected = handleIntepretations(response.data.interpretations);
 
           // keyword search

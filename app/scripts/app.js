@@ -69,13 +69,18 @@ angular.module('itapapersApp', [
       templateUrl: "views/science-library/main.html",
       controller: "MainCtrl"
     })
+    .state('category', {
+      url: "/science-library/:category",
+      templateUrl: "views/science-library/main.html",
+      controller: "MainCtrl"
+    })
     .state('help', {
       url: "/science-library/help",
       templateUrl: "views/science-library/help.html",
       controller: "HelpCtrl"
     })
     .state('author', {
-      url: "/science-library/author/:authorId",
+      url: "/science-library/author/:authorId?view",
       templateUrl: "views/science-library/author.html",
       controller: "AuthorCtrl"
     })
@@ -90,12 +95,12 @@ angular.module('itapapersApp', [
       controller: "VenueCtrl"
     })
     .state('organisation', {
-      url: "/science-library/organisation/:organisationId",
+      url: "/science-library/organisation/:organisationId?view",
       templateUrl: "views/science-library/organisation.html",
       controller: "OrganisationCtrl"
     })
     .state('topic', {
-      url: "/science-library/topic/:topicId",
+      url: "/science-library/topic/:topicId?view",
       templateUrl: "views/science-library/topic.html",
       controller: "TopicCtrl"
     })
@@ -128,11 +133,6 @@ angular.module('itapapersApp', [
       url: "/science-library/special",
       templateUrl: "views/science-library/special.html",
       controller: "SpecialCtrl"
-    })
-    .state('category', {
-      url: "/science-library/:category",
-      templateUrl: "views/science-library/main.html",
-      controller: "MainCtrl"
     });
 
   $locationProvider.html5Mode(true);

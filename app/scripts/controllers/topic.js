@@ -2,7 +2,7 @@
 
 angular.module('itapapersApp')
 
-.controller('TopicCtrl', ['$scope', '$stateParams', 'store', 'hudson', 'documentTypes', 'utils', 'csv', 'urls', 'definitions', function ($scope, $stateParams, store, hudson, documentTypes, utils, csv, urls, ce) {
+.controller('TopicCtrl', ['$scope', '$state', '$stateParams', 'store', 'hudson', 'documentTypes', 'utils', 'csv', 'urls', 'definitions', function ($scope, $state, $stateParams, store, hudson, documentTypes, utils, csv, urls, ce) {
   'use strict';
 
   $scope.views = ['papers', 'authors', 'organisations'];
@@ -57,6 +57,8 @@ angular.module('itapapersApp')
 
   $scope.showView = function (view) {
     $scope.currentView = view;
+    $stateParams.view = view;
+    $state.go('topic', $stateParams);
 
     if (view === $scope.views[0]) {
       $scope.sort   = $scope.sortTypes.papers;
@@ -68,7 +70,6 @@ angular.module('itapapersApp')
       $scope.sort   = $scope.sortTypes.organisations;
       $scope.header = $scope.orgsHeader;
     }
-    // generateCSVData();
   };
 
   $scope.filterPapers = function(value) {
@@ -121,7 +122,6 @@ angular.module('itapapersApp')
       var properties = data.main_instance.property_values;
       var relatedInstances = data.related_instances;
       var documentMap = {};
-//        var csvData = [];
 
       $scope.name = $stateParams.topicId;
 
@@ -297,7 +297,6 @@ angular.module('itapapersApp')
 
             $scope.paperCounts[documentTypes.typeMap[type]]++;
             paperItem.class.push(utils.getClassName(type));
-//              csvData.push([doc.id, doc.title, type]);
           }
 
           $scope.publications.push(paperItem);
@@ -326,6 +325,10 @@ angular.module('itapapersApp')
         value: $scope.paperCounts.other
       }];
 
-      $scope.showView($scope.views[0]);
+      if ($stateParams.view && $scope.views.includes($stateParams.view)) {
+        $scope.showView($stateParams.view);
+      } else {
+        $scope.showView($scope.views[0]);
+      }
     });
 }]);
