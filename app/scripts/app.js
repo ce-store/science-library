@@ -69,11 +69,6 @@ angular.module('itapapersApp', [
       templateUrl: "views/science-library/main.html",
       controller: "MainCtrl"
     })
-    .state('category', {
-      url: "/science-library/:category",
-      templateUrl: "views/science-library/main.html",
-      controller: "MainCtrl"
-    })
     .state('help', {
       url: "/science-library/help",
       templateUrl: "views/science-library/help.html",
@@ -133,6 +128,11 @@ angular.module('itapapersApp', [
       url: "/science-library/special",
       templateUrl: "views/science-library/special.html",
       controller: "SpecialCtrl"
+    })
+    .state('category', {
+      url: "/science-library/:category",
+      templateUrl: "views/science-library/main.html",
+      controller: "MainCtrl"
     });
 
   $locationProvider.html5Mode(true);
