@@ -1,0 +1,25 @@
+{
+  "endpoint": "https://dais-ita.org",
+  "files": [
+    "ce-documents",
+    "ce-technical-areas",
+    "ce-people",
+    "ce-paper-citations",
+    "ce-person-citations",
+    "ce-messages",
+    "ce-linguistics",
+    "ce-topics",
+    "ce-projects",
+    "ce-project-plans",
+    "ce-organisations",
+    "ce-places",
+    "ce-event-series",
+    "ce-events",
+    "ce-programmes",
+    "ce-countries"
+  ],
+  "credentials": {
+    "username": "username",
+    "password": "password"
+  }
+}

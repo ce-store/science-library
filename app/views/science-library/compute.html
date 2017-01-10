@@ -9,6 +9,9 @@
       <h3>Computed Controlled English</h3>
       <div>
         <!-- Generated CE -->
+        <div ng-show="computedCe.length === 0">
+          <p>Loading CE...</p>
+        </div>
         <div class="ce-list" ng-repeat="ce in computedCe">
           <p style="white-space: pre;">{{ce}}</p>
         </div>

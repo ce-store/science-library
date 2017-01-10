@@ -5,9 +5,12 @@
 /bower_components
 /.apt_generated/
 /build/
+/WebContent
+
 .DS_Store
 .project
 .classpath
 .factorypath
 .settings
-/WebContent
+
+settings.json
