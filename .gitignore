@@ -3,3 +3,11 @@
 /.tmp
 /.sass-cache
 /bower_components
+/.apt_generated/
+/build/
+.DS_Store
+.project
+.classpath
+.factorypath
+.settings
+/WebContent

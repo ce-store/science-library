@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * (C) Copyright IBM Corporation  2016, 2017
+ * All Rights Reserved
+ *******************************************************************************/
+
 angular.module('itapapersApp')
 
 .factory('hudson', ['$http', '$location', '$rootScope', '$state', 'urls', function ($http, $location, $rootScope, $state, urls) {

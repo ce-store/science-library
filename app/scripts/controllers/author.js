@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * (C) Copyright IBM Corporation  2016, 2017
+ * All Rights Reserved
+ *******************************************************************************/
+
 /* globals window: true */
 /* globals drawNarrativeChart: true */
 

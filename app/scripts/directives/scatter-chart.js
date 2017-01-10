@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * (C) Copyright IBM Corporation  2016, 2017
+ * All Rights Reserved
+ *******************************************************************************/
+
 angular.module('itapapersApp')
 
 .directive('scatterChart', ['$parse', '$window', '$location', 'store', 'csv', 'colours', function ($parse, $window, $location, store, csv, colours) {

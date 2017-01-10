@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * (C) Copyright IBM Corporation  2016, 2017
+ * All Rights Reserved
+ *******************************************************************************/
+
 /* globals window: true */
 
 angular.module('itapapersApp')
@@ -381,6 +386,7 @@ angular.module('itapapersApp')
       .then(function(response) {
         var foundComputeMessage = false;
         var lastUpdatedText = "";
+        var projectName = "";
 
         if (response.results.length > 0) {
           for (var i in response.results) {
@@ -394,6 +400,9 @@ angular.module('itapapersApp')
                 if (msg[0] === "msg computed") {
                   foundComputeMessage = true;
                 }
+                if (msg[0] === "project name") {
+                    projectName = msg[1];
+                  }
               }
             }
           }
@@ -402,6 +411,7 @@ angular.module('itapapersApp')
             lastUpdatedText += " (computed data not yet generated)";
           }
           $scope.lastUpdated = lastUpdatedText;
+          $scope.projectName = projectName;
         }
       });
 

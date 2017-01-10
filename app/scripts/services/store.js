@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * (C) Copyright IBM Corporation  2016, 2017
+ * All Rights Reserved
+ *******************************************************************************/
+
 angular.module('itapapersApp')
 
 .factory('store', ['$http', '$q', 'urls', 'localStorageService', 'utils', 'requests', 'definitions', function ($http, $q, urls, localStorageService, utils, reqs, ce) {

@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * (C) Copyright IBM Corporation  2016, 2017
+ * All Rights Reserved
+ *******************************************************************************/
+
 /* globals $: true */
 
 angular.module('itapapersApp')
@@ -443,7 +448,7 @@ angular.module('itapapersApp')
         for (j in papers) {
           paper = papers[j];
 
-          if (paper.property_values["publication year"] === i) {
+          if (paper.property_values["publication year"][0] === i) {
             date.papers.push(paper);
 
             for (k in paper.instances["written by"]) {
