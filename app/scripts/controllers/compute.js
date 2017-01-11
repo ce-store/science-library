@@ -13,18 +13,22 @@ angular.module('itapapersApp')
   $scope.computedCe = [];
 
   drupal.loadModel().then(function(modelCE) {
-    console.log(modelCE);
-    $scope.computedCe.push(modelCE);
+    $scope.computedCe.push('-- loaded model');
 
     drupal.loadDocuments().then(function(drupalCE) {
-      $scope.computedCe.push(drupalCE);
+      $scope.computedCe.push('-- loaded facts');
 
-      drupal.loadRules();
-
-      computeData();
+      drupal.loadRules().then(function(rulesCE) {
+        $scope.computedCe.push('-- loaded rules');
+        computeData();
+      }, function() {
+        computeData();
+      });
     }, function() {
       computeData();
     });
+  }, function() {
+    computeData();
   });
 
   var computeData = function() {
