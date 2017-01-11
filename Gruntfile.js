@@ -26,6 +26,24 @@ module.exports = function (grunt) {
     // Project settings
     yeoman: appConfig,
 
+    // sets Node environment variable for testing production
+    env : {
+      dev : {
+        NODE_ENV : 'development',
+        DEST     : 'temp'
+      },
+      prod : {
+        NODE_ENV : 'production',
+        DEST     : 'dist',
+        concat   : {
+          PATH     : {
+            'value': 'node_modules/.bin',
+            'delimiter': ':'
+          }
+        }
+      }
+    },
+
     // Watches files for changes and runs tasks based on the changed files
     watch: {
       bower: {
@@ -382,36 +400,49 @@ module.exports = function (grunt) {
       }
     },
 
+    // watch our node server for changes
+    nodemon: {
+      dev: {
+        script: 'server.js'
+      }
+    },
+
     // Run some tasks in parallel to speed up the build process
     concurrent: {
+      options: {
+        logConcurrentOutput: true
+      },
       server: [
-        'copy:styles'
+        'nodemon',
+        'watch'
       ],
       test: [
         'copy:styles'
       ],
       dist: [
-        'copy:styles',
-        'imagemin',
-        'svgmin'
+        'nodemon',
+        'watch'
       ]
     },
   });
 
 
-  grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
+  grunt.registerTask('serve', 'Compile then start an express web server', function (target) {
     if (target === 'dist') {
-      return grunt.task.run(['build', 'connect:dist:keepalive']);
+      grunt.task.run([
+        'build',
+        'env:prod',
+        'concurrent:dist'
+      ]);
+    } else {
+      grunt.task.run([
+        'clean:server',
+        'env:dev',
+        'wiredep',
+        'concurrent:server',
+        'postcss:server'
+      ]);
     }
-
-    grunt.task.run([
-      'clean:server',
-      'wiredep',
-      'concurrent:server',
-      'postcss:server',
-      'connect:livereload',
-      'watch'
-    ]);
   });
 
   grunt.registerTask('server', 'DEPRECATED TASK. Use the "serve" task instead', function (target) {

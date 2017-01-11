@@ -38,6 +38,8 @@
   "dependencies": {
     "connect-modrewrite": "^0.8.2",
     "express": "^4.14.0",
+    "grunt-env": "^0.4.4",
+    "grunt-nodemon": "^0.4.2",
     "promise": "^7.1.1",
     "request": "^2.79.0"
   }
