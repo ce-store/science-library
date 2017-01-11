@@ -14,7 +14,12 @@ angular.module('itapapersApp')
 
   drupal.loadDocuments().then(function(drupalCE) {
     $scope.computedCe.push(drupalCE);
+    computeData();
+  }, function() {
+    computeData();
+  });
 
+  var computeData = function() {
     store.getDataForCompute()
       .then(function(results) {
           var papers = {};
@@ -29,7 +34,6 @@ angular.module('itapapersApp')
           var dates = {};
 
           var i, inst;
-          console.log(results.document);
           for (i in results[ce.concepts.document]) {
             inst = results[ce.concepts.document][i];
             inst.instances = {};
@@ -146,7 +150,7 @@ angular.module('itapapersApp')
 
           console.log("all done");
       });
-  });
+  };
 
   function saveCeToStore() {
     var url = urls.server + urls.ceStore + "/sources/computedCe?showStats=true&action=save";

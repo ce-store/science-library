@@ -6,7 +6,15 @@ var Promise = require('promise');
 var path = require('path');
 var app = express();
 
-var settings = require('./settings');
+var settings;
+
+try {
+  settings = require('./settings');
+} catch (e) {
+  console.log('Settings not found');
+}
+
+
 
 if (process.env.NODE_ENV === 'production') {
   app.use('/fonts', express.static(path.join(__dirname, 'dist', 'fonts')));
@@ -111,13 +119,17 @@ var getCE = function(token, session) {
 app.get('/drupal', function (req, res) {
   'use strict';
 
-  getToken().then(function(token) {
-    login(token).then(function(session) {
-      getCE(token, session).then(function(html) {
-        res.send(html);
+  if (settings) {
+    getToken().then(function(token) {
+      login(token).then(function(session) {
+        getCE(token, session).then(function(html) {
+          res.send(html);
+        });
       });
     });
-  });
+  } else {
+    res.sendStatus(500);
+  }
 });
 
 app.all('/*', function (req, res) {
