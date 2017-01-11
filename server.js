@@ -34,7 +34,7 @@ var getToken = function() {
 
   var options = {
     method: 'POST',
-    url: settings.endpoint + '/api/user/token',
+    url: settings.drupal_endpoint + '/api/user/token',
     headers: {
       'content-type': 'application/json'
     },
@@ -57,7 +57,7 @@ var login = function(token) {
 
   var options = {
     method: 'POST',
-    url: settings.endpoint + '/api/user/login',
+    url: settings.drupal_endpoint + '/api/user/login',
     headers: {
       'x-csrf-token': token,
       'content-type': 'application/json'
@@ -91,6 +91,17 @@ var createPromise = function(options) {
   });
 };
 
+var getRules = function() {
+  'use strict';
+
+  var options = {
+    method: 'GET',
+    url: settings.rules_endpoint
+  };
+
+  return createPromise(options);
+};
+
 var getCE = function(token, session) {
   'use strict';
 
@@ -100,7 +111,7 @@ var getCE = function(token, session) {
     var file = settings.files[i];
     var options = {
       method: 'GET',
-      url: settings.endpoint + '/' + file,
+      url: settings.drupal_endpoint + '/' + file,
       headers: {
         'x-csrf-token': token,
         'content-type': 'application/json',
@@ -116,6 +127,67 @@ var getCE = function(token, session) {
   return Promise.all(promises);
 };
 
+var getModels = function() {
+  'use strict';
+
+  var promises = [];
+  var file, options, promise, i;
+
+  for (i in settings.models) {
+    file = settings.models[i];
+    options = {
+      method: 'GET',
+      url: settings.model_endpoint + '/' + file
+    };
+
+    promise = createPromise(options);
+    promises.push(promise);
+  }
+
+  for (i in settings.agents) {
+    file = settings.agents[i];
+    options = {
+      method: 'GET',
+      url: settings.agents_endpoint + '/' + file
+    };
+
+    promise = createPromise(options);
+    promises.push(promise);
+  }
+
+  return Promise.all(promises);
+};
+
+app.get('/model', function (req, res) {
+  'use strict';
+
+  if (settings) {
+    getModels().then(function(ce) {
+      res.send(ce);
+    }, function(err) {
+      console.log(err);
+      res.sendStatus(500);
+    });
+  } else {
+    res.sendStatus(500);
+  }
+});
+
+app.get('/rules', function (req, res) {
+  'use strict';
+
+  if (settings) {
+    getRules().then(function(ce) {
+      res.send(ce);
+    }, function(err) {
+      console.log(err);
+      res.sendStatus(500);
+    });
+  } else {
+    res.sendStatus(500);
+  }
+});
+
 app.get('/drupal', function (req, res) {
   'use strict';
 
@@ -124,8 +196,17 @@ app.get('/drupal', function (req, res) {
       login(token).then(function(session) {
         getCE(token, session).then(function(html) {
           res.send(html);
+        }, function(err) {
+          console.log(err);
+          res.sendStatus(500);
         });
+      }, function(err) {
+        console.log(err);
+        res.sendStatus(500);
       });
+    }, function(err) {
+      console.log(err);
+      res.sendStatus(500);
     });
   } else {
     res.sendStatus(500);

@@ -6,15 +6,18 @@ angular.module('itapapersApp')
   'use strict';
   var target = 'https://dais-ita.org';
 
-  var loadDocuments = function() {
-    var config = {
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRF-Token': 'L1z5KCmSHO-lvcYXscIZZHoL4Hovu97fWfN0FWeO7Ik'
-      }
-    };
+  var loadModel = function() {
+    return $http.get('model').then(function(response) {
+      var ce = response.data.join('\n');
 
-    return $http.get('drupal', config).then(function(response) {
+      return addCE(ce).then(function() {
+        return ce;
+      });
+    });
+  };
+
+  var loadDocuments = function() {
+    return $http.get('drupal').then(function(response) {
       var documents = response.data;
       var ce = '';
 
@@ -39,16 +42,26 @@ angular.module('itapapersApp')
     });
   };
 
+  var loadRules = function() {
+    return $http.get('rules').then(function(response) {
+      console.log(response);
+      var ce = response.data;
+
+      return addCE(ce).then(function() {
+        return ce;
+      });
+    });
+  };
+
   var addCE = function(ce) {
     var ceStore = urls.server + urls.ceStore + '/sources/generalCeForm?showStats=true&action=save';
-
-    ce += "\nperform set 'ce root' to 'http://localhost:8080/ce-store/'.";
-    ce += "\nperform load sentences from url '/sl-data/ce/cmd/all_live_rules.cecmd'.";
 
     return $http.post(ceStore, ce);
   };
 
   return {
-    loadDocuments: loadDocuments
+    loadModel: loadModel,
+    loadDocuments: loadDocuments,
+    loadRules: loadRules
   };
 }]);

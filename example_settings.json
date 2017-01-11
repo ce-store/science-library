@@ -1,5 +1,32 @@
 {
-  "endpoint": "https://dais-ita.org",
+  "model_endpoint": "https://cdn.rawgit.com/ce-store/sl-data/master/WebContent/ce/model",
+  "models": [
+    "agent.ce",
+    "author.ce",
+    "organisation.ce",
+    "person.ce",
+    "document.ce",
+    "programme.ce",
+    "project.ce",
+    "statistics.ce",
+    "location.ce",
+    "event.ce",
+    "date.ce",
+    "citation.ce",
+    "topic.ce",
+    "misc.ce",
+    "queries/visualisation_queries.ce",
+    "queries/consistency_queries.ce",
+    "linguistic_metamodel.ce",
+    "rules/date.ce",
+    "rules/document.ce",
+    "rules/event.ce",
+    "rules/organisation.ce",
+    "rules/person.ce",
+    "rules/project.ce",
+    "rules/topic.ce"
+  ],
+  "drupal_endpoint": "https://dais-ita.org",
   "files": [
     "ce-documents",
     "ce-technical-areas",
@@ -18,6 +45,11 @@
     "ce-programmes",
     "ce-countries"
   ],
+  "agents_endpoint": "https://cdn.rawgit.com/ce-store/sl-data/master/WebContent/ce/agents",
+  "agents": [
+    "agents.ce"
+  ],
+  "rules_endpoint": "https://cdn.rawgit.com/ce-store/sl-data/master/WebContent/ce/cmd/all_live_rules.cecmd",
   "credentials": {
     "username": "username",
     "password": "password"
