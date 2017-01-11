@@ -457,7 +457,7 @@ angular.module('itapapersApp')
       for (j in papers) {
         paper = papers[j];
 
-          if (paper.property_values["publication year"][0] === i) {
+          if (paper.property_values["publication year"] && paper.property_values["publication year"][0] === i) {
             date.papers.push(paper);
 
           for (k in paper.instances["written by"]) {

@@ -42,6 +42,9 @@ angular.module('itapapersApp')
   var addCE = function(ce) {
     var ceStore = urls.server + urls.ceStore + '/sources/generalCeForm?showStats=true&action=save';
 
+    ce += "\nperform set 'ce root' to 'http://localhost:8080/ce-store/'.";
+    ce += "\nperform load sentences from url '/sl-data/ce/cmd/all_live_rules.cecmd'.";
+
     return $http.post(ceStore, ce);
   };
 
