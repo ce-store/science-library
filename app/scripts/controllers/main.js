@@ -348,10 +348,14 @@ angular.module('itapapersApp')
         var orgDocumentCount = utils.getIntProperty(orgProps, ce.organisation.documentCount);
         var orgExternalCount = utils.getIntProperty(orgProps, ce.organisation.externalDocumentCount);
         var orgCitationCount = utils.getIntProperty(orgProps, ce.organisation.citationCount);
-        var empLen = orgEmployeeList.length;
+        var empLen = 0;
         var orgType = utils.getIndustryFor(instances[id]);
         if (orgType) {
           className = utils.getClassName(orgType);
+        }
+
+        if (orgEmployeeList != null) {
+          empLen = orgEmployeeList.length;
         }
 
         // push data to list
