@@ -430,7 +430,7 @@ module.exports = function (grunt) {
   grunt.registerTask('serve', 'Compile then start an express web server', function (target) {
     if (target === 'dist') {
       grunt.task.run([
-        'build',
+        // 'build',
         'env:prod',
         'concurrent:dist'
       ]);
