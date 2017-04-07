@@ -436,7 +436,7 @@ module.exports = function (grunt) {
       ]);
     } else {
       grunt.task.run([
-        'clean:server',
+        // 'clean:server',
         'env:dev',
         'wiredep',
         'concurrent:server',

@@ -16,8 +16,7 @@ angular.module('itapapersApp')
   if ($stateParams.keywords) {
     $scope.keywords = $stateParams.keywords;
 
-    var url = urls.server + urls.ceStore + urls.keywordSearch.keywords + $scope.keywords + urls.keywordSearch.restrictions;
-    $http.get(url)
+    $http.get('ce-store/keywords/' + $scope.keywords)
       .then(function(response) {
 
         $scope.results = {
@@ -62,12 +61,12 @@ angular.module('itapapersApp')
               result.type = 'topic';
               $scope.results.topics.push(result);
             } else if (concepts.indexOf(ce.concepts.event) > -1) {
-              result.name = instId + ": ";
+              result.name = instId + ': ';
               result.name += properties[ce.venue.name][0];
               result.type = 'venue';
               $scope.results.venues.push(result);
             } else {
-              console.log("Unhandled concept for");
+              console.log('Unhandled concept for');
               console.log(instance);
             }
 
@@ -75,18 +74,18 @@ angular.module('itapapersApp')
             lastResult = result;
             ++matches;
           } else {
-            allResults[instId].context += ", " + sr.property_name;
+            allResults[instId].context += ', ' + sr.property_name;
           }
         }
 
         $scope.instances = response.data.instances;
 
         if (matches === 1) {
-          var url = urls.scienceLibrary + "/" + lastResult.type + "/" + lastResult.id;
+          var url = urls.scienceLibrary + '/' + lastResult.type + '/' + lastResult.id;
           window.location.href = url;
         }
       }, function(response) {
         console.log('failed: ' + response);
-    });
+      });
   }
 }]);

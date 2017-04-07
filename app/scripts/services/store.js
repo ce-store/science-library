@@ -5,7 +5,7 @@
 
 angular.module('itapapersApp')
 
-.factory('store', ['$http', '$q', 'urls', 'localStorageService', 'utils', 'requests', 'definitions', function ($http, $q, urls, localStorageService, utils, reqs, ce) {
+.factory('store', ['$http', '$q', 'localStorageService', 'utils', 'requests', 'definitions', function ($http, $q, localStorageService, utils, reqs, ce) {
   'use strict';
 
   function getDocuments () {
@@ -15,9 +15,9 @@ angular.module('itapapersApp')
   }
 
   function getPublishedPeople () {
-      var url = reqs.listCorePeople();
+    var url = reqs.listCorePeople();
 
-      return makeRequest(url, ce.concepts.corePerson);
+    return makeRequest(url, ce.concepts.corePerson);
   }
 
   function getEventSeries () {
@@ -47,25 +47,25 @@ angular.module('itapapersApp')
   function getAuthorMain (authorName) {
     var url = reqs.authorMainDetails(authorName);
 
-    return makeRequest(url, authorName + " (main)");
+    return makeRequest(url, authorName + ' (main)');
   }
 
   function getAuthorPapers (authorName) {
     var url = reqs.authorPaperDetails(authorName);
 
-    return makeRequest(url, authorName + " (papers)");
+    return makeRequest(url, authorName + ' (papers)');
   }
 
   function getAuthorCoAuthors (authorName) {
     var url = reqs.authorCoAuthorDetails(authorName);
 
-    return makeRequest(url, authorName + " (co-authors)");
+    return makeRequest(url, authorName + ' (co-authors)');
   }
 
   function getPaper (paperName) {
-      var url = reqs.documentDetails(paperName);
+    var url = reqs.documentDetails(paperName);
 
-      return makeRequest(url, paperName);
+    return makeRequest(url, paperName);
   }
 
   function getVenue (location) {
@@ -75,15 +75,15 @@ angular.module('itapapersApp')
   }
 
   function getOrganisation (organisation) {
-      var url = reqs.organisationDetails(organisation);
+    var url = reqs.organisationDetails(organisation);
 
-      return makeRequest(url, organisation);
+    return makeRequest(url, organisation);
   }
 
   function getTopic (topic) {
-      var url = reqs.topicDetails(topic);
+    var url = reqs.topicDetails(topic);
 
-      return makeRequest(url, topic);
+    return makeRequest(url, topic);
   }
 
   function runCoAuthorQuery (queryName) {
@@ -99,10 +99,10 @@ angular.module('itapapersApp')
   }
 
   function getStatistics () {
-      var url = reqs.statistics();
+    var url = reqs.statistics();
 
-      return makeRequest(url, ce.concepts.total);
-    }
+    return makeRequest(url, ce.concepts.total);
+  }
 
   function getEventSeriesDetails (esId) {
     var url = reqs.eventSeriesDetails(esId);
@@ -116,14 +116,14 @@ angular.module('itapapersApp')
     return makeRequest(url, ce.queries.lastUpdated);
   }
 
-  function getDataForCompute (queryName) {
+  function getDataForCompute () {
     var url = reqs.computeDetails();
 
-    return makeRequest(url, "compute");
+    return makeRequest(url, 'compute');
   }
 
   function makeRequest(url, key) {
-    var fullKey = key + "-" + urls.ceStore;
+    var fullKey = key;
 
     if (localStorageService.isSupported) {
       var val = localStorageService.get(fullKey);
@@ -131,10 +131,10 @@ angular.module('itapapersApp')
       if (val) {
         return $q.when(val);
       } else {
-        return $http.get(url)
+        return $http.post('ce-store/query', { url: url })
           .then(function(response) {
             localStorageService.set(fullKey, response.data);
-            return response.data;
+            return $q.when(response.data);
           }, function(err) {
             return err;
           });
@@ -143,7 +143,7 @@ angular.module('itapapersApp')
   }
 
   function getVoiceAcceptance () {
-    var key = "voice";
+    var key = 'voice';
 
     if (localStorageService.isSupported) {
       var val = localStorageService.get(key);
@@ -155,7 +155,7 @@ angular.module('itapapersApp')
   }
 
   function setVoiceAcceptance (accepted) {
-    var key = "voice";
+    var key = 'voice';
 
     if (localStorageService.isSupported) {
       localStorageService.set(key, accepted);

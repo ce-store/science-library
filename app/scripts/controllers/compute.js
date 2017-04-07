@@ -12,13 +12,13 @@ angular.module('itapapersApp')
 
   $scope.computedCe = [];
 
-  drupal.loadModel().then(function(modelCE) {
+  drupal.loadModel().then(function() {
     $scope.computedCe.push('-- loaded model');
 
-    drupal.loadDocuments().then(function(drupalCE) {
+    drupal.loadDocuments().then(function() {
       $scope.computedCe.push('-- loaded facts');
 
-      drupal.loadRules().then(function(rulesCE) {
+      drupal.loadRules().then(function() {
         $scope.computedCe.push('-- loaded rules');
         computeData();
       }, function() {
@@ -34,133 +34,133 @@ angular.module('itapapersApp')
   var computeData = function() {
     store.getDataForCompute()
       .then(function(results) {
-          var papers = {};
-          var external_papers = {};
-          var oas = {};
-          var people = {};
-          var organisations = {};
-          var citations = {};
-          var cas = {};
-          var tps = {};
-          var tos = {};
-          var dates = {};
+        var papers = {};
+        var external_papers = {};
+        var oas = {};
+        var people = {};
+        var organisations = {};
+        var citations = {};
+        var cas = {};
+        var tps = {};
+        var tos = {};
+        var dates = {};
 
-          var i, inst;
-          for (i in results[ce.concepts.document]) {
-            inst = results[ce.concepts.document][i];
+        var i, inst;
+        for (i in results[ce.concepts.document]) {
+          inst = results[ce.concepts.document][i];
+          inst.instances = {};
+          inst.values = {};
+
+          inst.instances["citation count"] = [];
+          inst.instances["ordered authors"] = [];
+          inst.instances["written by"] = [];
+          inst.values["citation count"] = null;
+          inst.values["weight"] = null;
+          inst.extraTypes = [];
+
+          papers[inst._id] = inst;
+
+          if ((inst.concept_names.indexOf(ce.concepts.externalDocument) > -1)) {
+            external_papers[inst._id] = inst;
+          }
+        }
+
+        for (i in results[ce.concepts.orderedAuthor]) {
+          inst = results[ce.concepts.orderedAuthor][i];
+          inst.instances = {};
+          inst.values = {};
+
+          inst.instances["author person"] = null;
+
+          oas[inst._id] = inst;
+        }
+
+        for (i in results[ce.concepts.publishedPerson]) {
+          inst = results[ce.concepts.publishedPerson][i];
+          inst.instances = {};
+          inst.values = {};
+
+          inst.instances["wrote"] = [];
+          inst.instances["writes documents for"] = null;
+          inst.values["citation count"] = null;
+          inst.values["h-index"] = null;
+
+          people[inst._id] = inst;
+        }
+
+        for (i in results[ce.concepts.publishedOrganisation]) {
+          inst = results[ce.concepts.publishedOrganisation][i];
+          inst.instances = {};
+          inst.values = {};
+
+          inst.instances["employs"] = [];
+
+          organisations[inst._id] = inst;
+        }
+
+        for (i in results[ce.concepts.paperCitationCount]) {
+            inst = results[ce.concepts.paperCitationCount][i];
             inst.instances = {};
             inst.values = {};
 
-            inst.instances["citation count"] = [];
-            inst.instances["ordered authors"] = [];
-            inst.instances["written by"] = [];
-            inst.values["citation count"] = null;
-            inst.values["weight"] = null;
-            inst.extraTypes = [];
+            citations[inst._id] = inst;
+        }
 
-            papers[inst._id] = inst;
+        for (i in results[ce.concepts.coAuthorStatistic]) {
+          inst = results[ce.concepts.coAuthorStatistic][i];
+          inst.instances = {};
+          inst.values = {};
 
-            if ((inst.concept_names.indexOf(ce.concepts.externalDocument) > -1)) {
-                external_papers[inst._id] = inst;
-            }
-          }
+          inst.values["co-author count"] = [];
 
-          for (i in results[ce.concepts.orderedAuthor]) {
-            inst = results[ce.concepts.orderedAuthor][i];
-            inst.instances = {};
-            inst.values = {};
+          cas[inst._id] = inst;
+        }
 
-            inst.instances["author person"] = null;
+        for (i in results[ce.concepts.topicPersonStatistic]) {
+          inst = results[ce.concepts.topicPersonStatistic][i];
+          inst.instances = {};
+          inst.values = {};
 
-            oas[inst._id] = inst;
-          }
+          inst.values["paper count"] = [];
 
-          for (i in results[ce.concepts.publishedPerson]) {
-            inst = results[ce.concepts.publishedPerson][i];
-            inst.instances = {};
-            inst.values = {};
+          tps[inst._id] = inst;
+        }
 
-            inst.instances["wrote"] = [];
-            inst.instances["writes documents for"] = null;
-            inst.values["citation count"] = null;
-            inst.values["h-index"] = null;
+        for (i in results[ce.concepts.topicOrganisationStatistic]) {
+          inst = results[ce.concepts.topicOrganisationStatistic][i];
+          inst.instances = {};
+          inst.values = {};
 
-            people[inst._id] = inst;
-          }
+          inst.values["paper count"] = [];
 
-          for (i in results[ce.concepts.publishedOrganisation]) {
-            inst = results[ce.concepts.publishedOrganisation][i];
-            inst.instances = {};
-            inst.values = {};
+          tos[inst._id] = inst;
+        }
 
-            inst.instances["employs"] = [];
+        buildLinks(papers, citations, oas, people, organisations, cas, dates);
 
-            organisations[inst._id] = inst;
-          }
+        computePersonCitations(people);
+        computePersonHIndex(people);
+        computeDocumentWeights(papers, people, organisations);
+        computeDocumentTypes(papers);
+        computeCoauthorCounts(cas, people);
+        computeTopicPersonCounts(tps);
+        computeTopicOrganisationCounts(tos);
 
-          for (i in results[ce.concepts.paperCitationCount]) {
-              inst = results[ce.concepts.paperCitationCount][i];
-              inst.instances = {};
-              inst.values = {};
+        ceForPersonCitations(people);
+        ceForDocumentWeights(papers);
+        ceForDocumentTypes(papers);
+        ceForCoauthorCounts(cas);
+        ceForTopicPersonCounts(tps);
+        ceForTopicOrganisationCounts(tos);
 
-              citations[inst._id] = inst;
-          }
+        computeTotals(dates, external_papers);
+        ceForTotals(dates);
 
-          for (i in results[ce.concepts.coAuthorStatistic]) {
-            inst = results[ce.concepts.coAuthorStatistic][i];
-            inst.instances = {};
-            inst.values = {};
+        ceForUiMessage(dates);
 
-            inst.values["co-author count"] = [];
+        saveCeToStore();
 
-            cas[inst._id] = inst;
-          }
-
-          for (i in results[ce.concepts.topicPersonStatistic]) {
-            inst = results[ce.concepts.topicPersonStatistic][i];
-            inst.instances = {};
-            inst.values = {};
-
-            inst.values["paper count"] = [];
-
-            tps[inst._id] = inst;
-          }
-
-          for (i in results[ce.concepts.topicOrganisationStatistic]) {
-            inst = results[ce.concepts.topicOrganisationStatistic][i];
-            inst.instances = {};
-            inst.values = {};
-
-            inst.values["paper count"] = [];
-
-            tos[inst._id] = inst;
-          }
-
-          buildLinks(papers, citations, oas, people, organisations, cas, dates);
-
-          computePersonCitations(people);
-          computePersonHIndex(people);
-          computeDocumentWeights(papers, people, organisations);
-          computeDocumentTypes(papers);
-          computeCoauthorCounts(cas, people);
-          computeTopicPersonCounts(tps);
-          computeTopicOrganisationCounts(tos);
-
-          ceForPersonCitations(people);
-          ceForDocumentWeights(papers);
-          ceForDocumentTypes(papers);
-          ceForCoauthorCounts(cas);
-          ceForTopicPersonCounts(tps);
-          ceForTopicOrganisationCounts(tos);
-
-          computeTotals(dates, external_papers);
-          ceForTotals(dates);
-
-          ceForUiMessage(dates);
-
-          saveCeToStore();
-
-          console.log("all done");
+        console.log("all done");
       });
   };
 

@@ -10,8 +10,6 @@ angular.module('itapapersApp')
 .controller('MainCtrl', ['$scope', '$stateParams', '$location', '$sce', '$window', 'store', 'charts', 'documentTypes', 'utils', 'csv', 'colours', 'localStorageService', 'urls', 'definitions', function ($scope, $stateParams, $location, $sce, $window, store, charts, documentTypes, utils, csv, colours, localStorageService, urls, ce) {
   'use strict';
 
-  var d3 = $window.d3;
-
   $scope.scienceLibrary = urls.scienceLibrary;
   $scope.accepted = 'accepted';
   $scope.listLength = 100;
@@ -67,19 +65,8 @@ angular.module('itapapersApp')
   $scope.otherDocumentType      = documentTypes.other;
   $scope.journalInput = $scope.externalInput = $scope.patentInput = $scope.internalInput = $scope.technicalInput = $scope.otherInput = $scope.acInput = $scope.indInput = $scope.govInput = true;
 
-  $scope.scatterYAxisOpts = ["hIndex", "citations", "googleHIndex", "googleCitations"];
+  $scope.scatterYAxisOpts = ['hIndex', 'citations', 'googleHIndex', 'googleCitations'];
   $scope.scatterYAxis = $scope.scatterYAxisOpts[0];
-
-  var scatterColour = d3.scale.ordinal()
-      .domain(["AC", "IND", "GOV"])
-      .range(colours.areas);
-
-  var legendMap = {
-    'AC':   'Academic',
-    'IND':  'Industry',
-    'GOV':  'Government',
-    'Unknown': 'Unknown'
-  };
 
   var types = documentTypes.nameMap;
 
@@ -111,9 +98,9 @@ angular.module('itapapersApp')
   $scope.height = window.innerHeight;
 
   // set max-height of results lists
-  var resultsListElems = angular.element(".results-list");
+  var resultsListElems = angular.element('.results-list');
   var maxHeight = $scope.height - 305;
-  resultsListElems.css("max-height", maxHeight + "px");
+  resultsListElems.css('max-height', maxHeight + 'px');
 
   $scope.filterPapers = function(value) {
     if (typeof value.type !== 'undefined') {
@@ -133,112 +120,112 @@ angular.module('itapapersApp')
   };
 
   $scope.filterOrganisations = function(value) {
-    return ($scope.acInput && value.area === "AC") ||
-    ($scope.indInput && value.area === "IND") ||
-    ($scope.govInput && value.area === "GOV");
+    return ($scope.acInput && value.area === 'AC') ||
+    ($scope.indInput && value.area === 'IND') ||
+    ($scope.govInput && value.area === 'GOV');
   };
 
   var filterData = function(instances) {
-      var documentMap = {};
-      var paperId, thisInst, i;
+    var documentMap = {};
+    var paperId, thisInst, i;
 
-      // loop through query results
-      //    - remove results with multiple citations
-      //    - select citation count with most citations
-      //    - collapse variants into one entry
-      for (i in instances) {
-        thisInst = instances[i];
+    // loop through query results
+    //    - remove results with multiple citations
+    //    - select citation count with most citations
+    //    - collapse variants into one entry
+    for (i in instances) {
+      thisInst = instances[i];
 
-        if (utils.isConcept(thisInst, ce.concepts.document)) {
-          paperId = thisInst._id;
-          var paperProps = thisInst.property_values;
+      if (utils.isConcept(thisInst, ce.concepts.document)) {
+        paperId = thisInst._id;
+        var paperProps = thisInst.property_values;
 
-          // paper properties
-          var citationCount = utils.getIntProperty(paperProps, ce.paper.citationCount);
-          var variantList = utils.getListProperty(paperProps, ce.paper.variantList);
-          var paperType = utils.getType(thisInst.concept_names);
+        // paper properties
+        var citationCount = utils.getIntProperty(paperProps, ce.paper.citationCount);
+        var variantList = utils.getListProperty(paperProps, ce.paper.variantList);
+        var paperType = utils.getType(thisInst.concept_names);
 
-          // ignore duplicates
-          if (!documentMap[paperId]) {
-            var variantFound = false;
-            var maxCitations = 0;
+        // ignore duplicates
+        if (!documentMap[paperId]) {
+          var variantFound = false;
+          var maxCitations = 0;
 
-            // find max variant
-            if (variantList) {
-              for (var j = 0; j < variantList.length; ++j) {
-                var variantId = variantList[j];
+          // find max variant
+          if (variantList) {
+            for (var j = 0; j < variantList.length; ++j) {
+              var variantId = variantList[j];
 
-                if (documentMap[variantId]) {
-                  maxCitations = documentMap[variantId].citations > maxCitations ? documentMap[variantId].citations : maxCitations;
-                  variantFound = variantId;
-                }
+              if (documentMap[variantId]) {
+                maxCitations = documentMap[variantId].citations > maxCitations ? documentMap[variantId].citations : maxCitations;
+                variantFound = variantId;
               }
             }
+          }
 
-            // set citation count in map
-            if (!variantFound) {
+          // set citation count in map
+          if (!variantFound) {
+            documentMap[paperId] = {
+              citations: citationCount,
+              index: i,
+              types: [paperType]
+            };
+          } else {
+            if (maxCitations < citationCount) {
+              var variantTypes = documentMap[variantFound].types.slice();
+              documentMap[variantFound] = null;
               documentMap[paperId] = {
                 citations: citationCount,
                 index: i,
-                types: [paperType]
+                types: [paperType].concat(variantTypes)
               };
             } else {
-              if (maxCitations < citationCount) {
-                var variantTypes = documentMap[variantFound].types.slice();
-                documentMap[variantFound] = null;
-                documentMap[paperId] = {
-                  citations: citationCount,
-                  index: i,
-                  types: [paperType].concat(variantTypes)
-                };
-              } else {
-                documentMap[variantFound].types.push(paperType);
-              }
+              documentMap[variantFound].types.push(paperType);
             }
           }
         }
       }
+    }
 
-      var filteredResults = [];
-      var instancesObj = {};
+    var filteredResults = [];
+    var instancesObj = {};
 
-      // recreate array - test for index to remove duplicate citations
-      for (i in instances) {
-        thisInst = instances[i];
-        paperId = thisInst._id;
+    // recreate array - test for index to remove duplicate citations
+    for (i in instances) {
+      thisInst = instances[i];
+      paperId = thisInst._id;
 
-        instancesObj[paperId] = thisInst;
+      instancesObj[paperId] = thisInst;
 
-        if (documentMap[paperId] && documentMap[paperId].index === i) {
-          filteredResults.push([ paperId, documentMap[paperId].types ]);
-        }
+      if (documentMap[paperId] && documentMap[paperId].index === i) {
+        filteredResults.push([ paperId, documentMap[paperId].types ]);
       }
+    }
 
-      var filteredData = {
-        instances: instancesObj,
-        data: filteredResults
-      };
-
-      return filteredData;
+    var filteredData = {
+      instances: instancesObj,
+      data: filteredResults
     };
 
-    var convertInstancesToResults = function(data) {
-        var idList = [];
-        var instObj = {};
+    return filteredData;
+  };
 
-        for (var i in data) {
-          var thisInst = data[i];
-          idList.push([thisInst._id]);
-          instObj[thisInst._id] = thisInst;
-        }
+  var convertInstancesToResults = function(data) {
+    var idList = [];
+    var instObj = {};
 
-        var result = {
-          results: idList,
-          instances: instObj
-        };
+    for (var i in data) {
+      var thisInst = data[i];
+      idList.push([thisInst._id]);
+      instObj[thisInst._id] = thisInst;
+    }
 
-        return result;
-      };
+    var result = {
+      results: idList,
+      instances: instObj
+    };
+
+    return result;
+  };
 
   var populateList = function(data, instances) {
     $scope.list       = [];
@@ -250,7 +237,6 @@ angular.module('itapapersApp')
     // loop through results and extract relevant data
     for (var i = 0; i < data.length; ++i) {
       var type, className;
-      var citationProps;
 
       var id = data[i][0];
 
@@ -265,8 +251,8 @@ angular.module('itapapersApp')
         var paperWeight = utils.getIntProperty(paperProps, ce.paper.weight);
         var paperNoteworthy = utils.getProperty(paperProps, ce.paper.noteworthyReason);
         var paperStatus = utils.getProperty(paperProps, ce.paper.status);
-        var paperVenue = utils.getProperty(paperProps, ce.paper.venue);
-        var paperAuthorString = utils.getProperty(paperProps, ce.paper.fullAuthorString);
+        // var paperVenue = utils.getProperty(paperProps, ce.paper.venue);
+        // var paperAuthorString = utils.getProperty(paperProps, ce.paper.fullAuthorString);
 
         // set types for duplicates and non-duplicates
         var types = data[i][1];
@@ -354,7 +340,7 @@ angular.module('itapapersApp')
           className = utils.getClassName(orgType);
         }
 
-        if (orgEmployeeList != null) {
+        if (orgEmployeeList !== null) {
           empLen = orgEmployeeList.length;
         }
 
@@ -389,8 +375,8 @@ angular.module('itapapersApp')
     store.getLastUpdated()
       .then(function(response) {
         var foundComputeMessage = false;
-        var lastUpdatedText = "";
-        var projectName = "";
+        var lastUpdatedText = '';
+        var projectName = '';
 
         if (response.results.length > 0) {
           for (var i in response.results) {
@@ -398,21 +384,21 @@ angular.module('itapapersApp')
               var msg = response.results[i];
 
               if (msg) {
-                if (msg[0] === "msg date") {
+                if (msg[0] === 'msg date') {
                   lastUpdatedText = msg[1];
                 }
-                if (msg[0] === "msg computed") {
+                if (msg[0] === 'msg computed') {
                   foundComputeMessage = true;
                 }
-                if (msg[0] === "project name") {
-                    projectName = msg[1];
-                  }
+                if (msg[0] === 'project name') {
+                  projectName = msg[1];
+                }
               }
             }
           }
 
           if (!foundComputeMessage) {
-            lastUpdatedText += " (computed data not yet generated)";
+            lastUpdatedText += ' (computed data not yet generated)';
           }
           $scope.lastUpdated = lastUpdatedText;
           $scope.projectName = projectName;

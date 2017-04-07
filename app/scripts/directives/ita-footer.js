@@ -14,7 +14,7 @@ angular.module('itapapersApp')
     templateUrl: 'views/ita-footer.html',
     restrict: 'E',
     link: function postLink(scope) {
-      scope.question = "";
+      scope.question = '';
 
       scope.submit = function () {
         hudson.askQuestion(scope.question);
@@ -25,9 +25,9 @@ angular.module('itapapersApp')
 
       var reset = function() {
         listener = new webspeech.Listener();
-        listener.listen("en", function(text) {
+        listener.listen('en', function(text) {
           scope.question = text;
-          angular.element("#question-box")[0].value = text;
+          angular.element('#question-box')[0].value = text;
           hudson.askQuestion(text);
         });
       };

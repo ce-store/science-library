@@ -36,6 +36,7 @@
     "node": ">=0.10.0"
   },
   "dependencies": {
+    "body-parser": "^1.17.1",
     "connect-modrewrite": "^0.8.2",
     "express": "^4.14.0",
     "grunt-env": "^0.4.4",

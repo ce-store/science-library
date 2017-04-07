@@ -5,7 +5,7 @@
 
 angular.module('itapapersApp')
 
-.factory('hudson', ['$http', '$location', '$rootScope', '$state', 'urls', function ($http, $location, $rootScope, $state, urls) {
+.factory('hudson', ['$http', '$location', '$rootScope', '$state', function ($http, $location, $rootScope, $state) {
   'use strict';
 
   var questions = [];
@@ -41,7 +41,7 @@ angular.module('itapapersApp')
     }
   };
   var matchedTriple = 'matched-triple';
-  var multiMatch = 'multi-match';
+  // var multiMatch = 'multi-match';
 
   var goTo = function(concept, id, extraParams) {
     var page = conceptPageMap[concept];
@@ -164,12 +164,10 @@ angular.module('itapapersApp')
   };
 
   var askQuestion = function (question) {
-    var url = urls.scienceLibrary;
-
     if (question.includes('help')) {
       $state.go('help');
     } else {
-      $http.post(urls.server + urls.interpreter, question)
+      $http.post('ce-store/hudson/interpreter', { question: question })
         .then(function(response) {
           var redirected = handleIntepretations(response.data.interpretations);
 

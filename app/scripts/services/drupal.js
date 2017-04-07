@@ -2,12 +2,11 @@
 
 angular.module('itapapersApp')
 
-.factory('drupal', ['$http', 'urls', function ($http, urls) {
+.factory('drupal', ['$http', function ($http) {
   'use strict';
-  var target = 'https://dais-ita.org';
 
   var loadModel = function() {
-    return $http.get('model').then(function(response) {
+    return $http.get('drupal/model').then(function(response) {
       var ce = response.data.join('\n');
 
       return addCE(ce).then(function() {
@@ -17,7 +16,7 @@ angular.module('itapapersApp')
   };
 
   var loadDocuments = function() {
-    return $http.get('drupal').then(function(response) {
+    return $http.get('drupal/documents').then(function(response) {
       var documents = response.data;
       var ce = '';
 
@@ -43,8 +42,7 @@ angular.module('itapapersApp')
   };
 
   var loadRules = function() {
-    return $http.get('rules').then(function(response) {
-      console.log(response);
+    return $http.get('drupal/rules').then(function(response) {
       var ce = response.data;
 
       return addCE(ce).then(function() {
@@ -54,9 +52,7 @@ angular.module('itapapersApp')
   };
 
   var addCE = function(ce) {
-    var ceStore = urls.server + urls.ceStore + '/sources/generalCeForm?showStats=true&action=save';
-
-    return $http.post(ceStore, ce);
+    return $http.post('ce-store/save', { ce: ce });
   };
 
   return {
