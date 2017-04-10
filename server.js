@@ -4,19 +4,28 @@ var express = require('express');
 var path = require('path');
 var app = express();
 
-var bodyParser = require('body-parser')
+var bodyParser = require('body-parser');
 app.use(bodyParser.json({
   limit: '50mb'
-}))
+}));
 
-require('./server/routes')(app)
+// Set up proxy for CE-Store
+
+var proxy = require('http-proxy-middleware');
+var settings = require('./settings');
+
+app.use('/ce-store*', proxy({target: settings.ce_store.domain, changeOrigin: true}));
+
+require('./server/routes')(app);
 
 if (process.env.NODE_ENV === 'production') {
+  console.log('production')
   app.use('/fonts', express.static(path.join(__dirname, 'dist', 'fonts')));
   app.use('/i', express.static(path.join(__dirname, 'dist', 'i')));
   app.use('/scripts', express.static(path.join(__dirname, 'dist', 'scripts')));
   app.use('/styles', express.static(path.join(__dirname, 'dist', 'styles')));
 } else {
+  console.log('development')
   app.use('/bower_components', express.static(path.join(__dirname, 'bower_components')));
   app.use('/i', express.static(path.join(__dirname, 'app', 'i')));
   app.use('/scripts', express.static(path.join(__dirname, 'app', 'scripts')));
@@ -35,8 +44,9 @@ app.all('/*', function (req, res) {
 });
 
 // start server on the specified port and binding host
-app.listen(3000, function() {
+var port = 3000
+app.listen(port, function() {
   'use strict';
 
-  console.log('server starting on 3000');
+  console.log('server starting on ' + port);
 });

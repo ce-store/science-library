@@ -6,8 +6,8 @@
 angular.module('itapapersApp')
 
 .constant('urls', {
-  home: 'sl.dais-ita.org',
-  server: 'sl.dais-ita.org',
+  home: 'http://localhost:8080',
+  server: 'http://localhost:8080',
   questionAnalyser: '/Hudson/QuestionAnalyser?debug=true',
   interpreter: '/ce-store/special/hudson/interpreter',
   ceStore: '/ce-store/stores/DEFAULT',

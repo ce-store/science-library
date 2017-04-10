@@ -52,7 +52,7 @@ angular.module('itapapersApp')
   };
 
   var addCE = function(ce) {
-    return $http.post('ce-store/save', { ce: ce });
+    return $http.post('ce/save', { ce: ce });
   };
 
   return {

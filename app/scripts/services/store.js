@@ -131,7 +131,7 @@ angular.module('itapapersApp')
       if (val) {
         return $q.when(val);
       } else {
-        return $http.post('ce-store/query', { url: url })
+        return $http.post('ce/query', { url: url })
           .then(function(response) {
             localStorageService.set(fullKey, response.data);
             return $q.when(response.data);
