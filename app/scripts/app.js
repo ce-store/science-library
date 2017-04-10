@@ -29,46 +29,6 @@ angular.module('itapapersApp', [
       templateUrl: 'views/home.html',
       controller: 'HomeCtrl'
     })
-    .state('assets', {
-      url: '/assets',
-      templateUrl: 'views/legacy/assets.html',
-      controller: 'AssetsCtrl'
-    })
-    .state('book', {
-      url: '/book',
-      templateUrl: 'views/legacy/book.html',
-      controller: 'BookCtrl'
-    })
-    .state('capstone', {
-      url: '/capstone',
-      templateUrl: 'views/legacy/capstone.html',
-      controller: 'CapstoneCtrl'
-    })
-    .state('cmc', {
-      url: '/cmc',
-      templateUrl: 'views/legacy/cmc.html',
-      controller: 'CmcCtrl'
-    })
-    .state('experimentation', {
-      url: '/experimentation',
-      templateUrl: 'views/legacy/experimentation.html',
-      controller: 'ExperimentationCtrl'
-    })
-    .state('peer-review', {
-      url: '/peer-review',
-      templateUrl: 'views/legacy/peer-review.html',
-      controller: 'PeerReviewCtrl'
-    })
-    .state('plans', {
-      url: '/plans',
-      templateUrl: 'views/legacy/plans.html',
-      controller: 'PlansCtrl'
-    })
-    .state('qprs', {
-      url: '/qprs',
-      templateUrl: 'views/legacy/qprs.html',
-      controller: 'QprsCtrl'
-    })
     .state('main', {
       url: '/science-library',
       templateUrl: 'views/science-library/main.html',
