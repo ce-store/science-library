@@ -4,14 +4,14 @@
   "dependencies": {
     "angular": "^1.4.0",
     "bootstrap": "^3.2.0",
-    "angular-ui-router": "~0.2.15",
+    "angular-ui-router": "^0.4.2",
     "d3-tip": "~0.6.7",
     "d3": "~3.5.10",
     "d3.promise": "~1.1.0",
     "datamaps": "~0.4.0",
     "topojson": "~1.6.19",
     "angular-bootstrap": "~0.14.3",
-    "angular-google-maps": "~2.2.1",
+    "angular-google-maps": "^2.4.1",
     "angular-datamaps": "~0.1.2",
     "angular-local-storage": "~0.2.3",
     "ng-csv": "~0.3.6",
@@ -33,7 +33,6 @@
     }
   },
   "resolutions": {
-    "angular": "^1.2",
     "d3": "~3.5.10"
   }
 }
