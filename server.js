@@ -14,7 +14,10 @@ app.use(bodyParser.json({
 var proxy = require('http-proxy-middleware');
 var settings = require('./settings');
 
-app.use('/ce-store*', proxy({target: settings.ce_store.domain, changeOrigin: true}));
+app.use('/ce-store*', proxy({
+  target: settings.ce_store.domain + '/' + settings.ce_store.port,
+  changeOrigin: true
+}));
 
 require('./server/routes')(app);
 

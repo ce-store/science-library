@@ -27,6 +27,18 @@
     "rules/topic.ce"
   ],
   "drupal_endpoint": "https://dais-ita.org",
+  "ce_store": {
+    "domain":       "http://sl.dais-ita.org",
+    "port":         "8080",
+    "endpoint":     "http://sl.dais-ita.org/ce-store",
+    "store":        "/stores/DEFAULT",
+    "save":         "/sources/generalCeForm?showStats=true&action=save",
+    "special": {
+      "interpreter":  "/special/hudson/interpreter",
+      "keywords":     "/special/keyword-search?keywords=",
+      "keyword_restrictions": "&returnInstances=true&style=minimal&restrictToConcepts=document,person,organisation,topic,event&restrictToProperties=writes about,abstract,title,name,short name,full name,marker,description"
+    }
+  },
   "files": [
     "ce-documents",
     "ce-technical-areas",
