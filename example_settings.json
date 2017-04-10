@@ -29,8 +29,8 @@
   "drupal_endpoint": "https://dais-ita.org",
   "ce_store": {
     "domain":       "http://sl.dais-ita.org",
-    "port":         "8080",
-    "endpoint":     "http://sl.dais-ita.org/ce-store",
+    "port":         ":8080",
+    "endpoint":     "/ce-store",
     "store":        "/stores/DEFAULT",
     "save":         "/sources/generalCeForm?showStats=true&action=save",
     "special": {

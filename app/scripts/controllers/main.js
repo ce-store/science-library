@@ -398,11 +398,15 @@ angular.module('itapapersApp')
           }
 
           if (!foundComputeMessage) {
-            lastUpdatedText += ' (computed data not yet generated)';
+            lastUpdatedText += ' (Computed data not yet generated)';
           }
-          $scope.lastUpdated = lastUpdatedText;
-          $scope.projectName = projectName;
+        } else {
+          lastUpdatedText = '(Computed data not found)';
+          projectName = 'Project name not found';
         }
+
+        $scope.lastUpdated = lastUpdatedText;
+        $scope.projectName = projectName;
       });
 
     if ($scope.listName === $scope.listTypes.papers) {

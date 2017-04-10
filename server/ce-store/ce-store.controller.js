@@ -16,7 +16,7 @@ var getKeywords = function (req, res) {
 
     var options = {
       method: 'GET',
-      url: ce.endpoint + ce.store + ce.special.keywords + keywords + ce.special.keyword_restrictions
+      url: ce.domain + ce.port + ce.endpoint + ce.store + ce.special.keywords + keywords + ce.special.keyword_restrictions
     };
 
     request(options, function (error, response, body) {
@@ -40,7 +40,7 @@ var addCE = function (req, res) {
 
     var options = {
       method: 'POST',
-      url: ce.endpoint + ce.store + ce.save,
+      url: ce.domain + ce.port + ce.endpoint + ce.store + ce.save,
       body: req.body.ce
     };
 
@@ -65,7 +65,7 @@ var query = function (req, res) {
 
     var options = {
       method: 'GET',
-      url: ce.endpoint + ce.store + req.body.url
+      url: ce.domain + ce.port + ce.endpoint + ce.store + req.body.url
     };
 
     request(options, function (error, response, body) {
@@ -89,7 +89,7 @@ var postQuestion = function (req, res) {
 
     var options = {
       method: 'POST',
-      url: ce.endpoint + ce.special.interpreter,
+      url: ce.domain + ce.port + ce.endpoint + ce.special.interpreter,
       body: req.body.question
     };
 
