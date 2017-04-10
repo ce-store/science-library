@@ -127,8 +127,9 @@ angular.module('itapapersApp')
 
     if (localStorageService.isSupported) {
       var val = localStorageService.get(fullKey);
+      var useLocalStorage = false;
 
-      if (val) {
+      if (useLocalStorage && val) {
         return $q.when(val);
       } else {
         return $http.post('ce/query', { url: url })
