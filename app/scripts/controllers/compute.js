@@ -10,16 +10,38 @@ angular.module('itapapersApp')
 .controller('ComputeCtrl', ['$scope', '$stateParams', 'store', 'urls', 'utils', 'definitions', 'drupal', function ($scope, $stateParams, store, urls, utils, ce, drupal) {
   'use strict';
 
-  $scope.computedCe = [];
+  $scope.computedCe = ['Loading model...'];
 
-  drupal.loadModel().then(function() {
-    $scope.computedCe.push('-- loaded model');
+  var appendErrors = function(response) {
+    var alerts = response.data.alerts;
+    if (alerts.errors.length) {
+      $scope.computedCe.push('Alerts:')
+      $scope.computedCe = $scope.computedCe.concat(alerts.errors)
+    }
+    if (alerts.warnings.length) {
+      $scope.computedCe.push('Warnings:')
+      $scope.computedCe = $scope.computedCe.concat(alerts.warnings)
+    }
+  }
 
-    drupal.loadDocuments().then(function() {
-      $scope.computedCe.push('-- loaded facts');
+  drupal.loadModel().then(function(response) {
+    appendErrors(response);
+    $scope.computedCe.push('Loaded model');
+    $scope.computedCe.push(' ');
+    $scope.computedCe.push('Loading facts...');
 
-      drupal.loadRules().then(function() {
-        $scope.computedCe.push('-- loaded rules');
+    drupal.loadDocuments().then(function(response) {
+      appendErrors(response);
+      $scope.computedCe.push('Loaded facts');
+      $scope.computedCe.push(' ');
+      $scope.computedCe.push('Loading rules...');
+
+      drupal.loadRules().then(function(response) {
+        appendErrors(response);
+        $scope.computedCe.push('Loaded rules');
+        $scope.computedCe.push(' ');
+        $scope.computedCe.push('Computing data...');
+
         computeData();
       }, function() {
         computeData();
