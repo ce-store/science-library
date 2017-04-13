@@ -24,15 +24,15 @@ angular.module('itapapersApp', [
   $urlRouterProvider.otherwise('/');
 
   $stateProvider
+    // .state('home', {
+    //   url: '/',
+    //   templateUrl: 'views/home.html',
+    //   controller: 'HomeCtrl'
+    // })
     .state('home', {
-      url: '/',
-      templateUrl: 'views/home.html',
-      controller: 'HomeCtrl'
-    })
-    .state('main', {
       url: '/science-library',
-      templateUrl: 'views/science-library/main.html',
-      controller: 'MainCtrl'
+      templateUrl: 'scripts/routes/home/home.html',
+      controller: 'HomeCtrl'
     })
     .state('help', {
       url: '/science-library/help',

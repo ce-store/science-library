@@ -1,0 +1,231 @@
+<div class="col-md-12 footer-padding">
+  <div class="row">
+    <!-- Description -->
+    <p class="center details">{{projectName}}. {{ lastUpdated }}.</p>
+  </div>
+
+  <div class="row">
+    <div class="list-view">
+      <div ng-show="listName === listTypes.papers">
+        <div class="col-md-8">
+          <top-header></top-header>
+
+          <div class="authorFilters">
+            <label ng-show="journalPapers" class="journal"></label>
+            <input ng-show="journalPapers" id="journalInput" type="checkbox" ng-model="journalInput">
+            <label ng-show="externalPapers" class="external-conference"></label>
+            <input ng-show="externalPapers" id="externalInput" type="checkbox" ng-model="externalInput">
+            <label ng-show="patents" class="patent"></label>
+            <input ng-show="patents" id="patentInput" type="checkbox" ng-model="patentInput">
+            <label ng-show="internalPapers" class="internal-conference"></label>
+            <input ng-show="internalPapers" id="internalInput" type="checkbox" ng-model="internalInput">
+            <label ng-show="technicalReports" class="technical-report"></label>
+            <input ng-show="technicalReports" id="technicalInput" type="checkbox" ng-model="technicalInput">
+            <label ng-show="otherDocuments" class="other-document"></label>
+            <input ng-show="otherDocuments" id="otherInput" type="checkbox" ng-model="otherInput">
+          </div>
+
+          <!-- Papers list -->
+          <div class="clear">
+            <div class="col-md-12">
+              <ul class="results-list no-bullets">
+                <li ng-repeat="item in list | orderBy : 'name' | orderBy : sortCommand | filter : filterPapers | limitTo : listLength">
+                  <span ng-class="[className, ('document-' + $index)]" ng-repeat="className in item.class track by $index"></span>
+                  <a ng-href="{{scienceLibrary}}/{{listName | limitTo : listName.length - 1}}/{{item.id}}" class="list-name"><span ng-show="item.status">[{{item.status}}] </span>{{item.name}}</a>
+                  <small ng-if="item.noteworthy"><span class="glyphicon glyphicon-star-empty highlight" aria-hidden="true"></span> ({{item.noteworthy}})</small>
+                  <small ng-if="item[sortValue] && sortShow" class="highlight">({{item[sortValue]}})</small>
+                </li>
+
+                <div class="center">
+                  <button class="btn see-more" ng-click="seeMore()">See more</button>
+                </div>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <!-- Publications -->
+          <h3>Statistics</h3>
+
+          <div class="total-publication-count">
+            <dl class="dl-horizontal dl-publications" ng-class="[{'answer-highlight': publicationsHighlight}]">
+              <div ng-show="totalPublications" ng-class="[{'answer-highlight': total_publication_countHighlight}]">
+                <dt>Total (External)</dt>
+                <dd>{{totalPublications}}</dd>
+              </div>
+            </dl>
+            <hr class="statistics-hr">
+            <dl class="dl-horizontal dl-publications" ng-class="[{'answer-highlight': publicationsHighlight}]">
+              <div ng-show="journalPapers" ng-class="[{'answer-highlight': journal_paper_countHighlight}]">
+                <dt>Journals</dt>
+                <dd>{{journalPapers}}</dd>
+              </div>
+              <div ng-show="externalPapers" ng-class="[{'answer-highlight': external_paper_countHighlight}]">
+                <dt>External Conferences</dt>
+                <dd>{{externalPapers}}</dd>
+              </div>
+              <div ng-show="patents" ng-class="[{'answer-highlight': patent_countHighlight}]">
+                <dt>Patents</dt>
+                <dd>{{patents}}</dd>
+              </div>
+            </dl>
+            <hr class="statistics-hr">
+            <dl class="dl-horizontal dl-publications" ng-class="[{'answer-highlight': publicationsHighlight}]">
+              <div ng-show="internalPapers" ng-class="[{'answer-highlight': internal_paper_countHighlight}]">
+                <dt>Internal Conferences</dt>
+                <dd>{{internalPapers}}</dd>
+              </div>
+              <div ng-show="technicalReports" ng-class="[{'answer-highlight': technical_report_countHighlight}]">
+                <dt>Technical Reports</dt>
+                <dd>{{technicalReports}}</dd>
+              </div>
+              <div ng-show="otherDocuments" ng-class="[{'answer-highlight': other_document_countHighlight}]">
+                <dt>Other Documents</dt>
+                <dd>{{otherDocuments}}</dd>
+              </div>
+            </dl>
+          </div>
+
+          <!-- Pie Chart -->
+          <div pie-chart data="pieData" factor="0.33"></div>
+        </div>
+      </div>
+
+      <!-- Author list -->
+      <div ng-show="listName === listTypes.authors">
+        <div class="col-md-3">
+          <top-header></top-header>
+
+          <ul class="results-list clear" style="padding-top: 15px">
+            <li ng-repeat="item in list | orderBy : 'name' | orderBy : sortCommand | limitTo : listLength">
+              <a ng-href="{{scienceLibrary}}/{{listName | limitTo : listName.length - 1}}/{{item.id}}" class="list-name">{{item.name}}</a>
+              <small ng-if="item[sortValue] && sortShow" class="highlight">({{item[sortValue]}})</small>
+            </li>
+
+            <div class="center">
+              <button class="btn see-more" ng-click="seeMore()">See more</button>
+            </div>
+          </ul>
+        </div>
+
+        <div class="col-md-9">
+          <input id="acInput" class="scatterInput" type="checkbox" checked>
+          <input id="indInput" class="scatterInput" type="checkbox" checked>
+          <input id="govInput" class="scatterInput" type="checkbox" checked>
+          <!-- <input id="unInput" class="scatterInput" type="checkbox" checked> -->
+
+          <div scatter-chart options="options"></div>
+
+          <div class="chart-btns">
+            <button ng-show="scatterYAxis !== scatterYAxisOpts[0]" class="btn" id="h-index">Local H-Index</button>
+            <button ng-show="scatterYAxis !== scatterYAxisOpts[1]" class="btn" id="citation-count">Local Citation Count</button>
+            <button ng-show="scatterYAxis !== scatterYAxisOpts[2]" class="btn" id="google-h-index">Google H-Index</button>
+            <button ng-show="scatterYAxis !== scatterYAxisOpts[3]" class="btn" id="google-citation-count">Google Citation Count</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Venue list -->
+      <div ng-show="listName === listTypes.venues">
+        <div class="col-md-12">
+          <top-header></top-header>
+        </div>
+        <div class="col-md-12">
+
+          <ul class="results-list clear">
+            <li ng-repeat="item in list | orderBy : 'name' | orderBy : sortCommand">
+              <a ng-href="{{scienceLibrary}}/{{listName | limitTo : listName.length - 1}}/{{item.id}}/" class="list-name">{{item.name}}</a> <small ng-if="item[sortValue] && sortShow" class="highlight">({{item[sortValue]}})</small>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Projects list -->
+      <!-- <div ng-show="listName === listTypes.projects">
+        <div class="col-md-12">
+          <top-header></top-header>
+
+          <ul class="results-list clear">
+            <div ng-repeat="area in areaNames | orderBy">
+              <h6>{{area}}</h6>
+
+              <li class="indented-list-item" ng-repeat="item in projects[area] | orderBy : 'name' | orderBy : '-value' | limitTo : listLength">
+                <a class="list-name" ng-href="{{scienceLibrary}}/{{listName | limitTo : listName.length - 1}}/{{item.id}}">{{item.name}}</a>
+                <small ng-if="item.value" class="highlight">({{item.value}} papers)</small>
+              </li>
+            </div>
+          </ul>
+        </div>
+      </div> -->
+
+      <!-- Organisation list -->
+      <div ng-show="listName === listTypes.organisations">
+        <div class="col-md-12">
+          <top-header></top-header>
+
+          <div class="authorFilters filters-right">
+            <label class="ac"></label>
+            <input id="acInput" type="checkbox" ng-model="acInput">
+            <label class="ind"></label>
+            <input id="indInput" type="checkbox" ng-model="indInput">
+            <label class="gov"></label>
+            <input id="govInput" type="checkbox" ng-model="govInput">
+          </div>
+
+          <div class="col-md-6 clear">
+            <ul class="results-list no-bullets">
+              <li ng-repeat="item in list | orderBy : 'name' | orderBy : sortCommand | filter : filterOrganisations">
+                <!-- Organisation list -->
+                <span ng-class="item.class"></span>
+                <a ng-href="{{scienceLibrary}}/{{listName | limitTo : listName.length - 1}}/{{item.id}}" class="list-name">{{item.name}}</a>
+                <small ng-if="item[sortValue] && sortShow" class="highlight">({{item[sortValue]}})</small>
+              </li>
+            </ul>
+          </div>
+
+          <div class="col-md-6">
+            <p class="helper-text center">Hover over a section of the sunburst to view details.</p>
+
+            <div sunburst data="sunburstData"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Co-authors list -->
+      <div ng-if="listName === listTypes.coauthors">
+        <div class="col-md-12">
+          <top-header></top-header>
+
+          <div class="authorFilters filters-right">
+            <label class="ac"></label>
+            <input id="acInput" type="checkbox" ng-model="acInput">
+            <label class="ind"></label>
+            <input id="indInput" type="checkbox" ng-model="indInput">
+            <label class="gov"></label>
+            <input id="govInput" type="checkbox" ng-model="govInput">
+          </div>
+        </div>
+
+        <div class="clear" edge-bundle-chart num-authors="'50'" ac="acInput" gov="govInput" ind="indInput"></div>
+      </div>
+
+      <!-- Topics list -->
+      <div ng-if="listName === listTypes.topics">
+        <div class="col-md-12">
+          <top-header></top-header>
+        </div>
+
+        <div class="col-md-12">
+          <ul class="results-list">
+            <li ng-repeat="item in list | orderBy : 'id' | orderBy : sortCommand">
+              <!-- Topics list -->
+              <a ng-href="{{scienceLibrary}}/{{listName | limitTo : listName.length - 1}}/{{item.id}}" class="list-name">{{ item.id | capitaliseFirst }}</a>
+              <small ng-if="item[sortValue] && sortShow" class="highlight">({{item[sortValue]}})</small>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
