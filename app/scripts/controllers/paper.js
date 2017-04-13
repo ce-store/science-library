@@ -5,7 +5,7 @@
 
 /* globals window: true */
 
-angular.module('itapapersApp')
+angular.module('scienceLibrary')
 
 .controller('PaperCtrl', ['$scope', '$stateParams', 'store', 'hudson', 'urls', 'documentTypes', 'utils', 'csv', 'definitions', function ($scope, $stateParams, store, hudson, urls, documentTypes, utils, csv, ce) {
   'use strict';

@@ -3,7 +3,7 @@
  * All Rights Reserved
  *******************************************************************************/
 
-angular.module('itapapersApp')
+angular.module('scienceLibrary')
 
 .constant('documentTypes', {
   journal: "journal paper",

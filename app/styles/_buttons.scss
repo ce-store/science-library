@@ -1,0 +1,56 @@
+.button-container {
+  text-align: center;
+  margin: 30px 0 50px 0;
+}
+
+.btn {
+  border-radius: 0;
+  border: 0;
+  padding: 12px 24px;
+  margin: 6px;
+  font-size: 16px;
+}
+
+.btn .fa {
+  font-size: 20px;
+  margin-right: 8px;
+}
+
+.btn-default {
+  background: $colour-one;
+  color: $text-colour-light;
+}
+
+.btn-primary {
+  background: $colour-two;
+  color: $text-colour-light;
+}
+
+.btn-secondary {
+  background: $colour-three;
+  color: $text-colour-light;
+}
+
+.home-buttons-container {
+  margin: 20px 0 0 0;
+  text-align: center;
+}
+
+@media (min-width: 700px) {
+  .button-container {
+    margin: 30px 0;
+  }
+
+  .btn {
+    font-size: 22px;
+    font-weight: lighter;
+  }
+
+  .btn .fa {
+    font-size: 26px;
+  }
+
+  .home-buttons-container {
+    margin: 50px 0 0 0;
+  }
+}

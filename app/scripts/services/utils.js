@@ -3,7 +3,7 @@
  * All Rights Reserved
  *******************************************************************************/
 
-angular.module('itapapersApp')
+angular.module('scienceLibrary')
 
 .factory('utils', ['documentTypes', 'definitions', function (documentTypes, ce) {
   'use strict';

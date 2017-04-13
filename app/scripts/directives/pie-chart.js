@@ -3,7 +3,7 @@
  * All Rights Reserved
  *******************************************************************************/
 
-angular.module('itapapersApp')
+angular.module('scienceLibrary')
 
 .directive('pieChart', ['$parse', '$window', 'store', 'csv', 'colours', function ($parse, $window, store, csv, colours) {
   'use strict';

@@ -19,11 +19,7 @@ if (process.env.NODE_ENV === 'production') {
   app.use('/styles', express.static(path.join(__dirname, 'dist', 'styles')));
 } else {
   console.log('development')
-  app.use('/bower_components', express.static(path.join(__dirname, 'bower_components')));
-  app.use('/i', express.static(path.join(__dirname, 'app', 'i')));
-  app.use('/scripts', express.static(path.join(__dirname, 'app', 'scripts')));
-  app.use('/styles', express.static(path.join(__dirname, 'app', 'styles')));
-  app.use('/views', express.static(path.join(__dirname, 'app', 'views')));
+  app.use('/', express.static(path.join(__dirname, 'app')));
 }
 
 app.all('/*', function (req, res) {
@@ -37,7 +33,7 @@ app.all('/*', function (req, res) {
 });
 
 // start server on the specified port and binding host
-var port = 3000
+var port = 3001
 app.listen(port, function() {
   'use strict';
 

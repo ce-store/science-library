@@ -1,0 +1,20 @@
+.interactive-header {
+  color: $text-colour-dark;
+  line-height: 1.75;
+  border-bottom: none;
+}
+
+.interactive-header-selected {
+  color: $text-colour-light;
+  background: $colour-primary;
+  padding: 2px 10px 6px;
+  font-family: $font-stack-mono;
+}
+
+.interactive-header-selected:hover {
+  cursor: pointer;
+}
+
+.interactive-header-selected .caret {
+  margin: 0 10px;
+}

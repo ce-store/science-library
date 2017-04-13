@@ -1,0 +1,42 @@
+h1 {
+  color: $text-colour-light;
+  font-size: 26px;
+  margin: 20px 25px;
+}
+
+h3 {
+  color: $colour-one;
+  font-size: 26px;
+  line-height: 1.2;
+  margin: 30px 0 30px 0;
+  border-bottom: 1px solid $background-dark;
+}
+
+@media (min-width: 700px) {
+  h3 {
+    color: $text-colour-dark;
+    display: flex;
+    align-items: center;
+    flex-flow: wrap;
+    font-size: 36px;
+    min-height: 64px;
+    margin: 30px 0 50px 0;
+    border-bottom: none;
+  }
+}
+
+a {
+  color: $colour-primary;
+}
+
+a:hover {
+  color: $colour-primary;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+p {
+  color: $text-colour-body;
+  line-height: 1.75;
+  margin: 0 0 30px;
+}

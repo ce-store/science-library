@@ -1,6 +1,6 @@
 /* globals DOMParser: true */
 
-angular.module('itapapersApp')
+angular.module('scienceLibrary')
 
 .factory('drupal', ['$http', function ($http) {
   'use strict';

@@ -3,7 +3,7 @@
  * All Rights Reserved
  *******************************************************************************/
 
-angular.module('itapapersApp')
+angular.module('scienceLibrary')
 
 .service('charts', ['utils', 'definitions', function (utils, ce) {
   'use strict';

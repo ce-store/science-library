@@ -5,9 +5,9 @@
 
 /* globals window: true */
 
-angular.module('itapapersApp')
+angular.module('scienceLibrary')
 
-.controller('HomeCtrl', ['$scope', '$stateParams', '$location', '$sce', '$window', 'store', 'charts', 'documentTypes', 'utils', 'csv', 'colours', 'localStorageService', 'urls', 'definitions', function ($scope, $stateParams, $location, $sce, $window, store, charts, documentTypes, utils, csv, colours, localStorageService, urls, ce) {
+.controller('HomeCtrl', ['$scope', '$stateParams', '$location', '$sce', '$window', 'store', 'charts', 'documentTypes', 'utils', 'colours', 'localStorageService', 'urls', 'definitions', function ($scope, $stateParams, $location, $sce, $window, store, charts, documentTypes, utils, colours, localStorageService, urls, ce) {
   'use strict';
 
   $scope.scienceLibrary = urls.scienceLibrary;
@@ -374,6 +374,7 @@ angular.module('itapapersApp')
   var getData = function() {
     store.getLastUpdated()
       .then(function(response) {
+        console.log(response)
         var foundComputeMessage = false;
         var lastUpdatedText = '';
         var projectName = '';

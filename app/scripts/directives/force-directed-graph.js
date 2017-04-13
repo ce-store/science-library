@@ -4,7 +4,7 @@
  *******************************************************************************/
 
 /* globals window: true */
-angular.module('itapapersApp')
+angular.module('scienceLibrary')
 
 .directive('forceDirectedGraph', ['$parse', '$window', 'urls', function ($parse, $window, urls) {
   'use strict';

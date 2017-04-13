@@ -5,7 +5,7 @@
 
 /* globals self: true */
 
-angular.module('itapapersApp')
+angular.module('scienceLibrary')
 
 .directive('sunburst', ['$parse', '$window', 'store', 'csv', 'colours', function ($parse, $window, store, csv, colours) {
   'use strict';

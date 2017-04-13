@@ -1,0 +1,288 @@
+/*
+ * (C) Copyright IBM Corporation  2016, 2017
+ * All Rights Reserved
+ */
+@import url("https://fonts.googleapis.com/css?family=PT+Mono|PT+Sans");
+h1 {
+  color: #fff;
+  font-size: 26px;
+  margin: 20px 25px;
+}
+
+h3 {
+  color: #f49c4e;
+  font-size: 26px;
+  line-height: 1.2;
+  margin: 30px 0 30px 0;
+  border-bottom: 1px solid #4a4a4a;
+}
+
+@media (min-width: 700px) {
+  h3 {
+    color: #444;
+    display: flex;
+    align-items: center;
+    flex-flow: wrap;
+    font-size: 36px;
+    min-height: 64px;
+    margin: 30px 0 50px 0;
+    border-bottom: none;
+  }
+}
+a {
+  color: #41d6c3;
+}
+
+a:hover {
+  color: #41d6c3;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+p {
+  color: #3a3a3a;
+  line-height: 1.75;
+  margin: 0 0 30px;
+}
+
+.button-container {
+  text-align: center;
+  margin: 30px 0 50px 0;
+}
+
+.btn {
+  border-radius: 0;
+  border: 0;
+  padding: 12px 24px;
+  margin: 6px;
+  font-size: 16px;
+}
+
+.btn .fa {
+  font-size: 20px;
+  margin-right: 8px;
+}
+
+.btn-default {
+  background: #f49c4e;
+  color: #fff;
+}
+
+.btn-primary {
+  background: #5596e6;
+  color: #fff;
+}
+
+.btn-secondary {
+  background: #f15a68;
+  color: #fff;
+}
+
+.home-buttons-container {
+  margin: 20px 0 0 0;
+  text-align: center;
+}
+
+@media (min-width: 700px) {
+  .button-container {
+    margin: 30px 0;
+  }
+
+  .btn {
+    font-size: 22px;
+    font-weight: lighter;
+  }
+
+  .btn .fa {
+    font-size: 26px;
+  }
+
+  .home-buttons-container {
+    margin: 50px 0 0 0;
+  }
+}
+.list-filters {
+  display: flex;
+  align-items: center;
+  background: #f1f2f1;
+  padding: 10px 30px;
+  margin: 0 -30px;
+}
+
+@media (min-width: 700px) {
+  .list-filters {
+    background: none;
+    margin: 0;
+    padding: 0 0 10px 0;
+    color: #f49c4e;
+    border-bottom: 1px solid #f49c4e;
+  }
+}
+.list-filters input[type="checkbox"] {
+  margin: 0;
+}
+
+.list-filters-label {
+  margin: 0 15px 0 0;
+}
+
+.list-filters .document-label {
+  margin: 0 5px 0 15px;
+}
+
+.list-filters .document-label:first-of-type {
+  margin: 0 5px 0 0;
+}
+
+.journal,
+.external-conference,
+.patent,
+.internal-conference,
+.technical-report,
+.other-document {
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  margin: 0 10px 0 0;
+}
+
+.journal {
+  background: #5596e6;
+}
+
+.external-conference {
+  background: #00b299;
+}
+
+.patent {
+  background: #7c56a5;
+}
+
+.internal-conference {
+  background: #f49c4e;
+}
+
+.technical-report {
+  background: #cc3f40;
+}
+
+.other-document {
+  background: #94a3ab;
+}
+
+ul.no-bullets {
+  list-style: none;
+}
+
+ul.results-list {
+  margin: 20px 0 0 0;
+  padding: 0;
+}
+
+ul.results-list li {
+  margin: 0 0 10px 0;
+}
+
+ul.results-list .list-name {
+  color: #3a3a3a;
+}
+
+.interactive-header {
+  color: #444;
+  line-height: 1.75;
+  border-bottom: none;
+}
+
+.interactive-header-selected {
+  color: #fff;
+  background: #41d6c3;
+  padding: 2px 10px 6px;
+  font-family: "PT Mono", monospace;
+}
+
+.interactive-header-selected:hover {
+  cursor: pointer;
+}
+
+.interactive-header-selected .caret {
+  margin: 0 10px;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+  background: #fff;
+}
+
+body {
+  font-family: "PT Sans", "Helvetica", sans-serif;
+  font-size: 16px;
+  text-rendering: optimizeLegibility;
+  background: none;
+}
+
+@media (min-width: 700px) {
+  html {
+    background: #f1f2f1;
+  }
+}
+.statistics dt {
+  width: 175px;
+  display: inline-block;
+}
+
+.statistics dd {
+  width: calc(100% - 180px);
+  display: inline-block;
+  text-align: right;
+  padding: 0 5px 0 0;
+}
+
+/* Header */
+.page-header {
+  font-family: "PT Mono", monospace;
+  margin: 0;
+  padding: 4px 0 8px 0;
+  border-bottom: 5px solid #41d6c3;
+  background: #4a4a4a;
+  color: #fff;
+}
+
+.data-message {
+  margin: 30px -30px;
+  text-align: center;
+  color: #5596e6;
+  background: #f1f2f1;
+  padding: 10px 30px;
+}
+
+.row {
+  background: #fff;
+}
+
+@media (min-width: 700px) {
+  .data-message {
+    margin: 0 0 30px 0;
+    color: #5596e6;
+    background: none;
+  }
+
+  .page-header {
+    margin: 0 0 15px 0;
+  }
+
+  .container {
+    padding: 0 15px;
+  }
+
+  .content-container {
+    margin-bottom: 15px;
+  }
+}
+@media (min-width: 1200px) {
+  .container {
+    width: 100%;
+  }
+}
+
+/*# sourceMappingURL=style.css.map */

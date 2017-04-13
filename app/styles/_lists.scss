@@ -1,0 +1,16 @@
+ul.no-bullets {
+  list-style: none;
+}
+
+ul.results-list {
+  margin: 20px 0 0 0;
+  padding: 0;
+}
+
+ul.results-list li {
+  margin: 0 0 10px 0;
+}
+
+ul.results-list .list-name {
+  color: $text-colour-body;
+}

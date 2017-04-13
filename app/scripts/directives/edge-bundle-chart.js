@@ -5,7 +5,7 @@
 
 /* globals window: true */
 
-angular.module('itapapersApp')
+angular.module('scienceLibrary')
 
 .directive('edgeBundleChart', ['$parse', '$window', 'store', 'csv', 'urls', 'definitions', function ($parse, $window, store, csv, urls, ce) {
   'use strict';

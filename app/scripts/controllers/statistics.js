@@ -3,7 +3,7 @@
  * All Rights Reserved
  *******************************************************************************/
 
-angular.module('itapapersApp')
+angular.module('scienceLibrary')
 
 .controller('StatisticsCtrl', ['$scope', 'store', 'utils', 'definitions', function ($scope, store, utils, ce) {
   'use strict';

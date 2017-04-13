@@ -62,8 +62,11 @@ module.exports = function (grunt) {
         tasks: ['newer:jshint:test', 'newer:jscs:test']
       },
       styles: {
-        files: ['<%= yeoman.app %>/styles/{,*/}*.css'],
-        tasks: ['newer:copy:styles', 'postcss']
+        files: [
+          '<%= yeoman.app %>/styles/{,*/}*.css',
+          '<%= yeoman.app %>/styles/{,*/}*.scss'
+        ],
+        tasks: ['newer:copy:styles', 'sass', 'postcss']
       },
       gruntfile: {
         files: ['Gruntfile.js']
@@ -182,6 +185,17 @@ module.exports = function (grunt) {
         }]
       },
       server: '.tmp'
+    },
+
+    sass: {
+      server: {
+        options: {
+          style: 'expanded'
+        },
+        files: {
+          '<%= yeoman.app %>/styles/style.css': '<%= yeoman.app %>/styles/style.scss',
+        }
+      }
     },
 
     // Add vendor prefixed styles
@@ -430,17 +444,16 @@ module.exports = function (grunt) {
   grunt.registerTask('serve', 'Compile then start an express web server', function (target) {
     if (target === 'dist') {
       grunt.task.run([
-        // 'build',
         'env:prod',
         'concurrent:dist'
       ]);
     } else {
       grunt.task.run([
-        // 'clean:server',
         'env:dev',
         'wiredep',
+        'sass:server',
         'concurrent:server',
-        'postcss:server'
+        'postcss:server',
       ]);
     }
   });
@@ -454,6 +467,7 @@ module.exports = function (grunt) {
     'clean:server',
     'wiredep',
     'concurrent:test',
+    'sass',
     'postcss',
     'connect:test'
   ]);
@@ -462,6 +476,7 @@ module.exports = function (grunt) {
     'clean:dist',
     'wiredep',
     'useminPrepare',
+    'sass',
     'postcss',
     'ngtemplates',
     'concat',

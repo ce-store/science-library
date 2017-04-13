@@ -3,7 +3,7 @@
  * All Rights Reserved
  *******************************************************************************/
 
-angular.module('itapapersApp')
+angular.module('scienceLibrary')
 
 .directive('scatterChart', ['$parse', '$window', '$location', 'store', 'csv', 'colours', function ($parse, $window, $location, store, csv, colours) {
   'use strict';

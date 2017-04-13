@@ -6,7 +6,7 @@
 /* globals localStorage: true */
 /* globals alert: true */
 
-angular.module('itapapersApp')
+angular.module('scienceLibrary')
 
 .controller('SpecialCtrl', ['$scope', '$stateParams', '$location', 'store', 'urls', 'localStorageService', function ($scope, $stateParams, $location, store, urls, localStorageService) {
   'use strict';

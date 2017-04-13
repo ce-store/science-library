@@ -3,7 +3,7 @@
  * All Rights Reserved
  *******************************************************************************/
 
-angular.module('itapapersApp')
+angular.module('scienceLibrary')
 
 .factory('hudson', ['$http', '$location', '$rootScope', '$state', function ($http, $location, $rootScope, $state) {
   'use strict';

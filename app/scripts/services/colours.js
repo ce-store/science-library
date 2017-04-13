@@ -3,7 +3,7 @@
  * All Rights Reserved
  *******************************************************************************/
 
-angular.module('itapapersApp')
+angular.module('scienceLibrary')
 
 .constant('colours', {
   areas: ["#5596e6", "#ff7f0e", "#2ca02c"],

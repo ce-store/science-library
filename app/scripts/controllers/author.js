@@ -6,7 +6,7 @@
 /* globals window: true */
 /* globals drawNarrativeChart: true */
 
-angular.module('itapapersApp')
+angular.module('scienceLibrary')
 
 .controller('AuthorCtrl', ['$scope', '$state', '$stateParams', '$timeout', 'store', 'urls', 'hudson', 'documentTypes', 'utils', 'csv', 'colours', 'definitions', function ($scope, $state, $stateParams, $timeout, store, urls, hudson, documentTypes, utils, csv, colours, ce) {
   'use strict';

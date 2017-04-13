@@ -1,0 +1,69 @@
+.list-filters {
+  display: flex;
+  align-items: center;
+  background: $background-light;
+  padding: 10px 30px;
+  margin: 0 -30px;
+}
+
+@media (min-width: 700px) {
+  .list-filters {
+    background: none;
+    margin: 0;
+    padding: 0 0 10px 0;
+    color: $colour-one;
+    border-bottom: 1px solid $colour-one;
+  }
+}
+
+.list-filters input[type="checkbox"] {
+  margin: 0;
+}
+
+.list-filters-label {
+  margin: 0 15px 0 0;
+}
+
+.list-filters .document-label {
+  margin: 0 5px 0 15px;
+}
+
+.list-filters .document-label:first-of-type {
+  margin: 0 5px 0 0;
+}
+
+.journal,
+.external-conference,
+.patent,
+.internal-conference,
+.technical-report,
+.other-document {
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  margin: 0 10px 0 0;
+}
+
+.journal {
+  background: #5596e6;
+}
+
+.external-conference {
+  background: #00b299;
+}
+
+.patent {
+  background: #7c56a5;
+}
+
+.internal-conference {
+  background: #f49c4e;
+}
+
+.technical-report {
+  background: #cc3f40;
+}
+
+.other-document {
+  background: #94a3ab;
+}

@@ -1,0 +1,79 @@
+<div class="col-md-8">
+  <interactive-header></interactive-header>
+
+  <div class="list-filters">
+    <span class="list-filters-label">Filter types</span>
+    <label ng-show="journalPapers" class="document-label journal"></label>
+    <input ng-show="journalPapers" id="journalInput" type="checkbox" ng-model="journalInput">
+    <label ng-show="externalPapers" class="document-label external-conference"></label>
+    <input ng-show="externalPapers" id="externalInput" type="checkbox" ng-model="externalInput">
+    <label ng-show="patents" class="document-label patent"></label>
+    <input ng-show="patents" id="patentInput" type="checkbox" ng-model="patentInput">
+    <label ng-show="internalPapers" class="document-label internal-conference"></label>
+    <input ng-show="internalPapers" id="internalInput" type="checkbox" ng-model="internalInput">
+    <label ng-show="technicalReports" class="document-label technical-report"></label>
+    <input ng-show="technicalReports" id="technicalInput" type="checkbox" ng-model="technicalInput">
+    <label ng-show="otherDocuments" class="document-label other-document"></label>
+    <input ng-show="otherDocuments" id="otherInput" type="checkbox" ng-model="otherInput">
+  </div>
+
+  <ul class="results-list no-bullets">
+    <li ng-repeat="item in list | orderBy : 'name' | orderBy : sortCommand | filter : filterPapers | limitTo : listLength">
+      <span ng-class="[className, ('document-' + $index)]" ng-repeat="className in item.class track by $index"></span>
+      <a ng-href="{{scienceLibrary}}/{{listName | limitTo : listName.length - 1}}/{{item.id}}" class="list-name"><span ng-show="item.status">[{{item.status}}] </span>{{item.name}}</a>
+      <small ng-if="item.noteworthy"><span class="glyphicon glyphicon-star-empty highlight" aria-hidden="true"></span> ({{item.noteworthy}})</small>
+      <small ng-if="item[sortValue] && sortShow" class="highlight">({{item[sortValue]}})</small>
+    </li>
+
+    <div class="button-container">
+      <button class="btn btn-default" ng-click="seeMore()">See more</button>
+    </div>
+  </ul>
+</div>
+
+<div class="col-md-4">
+  <!-- Publications -->
+  <h3>Statistics</h3>
+
+  <div class="statistics">
+    <dl ng-class="[{'answer-highlight': publicationsHighlight}]">
+      <div ng-show="totalPublications" ng-class="[{'answer-highlight': total_publication_countHighlight}]">
+        <dt>Total (External)</dt>
+        <dd>{{totalPublications}}</dd>
+      </div>
+    </dl>
+    <hr class="statistics-hr">
+    <dl ng-class="[{'answer-highlight': publicationsHighlight}]">
+      <div ng-show="journalPapers" ng-class="[{'answer-highlight': journal_paper_countHighlight}]">
+        <dt>Journals</dt>
+        <dd>{{journalPapers}}</dd>
+      </div>
+      <div ng-show="externalPapers" ng-class="[{'answer-highlight': external_paper_countHighlight}]">
+        <dt>External Conferences</dt>
+        <dd>{{externalPapers}}</dd>
+      </div>
+      <div ng-show="patents" ng-class="[{'answer-highlight': patent_countHighlight}]">
+        <dt>Patents</dt>
+        <dd>{{patents}}</dd>
+      </div>
+    </dl>
+    <hr class="statistics-hr">
+    <dl ng-class="[{'answer-highlight': publicationsHighlight}]">
+      <div ng-show="internalPapers" ng-class="[{'answer-highlight': internal_paper_countHighlight}]">
+        <dt>Internal Conferences</dt>
+        <dd>{{internalPapers}}</dd>
+      </div>
+      <div ng-show="technicalReports" ng-class="[{'answer-highlight': technical_report_countHighlight}]">
+        <dt>Technical Reports</dt>
+        <dd>{{technicalReports}}</dd>
+      </div>
+      <div ng-show="otherDocuments" ng-class="[{'answer-highlight': other_document_countHighlight}]">
+        <dt>Other Documents</dt>
+        <dd>{{otherDocuments}}</dd>
+      </div>
+    </dl>
+  </div>
+
+  <!-- Pie Chart -->
+  <div pie-chart data="pieData" factor="0.33"></div>
+</div>
