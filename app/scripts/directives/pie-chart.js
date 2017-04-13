@@ -28,7 +28,7 @@ angular.module('scienceLibrary')
 
       var drawPieChart = function(data) {
         var width = (scope.width - 200) * factor;
-        var height = scope.height - 570;
+        var height = scope.height - 585;
 
         if (scope.width < 1000 || height < 300) {
           width = 300;

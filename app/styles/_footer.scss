@@ -1,0 +1,51 @@
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 50px;
+  background-color: $background-dark;
+}
+
+.footer form {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.footer h4 {
+  font-size: 24px;
+  color: $text-colour-light;
+  margin: 0 20px;
+}
+
+.question-text {
+  height: 100%;
+  font-size: 22px;
+  flex-grow: 5;
+  padding: 8px 15px;
+  color: $text-colour-light;
+  background: transparent;
+  border: none;
+  outline: none;
+}
+
+.question-text::placeholder {
+  opacity: 0.8;
+}
+
+.question-submit {
+  height: 100%;
+  width: 60px;
+  background: transparent;
+  color: $text-colour-light;
+  border: none;
+  border-left: 1px solid #a0a0a0;
+  border-left: 1px solid rgba(255, 255, 255, 0.25);
+  font-size: 18px;
+  font-weight: lighter;
+  outline: none;
+}
+
+.footer-padding {
+  margin-bottom: 65px;
+}

@@ -11,7 +11,7 @@ angular.module('scienceLibrary')
   'use strict';
 
   return {
-    templateUrl: 'views/ita-footer.html',
+    templateUrl: 'scripts/directives/footer/ita-footer.html',
     restrict: 'E',
     link: function postLink(scope) {
       scope.question = '';

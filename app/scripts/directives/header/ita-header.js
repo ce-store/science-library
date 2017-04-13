@@ -7,11 +7,11 @@
 
 angular.module('scienceLibrary')
 
-.directive('itaHeader', ['$uibModal', '$location', '$sce', 'localStorageService', 'csv', function ($uibModal, $location, $sce, localStorageService, csv) {
+.directive('itaHeader', ['localStorageService', function (localStorageService) {
   'use strict';
 
   return {
-    templateUrl: 'views/ita-header.html',
+    templateUrl: 'scripts/directives/header/ita-header.html',
     restrict: 'E',
     link: function postLink(scope) {
       scope.reset = function () {

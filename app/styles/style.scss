@@ -8,6 +8,8 @@
  @import "buttons";
  @import "labels";
  @import "lists";
+ @import "header";
+ @import "footer";
  @import "interactive-header";
 
 html {
@@ -44,19 +46,8 @@ body {
   padding: 0 5px 0 0;
 }
 
-/* Header */
-
-.page-header {
-  font-family: $font-stack-mono;
-  margin: 0;
-  padding: 4px 0 8px 0;
-  border-bottom: 5px solid $colour-primary;
-  background: $background-dark;
-  color: $text-colour-light;
-}
-
 .data-message {
-  margin: 30px -30px;
+  margin: 30px -15px 0;
   text-align: center;
   color: $colour-two;
   background: $background-light;
@@ -87,7 +78,7 @@ body {
   }
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 990px) {
   .container {
     width: 100%;
   }
