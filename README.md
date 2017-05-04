@@ -55,3 +55,8 @@ npm start
 ## Testing
 
 Running `grunt test` will JSHint your files.
+
+## License
+
+Licensed under the [Apache License, Version 2.0](https://github.com/ce-store/science-library/blob/master/LICENSE.md)
+
