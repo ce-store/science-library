@@ -9,8 +9,8 @@ angular.module('itapapersApp')
     return $http.get('drupal/model').then(function(response) {
       var ce = response.data.join('\n');
 
-      return addCE(ce).then(function() {
-        return ce;
+      return addCE(ce).then(function(response) {
+        return response;
       });
     });
   };
@@ -35,8 +35,8 @@ angular.module('itapapersApp')
         }
       }
 
-      return addCE(ce).then(function() {
-        return ce;
+      return addCE(ce).then(function(response) {
+        return response;
       });
     });
   };
@@ -45,8 +45,8 @@ angular.module('itapapersApp')
     return $http.get('drupal/rules').then(function(response) {
       var ce = response.data;
 
-      return addCE(ce).then(function() {
-        return ce;
+      return addCE(ce).then(function(response) {
+        return response;
       });
     });
   };
