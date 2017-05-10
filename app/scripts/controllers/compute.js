@@ -10,37 +10,45 @@ angular.module('itapapersApp')
 .controller('ComputeCtrl', ['$scope', '$stateParams', 'store', 'urls', 'utils', 'definitions', 'drupal', function ($scope, $stateParams, store, urls, utils, ce, drupal) {
   'use strict';
 
-  $scope.computedCe = ['Loading model...'];
+  $scope.computedCe = [];
+//  $scope.computedCe.push('perform reset store with starting uid \'1\'.');
+  $scope.computedCe.push('--Loading model...');
 
   var appendErrors = function(response) {
     var alerts = response.data.alerts;
     if (alerts.errors.length) {
-      $scope.computedCe.push('Alerts:');
-      $scope.computedCe = $scope.computedCe.concat(alerts.errors);
+      $scope.computedCe.push('--Alerts:');
+      for (var i in alerts.errors) {
+        var msg = alerts.errors[i];
+        $scope.computedCe.push('--' + msg);
+      }
     }
     if (alerts.warnings.length) {
-      $scope.computedCe.push('Warnings:');
-      $scope.computedCe = $scope.computedCe.concat(alerts.warnings);
+      $scope.computedCe.push('--Warnings:');
+      for (var i in alerts.warnings) {
+        var msg = alerts.warnings[i];
+        $scope.computedCe.push('--' + msg);
+      }
     }
   };
 
   drupal.loadModel().then(function(response) {
     appendErrors(response);
-    $scope.computedCe.push('Loaded model');
+    $scope.computedCe.push('--Loaded model');
     $scope.computedCe.push(' ');
-    $scope.computedCe.push('Loading facts...');
+    $scope.computedCe.push('--Loading facts...');
 
     drupal.loadDocuments().then(function(response) {
       appendErrors(response);
-      $scope.computedCe.push('Loaded facts');
+      $scope.computedCe.push('--Loaded facts');
       $scope.computedCe.push(' ');
-      $scope.computedCe.push('Loading rules...');
+      $scope.computedCe.push('--Loading rules...');
 
       drupal.loadRules().then(function(response) {
         appendErrors(response);
-        $scope.computedCe.push('Loaded rules');
+        $scope.computedCe.push('--Loaded rules');
         $scope.computedCe.push(' ');
-        $scope.computedCe.push('Computing data...');
+        $scope.computedCe.push('--Computing data...');
 
         computeData();
       });
