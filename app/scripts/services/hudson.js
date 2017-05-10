@@ -5,7 +5,7 @@
 
 angular.module('itapapersApp')
 
-.factory('hudson', ['$http', '$location', '$rootScope', '$state', function ($http, $location, $rootScope, $state) {
+.factory('hudson', ['$http', '$location', '$rootScope', '$state', 'urls', function ($http, $location, $rootScope, $state, urls) {
   'use strict';
 
   var questions = [];
@@ -139,7 +139,7 @@ angular.module('itapapersApp')
     }
   };
 
-  var handleIntepretations = function(interpretations) {
+  var handleInterpretations = function(interpretations) {
     if (interpretations && interpretations.length > 0) {
       var result = interpretations[0].result;
       var redirected;
@@ -167,9 +167,9 @@ angular.module('itapapersApp')
     if (question.includes('help')) {
       $state.go('help');
     } else {
-      $http.post('ce-store/hudson/interpreter', { question: question })
+      $http.post(urls.home + urls.interpreter, question)
         .then(function(response) {
-          var redirected = handleIntepretations(response.data.interpretations);
+          var redirected = handleInterpretations(response.data.interpretations);
 
           // keyword search
           if (!redirected) {

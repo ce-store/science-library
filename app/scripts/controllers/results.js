@@ -16,9 +16,8 @@ angular.module('itapapersApp')
   if ($stateParams.keywords) {
     $scope.keywords = $stateParams.keywords;
 
-    $http.get('ce-store/keywords/' + $scope.keywords)
+    $http.get(urls.home + urls.keywordSearch.keywords + $scope.keywords + urls.keywordSearch.restrictions)
       .then(function(response) {
-
         $scope.results = {
           papers: [],
           authors: [],

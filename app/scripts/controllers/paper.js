@@ -135,6 +135,10 @@ angular.module('itapapersApp')
         var citationUrl = utils.getProperty(citationProps, ce.citation.url);
         var citationCount = utils.getProperty(citationProps, ce.citation.count);
 
+        if ((citationUrl == null) || (!citationUrl.startsWith("http"))) {
+          citationUrl = "";
+        }
+
         $scope.citationCount = {
           url:    citationUrl,
           count:  citationCount

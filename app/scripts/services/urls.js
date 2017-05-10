@@ -13,7 +13,7 @@ angular.module('itapapersApp')
   ceStore: '/ce-store/stores/DEFAULT',
   scienceLibrary: 'science-library',
   keywordSearch: {
-    keywords: '/special/keyword-search?keywords=',
+    keywords: '/ce-store/special/keyword-search?keywords=',
     restrictions: '&returnInstances=true&style=minimal&restrictToConcepts=document,person,organisation,topic,event&restrictToProperties=writes about,abstract,title,name,short name,full name,marker,description'
   }
 });
