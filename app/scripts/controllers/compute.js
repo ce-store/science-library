@@ -15,14 +15,14 @@ angular.module('itapapersApp')
   var appendErrors = function(response) {
     var alerts = response.data.alerts;
     if (alerts.errors.length) {
-      $scope.computedCe.push('Alerts:')
-      $scope.computedCe = $scope.computedCe.concat(alerts.errors)
+      $scope.computedCe.push('Alerts:');
+      $scope.computedCe = $scope.computedCe.concat(alerts.errors);
     }
     if (alerts.warnings.length) {
-      $scope.computedCe.push('Warnings:')
-      $scope.computedCe = $scope.computedCe.concat(alerts.warnings)
+      $scope.computedCe.push('Warnings:');
+      $scope.computedCe = $scope.computedCe.concat(alerts.warnings);
     }
-  }
+  };
 
   drupal.loadModel().then(function(response) {
     appendErrors(response);
@@ -43,14 +43,8 @@ angular.module('itapapersApp')
         $scope.computedCe.push('Computing data...');
 
         computeData();
-      }, function() {
-        computeData();
       });
-    }, function() {
-      computeData();
     });
-  }, function() {
-    computeData();
   });
 
   var computeData = function() {

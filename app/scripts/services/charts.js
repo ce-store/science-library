@@ -123,8 +123,10 @@ angular.module('itapapersApp')
       var employeeList = utils.getListProperty(orgProps, ce.organisation.employeeList);
       var documentCount = utils.getIntProperty(orgProps, ce.organisation.documentCount);
 
-      if (!employeeList.length) {
-        employeeList = [];
+      if (employeeList != null) {
+        if (!employeeList.length) {
+          employeeList = [];
+        }
       }
 
       children[type].push({

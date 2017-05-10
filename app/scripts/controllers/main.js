@@ -340,7 +340,7 @@ angular.module('itapapersApp')
           className = utils.getClassName(orgType);
         }
 
-        if (orgEmployeeList !== null) {
+        if (orgEmployeeList != null) {
           empLen = orgEmployeeList.length;
         }
 
