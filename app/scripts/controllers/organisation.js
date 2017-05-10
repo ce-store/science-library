@@ -317,6 +317,11 @@ angular.module('itapapersApp')
               class:      []
             };
 
+            paperItem.class = [];
+            for (var l = 0; l < paperItem.type.length; ++l) {
+              paperItem.class.push(utils.getClassName(paperItem.type[l]));
+            }
+
             $scope.papers[thisPaperId] = (paperItem);
             $scope.papersList.push(paperItem);
           }

@@ -160,6 +160,7 @@ angular.module('itapapersApp')
       onlyProps += ce.paper.title + ',';
       onlyProps += ce.date.month + ',';
       onlyProps += ce.date.year + ',';
+      onlyProps += ce.paper.noteworthyReason + ',';
       onlyProps += ce.orderedAuthor.person;
 
       url = '/instances/' + authorId;
