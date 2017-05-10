@@ -11,7 +11,7 @@
     "datamaps": "~0.4.0",
     "topojson": "~1.6.19",
     "angular-bootstrap": "~0.14.3",
-    "angular-google-maps": "^2.4.1",
+    "angular-google-maps": "2.3.2",
     "angular-datamaps": "~0.1.2",
     "angular-local-storage": "~0.2.3",
     "ng-csv": "~0.3.6",
