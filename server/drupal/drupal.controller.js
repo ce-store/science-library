@@ -39,7 +39,8 @@ var login = function(token) {
     url: settings.drupal_endpoint + '/api/user/login',
     headers: {
       'x-csrf-token': token,
-      'content-type': 'application/json'
+      'content-type': 'application/json',
+      'Cache-Control': 'no-cache'
     },
     body: settings.credentials,
     json: true
