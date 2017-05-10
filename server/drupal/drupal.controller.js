@@ -95,6 +95,7 @@ var getCE = function(token, session) {
       headers: {
         'x-csrf-token': token,
         'content-type': 'application/json',
+        'Cache-Control': 'no-cache',
         'Cookie': session.session_name + '=' + session.sessid
       },
       json: true
@@ -117,6 +118,9 @@ var getModelsPromise = function() {
     file = settings.models[i];
     options = {
       method: 'GET',
+      headers: {
+        'Cache-Control': 'no-cache'
+      },
       url: settings.model_endpoint + '/' + file
     };
 
