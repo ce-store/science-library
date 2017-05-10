@@ -141,7 +141,7 @@ angular.module('itapapersApp')
         var paperProps = thisInst.property_values;
 
         // paper properties
-        var citationCount = utils.getIntProperty(paperProps, ce.paper.citationCount);
+        var citationCount = utils.getLatestIntProperty(paperProps, ce.paper.citationCount);
         var variantList = utils.getListProperty(paperProps, ce.paper.variantList);
         var paperType = utils.getType(thisInst.concept_names);
 
@@ -247,8 +247,8 @@ angular.module('itapapersApp')
         // paper properties
         var paperName = utils.getUnknownProperty(paperProps, ce.paper.title);
         var paperDate = utils.getDateProperty(paperProps, ce.paper.finalDate);
-        var paperCitationCount = utils.getIntProperty(paperProps, ce.paper.citationCount);
-        var paperWeight = utils.getIntProperty(paperProps, ce.paper.weight);
+        var paperCitationCount = utils.getLatestIntProperty(paperProps, ce.paper.citationCount);
+        var paperWeight = utils.getLatestIntProperty(paperProps, ce.paper.weight);
         var paperNoteworthy = utils.getProperty(paperProps, ce.paper.noteworthyReason);
         var paperStatus = utils.getProperty(paperProps, ce.paper.status);
         // var paperVenue = utils.getProperty(paperProps, ce.paper.venue);
@@ -293,11 +293,11 @@ angular.module('itapapersApp')
 
         // author properties
         var authorName = utils.getProperty(authorProps, ce.author.fullName);
-        var authorCitationCount = utils.getIntProperty(authorProps, ce.author.localCitationCount);
-        var authorHIndex = utils.getIntProperty(authorProps, ce.author.localHIndex);
-        var authorDocumentCount = utils.getIntProperty(authorProps, ce.author.documentCount);
-        var authorExternalCount = utils.getIntProperty(authorProps, ce.author.externalDocumentCount);
-        var authorCoAuthorCount = utils.getIntProperty(authorProps, ce.author.coAuthorCount);
+        var authorCitationCount = utils.getLatestIntProperty(authorProps, ce.author.localCitationCount);
+        var authorHIndex = utils.getLatestIntProperty(authorProps, ce.author.localHIndex);
+        var authorDocumentCount = utils.getLatestIntProperty(authorProps, ce.author.documentCount);
+        var authorExternalCount = utils.getLatestIntProperty(authorProps, ce.author.externalDocumentCount);
+        var authorCoAuthorCount = utils.getLatestIntProperty(authorProps, ce.author.coAuthorCount);
 
         if (!authorIds[id]) {
           authorIds[id] = true;
@@ -331,9 +331,9 @@ angular.module('itapapersApp')
         // organisation properties
         var orgName = utils.getProperty(orgProps, ce.organisation.name);
         var orgEmployeeList = utils.getListProperty(orgProps, ce.organisation.employeeList);
-        var orgDocumentCount = utils.getIntProperty(orgProps, ce.organisation.documentCount);
-        var orgExternalCount = utils.getIntProperty(orgProps, ce.organisation.externalDocumentCount);
-        var orgCitationCount = utils.getIntProperty(orgProps, ce.organisation.citationCount);
+        var orgDocumentCount = utils.getLatestIntProperty(orgProps, ce.organisation.documentCount);
+        var orgExternalCount = utils.getLatestIntProperty(orgProps, ce.organisation.externalDocumentCount);
+        var orgCitationCount = utils.getLatestIntProperty(orgProps, ce.organisation.citationCount);
         var empLen = 0;
         var orgType = utils.getIndustryFor(instances[id]);
         if (orgType) {
@@ -360,7 +360,7 @@ angular.module('itapapersApp')
         var topicProps = instances[id].property_values;
 
         // topic properties
-        var topicDocumentCount = utils.getIntProperty(topicProps, ce.topic.documentCount);
+        var topicDocumentCount = utils.getLatestIntProperty(topicProps, ce.topic.documentCount);
 
         // push data to list
         $scope.list.push({

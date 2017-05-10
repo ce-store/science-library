@@ -73,6 +73,9 @@ angular.module('itapapersApp')
     getIntProperty: function(propertiesList, propertyName) {
       return propertiesList[propertyName] ? parseInt(propertiesList[propertyName][0], 10) : 0;
     },
+    getLatestIntProperty: function(propertiesList, propertyName) {
+      return propertiesList[propertyName] ? parseInt(propertiesList[propertyName][propertiesList[propertyName].length-1], 10) : 0;
+    },
     getDateProperty: function(propertiesList, propertyName) {
       return propertiesList[propertyName] ? Date.parse(propertiesList[propertyName][0]) : 0;
     },

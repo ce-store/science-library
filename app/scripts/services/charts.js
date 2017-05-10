@@ -129,9 +129,17 @@ angular.module('itapapersApp')
         }
       }
 
+      var empLen = null;
+
+      if (employeeList) {
+        empLen = employeeList.length;
+      } else {
+        empLen = 0;
+      }
+
       children[type].push({
         name:       name,
-        employees:  employeeList.length,
+        employees:  empLen,
         papers:     documentCount
       });
     }
