@@ -17,11 +17,26 @@
   <div class="row">
     <!-- Paper -->
     <div class="col-md-6">
-      <img class="paper-img" id="paper-img" ng-src="{{paperSource}}" ng-class="[{'answer-highlight': paper_thumbnailHighlight}]"/>
-      <div class="paper-buttons">
-        <button ng-if="paperSource && source !== paperSource" ng-click="show('paper')" class="btn">Show Paper</button>
-        <button ng-if="posterSource && source !== posterSource" ng-click="show('poster')" class="btn">Show Poster</button>
-        <button ng-if="presentationSource && source !== presentationSource" ng-click="show('presentation')" class="btn">Show Presentation</button>
+      <div ng-if="paperSource" >
+        <img class="paper-img" id="paper-img" ng-src="{{paperSource}}" ng-class="[{'answer-highlight': paper_thumbnailHighlight}]"/>
+        <div class="paper-buttons">
+          <button ng-if="posterSource && source !== posterSource" ng-click="show('poster')" class="btn">Show Poster</button>
+          <button ng-if="presentationSource && source !== presentationSource" ng-click="show('presentation')" class="btn">Show Presentation</button>
+        </div>
+      </div>
+      <div ng-if="posterSource" >
+        <img class="poster-img" id="poster-img" ng-src="{{posterSource}}" ng-class="[{'answer-highlight': poster_thumbnailHighlight}]"/>
+        <div class="paper-buttons">
+          <button ng-if="paperSource && source !== paperSource" ng-click="show('paper')" class="btn">Show Paper</button>
+          <button ng-if="presentationSource && source !== presentationSource" ng-click="show('presentation')" class="btn">Show Presentation</button>
+        </div>
+      </div>
+      <div ng-if="presentationSource" >
+        <img class="presentation-img" id="presentation-img" ng-src="{{presentationSource}}" ng-class="[{'answer-highlight': presentation_thumbnailHighlight}]"/>
+        <div class="paper-buttons">
+          <button ng-if="paperSource && source !== paperSource" ng-click="show('paper')" class="btn">Show Paper</button>
+          <button ng-if="posterSource && source !== posterSource" ng-click="show('poster')" class="btn">Show Poster</button>
+        </div>
       </div>
     </div>
 
@@ -39,11 +54,10 @@
               <small>({{orderedAuthors.length}})</small>
             </dd>
           </dl>
-          <dl class="dl-horizontal" ng-class="[{'answer-highlight': projectHighlight}]">
+          <dl class="dl-horizontal" ng-if="project" ng-class="[{'answer-highlight': projectHighlight}]">
             <dt>Project</dt>
             <!-- <dd ng-if="project"><a ng-href="{{scienceLibrary}}/project/{{project.id}}">{{project.name}}</a></dd> -->
-            <dd ng-if="project">{{project.name}}</dd>
-            <dd ng-if="!project">Unknown</dd>
+            <dd>{{project.name}}</dd>
           </dl>
 
           <!-- Abstract -->
@@ -87,31 +101,6 @@
             <dt>Noteworthy</dt>
             <dd>{{noteworthy}}</dd>
           </dl>
-
-          <div ng-if="!variants">
-            <!-- Variants -->
-            <dl class="dl-horizontal" class="paper-variants" ng-class="[{'answer-highlight': variantHighlight}]">
-              <dt>Variants</dt>
-              <dd>
-                <ul ng-if="variants.length > 0" class="results-list no-bullets no-min-list">
-                  <li ng-repeat="variant in variants">
-                    <span ng-class="variant.className"></span>
-                    <a ng-href="{{scienceLibrary}}/paper/{{variant.id}}">{{variant.name}}</a>
-                  </li>
-                </ul>
-                <span ng-if="variants.length === 0" class="details">None</span>
-              </dd>
-            </dl>
-
-            <!-- Download Link -->
-            <div class="paper-download-buttons">
-              <a class="btn" ng-if="paperDownloadUrl" ng-href="{{paperDownloadUrl}}" ng-class="[{'answer-highlight': paper_fileHighlight}]" target="_self">
-                Download Paper
-              </a>
-              <a class="btn" ng-if="posterDownloadUrl" ng-href="{{posterDownloadUrl}}" ng-class="[{'answer-highlight': poster_fileHighlight}]" target="_self">Download Poster</a>
-              <a class="btn" ng-if="presentationDownloadUrl" ng-href="{{presentationDownloadUrl}}" ng-class="[{'answer-highlight': presentation_fileHighlight}]" target="_self">Download Presentation</a>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -129,20 +118,18 @@
 
         <div class="col-md-6">
           <!-- Similar Papers -->
-          <div class="paper-variants" ng-class="[{'answer-highlight': variantHighlight}]">
+          <div ng-if="variants.length > 0" class="paper-variants" ng-class="[{'answer-highlight': variantHighlight}]">
             <h5>Variants</h5>
 
-            <ul ng-if="variants.length > 0" class="results-list no-bullets no-min-list">
+            <ul class="results-list no-bullets no-min-list">
               <li ng-repeat="variant in variants">
                 <span ng-class="variant.className"></span>
                 <a ng-href="{{scienceLibrary}}/paper/{{variant.id}}">{{variant.name}}</a>
               </li>
             </ul>
-
-            <span ng-if="variants.length === 0" class="details">None</span>
           </div>
 
-          <!-- Download Link -->
+          <!-- Download Links -->
           <div class="paper-download-buttons">
             <a class="btn" ng-if="paperDownloadUrl" ng-href="{{paperDownloadUrl}}" ng-class="[{'answer-highlight': paper_fileHighlight}]" target="_self">
               Download Paper

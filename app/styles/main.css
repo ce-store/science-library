@@ -405,6 +405,16 @@ td {
   margin: 0 12.5%;
 }
 
+.poster-img {
+  max-width: 75%;
+  margin: 0 12.5%;
+}
+
+.presentation-img {
+  max-width: 75%;
+  margin: 0 12.5%;
+}
+
 .paper-abstract {
   max-height: 350px;
   overflow-y: auto;

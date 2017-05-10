@@ -36,7 +36,7 @@
                   <small ng-if="item[sortValue] && sortShow" class="highlight">({{item[sortValue]}})</small>
                 </li>
 
-                <div class="center">
+                <div ng-if="list.length > listLength" class="center">
                   <button class="btn see-more" ng-click="seeMore()">See more</button>
                 </div>
               </ul>
@@ -103,7 +103,7 @@
               <small ng-if="item[sortValue] && sortShow" class="highlight">({{item[sortValue]}})</small>
             </li>
 
-            <div class="center">
+            <div ng-if="list.length > listLength" class="center">
               <button class="btn see-more" ng-click="seeMore()">See more</button>
             </div>
           </ul>

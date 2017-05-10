@@ -13,6 +13,7 @@ angular.module('itapapersApp')
   $scope.scienceLibrary = urls.scienceLibrary;
   $scope.accepted = 'accepted';
   $scope.listLength = 100;
+  $scope.listDelta = 100;
   $scope.listTypes = {
     papers:   'papers',
     authors:  'authors',
@@ -83,7 +84,7 @@ angular.module('itapapersApp')
   resetTypeCount();
 
   $scope.seeMore = function() {
-    $scope.listLength += 500;
+    $scope.listLength += $scope.listDelta;
   };
 
   $scope.select = function(type) {
