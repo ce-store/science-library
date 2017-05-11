@@ -37,10 +37,10 @@ angular.module('itapapersApp')
       reverse:  ['-', '-', '-', '-', '-', '-', '+']
     },
     'venues': {
-      names:    ['name'], // ['papers', 'most recent', 'duration', 'citation count', 'name'],
-      values:   ['name'],
-      show:     [false],
-      reverse:  ['+']
+      names:    ['paper count', 'author count', 'citation count', 'years attended', 'name'],
+      values:   ['papers', 'authors', 'citations', 'duration', 'name'],
+      show:     [true, true, true, true, false],
+      reverse:  ['-', '-', '-', '-', '+']
     },
     'projects': {},
     'organisations': {
@@ -51,10 +51,10 @@ angular.module('itapapersApp')
     },
     'co-authors': {},
     'topics': {
-      names:    ['collaborations', 'paper count'], //, 'author count', 'citation count', 'name'],
-      values:   ['collaborations', 'papers'],
-      show:     [true, true],
-      reverse:  ['-', '-']
+      names:    ['paper count', 'author count', 'organisation count', 'citation count', 'name'],
+      values:   ['papers', 'authors', 'organisations', 'citations', 'name'],
+      show:     [true, true, true, true, true, false],
+      reverse:  ['-', '-', '-', '-', '+']
     }
   };
 
@@ -321,16 +321,26 @@ angular.module('itapapersApp')
         }
       } else if ($scope.listName === $scope.listTypes.venues) {
         // venues page
-        var esInst = instances[data[i][0]];
-        var name = utils.getProperty(esInst.property_values, ce.series.name);
+        // authors page
+        var venueProps = instances[data[i][0]].property_values;
+
+        var name = utils.getProperty(venueProps, ce.series.name);
+        var venuePaperCount = utils.getIntProperty(venueProps, ce.series.documentCount);
+        var venueAuthorCount = utils.getIntProperty(venueProps, ce.series.authorCount);
+        var venueCitationCount = utils.getIntProperty(venueProps, ce.series.citationCount);;
+        var venueDuration = utils.getIntProperty(venueProps, ce.series.duration)
 
         // push data to list
         $scope.list.push({
-          id:   esInst._id,
-          name: name
+          id:   instances[data[i][0]]._id,
+          name: name,
+          papers: venuePaperCount,
+          authors: venueAuthorCount,
+          citations: venueCitationCount,
+          duration: venueDuration
         });
       } else if ($scope.listName === $scope.listTypes.projects) {
-        //
+        // projects page
       } else if ($scope.listName === $scope.listTypes.organisations) {
         // organisations page
         var orgProps = instances[id].property_values;
@@ -368,11 +378,17 @@ angular.module('itapapersApp')
 
         // topic properties
         var topicDocumentCount = utils.getLatestIntProperty(topicProps, ce.topic.documentCount);
+        var topicAuthorCount = utils.getLatestIntProperty(topicProps, ce.topic.authorCount);
+        var topicOrganisationCount = utils.getLatestIntProperty(topicProps, ce.topic.organisationCount);
+        var topicCitationCount = utils.getLatestIntProperty(topicProps, ce.topic.citationCount);
 
         // push data to list
         $scope.list.push({
           id:     id,
-          papers: topicDocumentCount
+          papers: topicDocumentCount,
+          authors: topicAuthorCount,
+          organisations: topicOrganisationCount,
+          citations: topicCitationCount
         });
       }
     }

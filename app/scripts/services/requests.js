@@ -99,7 +99,6 @@ angular.module('itapapersApp')
       url += '?showStats=false';
       url += '&style=minimal';
       url += '&onlyProperties=' + onlyProps;
-
       return url;
     },
 
@@ -108,6 +107,7 @@ angular.module('itapapersApp')
 
       url = '/concepts/' + ce.concepts.eventSeries + '/instances';
       url += '?showStats=false';
+      url += '&steps=1';
       url += '&style=minimal';
 
       return url;
@@ -244,7 +244,7 @@ angular.module('itapapersApp')
       var limRels = null;
 
       limRels = ce.topic.topicStatistic + ',';
-      limRels += ce.topic.citationCount + ',';
+//      limRels += ce.topic.citationCount + ',';
       limRels += ce.statistic.person + ',';
       limRels += ce.statistic.documentList + ',';
       limRels += ce.statistic.organisation;

@@ -108,6 +108,7 @@ angular.module('itapapersApp')
       topicStatistic: 'topic statistic',
       documentCount:  'number of documents',
       authorCount:    'number of authors',
+      organisationCount:    'number of organisations',
       citationCount:  'citation count'
     },
     citation: {
@@ -119,8 +120,10 @@ angular.module('itapapersApp')
     series: {
       name:   'full name',
       years:  'years ran',
+      duration:   'years ran',
       documentCount: 'paper count',
       citationCount: 'citation count',
+      authorCount: 'author count',
       eventList: 'comprises'
     },
     statistic: {

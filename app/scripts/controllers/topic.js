@@ -23,11 +23,11 @@ angular.module('itapapersApp')
     papers: {
       names:    ['most collaborative', 'citation count', 'most recent', 'name'],
       values:   ['weight', 'citationCount', 'date', 'name'],
-      show:     [false, true, false, false],
+      show:     [false, true, true, false],
       reverse:  ['-', '-', '-', '+']
     },
     authors: {
-      names:    ['external paper count', 'ITA citation count', 'ITA h-index', 'co-author count', 'name'],
+      names:    ['external paper count', 'local citation count', 'local h-index', 'co-author count', 'name'],
       values:   ['externalCount', 'citationCount', 'hIndex', 'coAuthorCount', 'name'],
       show:     [true, true, true, true, false],
       reverse:  ['-', '-', '-', '-', '+']
@@ -46,6 +46,10 @@ angular.module('itapapersApp')
   $scope.$on('question:added', function() {
     refreshHighlight();
   });
+
+  $scope.formatSortValue = function(rawVal, sortName) {
+    return utils.formatSortValue(rawVal, sortName);
+  };
 
   var refreshHighlight = function() {
     var qa = hudson.getLatestQuestion();
