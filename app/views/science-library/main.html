@@ -33,7 +33,7 @@
                   <span ng-class="[className, ('document-' + $index)]" ng-repeat="className in item.class track by $index"></span>
                   <a ng-href="{{scienceLibrary}}/{{listName | limitTo : listName.length - 1}}/{{item.id}}" class="list-name"><span ng-show="item.status">[{{item.status}}] </span>{{item.name}}</a>
                   <small ng-if="item.noteworthy"><span class="glyphicon glyphicon-star-empty highlight" aria-hidden="true"></span> ({{item.noteworthy}})</small>
-                  <small ng-if="item[sortValue] && sortShow" class="highlight">({{item[sortValue]}})</small>
+                  <small ng-if="item[sortValue] && sortShow" class="highlight">({{formatSortValue(item[sortValue], sortCommand)}})</small>
                 </li>
 
                 <div ng-if="list.length > listLength" class="center">
@@ -100,7 +100,7 @@
           <ul class="results-list clear" style="padding-top: 15px">
             <li ng-repeat="item in list | orderBy : 'name' | orderBy : sortCommand | limitTo : listLength">
               <a ng-href="{{scienceLibrary}}/{{listName | limitTo : listName.length - 1}}/{{item.id}}" class="list-name">{{item.name}}</a>
-              <small ng-if="item[sortValue] && sortShow" class="highlight">({{item[sortValue]}})</small>
+              <small ng-if="item[sortValue] && sortShow" class="highlight">({{formatSortValue(item[sortValue], sortCommand)}})</small>
             </li>
 
             <div ng-if="list.length > listLength" class="center">
@@ -135,7 +135,8 @@
 
           <ul class="results-list clear">
             <li ng-repeat="item in list | orderBy : 'name' | orderBy : sortCommand">
-              <a ng-href="{{scienceLibrary}}/{{listName | limitTo : listName.length - 1}}/{{item.id}}/" class="list-name">{{item.name}}</a> <small ng-if="item[sortValue] && sortShow" class="highlight">({{item[sortValue]}})</small>
+              <a ng-href="{{scienceLibrary}}/{{listName | limitTo : listName.length - 1}}/{{item.id}}/" class="list-name">{{item.name}}</a>
+              <small ng-if="item[sortValue] && sortShow" class="highlight">({{formatSortValue(item[sortValue], sortCommand)}})</small>
             </li>
           </ul>
         </div>
@@ -179,7 +180,7 @@
                 <!-- Organisation list -->
                 <span ng-class="item.class"></span>
                 <a ng-href="{{scienceLibrary}}/{{listName | limitTo : listName.length - 1}}/{{item.id}}" class="list-name">{{item.name}}</a>
-                <small ng-if="item[sortValue] && sortShow" class="highlight">({{item[sortValue]}})</small>
+                <small ng-if="item[sortValue] && sortShow" class="highlight">({{formatSortValue(item[sortValue], sortCommand)}})</small>
               </li>
             </ul>
           </div>
@@ -221,7 +222,7 @@
             <li ng-repeat="item in list | orderBy : 'id' | orderBy : sortCommand">
               <!-- Topics list -->
               <a ng-href="{{scienceLibrary}}/{{listName | limitTo : listName.length - 1}}/{{item.id}}" class="list-name">{{ item.id | capitaliseFirst }}</a>
-              <small ng-if="item[sortValue] && sortShow" class="highlight">({{item[sortValue]}})</small>
+              <small ng-if="item[sortValue] && sortShow" class="highlight">({{formatSortValue(item[sortValue], sortCommand)}})</small>
             </li>
           </ul>
         </div>

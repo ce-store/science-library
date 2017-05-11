@@ -27,7 +27,7 @@ angular.module('itapapersApp')
     'papers': {
       names:    ['most collaborative', 'citation count', 'most recent', 'name'],
       values:   ['weight', 'citations', 'date', 'name'],
-      show:     [false, true, false, false],
+      show:     [false, true, true, false],
       reverse: ['-', '-', '-', '+']
     },
     'authors': {
@@ -70,6 +70,29 @@ angular.module('itapapersApp')
   $scope.scatterYAxis = $scope.scatterYAxisOpts[0];
 
   var types = documentTypes.nameMap;
+
+  $scope.formatSortValue = function(rawVal, sortName) {
+    var result = null;
+
+    if (sortName === "-date") {
+      var monthNames = [
+          "Jan", "Feb", "Mar",
+          "Apr", "May", "Jun", "Jul",
+          "Aug", "Sep", "Oct",
+          "Nov", "Dec"
+        ];
+
+      var date = new Date(rawVal);
+      var monthIndex = date.getMonth();
+      var year = date.getFullYear();
+
+      result = monthNames[monthIndex] + ' ' + year;
+    } else {
+      result = rawVal;
+    }
+
+    return result;
+  };
 
   var resetTypeCount = function() {
     $scope.typeCount = {};
@@ -252,8 +275,6 @@ angular.module('itapapersApp')
         var paperWeight = utils.getLatestIntProperty(paperProps, ce.paper.weight);
         var paperNoteworthy = utils.getProperty(paperProps, ce.paper.noteworthyReason);
         var paperStatus = utils.getProperty(paperProps, ce.paper.status);
-        // var paperVenue = utils.getProperty(paperProps, ce.paper.venue);
-        // var paperAuthorString = utils.getProperty(paperProps, ce.paper.fullAuthorString);
 
         // set types for duplicates and non-duplicates
         var types = data[i][1];
