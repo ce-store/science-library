@@ -232,18 +232,19 @@ angular.module('itapapersApp')
   }
 
   function linkPaperCitationCounts(paper, citations) {
-      var ccNames = paper.property_values["citation count"];
+    var ccNames = paper.property_values["citation count"];
 
     if (ccNames) {
       for (var i = 0; i < ccNames.length; ++i) {
         var ccName = ccNames[i];
         var ccInst = citations[ccName];
-
         if (ccInst) {
-          paper.instances["citation count"].push(ccInst);
-          paper.values["citation count"] = 0;
-          if (ccInst.property_values["citation count"]) {
-            paper.values["citation count"] = ccInst.property_values["citation count"][0] || 0;
+          if (utils.isConcept(ccInst, "latest paper citation count")) {
+            paper.instances["citation count"].push(ccInst);
+            paper.values["citation count"] = 0;
+            if (ccInst.property_values["citation count"]) {
+              paper.values["citation count"] = ccInst.property_values["citation count"][0] || 0;
+            }
           }
         } else {
           console.log("No ccInst for " + paper._id);
@@ -312,7 +313,6 @@ angular.module('itapapersApp')
 
         for (var paperId in person.instances["wrote"]) {
           var paper = person.instances["wrote"][paperId];
-
           pcc += parseInt(paper.values["citation count"]);
         }
 
