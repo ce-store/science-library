@@ -357,8 +357,10 @@ angular.module('itapapersApp')
 
           if (org) {
             type = utils.getIndustryFor(org);
-
             if (type != null) {
+              var country = utils.getUnknownProperty(org.property_values, "is affiliated to");
+
+              type += "-" + country;
               if (types.indexOf(type) === -1) {
                 types.push(type);
               }
@@ -371,7 +373,6 @@ angular.module('itapapersApp')
         }
 
         weight += types.length * 1000;
-
         paper.values["weight"] = weight;
       }
     }

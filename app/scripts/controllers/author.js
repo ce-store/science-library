@@ -185,31 +185,33 @@ angular.module('itapapersApp')
       // Organisations
       $scope.organisations = [];
 
-      var i, j;
-      for (i = 0; i < writesFor.length; ++i) {
-        var org = writesFor[i];
-        var relatedOrganisation = relatedInstances[org];
+      if (writesFor != null) {
+        var i, j;
+        for (i = 0; i < writesFor.length; ++i) {
+          var org = writesFor[i];
+          var relatedOrganisation = relatedInstances[org];
 
-        if (relatedOrganisation) {
-          var organisationProps = relatedOrganisation.property_values;
+          if (relatedOrganisation) {
+            var organisationProps = relatedOrganisation.property_values;
 
-          // organisation properties
-          var orgID   = relatedOrganisation._id;
-          var orgName = utils.getProperty(organisationProps, ce.organisation.name);
-          var orgType = utils.getIndustryFor(relatedOrganisation);
+            // organisation properties
+            var orgID   = relatedOrganisation._id;
+            var orgName = utils.getProperty(organisationProps, ce.organisation.name);
+            var orgType = utils.getIndustryFor(relatedOrganisation);
 
-          var organisationToAdd = {
-            id: orgID,
-            type: orgType
-          };
+            var organisationToAdd = {
+              id: orgID,
+              type: orgType
+            };
 
-          if (orgName) {
-            organisationToAdd.name = orgName;
-          } else {
-            organisationToAdd.name = orgID;
+            if (orgName) {
+              organisationToAdd.name = orgName;
+            } else {
+              organisationToAdd.name = orgID;
+            }
+
+            $scope.organisations.push(organisationToAdd);
           }
-
-          $scope.organisations.push(organisationToAdd);
         }
       }
 
