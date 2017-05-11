@@ -154,6 +154,7 @@ angular.module('itapapersApp')
       limRels = ce.author.documentList + ',';
       limRels += ce.paper.finalDate + ',';
       limRels += ce.paper.variantList + ',';
+      limRels += ce.paper.googleCitationCount + ',';
       limRels += ce.paper.authorList;
 
       onlyProps = ce.author.fullName + ',';

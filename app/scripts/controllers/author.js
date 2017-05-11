@@ -29,7 +29,7 @@ angular.module('itapapersApp')
     papers: {
       names:    ['most collaborative', 'citation count', 'most recent', 'name'],
       values:   ['weight', 'citations', 'date', 'name'],
-      show:     [false, true, false, false],
+      show:     [false, true, true, false],
       reverse:  ['-', '-', '-', '+']
     },
     coAuthors: {
@@ -38,6 +38,10 @@ angular.module('itapapersApp')
       show:     [true, false],
       reverse:  ['-', '+']
     }
+  };
+
+  $scope.formatSortValue = function(rawVal, sortName) {
+    return utils.formatSortValue(rawVal, sortName);
   };
 
   var lastHighlight = null;
@@ -291,8 +295,22 @@ angular.module('itapapersApp')
           var paperFinalDate  = utils.getDateProperty(paperProps, ce.paper.finalDate);
           var paperNoteworthy = utils.getProperty(paperProps, ce.paper.noteworthyReason);
           var paperVariantList = utils.getListProperty(paperProps, ce.paper.variantList);
-          var paperCitationCount = utils.getIntProperty(paperProps, ce.paper.citationCount);
           var paperFullAuthorString = utils.getUnknownProperty(paperProps, ce.paper.fullAuthorString);
+          var paperCitationCount = null;
+
+          for (var j = 0; j < paperProps[ce.paper.googleCitationCount].length; ++j) {
+            var cName = paperProps[ce.paper.googleCitationCount][j];
+
+            if (cName != null) {
+              var citation = relatedInstances[cName];
+
+              if (citation != null) {
+                if (utils.isConcept(citation, ce.concepts.latestPaperCitationCount)) {
+                  paperCitationCount = utils.getIntProperty(citation.property_values, ce.citation.count);
+                }
+              }
+            }
+          }
 
           if (!documentMap[paperId]) {
             var variantFound = false;

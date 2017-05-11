@@ -11,6 +11,28 @@ angular.module('itapapersApp')
   var types = documentTypes.nameMap;
 
   return {
+    formatSortValue: function(rawVal, sortName) {
+      var result = null;
+
+      if (sortName === "-date") {
+        var monthNames = [
+            "Jan", "Feb", "Mar",
+            "Apr", "May", "Jun", "Jul",
+            "Aug", "Sep", "Oct",
+            "Nov", "Dec"
+          ];
+
+        var date = new Date(rawVal);
+        var monthIndex = date.getMonth();
+        var year = date.getFullYear();
+
+        result = monthNames[monthIndex] + ' ' + year;
+      } else {
+        result = rawVal;
+      }
+
+      return result;
+    },
     getType: function (directConceptNames) {
       if (directConceptNames.indexOf(documentTypes.journal) > -1) {
         return types[documentTypes.journal];
