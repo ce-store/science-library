@@ -770,7 +770,7 @@ td {
   padding: 12px;
   background: #26343F;
   border: 1px solid #a0a0a0;
-  width: 290px;
+  width: 350px;
 }
 
 .d3-tip:after, .d3-tip:before {
@@ -826,6 +826,15 @@ td {
 .d3-tip img {
   float: left;
   width: 80px;
+}
+
+.d3-tip table {
+  border: 0px;
+  border-collapse: collapse;
+}
+
+.d3-tip td {
+  text-align: left;
 }
 
 /* Height percentages */

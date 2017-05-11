@@ -31,10 +31,10 @@ angular.module('itapapersApp')
       reverse: ['-', '-', '-', '+']
     },
     'authors': {
-      names:    ['external paper count', 'local citation count', 'local h-index', 'co-author count', 'name'],
-      values:   ['externalCount', 'citations', 'hIndex', 'coAuthors', 'name'],
-      show:     [true, true, true, true, false],
-      reverse:  ['-', '-', '-', '-', '+']
+      names:    ['external paper count', 'local citation count', 'local h-index', 'global citation count', 'global h-index', 'co-author count', 'name'],
+      values:   ['externalCount', 'localCitations', 'localHIndex', 'overallCitations', 'overallHIndex', 'coAuthors', 'name'],
+      show:     [true, true, true, true, true, true, false],
+      reverse:  ['-', '-', '-', '-', '-', '-', '+']
     },
     'venues': {
       names:    ['name'], // ['papers', 'most recent', 'duration', 'citation count', 'name'],
@@ -66,7 +66,7 @@ angular.module('itapapersApp')
   $scope.otherDocumentType      = documentTypes.other;
   $scope.journalInput = $scope.externalInput = $scope.patentInput = $scope.internalInput = $scope.technicalInput = $scope.otherInput = $scope.acInput = $scope.indInput = $scope.govInput = true;
 
-  $scope.scatterYAxisOpts = ['hIndex', 'citations', 'googleHIndex', 'googleCitations'];
+  $scope.scatterYAxisOpts = ['localHIndex', 'localCitations', 'overallHIndex', 'overallCitations'];
   $scope.scatterYAxis = $scope.scatterYAxisOpts[0];
 
   var types = documentTypes.nameMap;
@@ -320,18 +320,22 @@ angular.module('itapapersApp')
         var authorDocumentCount = utils.getLatestIntProperty(authorProps, ce.author.documentCount);
         var authorExternalCount = utils.getLatestIntProperty(authorProps, ce.author.externalDocumentCount);
         var authorCoAuthorCount = utils.getLatestIntProperty(authorProps, ce.author.coAuthorCount);
+        var authorOverallCitationCount = utils.getLatestIntProperty(authorProps, ce.author.overallCitationCount);
+        var authorOverallHIndex = utils.getLatestIntProperty(authorProps, ce.author.overallHIndex);
 
         if (!authorIds[id]) {
           authorIds[id] = true;
           // push data to list
           $scope.list.push({
-            id:         id,
-            name:       authorName,
-            citations:  authorCitationCount,
-            hIndex:     authorHIndex,
-            coAuthors:  authorCoAuthorCount,
-            totalPubs:  authorDocumentCount,
-            externalCount: authorExternalCount
+            id:               id,
+            name:             authorName,
+            localCitations:   authorCitationCount,
+            localHIndex:      authorHIndex,
+            overallCitations: authorOverallCitationCount,
+            overallHIndex:    authorOverallHIndex,
+            coAuthors:        authorCoAuthorCount,
+            totalPubs:        authorDocumentCount,
+            externalCount:    authorExternalCount
           });
         }
       } else if ($scope.listName === $scope.listTypes.venues) {

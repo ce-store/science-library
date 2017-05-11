@@ -16,10 +16,10 @@ angular.module('itapapersApp')
       var options = expOptions(scope);
 
       var scatterYAxisNames = {};
-      scatterYAxisNames[scope.scatterYAxisOpts[0]] = "H-Index";
-      scatterYAxisNames[scope.scatterYAxisOpts[1]] = "Citation Count";
-      scatterYAxisNames[scope.scatterYAxisOpts[2]] = "Google H-Index";
-      scatterYAxisNames[scope.scatterYAxisOpts[3]] = "Google Citation Count";
+      scatterYAxisNames[scope.scatterYAxisOpts[0]] = "Local H-Index";
+      scatterYAxisNames[scope.scatterYAxisOpts[1]] = "Local Citation Count";
+      scatterYAxisNames[scope.scatterYAxisOpts[2]] = "Overall H-Index";
+      scatterYAxisNames[scope.scatterYAxisOpts[3]] = "Overall Citation Count";
 
       scope.$watchCollection(expOptions, function(newVal) {
         options = newVal;
@@ -40,9 +40,9 @@ angular.module('itapapersApp')
       };
 
       var drawScatterPlot = function(options) {
-        var xMax = d3.max(options.hIndex, function(d) { return +d.totalPubs; }) * 1.3,
+        var xMax = d3.max(options.localHIndex, function(d) { return +d.totalPubs; }) * 1.3,
             xMin = -1,
-            yMax = d3.max(options.hIndex, function(d) { return +d.yValue; }) * 1.3,
+            yMax = d3.max(options.localHIndex, function(d) { return +d.yValue; }) * 1.3,
             yMin = -2;
 
         var margin = {top: 20, right: 20, bottom: 30, left: 40},
@@ -90,7 +90,7 @@ angular.module('itapapersApp')
 
               var authors = [d];
               for (var i = 0; i < data.length; ++i) {
-                if (data[i].id !== d.id && data[i].totalPubs === d.totalPubs && ((d.hIndex && data[i].hIndex === d.hIndex) || (d.citations && data[i].citations === d.citations))) {
+                if (data[i].id !== d.id && data[i].totalPubs === d.totalPubs && ((d.localHIndex && data[i].localHIndex === d.localHIndex) || (d.citations && data[i].citations === d.citations))) {
                   authors.push(data[i]);
                 }
               }
@@ -98,16 +98,24 @@ angular.module('itapapersApp')
               var html = "";
               for (var j = 0; j < authors.length; ++j) {
                 var a = authors[j];
-                html += "<div><h2>" + a.name + " <small>(" + a.employer + ")</small></h2>" + "<dl><dt>Local H-Index</dt><dd>" + a.hIndex + "</dd><dt>Local Citation Count</dt><dd>" + a.citations + "</dd><dt>ITA Publications</dt><dd>" + a.totalPubs + "</dd></dl>";
+                var imgHtml = "";
+                var colspan = 3;
 
                 if (a.picture) {
-                  html += "<img src='" + a.picture + "' />";
+                  imgHtml += "<td rowspan=\"4\"><img src='" + a.picture + "'/></td>";
+                  colspan = 4;
                 }
 
-                html += "<div style='clear: both'></div></div>";
+                html += "<table>";
+                html += "<tr><td colspan=\"" + colspan + "\"><h2>" + a.name + " <small>(" + a.employer + ")</small></h2></td></tr>";
+                html += "<tr><td></td><td>Local</td><td>Overall</td>" + imgHtml + "</tr>";
+                html += "<tr><td>Citation Count</td><td>" + a.localCitations + "</td><td>" + a.overallCitations + "</td></tr>";
+                html += "<tr><td>H-Index</td><td>" + a.localHIndex + "</td><td>" + a.overallHIndex + "</td></tr>";
+                html += "<tr><td>External Papers</td><td colspan=\"2\">" + a.totalPubs + "</td></tr>";
+                html += "</table>";
 
                 if (j < authors.length - 1) {
-                  html += "<hr>";
+                  html += "<hr/>";
                 }
               }
 
@@ -141,7 +149,7 @@ angular.module('itapapersApp')
             .attr("x", width - 5)
             .attr("y", -6)
             .style("text-anchor", "end")
-            .text("Total (External)");
+            .text("External publications");
 
         // y axis
         svg.append("g")
@@ -171,25 +179,25 @@ angular.module('itapapersApp')
             .attr("class", "scatter-legend");
 
         // setup toggle
-        d3.select("#h-index")
+        d3.select("#local-h-index")
           .on("click", function() {
             scope.scatterYAxis = scope.scatterYAxisOpts[0];
             scope.$apply();
             filterDots();
           });
-        d3.select("#citation-count")
+        d3.select("#local-citation-count")
           .on("click", function() {
             scope.scatterYAxis = scope.scatterYAxisOpts[1];
             scope.$apply();
             filterDots();
           });
-        d3.select("#google-h-index")
+        d3.select("#overall-h-index")
           .on("click", function() {
             scope.scatterYAxis = scope.scatterYAxisOpts[2];
             scope.$apply();
             filterDots();
           });
-        d3.select("#google-citation-count")
+        d3.select("#overall-citation-count")
           .on("click", function() {
             scope.scatterYAxis = scope.scatterYAxisOpts[3];
             scope.$apply();
@@ -203,7 +211,8 @@ angular.module('itapapersApp')
           var ac = acInput ? acInput.property("checked") : null;
           var ind = indInput ? indInput.property("checked") : null;
           var gov = govInput ? govInput.property("checked") : null;
-
+console.log(scope.scatterYAxis);
+console.log(options);
           var data = options[scope.scatterYAxis];
           var filteredData = data.filter(function (d) {
             return (ac && d.industry === "AC") ||
@@ -217,7 +226,7 @@ angular.module('itapapersApp')
         d3.selectAll(".scatterInput")
           .on("change", filterDots);
 
-        dots(options.hIndex, objects, "H-Index", tip, x, y, width, yAxis, scatterColour);
+        dots(options.localHIndex, objects, "H-Index", tip, x, y, width, yAxis, scatterColour);
       };
 
       var dots = function(data, objects, yTitle, tip, x, y, width, yAxis, scatterColour) {

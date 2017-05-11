@@ -13,10 +13,10 @@ angular.module('itapapersApp')
     var instances = results.instances;
 
     var useStorage = typeof(Storage) !== "undefined";
-    var citationData = [];
-    var hIndexData = [];
-    var googleCitationData = [];
-    var googleHIndexData = [];
+    var localCitationData = [];
+    var localHIndexData = [];
+    var overallCitationData = [];
+    var overallHIndexData = [];
     var scatterOptions;
 
     for (var i = 0; i < data.length; ++i) {
@@ -26,8 +26,8 @@ angular.module('itapapersApp')
       var id = person._id;
 
       // person properties
-      var citations = utils.getIntProperty(personProps, ce.author.localCitationCount);
-      var hIndex = utils.getIntProperty(personProps, ce.author.localHIndex);
+      var localCitations = utils.getIntProperty(personProps, ce.author.localCitationCount);
+      var localHIndex = utils.getIntProperty(personProps, ce.author.localHIndex);
       var overallCitations = utils.getProperty(personProps, ce.author.overallCitationCount);
       var overallHIndex = utils.getIntProperty(personProps, ce.author.overallHIndex);
       var totalPubs = utils.getIntProperty(personProps, ce.author.externalDocumentCount);
@@ -36,70 +36,70 @@ angular.module('itapapersApp')
       var writesFor = utils.getListProperty(personProps, ce.author.writesFor);
       var industry = utils.getIndustryFor(person);
 
-      var c = {
+      var lc = {
         id: id,
         employer:   writesFor,
         name:       fullName,
         totalPubs:  totalPubs,
-        citations:  citations,
-        hIndex:     hIndex,
+        localCitations:  localCitations,
+        localHIndex:     localHIndex,
         picture:    profilePicture,
-        googleCitations:  overallCitations,
-        googleHIndex:     overallHIndex,
+        overallCitations:  overallCitations,
+        overallHIndex:     overallHIndex,
         industry:   industry,
-        yValue:     citations
+        yValue:     localCitations
       };
-      var h = {
+      var lh = {
         id: id,
         employer:   writesFor,
         name:       fullName,
         totalPubs:  totalPubs,
-        citations:  citations,
-        hIndex:     hIndex,
+        localCitations:  localCitations,
+        localHIndex:     localHIndex,
         picture:    profilePicture,
-        googleCitations:  overallCitations,
-        googleHIndex:     overallHIndex,
+        overallCitations:  overallCitations,
+        overallHIndex:     overallHIndex,
         industry:   industry,
-        yValue:     hIndex
+        yValue:     localHIndex
       };
-      var gc = {
+      var oc = {
         id: id,
         employer:   writesFor,
         name:       fullName,
         totalPubs:  totalPubs,
-        citations:  citations,
-        hIndex:     hIndex,
+        localCitations:  localCitations,
+        localHIndex:     localHIndex,
         picture:    profilePicture,
-        googleCitations:  overallCitations,
-        googleHIndex:     overallHIndex,
+        overallCitations:  overallCitations,
+        overallHIndex:     overallHIndex,
         industry:   industry,
         yValue:     overallCitations
       };
-      var gh = {
+      var oh = {
         id: id,
         employer:   writesFor,
         name:       fullName,
         totalPubs:  totalPubs,
-        citations:  citations,
-        hIndex:     hIndex,
+        localCitations:  localCitations,
+        localHIndex:     localHIndex,
         picture:    profilePicture,
-        googleCitations:  overallCitations,
-        googleHIndex:     overallHIndex,
+        overallCitations:  overallCitations,
+        overallHIndex:     overallHIndex,
         industry:   industry,
         yValue:     overallHIndex
       };
 
-      citationData.push(c);
-      hIndexData.push(h);
-      googleCitationData.push(gc);
-      googleHIndexData.push(gh);
+      localCitationData.push(lc);
+      localHIndexData.push(lh);
+      overallCitationData.push(oc);
+      overallHIndexData.push(oh);
     }
 
     scatterOptions = {
-      citations:        citationData,
-      hIndex:           hIndexData,
-      googleCitations:  googleCitationData,
-      googleHIndex:     googleHIndexData
+      localCitations:    localCitationData,
+      localHIndex:       localHIndexData,
+      overallCitations:  overallCitationData,
+      overallHIndex:     overallHIndexData
     };
 
     return scatterOptions;
