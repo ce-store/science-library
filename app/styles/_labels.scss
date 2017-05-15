@@ -7,6 +7,10 @@
   background: $background-light;
 }
 
+.list-filters-indented {
+  margin: 0 -45px;
+}
+
 @media (min-width: 700px) {
   .list-filters {
     padding: 0 0 10px 0;
@@ -14,6 +18,10 @@
     color: $colour-one;
     background: none;
     border-bottom: 1px solid $colour-one;
+  }
+
+  .list-filters-indented {
+    margin: 0 -15px;
   }
 }
 
@@ -23,14 +31,17 @@
 
 .list-filters-label {
   margin: 0 15px 0 0;
+
 }
 
-.list-filters .document-label {
-  margin: 0 5px 0 15px;
-}
+.list-filters {
+  .document-label {
+    margin: 0 5px 0 15px;
+  }
 
-.list-filters .document-label:first-of-type {
-  margin: 0 5px 0 0;
+  .document-label:first-of-type {
+    margin: 0 5px 0 0;
+  }
 }
 
 .journal,
@@ -67,4 +78,24 @@
 
 .other-document {
   background: #94a3ab;
+}
+
+.ind, .ac, .gov {
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  margin-right: 5px;
+  margin-left: -10px;
+}
+
+.ind {
+  background-color: #ff7f0e;
+}
+
+.ac {
+  background-color: #5596e6;
+}
+
+.gov {
+  background-color: #2ca02c;
 }

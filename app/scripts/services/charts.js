@@ -12,7 +12,7 @@ angular.module('scienceLibrary')
     var data = results.results;
     var instances = results.instances;
 
-    var useStorage = typeof(Storage) !== "undefined";
+    var useStorage = typeof(Storage) !== 'undefined';
     var citationData = [];
     var hIndexData = [];
     var googleCitationData = [];
@@ -107,10 +107,10 @@ angular.module('scienceLibrary')
 
   var getSunburstData = function (data) {
     var children = {
-      "IND":      [],
-      "AC":       [],
-      "GOV":      [],
-      "Unknown":  []
+      'IND':      [],
+      'AC':       [],
+      'GOV':      [],
+      'Unknown':  []
     };
 
     for (var i = 0; i < data.results.length; ++i) {
@@ -123,7 +123,7 @@ angular.module('scienceLibrary')
       var employeeList = utils.getListProperty(orgProps, ce.organisation.employeeList);
       var documentCount = utils.getIntProperty(orgProps, ce.organisation.documentCount);
 
-      if (!employeeList.length) {
+      if (!employeeList || !employeeList.length) {
         employeeList = [];
       }
 
@@ -135,15 +135,15 @@ angular.module('scienceLibrary')
     }
 
     var sunburstData = {
-      name: "flare",
+      name: 'flare',
       children: [{
-        name: "AC",
+        name: 'AC',
         children: children.AC
       }, {
-        name: "IND",
+        name: 'IND',
         children: children.IND
       }, {
-        name: "GOV",
+        name: 'GOV',
         children: children.GOV
       }]
     };

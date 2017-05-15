@@ -27,12 +27,17 @@ angular.module('scienceLibrary')
       var d3 = $window.d3;
 
       var drawPieChart = function(data) {
-        var width = (scope.width - 200) * factor;
-        var height = scope.height - 585;
+        var width, height;
 
-        if (scope.width < 1000 || height < 300) {
+        if (scope.width < 700) {
+          width = scope.width - 60;
+          height = width;
+        } else if (scope.width < 1000 || height < 300) {
           width = 300;
           height = 300;
+        } else {
+          width = (scope.width - 200) * factor;
+          height = scope.height - 585;
         }
 
         var radius = Math.min(width, height) / 2;

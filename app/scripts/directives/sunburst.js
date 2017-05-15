@@ -12,7 +12,7 @@ angular.module('scienceLibrary')
 
   return {
     restrict:'EA',
-    template:"<div class='sunburst'></div>",
+    template:'<div class="sunburst"></div>',
     link: function postLink(scope, element, attrs) {
       var expData = $parse(attrs.data);
       var data = expData(scope);
@@ -35,7 +35,7 @@ angular.module('scienceLibrary')
 
       var d3 = $window.d3;
       var scatterColour = d3.scale.ordinal()
-        .domain(["AC", "IND", "GOV"])
+        .domain(['AC', 'IND', 'GOV'])
         .range(colours.areas);
       var legendMap = {
         'AC': 'Academic',
@@ -45,9 +45,22 @@ angular.module('scienceLibrary')
       };
 
       var drawSunburst = function (root) {
-        var width = (scope.width - 150) * 0.5,
-            height = scope.height - 300,
-            radius = Math.min(width, height) / 2;
+        var width, height;
+
+        // if mobile
+        if (scope.width < 700) {
+          width = scope.width - 90;
+          height = width;
+        } else {
+          width = (scope.width - 150) * 0.5;
+          height = scope.height - 480;
+        }
+
+        var radius = Math.min(width, height) / 2;
+
+        console.log(width);
+        console.log(height);
+        console.log(radius);
 
         var legendRectSize = 18;
         var legendSpacing = 5;
@@ -64,20 +77,20 @@ angular.module('scienceLibrary')
             .attr('class', 'd3-tip dark-tip small-tip')
             .offset([-10, 0])
             .html(function(d) {
-              if (d.name === "AC" || d.name === "IND" || d.name === "GOV") {
-                return legendMap[d.name] + " <small class='highlight'>(" + d.value + " authors)</small>";
+              if (d.name === 'AC' || d.name === 'IND' || d.name === 'GOV') {
+                return legendMap[d.name] + ' <small class="highlight">(' + d.value + ' authors)</small>';
               } else {
-                return d.name + " <small class='highlight'>(" + d.value + " authors, " + d.papers + " papers)</small>";
+                return d.name + ' <small class="highlight">(' + d.value + ' authors, ' + d.papers + ' papers)</small>';
               }
             });
 
-        angular.element(".sunburst-svg").remove();
-        var svg = d3.select(".sunburst").append("svg")
-            .attr("class", "sunburst-svg")
-            .attr("width", width)
-            .attr("height", height)
-          .append("g")
-            .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+        angular.element('.sunburst-svg').remove();
+        var svg = d3.select('.sunburst').append('svg')
+            .attr('class', 'sunburst-svg')
+            .attr('width', width)
+            .attr('height', height)
+          .append('g')
+            .attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
 
         svg.call(tip);
 
@@ -95,34 +108,34 @@ angular.module('scienceLibrary')
         var node;
 
         node = root;
-        var path = svg.datum(root).selectAll("path")
+        var path = svg.datum(root).selectAll('path')
             .data(partition.nodes)
-          .enter().append("path")
-            .attr("stroke", "#fff")
-            .attr("d", arc)
-            .style("fill", function(d) {
+          .enter().append('path')
+            .attr('stroke', '#fff')
+            .attr('d', arc)
+            .style('fill', function(d) {
               var name = (d.children ? d : d.parent).name;
-              if (name === "flare") {
-                return "#22394A";
+              if (name === 'flare') {
+                return '#fff';
               } else {
                 return color(name);
               }
             })
-            .on("click", click)
-            .on("mouseover", function(d) {
-              if (d.name !== "flare") {
+            .on('click', click)
+            .on('mouseover', function(d) {
+              if (d.name !== 'flare') {
                 tip.show(d);
               }
             })
-            .on("mouseout", tip.hide)
+            .on('mouseout', tip.hide)
             .each(stash);
 
         scope.change = function() {
           var value = function(d) {
             if (d.parent) {
-              if ((scope.acInput && d.parent.name === "AC") ||
-                  (scope.indInput && d.parent.name === "IND") ||
-                  (scope.govInput && d.parent.name === "GOV")) {
+              if ((scope.acInput && d.parent.name === 'AC') ||
+                  (scope.indInput && d.parent.name === 'IND') ||
+                  (scope.govInput && d.parent.name === 'GOV')) {
                 if (scope.sortName === scope.sort.names[0]) {
                   lastSort = scope.sort.names[0];
                   return d.employees;
@@ -141,20 +154,20 @@ angular.module('scienceLibrary')
           path.data(partition.value(value).nodes)
             .transition()
               .duration(1000)
-              .attrTween("d", arcTweenData);
+              .attrTween('d', arcTweenData);
         };
 
-        d3.selectAll("input").on("change", scope.change);
+        d3.selectAll('input').on('change', scope.change);
         scope.change();
 
         function click(d) {
           node = d;
           path.transition()
             .duration(1000)
-            .attrTween("d", arcTweenZoom(d));
+            .attrTween('d', arcTweenZoom(d));
         }
 
-        d3.select(self.frameElement).style("height", height + "px");
+        d3.select(self.frameElement).style('height', height + 'px');
 
         var legend = svg.selectAll('.legend')
           .data(color.domain())
@@ -211,10 +224,10 @@ angular.module('scienceLibrary')
 
         // When zooming: interpolate the scales.
         function arcTweenZoom(d) {
-          if (d.name === "flare") {
-            legend.attr("display", "inline");
+          if (d.name === 'flare') {
+            legend.attr('display', 'inline');
           } else {
-            legend.attr("display", "none");
+            legend.attr('display', 'none');
           }
 
           var xd = d3.interpolate(x.domain(), [d.x, d.x + d.dx]),

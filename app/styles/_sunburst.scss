@@ -1,0 +1,11 @@
+.sunburst {
+  margin-bottom: 30px;
+}
+
+.sunburst-svg {
+  margin-top: 50px;
+
+  @media (min-width: 700px) {
+    margin-top: 0;
+  }
+}

@@ -344,7 +344,7 @@ angular.module('scienceLibrary')
           className = utils.getClassName(orgType);
         }
 
-        if (orgEmployeeList !== null) {
+        if (orgEmployeeList) {
           empLen = orgEmployeeList.length;
         }
 
