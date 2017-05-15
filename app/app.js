@@ -41,7 +41,7 @@ angular.module('scienceLibrary', [
     })
     .state('paper', {
       url: '/science-library/paper/:paperId',
-      templateUrl: 'views/science-library/paper.html',
+      templateUrl: 'scripts/routes/document/document.html',
       controller: 'PaperCtrl'
     })
     .state('venue', {

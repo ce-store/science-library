@@ -8,13 +8,14 @@
  @import "buttons";
  @import "labels";
  @import "lists";
- @import "header";
- @import "footer";
- @import "interactive-header";
- @import "pie-chart";
- @import "scatter-chart";
- @import "sunburst";
- @import "edge-bundle-chart";
+ @import "directives/header";
+ @import "directives/footer";
+ @import "directives/interactive-header";
+ @import "directives/pie-chart";
+ @import "directives/scatter-chart";
+ @import "directives/sunburst";
+ @import "directives/edge-bundle-chart";
+ @import "routes/document";
 
 html {
  position: relative;
@@ -94,4 +95,9 @@ body {
   .container {
     width: 100%;
   }
+}
+
+.angular-google-map-container {
+  height: 300px;
+  margin: 20px 0 30px;
 }

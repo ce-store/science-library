@@ -1,0 +1,141 @@
+<!--
+ * (C) Copyright IBM Corporation  2016, 2017
+ * All Rights Reserved
+ -->
+
+<div class="container">
+  <div class="col-md-12 footer-padding">
+    <div class="row" style="padding-top: 20px;">
+      <!-- Title -->
+      <p class="center">
+        <span class="highlight" ng-class="[{'answer-highlight': titleHighlight}]">{{title}}</span>
+        was published
+        <span class="highlight" ng-class="[{'answer-highlight': publish_dateHighlight}]">{{published}}</span>
+        <span ng-if="noteworthy" class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
+      </p>
+    </div>
+
+    <div class="row" style="padding: 0 15px 20px;">
+      <!-- Paper -->
+      <div class="col-md-6">
+        <img class="paper-img" id="paper-img" ng-src="{{paperSource}}" ng-class="[{'answer-highlight': paper_thumbnailHighlight}]"/>
+        <div class="paper-buttons">
+          <button ng-if="paperSource && source !== paperSource" ng-click="show('paper')" class="btn">Show Paper</button>
+          <button ng-if="posterSource && source !== posterSource" ng-click="show('poster')" class="btn">Show Poster</button>
+          <button ng-if="presentationSource && source !== presentationSource" ng-click="show('presentation')" class="btn">Show Presentation</button>
+        </div>
+      </div>
+
+      <!-- Details -->
+      <div class="col-md-6">
+        <div class="row">
+          <div class="col-md-12">
+            <!-- Authors -->
+            <dl class="dl-horizontal" ng-class="[{'answer-highlight': authorHighlight}]">
+              <dt>Authors</dt>
+              <dd>
+                <span ng-repeat="author in orderedAuthors">
+                  <a ng-href="{{scienceLibrary}}/author/{{author.id}}">{{author.name}}</a><span ng-if="$index !== orderedAuthors.length - 1">, </span>
+                </span>
+                <small>({{orderedAuthors.length}})</small>
+              </dd>
+            </dl>
+            <dl class="dl-horizontal" ng-class="[{'answer-highlight': projectHighlight}]">
+              <dt>Project</dt>
+              <!-- <dd ng-if="project"><a ng-href="{{scienceLibrary}}/project/{{project.id}}">{{project.name}}</a></dd> -->
+              <dd ng-if="project">{{project.name}}</dd>
+              <dd ng-if="!project">Unknown</dd>
+            </dl>
+
+            <!-- Abstract -->
+            <dl class="dl-horizontal" ng-class="[{'answer-highlight': abstractHighlight}]">
+              <dt>Abstract</dt>
+              <dd class="paper-abstract" id="paper-abstract">
+                {{abstract}}
+                <button ng-if="!abstract" class="btn" ng-click="addAbstract()">
+                  Add Abstract
+                </button>
+              </dd>
+            </dl>
+
+            <!-- Citations -->
+            <dl class="dl-horizontal" ng-class="[{'answer-highlight': citation_countHighlight}]">
+              <dt>Citations</dt>
+              <dd>
+                <a ng-if="citationCount" ng-href="{{citationCount.url}}">{{citationCount.count}}</a>
+                <span ng-if="!citationCount">
+                  <a ng-href="{{scholarLink}}">Unknown</a>
+                  <button class="btn" ng-click="addCitationCount()">Add Citation Count</button>
+                </span>
+              </dd>
+            </dl>
+
+            <!-- Status -->
+            <dl class="dl-horizontal" ng-class="[{'answer-highlight': statusHighlight}]">
+              <dt>Status</dt>
+              <dd ng-if="status" class="status-warning">{{status | capitalise}}</dd>
+              <dd ng-if="!status">Accepted</dd>
+            </dl>
+
+            <!-- Paper Type -->
+            <dl class="dl-horizontal" ng-class="[{'answer-highlight': paper_typeHighlight}]">
+              <dt>Paper Type</dt>
+              <dd>{{paperType}} <span class="paper-type-left-margin" ng-class="paperClass"></span></dd>
+            </dl>
+
+            <!-- Noteworthy reason -->
+            <dl class="dl-horizontal" ng-if="noteworthy">
+              <dt>Noteworthy</dt>
+              <dd>{{noteworthy}}</dd>
+            </dl>
+
+            <!-- Variants -->
+            <dl class="dl-horizontal" class="paper-variants" ng-class="[{'answer-highlight': variantHighlight}]">
+              <dt>Variants</dt>
+              <dd>
+                <ul ng-if="variants.length > 0" class="results-list no-bullets no-min-list">
+                  <li ng-repeat="variant in variants">
+                    <span ng-class="variant.className"></span>
+                    <a ng-href="{{scienceLibrary}}/paper/{{variant.id}}">{{variant.name}}</a>
+                  </li>
+                </ul>
+                <span ng-if="variants.length === 0" class="details">None</span>
+              </dd>
+            </dl>
+
+            <!-- Noteworthy reason -->
+            <dl class="dl-horizontal" ng-if="venue">
+              <dt>Venue</dt>
+              <dd><a ng-href="{{scienceLibrary}}/venue/{{venue.id}}/{{venue.name}}">{{venue.name}}</a></dd>
+            </dl>
+          </div>
+        </div>
+
+        <ui-gmap-google-map center='map.center' zoom='map.zoom'>
+          <ui-gmap-marker idkey='marker.id' coords='marker.coords'></ui-gmap-marker>
+        </ui-gmap-google-map>
+
+        <!-- Download Link -->
+        <div class="paper-download-buttons">
+          <a class="btn btn-default" ng-if="paperDownloadUrl" ng-href="{{paperDownloadUrl}}" ng-class="[{'answer-highlight': paper_fileHighlight}]" target="_self">
+            Download Paper
+          </a>
+          <a class="btn" ng-if="posterDownloadUrl" ng-href="{{posterDownloadUrl}}" ng-class="[{'answer-highlight': poster_fileHighlight}]" target="_self">Download Poster</a>
+          <a class="btn" ng-if="presentationDownloadUrl" ng-href="{{presentationDownloadUrl}}" ng-class="[{'answer-highlight': presentation_fileHighlight}]" target="_self">Download Presentation</a>
+        </div>
+<!--
+        <div ng-if="venue" class="row">
+          <div class="col-md-6">
+            <div ng-class="[{'answer-highlight': venueHighlight}]">
+              <h5>Venue</h5>
+              <ui-gmap-google-map center='map.center' zoom='map.zoom'>
+                <ui-gmap-marker idkey='marker.id' coords='marker.coords'></ui-gmap-marker>
+              </ui-gmap-google-map>
+              <a ng-href="{{scienceLibrary}}/venue/{{venue.id}}/{{venue.name}}">{{venue.name}}</a>
+            </div>
+          </div>
+        </div> -->
+      </div>
+    </div>
+  </div>
+</div>

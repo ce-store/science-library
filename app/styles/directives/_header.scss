@@ -5,4 +5,12 @@
   border-bottom: 5px solid $colour-primary;
   background: $background-dark;
   color: $text-colour-light;
+
+  h1 {
+    display: inline-block;
+  }
+
+  h1:hover {
+    cursor: pointer;
+  }
 }

@@ -29,6 +29,12 @@ h3 {
     border-bottom: none;
   }
 }
+h5 {
+  font-weight: bold;
+  line-height: 1.4;
+  font-size: 16px;
+}
+
 a {
   color: #41d6c3;
 }
@@ -247,6 +253,12 @@ ul.results-list .list-name {
   border-bottom: 5px solid #41d6c3;
   background: #4a4a4a;
   color: #fff;
+}
+.page-header h1 {
+  display: inline-block;
+}
+.page-header h1:hover {
+  cursor: pointer;
 }
 
 .footer {
@@ -556,6 +568,26 @@ ul.results-list .list-name {
   stroke: #8783B9;
 }
 
+.paper-img {
+  margin: 0 -45px 30px;
+  width: calc(100% + 90px);
+}
+@media (min-width: 700px) {
+  .paper-img {
+    width: initial;
+    margin: 0;
+    max-width: 100%;
+  }
+}
+
+.paper-abstract {
+  overflow: scroll;
+}
+
+.paper-download-buttons {
+  text-align: center;
+}
+
 html {
   position: relative;
   min-height: 100%;
@@ -629,6 +661,10 @@ body {
   .container {
     width: 100%;
   }
+}
+.angular-google-map-container {
+  height: 300px;
+  margin: 20px 0 30px;
 }
 
 /*# sourceMappingURL=style.css.map */
