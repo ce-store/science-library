@@ -125,28 +125,30 @@
             <a ng-href="{{scienceLibrary}}/venue/{{venue.id}}/{{venue.name}}">{{venue.name}}</a>
           </div>
         </div>
+    </div>
 
-        <div class="col-md-6">
-          <!-- Similar Papers -->
-          <div ng-if="variants.length > 0" class="paper-variants" ng-class="[{'answer-highlight': variantHighlight}]">
-            <h5>Variants</h5>
+    <div ng-if="variants" class="row">
+      <div class="col-md-6">
+        <!-- Similar Papers -->
+        <div ng-if="variants.length > 0" class="paper-variants" ng-class="[{'answer-highlight': variantHighlight}]">
+          <h5>Variants</h5>
 
-            <ul class="results-list no-bullets no-min-list">
-              <li ng-repeat="variant in variants">
-                <span ng-class="variant.className"></span>
-                <a ng-href="{{scienceLibrary}}/paper/{{variant.id}}">{{variant.name}}</a>
-              </li>
-            </ul>
-          </div>
+          <ul class="results-list no-bullets no-min-list">
+            <li ng-repeat="variant in variants">
+              <span ng-class="variant.className"></span>
+              <a ng-href="{{scienceLibrary}}/paper/{{variant.id}}">{{variant.name}}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
 
-          <!-- Download Links -->
-          <div class="paper-download-buttons">
-            <a class="btn" ng-if="paperDownloadUrl" ng-href="{{paperDownloadUrl}}" ng-class="[{'answer-highlight': paper_fileHighlight}]" target="_self">
-              Download Paper
-            </a>
-            <a class="btn" ng-if="posterDownloadUrl" ng-href="{{posterDownloadUrl}}" ng-class="[{'answer-highlight': poster_fileHighlight}]" target="_self">Download Poster</a>
-            <a class="btn" ng-if="presentationDownloadUrl" ng-href="{{presentationDownloadUrl}}" ng-class="[{'answer-highlight': presentation_fileHighlight}]" target="_self">Download Presentation</a>
-          </div>
+      <!-- Download Links -->
+        <div class="paper-download-buttons">
+          <a class="btn" ng-if="paperDownloadUrl" ng-href="{{paperDownloadUrl}}" ng-class="[{'answer-highlight': paper_fileHighlight}]" target="_self">
+            Download Paper
+          </a>
+          <a class="btn" ng-if="posterDownloadUrl" ng-href="{{posterDownloadUrl}}" ng-class="[{'answer-highlight': poster_fileHighlight}]" target="_self">Download Poster</a>
+          <a class="btn" ng-if="presentationDownloadUrl" ng-href="{{presentationDownloadUrl}}" ng-class="[{'answer-highlight': presentation_fileHighlight}]" target="_self">Download Presentation</a>
         </div>
       </div>
     </div>

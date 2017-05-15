@@ -77,9 +77,8 @@ angular.module('itapapersApp')
               for (var i = 0; i < d.papers.length; ++i) {
                 var id = d.papers[i].id;
                 var title = d.papers[i].title;
-                html += "<li><a class='list-name' href='paper/" + id + "'>" + title + "</a></li>";
+                html += "<li><a class='list-name' href='" + scope.scienceLibrary + "/paper/" + id + "'>" + title + "</a></li>";
               }
-
               html += "</ul>";
               return html;
             });
