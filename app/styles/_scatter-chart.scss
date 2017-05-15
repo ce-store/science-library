@@ -1,0 +1,128 @@
+.chart-btns {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#chart-svg {
+  background: none;
+}
+
+.scatterInput {
+  position: absolute;
+  right: 50px;
+}
+
+#acInput.scatterInput {
+  top: 59px;
+}
+
+#indInput.scatterInput {
+  top: 79px;
+}
+
+#govInput.scatterInput {
+  top: 99px;
+}
+
+#unInput.scatterInput {
+  top: 119px;
+}
+
+/* Axis */
+
+#chart-svg .axis text {
+  fill: $text-colour-body;
+  font-size: 12px;
+}
+
+#chart-svg .axis text.label {
+  fill: $text-colour-body;
+}
+
+.axis text {
+  font-family: "Helvetica", sans-serif;
+  font-weight: lighter;
+  fill: $text-colour-body;
+}
+
+.axis line, .axis path {
+  fill: none;
+  stroke: $background-light;
+  shape-rendering: crispEdges;
+}
+
+.scatter-axis line {
+  stroke: $background-light;
+}
+
+.scatter-legend {
+  stroke: $background-light;
+  stroke-width: 1;
+  fill: $background-white;
+}
+
+.legend text {
+  fill: $text-colour-body;
+}
+
+.d3-tip {
+  padding: 12px;
+  background: $background-white;
+  border: 3px solid $colour-primary;
+  width: 290px;
+}
+
+.d3-tip:after, .d3-tip:before {
+  top: 100%;
+  left: 50%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+
+.d3-tip:after {
+  border-color: rgba(255, 255, 255, 0);
+  border-top-color: $background-white;
+  border-width: 10px;
+  margin-left: -10px;
+}
+.d3-tip:before {
+  border-color: rgba(160, 160, 160, 0);
+  border-top-color: $colour-primary;
+  border-width: 14px;
+  margin-left: -14px;
+}
+
+.d3-tip h2 {
+  color: $text-colour-body;
+}
+
+.d3-tip h2 small {
+  color: $colour-primary;
+}
+
+.d3-tip dl {
+  width: 180px;
+  float: left;
+  font-size: 12px;
+}
+
+.d3-tip dt {
+  color: $text-colour-body;
+  font-weight: lighter;
+  width: 120px;
+  float: left;
+}
+
+.d3-tip dd {
+  width: calc(100% - 120px);
+  float: left;
+}
+
+.d3-tip img {
+  float: left;
+  width: 80px;
+}

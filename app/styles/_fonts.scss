@@ -35,8 +35,16 @@ a:hover {
   text-decoration: none;
 }
 
+a:focus {
+  text-decoration: none;
+}
+
 p {
   color: $text-colour-body;
   line-height: 1.75;
   margin: 0 0 30px;
+}
+
+.highlight {
+  color: $colour-one;
 }

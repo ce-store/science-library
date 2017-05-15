@@ -68,6 +68,10 @@ angular.module('scienceLibrary')
   $scope.scatterYAxisOpts = ['hIndex', 'citations', 'googleHIndex', 'googleCitations'];
   $scope.scatterYAxis = $scope.scatterYAxisOpts[0];
 
+  $scope.formatSortValue = function(rawVal, sortName) {
+    return utils.formatSortValue(rawVal, sortName);
+  };
+
   var types = documentTypes.nameMap;
 
   var resetTypeCount = function() {

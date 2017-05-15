@@ -7,7 +7,7 @@
   <!-- Top 50 -->
   <span ng-if="!header">
     View
-    <span uib-dropdown on-toggle="toggled(open)">
+    <span uib-dropdown on-toggle="toggled(open)" class="interactive-header-dropdown">
       <a href id="simple-dropdown" uib-dropdown-toggle>
         <span class="interactive-header-selected">{{listName}}<span class="caret"></span></span>
       </a>
@@ -26,7 +26,7 @@
 
   <span ng-show="sort.names">
     sorted by
-    <span uib-dropdown on-toggle="toggled(open)">
+    <span uib-dropdown on-toggle="toggled(open)" class="interactive-header-dropdown">
       <a href id="simple-dropdown" uib-dropdown-toggle>
         <span class="interactive-header-selected">{{sortName}}<span class="caret"></span></span>
       </a>

@@ -39,10 +39,18 @@ a:hover {
   text-decoration: none;
 }
 
+a:focus {
+  text-decoration: none;
+}
+
 p {
   color: #3a3a3a;
   line-height: 1.75;
   margin: 0 0 30px;
+}
+
+.highlight {
+  color: #f49c4e;
 }
 
 .button-container {
@@ -66,6 +74,15 @@ p {
 .btn-default {
   background: #f49c4e;
   color: #fff;
+}
+
+.btn-default:hover,
+.btn-default:focus,
+.btn-default:active,
+.btn-default:active:focus {
+  background: #ea8731;
+  color: #fff;
+  outline: none;
 }
 
 .btn-primary {
@@ -173,11 +190,11 @@ p {
 
 ul.no-bullets {
   list-style: none;
+  padding: 0;
 }
 
 ul.results-list {
   margin: 20px 0 0 0;
-  padding: 0;
 }
 
 ul.results-list li {
@@ -253,13 +270,16 @@ ul.results-list .list-name {
   color: #444;
   line-height: 1.75;
   border-bottom: none;
+  margin: 30px 10px 50px 10px;
 }
 
 .interactive-header-selected {
   color: #fff;
   background: #41d6c3;
-  padding: 2px 10px 6px;
   font-family: "PT Mono", monospace;
+  box-shadow: 10px 0 0 #41d6c3, -10px 0 0 #41d6c3;
+  padding: 2px 0 6px;
+  margin: 0 20px 0 10px;
 }
 
 .interactive-header-selected:hover {
@@ -267,7 +287,136 @@ ul.results-list .list-name {
 }
 
 .interactive-header-selected .caret {
-  margin: 0 10px;
+  margin: 0 10px 0 5px;
+}
+
+.chart-btns {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#chart-svg {
+  background: none;
+}
+
+.scatterInput {
+  position: absolute;
+  right: 50px;
+}
+
+#acInput.scatterInput {
+  top: 59px;
+}
+
+#indInput.scatterInput {
+  top: 79px;
+}
+
+#govInput.scatterInput {
+  top: 99px;
+}
+
+#unInput.scatterInput {
+  top: 119px;
+}
+
+/* Axis */
+#chart-svg .axis text {
+  fill: #3a3a3a;
+  font-size: 12px;
+}
+
+#chart-svg .axis text.label {
+  fill: #3a3a3a;
+}
+
+.axis text {
+  font-family: "Helvetica", sans-serif;
+  font-weight: lighter;
+  fill: #3a3a3a;
+}
+
+.axis line, .axis path {
+  fill: none;
+  stroke: #f1f2f1;
+  shape-rendering: crispEdges;
+}
+
+.scatter-axis line {
+  stroke: #f1f2f1;
+}
+
+.scatter-legend {
+  stroke: #f1f2f1;
+  stroke-width: 1;
+  fill: #fff;
+}
+
+.legend text {
+  fill: #3a3a3a;
+}
+
+.d3-tip {
+  padding: 12px;
+  background: #fff;
+  border: 3px solid #41d6c3;
+  width: 290px;
+}
+
+.d3-tip:after, .d3-tip:before {
+  top: 100%;
+  left: 50%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+
+.d3-tip:after {
+  border-color: rgba(255, 255, 255, 0);
+  border-top-color: #fff;
+  border-width: 10px;
+  margin-left: -10px;
+}
+
+.d3-tip:before {
+  border-color: rgba(160, 160, 160, 0);
+  border-top-color: #41d6c3;
+  border-width: 14px;
+  margin-left: -14px;
+}
+
+.d3-tip h2 {
+  color: #3a3a3a;
+}
+
+.d3-tip h2 small {
+  color: #41d6c3;
+}
+
+.d3-tip dl {
+  width: 180px;
+  float: left;
+  font-size: 12px;
+}
+
+.d3-tip dt {
+  color: #3a3a3a;
+  font-weight: lighter;
+  width: 120px;
+  float: left;
+}
+
+.d3-tip dd {
+  width: calc(100% - 120px);
+  float: left;
+}
+
+.d3-tip img {
+  float: left;
+  width: 80px;
 }
 
 html {

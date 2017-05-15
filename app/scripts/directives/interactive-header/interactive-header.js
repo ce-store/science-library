@@ -10,10 +10,11 @@ angular.module('scienceLibrary')
 
   return {
     restrict: 'E',
-    templateUrl: 'scripts/routes/home/interactive-header/interactive-header.html',
+    templateUrl: 'scripts/directives/interactive-header/interactive-header.html',
     link: function postLink(scope, element, attrs) {
       var expHeader = $parse(attrs.headertext);
       scope.header = expHeader(scope);
+      console.log(scope);
 
       scope.$watchCollection(expHeader, function(header) {
         scope.header = header;

@@ -11,7 +11,7 @@ angular.module('scienceLibrary')
   'use strict';
 
   return {
-    templateUrl: 'scripts/routes/home/pages/documents/documents.html',
+    templateUrl: 'scripts/directives/documents/documents.html',
     restrict: 'E'
   };
 });

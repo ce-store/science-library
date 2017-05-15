@@ -26,15 +26,15 @@ angular.module('scienceLibrary')
       var tipOpen = false;
 
       var hideTips = function() {
-        angular.element(".d3-tip").css("opacity", 0);
-        angular.element(".d3-tip").css("display", "none");
+        angular.element('.d3-tip').css('opacity', 0);
+        angular.element('.d3-tip').css('display', 'none');
         tipOpen = false;
       };
 
       var drawBarChart = function(data) {
-        var margin = {top: 20, right: 20, bottom: 50, left: 40},
-            width = (scope.width - 150 - margin.left - margin.right) * 0.75,
-            height = scope.height - 370 - margin.top - margin.bottom;
+        var margin = {top: 20, right: 20, bottom: 50, left: 40};
+        var width = (scope.width - 150 - margin.left - margin.right) * 0.75;
+        var height = scope.height - 370 - margin.top - margin.bottom;
 
         var x = d3.scale.ordinal()
             .rangeRoundBands([0, width], 0.1);
@@ -45,55 +45,55 @@ angular.module('scienceLibrary')
         var color = d3.scale.ordinal()
             .range(colours.papers);
 
-        var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June",
-          "July", "Aug", "Sept", "Oct", "Nov", "Dec"
+        var monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June',
+          'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'
         ];
 
         var xAxis = d3.svg.axis()
             .scale(x)
-            .tickFormat(function(d, i) {
+            .tickFormat(function(d) {
               var dateObj = new Date(d);
 
               if (x.domain().length < 12) {
-                return monthNames[dateObj.getMonth()] + " " + dateObj.getFullYear();
+                return monthNames[dateObj.getMonth()] + ' ' + dateObj.getFullYear();
               }
 
               if (dateObj.getMonth() === 0) {
                 return dateObj.getFullYear();
               }
             })
-            .orient("bottom");
+            .orient('bottom');
 
         var yAxis = d3.svg.axis()
             .scale(y)
-            .orient("left");
+            .orient('left');
 
         var tip = d3.tip()
             .attr('class', 'd3-tip dark-tip')
             .offset([-10, 0])
             .html(function(d) {
-              var html = "<ul class='org-tip-content results-list'>";
+              var html = '<ul class="org-tip-content results-list">';
 
               for (var i = 0; i < d.papers.length; ++i) {
                 var id = d.papers[i].id;
                 var title = d.papers[i].title;
-                html += "<li><a class='list-name' href='paper/" + id + "'>" + title + "</a></li>";
+                html += '<li><a class="list-name" href="paper/' + id + '">' + title + '</a></li>';
               }
 
-              html += "</ul>";
+              html += '</ul>';
               return html;
             });
 
-        var svg = d3.select("#bar-chart").append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .attr("class", "organisation-bar-chart")
-          .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        var svg = d3.select('#bar-chart').append('svg')
+            .attr('width', width + margin.left + margin.right)
+            .attr('height', height + margin.top + margin.bottom)
+            .attr('class', 'organisation-bar-chart')
+          .append('g')
+            .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
         svg.call(tip);
 
-        color.domain(d3.keys(data[0]).filter(function(key) { return key !== "date"; }));
+        color.domain(d3.keys(data[0]).filter(function(key) { return key !== 'date'; }));
 
         var totals = {
           journal: 0,
@@ -137,41 +137,41 @@ angular.module('scienceLibrary')
         }));
         y.domain([0, d3.max(data, function(d) { return d.total; })]);
 
-        svg.append("g")
-            .attr("class", "x axis")
-            .attr("transform", "translate(0," + height + ")")
+        svg.append('g')
+            .attr('class', 'x axis')
+            .attr('transform', 'translate(0,' + height + ')')
             .call(xAxis)
-          .selectAll("text")
-            .attr("x", -11)
-            .attr("y", 10)
-            .style("text-anchor", "start");
+          .selectAll('text')
+            .attr('x', -11)
+            .attr('y', 10)
+            .style('text-anchor', 'start');
 
-        svg.append("g")
-            .attr("class", "y axis")
+        svg.append('g')
+            .attr('class', 'y axis')
             .call(yAxis)
-          .append("text")
-            .attr("transform", "rotate(-90)")
-            .attr("y", 6)
-            .attr("dy", ".71em")
-            .style("text-anchor", "end")
-            .text("No. of papers");
+          .append('text')
+            .attr('transform', 'rotate(-90)')
+            .attr('y', 6)
+            .attr('dy', '.71em')
+            .style('text-anchor', 'end')
+            .text('No. of papers');
 
-        var bar = svg.selectAll(".bar")
+        var bar = svg.selectAll('.bar')
             .data(data)
-          .enter().append("g")
-            .attr("class", "g")
-            .attr("transform", function(d) { return "translate(" + x(d.date) + ",0)"; });
+          .enter().append('g')
+            .attr('class', 'g')
+            .attr('transform', function(d) { return 'translate(' + x(d.date) + ',0)'; });
 
-        bar.selectAll("rect")
+        bar.selectAll('rect')
             .data(function(d) { return d.papers; })
-          .enter().append("rect")
-            .attr("width", x.rangeBand())
-            .attr("y", function(d) { return y(d.y1); })
-            .attr("height", function(d) { return y(d.y0) - y(d.y1); })
-            .style("fill", function(d) { return color(d.name); })
+          .enter().append('rect')
+            .attr('width', x.rangeBand())
+            .attr('y', function(d) { return y(d.y1); })
+            .attr('height', function(d) { return y(d.y0) - y(d.y1); })
+            .style('fill', function(d) { return color(d.name); })
             .on('click', function(d) {
               if (!tipOpen) {
-                angular.element(".d3-tip").css("display", "inline");
+                angular.element('.d3-tip').css('display', 'inline');
                 tip.show(d);
                 tipOpen = !tipOpen;
               }
@@ -179,14 +179,14 @@ angular.module('scienceLibrary')
 
         // handle hiding tooltip
         $document.mouseup(function (e) {
-          var container = angular.element("d3-tip");
+          var container = angular.element('d3-tip');
           if (tipOpen && !container.is(e.target)) {
             hideTips();
           }
         });
 
-        d3.selectAll("g.x.axis g.tick line")
-            .attr("y2", function(d) {
+        d3.selectAll('g.x.axis g.tick line')
+            .attr('y2', function(d) {
               var dateObj = new Date(d);
               if (dateObj.getMonth() === 0) {
                 return 6;
@@ -197,44 +197,44 @@ angular.module('scienceLibrary')
 
         var hiddenLegendRows = 0;
 
-        var legend = svg.selectAll(".legend")
+        var legend = svg.selectAll('.legend')
             .data(color.domain().slice())
-          .enter().append("g")
-            .attr("class", "legend")
+          .enter().append('g')
+            .attr('class', 'legend')
             .attr('display', function(d) {
               if (!totals[d]) {
                 return 'none';
               }
             })
-            .attr("transform", function(d, i) {
+            .attr('transform', function(d, i) {
               hiddenLegendRows = totals[d] === 0 ? hiddenLegendRows + 1 : hiddenLegendRows;
-              return "translate(0," + (i - hiddenLegendRows) * 20 + ")";
+              return 'translate(0,' + (i - hiddenLegendRows) * 20 + ')';
             });
 
-        legend.append("rect")
-            .attr("x", width - 18)
-            .attr("width", 18)
-            .attr("height", 18)
-            .style("fill", color);
+        legend.append('rect')
+            .attr('x', width - 18)
+            .attr('width', 18)
+            .attr('height', 18)
+            .style('fill', color);
 
-        legend.append("text")
-            .attr("x", width - 24)
-            .attr("y", 9)
-            .attr("dy", ".35em")
-            .style("text-anchor", "end")
+        legend.append('text')
+            .attr('x', width - 24)
+            .attr('y', 9)
+            .attr('dy', '.35em')
+            .style('text-anchor', 'end')
             .text(function(d) {
-              if (d === "journal") {
-                return "Journal";
-              } else if (d === "external") {
-                return "External Conference";
-              } else if (d === "patent") {
-                return "Patent";
-              } else if (d === "internal") {
-                return "Internal Conference";
-              } else if (d === "technical") {
-                return "Technical Report";
-              } else if (d === "other") {
-                return "Other Document";
+              if (d === 'journal') {
+                return 'Journal';
+              } else if (d === 'external') {
+                return 'External Conference';
+              } else if (d === 'patent') {
+                return 'Patent';
+              } else if (d === 'internal') {
+                return 'Internal Conference';
+              } else if (d === 'technical') {
+                return 'Technical Report';
+              } else if (d === 'other') {
+                return 'Other Document';
               }
             });
       };

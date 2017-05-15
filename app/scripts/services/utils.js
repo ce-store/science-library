@@ -11,6 +11,28 @@ angular.module('scienceLibrary')
   var types = documentTypes.nameMap;
 
   return {
+    formatSortValue: function(rawVal, sortName) {
+      var result = null;
+
+      if (sortName === '-date') {
+        var monthNames = [
+          'Jan', 'Feb', 'Mar',
+          'Apr', 'May', 'Jun', 'Jul',
+          'Aug', 'Sep', 'Oct',
+          'Nov', 'Dec'
+        ];
+
+        var date = new Date(rawVal);
+        var monthIndex = date.getMonth();
+        var year = date.getFullYear();
+
+        result = monthNames[monthIndex] + ' ' + year;
+      } else {
+        result = rawVal;
+      }
+
+      return result;
+    },
     getType: function (directConceptNames) {
       if (directConceptNames.indexOf(documentTypes.journal) > -1) {
         return types[documentTypes.journal];
@@ -81,24 +103,24 @@ angular.module('scienceLibrary')
       var conceptNames = instance.concept_names;
 
       if ((conceptNames.indexOf(ce.concepts.governmentOrganisation) > -1) || (conceptNames.indexOf(ce.concepts.governmentPerson) > -1)) {
-        result = "GOV";
+        result = 'GOV';
       } else if ((conceptNames.indexOf(ce.concepts.academicOrganisation) > -1) || (conceptNames.indexOf(ce.concepts.academicPerson) > -1)) {
-        result = "AC";
+        result = 'AC';
       } else if ((conceptNames.indexOf(ce.concepts.industryOrganisation) > -1) || (conceptNames.indexOf(ce.concepts.industryPerson) > -1)) {
-        result = "IND";
+        result = 'IND';
       } else {
-        result = "Unknown";
+        result = 'Unknown';
       }
 
       return result;
     },
     isConcept: function (inst, conName) {
       var result =
-        ((inst.concept_names != null) && (inst.concept_names.indexOf(conName) > -1)) ||
-        ((inst.direct_concept_names != null) && (inst.direct_concept_names.indexOf(conName) > -1)) ||
-        ((inst.inherited_concept_names != null) && (inst.inherited_concept_names.indexOf(conName) > -1));
+        (inst.concept_names && (inst.concept_names.indexOf(conName) > -1)) ||
+        (inst.direct_concept_names && (inst.direct_concept_names.indexOf(conName) > -1)) ||
+        (inst.inherited_concept_names && (inst.inherited_concept_names.indexOf(conName) > -1));
 
-        return result;
+      return result;
     }
   };
 }]);

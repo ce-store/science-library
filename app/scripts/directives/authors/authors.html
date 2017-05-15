@@ -1,0 +1,30 @@
+<div class="col-md-3">
+  <interactive-header></interactive-header>
+
+  <ul class="results-list clear">
+    <li ng-repeat="item in list | orderBy : 'name' | orderBy : sortCommand | limitTo : listLength">
+      <a ng-href="{{scienceLibrary}}/{{listName | limitTo : listName.length - 1}}/{{item.id}}" class="list-name">{{item.name}}</a>
+      <small ng-if="item[sortValue] && sortShow" class="highlight">({{formatSortValue(item[sortValue], sortCommand)}})</small>
+    </li>
+
+    <div ng-if="list.length > listLength" class="center">
+      <button class="btn btn-default see-more" ng-click="seeMore()">See more</button>
+    </div>
+  </ul>
+</div>
+
+<div class="col-md-9">
+  <input id="acInput" class="scatterInput" type="checkbox" checked>
+  <input id="indInput" class="scatterInput" type="checkbox" checked>
+  <input id="govInput" class="scatterInput" type="checkbox" checked>
+  <!-- <input id="unInput" class="scatterInput" type="checkbox" checked> -->
+
+  <scatter-chart options="options"></scatter-chart>
+
+  <div class="chart-btns">
+    <button ng-show="scatterYAxis !== scatterYAxisOpts[0]" class="btn btn-default" id="local-h-index">Local H-Index</button>
+    <button ng-show="scatterYAxis !== scatterYAxisOpts[1]" class="btn btn-default" id="local-citation-count">Local Citation Count</button>
+    <button ng-show="scatterYAxis !== scatterYAxisOpts[2]" class="btn btn-default" id="overall-h-index">Overall H-Index</button>
+    <button ng-show="scatterYAxis !== scatterYAxisOpts[3]" class="btn btn-default" id="overall-citation-count">Overall Citation Count</button>
+  </div>
+</div>
