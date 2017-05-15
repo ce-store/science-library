@@ -114,16 +114,24 @@
         </div>
       </div>
 
-      <div ng-if="venue" class="row">
+      <div ng-if="venue || venueDetails" class="row">
         <!-- Venue -->
         <div class="col-md-6">
-          <div ng-class="[{'answer-highlight': venueHighlight}]">
-            <h5>Venue</h5>
-            <ui-gmap-google-map center='map.center' zoom='map.zoom'>
-              <ui-gmap-marker idkey='marker.id' coords='marker.coords'></ui-gmap-marker>
-            </ui-gmap-google-map>
-            <a ng-href="{{scienceLibrary}}/venue/{{venue.id}}/{{venue.name}}">{{venue.name}}</a>
-          </div>
+          <span ng-if="venue.lat">
+            <div ng-class="[{'answer-highlight': venueHighlight}]">
+              <h5>Venue</h5>
+              <ui-gmap-google-map center='map.center' zoom='map.zoom'>
+                <ui-gmap-marker idkey='marker.id' coords='marker.coords'></ui-gmap-marker>
+              </ui-gmap-google-map>
+              <a ng-href="{{scienceLibrary}}/venue/{{venue.id}}/{{venue.name}}">{{venue.name}}</a>
+            </div>
+          </span>
+          <span ng-if="venueDetails">
+            <dl class="dl-horizontal" ng-class="[{'answer-highlight': paper_typeHighlight}]">
+              <dt>Venue</dt>
+              <dd>{{venueDetails}}</dd>
+            </dl>
+          </span>
         </div>
     </div>
 

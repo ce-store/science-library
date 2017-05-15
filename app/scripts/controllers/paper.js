@@ -69,6 +69,7 @@ angular.module('itapapersApp')
       var abstract  = utils.getUnknownProperty(properties, ce.paper.abstract);
       var status    = utils.getProperty(properties, ce.paper.status);
       var venue     = utils.getProperty(properties, ce.paper.venue);
+      var venueDetails = utils.getProperty(properties, ce.paper.venueDetails);
       var finalDate = utils.getProperty(properties, ce.paper.finalDate);
       var project   = utils.getUnknownProperty(properties, ce.paper.project);
       var authorList  = utils.getListProperty(properties, ce.paper.authorList);
@@ -93,6 +94,7 @@ angular.module('itapapersApp')
       $scope.source = $scope.paperSource;
       $scope.paperType  = utils.getType(conceptNames);
       $scope.paperClass = utils.getClassName($scope.paperType);
+      $scope.venueDetails = venueDetails;
 
       // Order authors
       $scope.orderedAuthors = [];
@@ -163,29 +165,33 @@ angular.module('itapapersApp')
           name: event._id
         };
 
-        // Get venue data
-        store.getVenue(eventLocation)
-          .then(function(data) {
-            var locationProps = data.property_values;
+        if (eventLocation) {
+          // Get venue data
+          store.getVenue(eventLocation)
+            .then(function(data) {
+              var locationProps = data.property_values;
 
-            // venue properties
-            var lon = utils.getProperty(locationProps, ce.location.lon);
-            var lat = utils.getProperty(locationProps, ce.location.lat);
+              if (locationProps) {
+                // venue properties
+                var lon = utils.getProperty(locationProps, ce.location.lon);
+                var lat = utils.getProperty(locationProps, ce.location.lat);
 
-            var center = {
-              latitude:   lat,
-              longitude:  lon
-            };
+                var center = {
+                  latitude:   lat,
+                  longitude:  lon
+                };
 
-            $scope.map = {
-              center: center,
-              zoom:   8
-            };
-            $scope.marker = {
-              id:  data._id,
-              coords: center
-            };
-          });
+                $scope.map = {
+                  center: center,
+                  zoom:   8
+                };
+                $scope.marker = {
+                  id:  data._id,
+                  coords: center
+                };
+              }
+            });
+        }
       }
 
       if ($scope.paperType === types[$scope.otherDocumentType]) {

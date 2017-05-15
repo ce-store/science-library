@@ -71,6 +71,7 @@ angular.module('itapapersApp')
       onlyProps += ce.paper.weight + ',';
       onlyProps += ce.paper.noteworthyReason + ',';
       onlyProps += ce.paper.noteworthyUrl + ',';
+      onlyProps += ce.paper.venueDetails + ',';
       onlyProps += ce.paper.variantList;
 
       url = '/concepts/' + ce.concepts.document + '/instances';
