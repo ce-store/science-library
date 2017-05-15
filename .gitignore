@@ -3,6 +3,7 @@
 /.tmp
 /.sass-cache
 /bower_components
+app/bower_components
 /.apt_generated/
 /build/
 /WebContent
