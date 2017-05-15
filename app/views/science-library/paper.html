@@ -10,7 +10,9 @@
       <span class="highlight" ng-class="[{'answer-highlight': titleHighlight}]">{{title}}</span>
       was published
       <span class="highlight" ng-class="[{'answer-highlight': publish_dateHighlight}]">{{published}}</span>
-      <span ng-if="noteworthy" class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
+      <small ng-if="noteworthy">
+        ({{noteworthy}})
+      </small>
     </p>
   </div>
 
@@ -99,7 +101,15 @@
           <!-- Noteworthy reason -->
           <dl class="dl-horizontal" ng-if="noteworthy">
             <dt>Noteworthy</dt>
-            <dd>{{noteworthy}}</dd>
+            <dd>
+              <small ng-if="noteworthy">
+                <span ng-if="url" >
+                  <a href="{{url}}" target="_new"><span class="glyphicon glyphicon-star-empty highlight" aria-hidden="true"></span></a>
+                </span>
+                <span ng-if="!url" class="glyphicon glyphicon-star-empty highlight" aria-hidden="true"></span>
+                ({{noteworthy}})
+              </small>
+            </dd>
           </dl>
         </div>
       </div>

@@ -204,7 +204,8 @@ angular.module('itapapersApp')
           var paperWeight = utils.getIntProperty(paperProps, ce.paper.weight);
           var paperVariantList = utils.getListProperty(paperProps, ce.paper.variantList);
           var paperCitationCount = utils.getIntProperty(paperProps, ce.paper.citationCount);
-          var paperNoteworthy = utils.getProperty(paperProps, ce.paper.noteworthyReason);
+          var noteworthyReason = utils.getProperty(paperProps, ce.paper.noteworthyReason);
+          var noteworthyUrl = utils.getProperty(paperProps, ce.paper.noteworthyUrl);
           var paperFinalDate = utils.getDateProperty(paperProps, ce.paper.finalDate);
           var paperFinalDateString = utils.getProperty(paperProps, ce.paper.finalDate);
           var paperFullAuthorString = utils.getUnknownProperty(paperProps, ce.paper.fullAuthorString);
@@ -232,7 +233,8 @@ angular.module('itapapersApp')
                 index:      j,
                 title:      paperTitle,
                 citations:  paperCitationCount,
-                noteworthy: paperNoteworthy,
+                noteworthy: noteworthyReason,
+                url:        noteworthyUrl,
                 date:       paperFinalDate,
                 types:      [paperType],
                 venue:      paperVenue,
@@ -247,7 +249,8 @@ angular.module('itapapersApp')
                   index:      j,
                   title:      paperTitle,
                   citations:  paperCitationCount,
-                  noteworthy: paperNoteworthy,
+                  noteworthy: noteworthyReason,
+                  url:        noteworthyUrl,
                   date:       paperFinalDate,
                   types:      [paperType].concat(variantTypes),
                   venue:      paperVenue,
@@ -312,6 +315,7 @@ angular.module('itapapersApp')
               id:         thisPaperId,
               name:       thisPaper.title,
               noteworthy: thisPaper.noteworthy,
+              url:        thisPaper.url,
               date:       thisPaper.date,
               value:      thisPaper.citations,
               type:       utils.sortTypes(thisPaper.types),

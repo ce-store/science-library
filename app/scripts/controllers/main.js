@@ -254,7 +254,8 @@ angular.module('itapapersApp')
         var paperDate = utils.getDateProperty(paperProps, ce.paper.finalDate);
         var paperCitationCount = utils.getLatestIntProperty(paperProps, ce.paper.citationCount);
         var paperWeight = utils.getLatestIntProperty(paperProps, ce.paper.weight);
-        var paperNoteworthy = utils.getProperty(paperProps, ce.paper.noteworthyReason);
+        var noteworthyReason = utils.getProperty(paperProps, ce.paper.noteworthyReason);
+        var noteworthyUrl = utils.getProperty(paperProps, ce.paper.noteworthyUrl);
         var paperStatus = utils.getProperty(paperProps, ce.paper.status);
 
         // set types for duplicates and non-duplicates
@@ -287,7 +288,8 @@ angular.module('itapapersApp')
           weight:     paperWeight,
           type:       type,
           class:      className,
-          noteworthy: paperNoteworthy,
+          noteworthy: noteworthyReason,
+          url:        noteworthyUrl,
           status:     paperStatus
         });
       } else if ($scope.listName === $scope.listTypes.authors) {

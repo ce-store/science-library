@@ -19,6 +19,7 @@ angular.module('itapapersApp')
       project:   'project',
       variantList:      'variant',
       noteworthyReason: 'noteworthy reason',
+      noteworthyUrl:    'url',
       finalDate:        'final date',
       publishDate:      'publish date',
       publicationYear:  'publication year',

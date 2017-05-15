@@ -73,7 +73,8 @@ angular.module('itapapersApp')
       var project   = utils.getUnknownProperty(properties, ce.paper.project);
       var authorList  = utils.getListProperty(properties, ce.paper.authorList);
       var variantList = utils.getListProperty(properties, ce.paper.variantList);
-      var noteworthy  = utils.getProperty(properties, ce.paper.noteworthyReason);
+      var noteworthyReason  = utils.getProperty(properties, ce.paper.noteworthyReason);
+      var noteworthyUrl  = utils.getProperty(properties, ce.paper.noteworthyUrl);
       var googleCitationCount = utils.getProperty(properties, ce.paper.googleCitationCount);
       var paperFile       = utils.getProperty(properties, ce.paper.paperFile);
       var paperThumbnail  = utils.getProperty(properties, ce.paper.paperThumbnail);
@@ -83,7 +84,8 @@ angular.module('itapapersApp')
       var posterThumbnail = utils.getProperty(properties, ce.paper.posterThumbnail);
 
       $scope.title      = title;
-      $scope.noteworthy = noteworthy;
+      $scope.noteworthy = noteworthyReason;
+      $scope.url        = noteworthyUrl;
       $scope.status     = status;
       $scope.paperSource        = paperThumbnail;
       $scope.presentationSource = presentationThumbnail;

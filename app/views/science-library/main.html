@@ -32,7 +32,13 @@
                 <li ng-repeat="item in list | orderBy : 'name' | orderBy : sortCommand | filter : filterPapers | limitTo : listLength">
                   <span ng-class="[className, ('document-' + $index)]" ng-repeat="className in item.class track by $index"></span>
                   <a ng-href="{{scienceLibrary}}/{{listName | limitTo : listName.length - 1}}/{{item.id}}" class="list-name"><span ng-show="item.status">[{{item.status}}] </span>{{item.name}}</a>
-                  <small ng-if="item.noteworthy"><span class="glyphicon glyphicon-star-empty highlight" aria-hidden="true"></span> ({{item.noteworthy}})</small>
+                  <small ng-if="item.noteworthy">
+                    <span ng-if="item.url" >
+                      <a href="{{item.url}}" target="_new"><span class="glyphicon glyphicon-star-empty highlight" aria-hidden="true"></span></a>
+                    </span>
+                    <span ng-if="!item.url" class="glyphicon glyphicon-star-empty highlight" aria-hidden="true"></span>
+                    ({{item.noteworthy}})
+                  </small>
                   <small ng-if="item[sortValue] && sortShow" class="highlight">({{formatSortValue(item[sortValue], sortCommand)}})</small>
                 </li>
 

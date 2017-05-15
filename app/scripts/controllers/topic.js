@@ -169,6 +169,8 @@ angular.module('itapapersApp')
             // paper properties
             var paperName   = utils.getUnknownProperty(paperProps, ce.paper.title);
             var paperWeight = utils.getIntProperty(paperProps, ce.paper.weight);
+            var noteworthyReason = utils.getProperty(paperProps, ce.paper.noteworthyReason);
+            var noteworthyUrl = utils.getProperty(paperProps, ce.paper.noteworthyUrl);
             var paperFinalDate = utils.getDateProperty(paperProps, ce.paper.finalDate);
             var paperCitationCount = utils.getIntProperty(paperProps, ce.paper.citationCount);
             var paperVariantList = utils.getListProperty(paperProps, ce.paper.variantList);
@@ -195,6 +197,8 @@ angular.module('itapapersApp')
                 documentMap[id] = {
                   title:      paperName,
                   citations:  paperCitationCount,
+                  noteworthy: noteworthyReason,
+                  url:        noteworthyUrl,
                   date:       paperFinalDate,
                   types:      [paperType],
                   weight:     paperWeight
@@ -206,6 +210,8 @@ angular.module('itapapersApp')
                   documentMap[id] = {
                     title:      paperName,
                     citations:  paperCitationCount,
+                    noteworthy: noteworthyReason,
+                    url:        noteworthyUrl,
                     date:       paperFinalDate,
                     types:      [paperType].concat(variantTypes),
                     weight:     paperWeight
@@ -294,6 +300,8 @@ angular.module('itapapersApp')
           var paperItem = {
             id:   docId,
             name: doc.title,
+            noteworthy: doc.noteworthy,
+            url: doc.url,
             date: doc.date,
             citationCount: doc.citations,
             type:   utils.sortTypes(doc.types),

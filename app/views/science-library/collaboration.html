@@ -43,7 +43,13 @@
             <li class="no-bullets" ng-repeat="item in papers | limitTo : listLength | orderBy : 'name' | orderBy : '-weight' | filter : filterPapers">
               <span ng-class="[className, ('document-' + $index)]" ng-repeat="className in item.class track by $index"></span>
               <a ng-href="{{scienceLibrary}}/paper/{{item.id}}" class="list-name">{{item.name}}</a>
-              <small ng-if="item.noteworthy"><span class="glyphicon glyphicon-star-empty highlight" aria-hidden="true"></span> ({{item.noteworthy}})</small> <!-- <small class="highlight" uib-tooltip="Citation count">({{item.value}})</small> -->
+              <small ng-if="item.noteworthy">
+                <span ng-if="item.url" >
+                  <a href="{{item.url}}" target="_new"><span class="glyphicon glyphicon-star-empty highlight" aria-hidden="true"></span></a>
+                </span>
+                <span ng-if="!item.url" class="glyphicon glyphicon-star-empty highlight" aria-hidden="true"></span>
+                ({{item.noteworthy}})
+              </small>
             </li>
           </ul>
         </div>

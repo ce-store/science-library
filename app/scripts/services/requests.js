@@ -70,6 +70,7 @@ angular.module('itapapersApp')
       onlyProps += ce.paper.programme + ',';
       onlyProps += ce.paper.weight + ',';
       onlyProps += ce.paper.noteworthyReason + ',';
+      onlyProps += ce.paper.noteworthyUrl + ',';
       onlyProps += ce.paper.variantList;
 
       url = '/concepts/' + ce.concepts.document + '/instances';
@@ -162,6 +163,7 @@ angular.module('itapapersApp')
       onlyProps += ce.date.month + ',';
       onlyProps += ce.date.year + ',';
       onlyProps += ce.paper.noteworthyReason + ',';
+      onlyProps += ce.paper.noteworthyUrl + ',';
       onlyProps += ce.orderedAuthor.person;
 
       url = '/instances/' + authorId;
@@ -244,7 +246,6 @@ angular.module('itapapersApp')
       var limRels = null;
 
       limRels = ce.topic.topicStatistic + ',';
-//      limRels += ce.topic.citationCount + ',';
       limRels += ce.statistic.person + ',';
       limRels += ce.statistic.documentList + ',';
       limRels += ce.statistic.organisation;

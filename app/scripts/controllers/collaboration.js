@@ -128,7 +128,8 @@ angular.module('itapapersApp')
         var paperFinalDate = utils.getProperty(paperProps, ce.paper.finalDate);
         var paperCitationCount = utils.getIntProperty(paperProps, ce.paper.citationCount);
         var paperFullAuthorsString = utils.getUnknownProperty(paperProps, ce.paper.fullAuthorsString);
-        var paperNoteworthy = utils.getProperty(paperProps, ce.paper.noteworthyReason);
+        var noteworthyReason = utils.getProperty(paperProps, ce.paper.noteworthyReason);
+        var noteworthyUrl = utils.getProperty(paperProps, ce.paper.noteworthyUrl);
         $scope.typeCount[paperType]++;
 
         if (!documentMap[paperId]) {
@@ -152,7 +153,8 @@ angular.module('itapapersApp')
               index:      i,
               title:      paperName,
               citations:  paperCitationCount,
-              noteworthy: paperNoteworthy,
+              noteworthy: noteworthyReason,
+              url:        noteworthyUrl,
               types:      [paperType],
               venue:      paperVenue,
               authors:    paperFullAuthorsString,
@@ -166,7 +168,8 @@ angular.module('itapapersApp')
                 index:      i,
                 title:      paperName,
                 citations:  paperCitationCount,
-                noteworthy: paperNoteworthy,
+                noteworthy: noteworthyReason,
+                url:        noteworthyUrl,
                 types:      [paperType].concat(variantTypes),
                 venue:      paperVenue,
                 authors:    paperFullAuthorsString,
@@ -225,6 +228,7 @@ angular.module('itapapersApp')
             id:         thisPaperId,
             name:       thisPaper.title,
             noteworthy: thisPaper.noteworthy,
+            url:        thisPaper.url,
             value:      thisPaper.citations,
             type:       utils.sortTypes(thisPaper.types),
             venue:      thisPaper.venue,

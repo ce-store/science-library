@@ -44,7 +44,13 @@
           <li class="no-bullets" ng-repeat="paper in papersList | orderBy : 'name' | orderBy : sortCommand | filter : filterPapers">
             <span ng-class="[className, ('document-' + $index)]" ng-repeat="className in paper.class track by $index"></span>
             <a ng-href="{{scienceLibrary}}/paper/{{paper.id}}" class="list-name">{{paper.name}}</a>
-            <small ng-if="paper.noteworthy"><span class="glyphicon glyphicon-star-empty highlight" aria-hidden="true"></span> ({{paper.noteworthy}})</small>
+            <small ng-if="paper.noteworthy">
+              <span ng-if="paper.url" >
+                <a href="{{paper.url}}" target="_new"><span class="glyphicon glyphicon-star-empty highlight" aria-hidden="true"></span></a>
+              </span>
+              <span ng-if="!paper.url" class="glyphicon glyphicon-star-empty highlight" aria-hidden="true"></span>
+              ({{paper.noteworthy}})
+            </small>
             <small ng-if="paper[sortValue] && sortShow" class="highlight">({{formatSortValue(paper[sortValue], sortCommand)}})</small>
           </li>
         </ul>

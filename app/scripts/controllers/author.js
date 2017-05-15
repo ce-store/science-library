@@ -293,7 +293,8 @@ angular.module('itapapersApp')
           var paperVenue    = utils.getUnknownProperty(paperProps, ce.paper.venue);
           var paperWeight   = utils.getIntProperty(paperProps, ce.paper.weight);
           var paperFinalDate  = utils.getDateProperty(paperProps, ce.paper.finalDate);
-          var paperNoteworthy = utils.getProperty(paperProps, ce.paper.noteworthyReason);
+          var noteworthyReason = utils.getProperty(paperProps, ce.paper.noteworthyReason);
+          var noteworthyUrl = utils.getProperty(paperProps, ce.paper.noteworthyUrl);
           var paperVariantList = utils.getListProperty(paperProps, ce.paper.variantList);
           var paperFullAuthorString = utils.getUnknownProperty(paperProps, ce.paper.fullAuthorString);
           var paperCitationCount = null;
@@ -334,7 +335,8 @@ angular.module('itapapersApp')
                 citations:  paperCitationCount,
                 index:      i,
                 title:      paperTitle,
-                noteworthy: paperNoteworthy,
+                noteworthyReason: noteworthyReason,
+                noteworthyUrl: noteworthyUrl,
                 date:       paperFinalDate,
                 types:      [paperType],
                 venue:      paperVenue,
@@ -349,7 +351,8 @@ angular.module('itapapersApp')
                   citations: paperCitationCount,
                   index:      i,
                   title:      paperTitle,
-                  noteworthy: paperNoteworthy,
+                  noteworthyReason: noteworthyReason,
+                  noteworthyUrl: noteworthyUrl,
                   date:       paperFinalDate,
                   types:      [paperType].concat(variantTypes),
                   venue:      paperVenue,
@@ -372,7 +375,8 @@ angular.module('itapapersApp')
             var paperItem = {
               id:         thisPaperId,
               name:       thisPaper.title,
-              noteworthy: thisPaper.noteworthy,
+              noteworthy: thisPaper.noteworthyReason,
+              url: thisPaper.noteworthyUrl,
               date:       thisPaper.date,
               citations:  thisPaper.citations,
               type:       utils.sortTypes(thisPaper.types),
