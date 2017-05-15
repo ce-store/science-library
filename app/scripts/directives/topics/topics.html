@@ -1,0 +1,13 @@
+<div class="col-md-12">
+  <interactive-header></interactive-header>
+</div>
+
+<div class="col-md-12" style="margin-bottom: 30px;">
+  <ul class="results-list">
+    <li ng-repeat="item in list | orderBy : 'id' | orderBy : sortCommand">
+      <!-- Topics list -->
+      <a ng-href="{{scienceLibrary}}/{{listName | limitTo : listName.length - 1}}/{{item.id}}" class="list-name">{{ item.id | capitaliseFirst }}</a>
+      <small ng-if="item[sortValue] && sortShow" class="highlight">({{formatSortValue(item[sortValue], sortCommand)}})</small>
+    </li>
+  </ul>
+</div>
