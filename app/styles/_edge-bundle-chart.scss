@@ -1,0 +1,94 @@
+#edge-bundle-chart {
+  margin: 30px 0 0;
+
+  @media (min-width: 700px) {
+    padding: 40px 0;
+    margin: 0;
+  }
+
+  svg {
+    background: none;
+  }
+
+  .orgarc path {
+    cursor: pointer;
+    opacity: 0.8;
+  }
+
+  .orgarc text {
+    cursor: pointer;
+    opacity: 1;
+  }
+
+  g.orgarc:hover  {
+    opacity: 1;
+  }
+
+  .orgarc:hover > path {
+    stroke: #fff;
+  }
+
+  .secarc path {
+    opacity: 0.8;
+  }
+
+  .secarc text {
+    opacity: 1;
+  }
+
+  path.arc {
+    cursor: move;
+    fill: #000;
+  }
+
+  .node {
+    font-size: 10px;
+    fill: #eee; /*#9C88DE;*/
+    opacity: 1;
+    cursor: pointer;
+    pointer-events: all;
+  }
+
+  .node text {
+    pointer-events: auto;
+    text-shadow: none;
+  }
+
+  .node:hover {
+    fill: #fff !important;
+    opacity: 1;
+    -font-size: 16px;
+  }
+
+  .link {
+    fill: none;
+    stroke: #8783B9;
+    stroke-opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .link-active {
+    stroke-opacity: 0.8;
+    stroke-width: 2;
+  }
+
+  .author-active {
+    fill: #FFFF6B;
+    opacity: 1;
+  }
+
+  .author-inactive {
+    fill: #999;
+    opacity: 0.5;
+  }
+
+  .author-org-active {
+    opacity: 1;
+    fill: #fff;
+  }
+
+  .networkLink {
+    fill: none;
+    stroke: #8783B9;
+  }
+}

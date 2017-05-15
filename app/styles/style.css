@@ -142,14 +142,14 @@ p {
 @media (min-width: 700px) {
   .list-filters {
     padding: 0 0 10px 0;
-    margin: 0;
+    margin: 0 15px;
     color: #f49c4e;
     background: none;
     border-bottom: 1px solid #f49c4e;
   }
 
   .list-filters-indented {
-    margin: 0 -15px;
+    margin: 0 0;
   }
 }
 .list-filters input[type="checkbox"] {
@@ -229,7 +229,7 @@ ul.no-bullets {
 }
 
 ul.results-list {
-  margin: 20px 0 0 0;
+  margin: 20px 15px 0 15px;
 }
 
 ul.results-list li {
@@ -474,6 +474,86 @@ ul.results-list .list-name {
   .sunburst-svg {
     margin-top: 0;
   }
+}
+
+#edge-bundle-chart {
+  margin: 30px 0 0;
+}
+@media (min-width: 700px) {
+  #edge-bundle-chart {
+    padding: 40px 0;
+    margin: 0;
+  }
+}
+#edge-bundle-chart svg {
+  background: none;
+}
+#edge-bundle-chart .orgarc path {
+  cursor: pointer;
+  opacity: 0.8;
+}
+#edge-bundle-chart .orgarc text {
+  cursor: pointer;
+  opacity: 1;
+}
+#edge-bundle-chart g.orgarc:hover {
+  opacity: 1;
+}
+#edge-bundle-chart .orgarc:hover > path {
+  stroke: #fff;
+}
+#edge-bundle-chart .secarc path {
+  opacity: 0.8;
+}
+#edge-bundle-chart .secarc text {
+  opacity: 1;
+}
+#edge-bundle-chart path.arc {
+  cursor: move;
+  fill: #000;
+}
+#edge-bundle-chart .node {
+  font-size: 10px;
+  fill: #eee;
+  /*#9C88DE;*/
+  opacity: 1;
+  cursor: pointer;
+  pointer-events: all;
+}
+#edge-bundle-chart .node text {
+  pointer-events: auto;
+  text-shadow: none;
+}
+#edge-bundle-chart .node:hover {
+  fill: #fff !important;
+  opacity: 1;
+  -font-size: 16px;
+}
+#edge-bundle-chart .link {
+  fill: none;
+  stroke: #8783B9;
+  stroke-opacity: 0.5;
+  pointer-events: none;
+}
+#edge-bundle-chart .link-active {
+  stroke-opacity: 0.8;
+  stroke-width: 2;
+}
+#edge-bundle-chart .author-active {
+  fill: #FFFF6B;
+  opacity: 1;
+}
+#edge-bundle-chart .author-inactive {
+  fill: #999;
+  opacity: 0.5;
+}
+#edge-bundle-chart .author-org-active {
+  opacity: 1;
+  fill: #fff;
+}
+#edge-bundle-chart .networkLink {
+  fill: none;
+  stroke: #8783B9;
 }
 
 html {

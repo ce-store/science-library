@@ -14,14 +14,14 @@
 @media (min-width: 700px) {
   .list-filters {
     padding: 0 0 10px 0;
-    margin: 0;
+    margin: 0 15px;
     color: $colour-one;
     background: none;
     border-bottom: 1px solid $colour-one;
   }
 
   .list-filters-indented {
-    margin: 0 -15px;
+    margin: 0 0;
   }
 }
 

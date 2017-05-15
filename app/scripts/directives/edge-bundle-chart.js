@@ -13,7 +13,7 @@ angular.module('scienceLibrary')
 
   return {
     restrict:'EA',
-    template:"<div id='edge-bundle-chart'></div>",
+    template:'<div id="edge-bundle-chart"></div>',
     link: function postLink(scope, elem, attrs) {
       var expAc = $parse(attrs.ac);
       var expInd = $parse(attrs.ind);
@@ -85,14 +85,14 @@ angular.module('scienceLibrary')
       var w, h;
 
       if (scope.width > scope.height) {
-        w = h = scope.height - 270;
+        w = h = scope.height - 500;
       } else {
         w = h = scope.width - 50;
       }
 
       var rx = w / 2,
-      ry = h / 2,
-      radius = Math.min(w, h) / 2;
+          ry = h / 2,
+          radius = Math.min(w, h) / 2;
 
       var cluster = d3.layout.cluster()
           .size([360, ry - 130])
@@ -101,31 +101,31 @@ angular.module('scienceLibrary')
       var bundle = d3.layout.bundle();
 
       var line = d3.svg.line.radial()
-      .interpolate("bundle")
+      .interpolate('bundle')
       .tension(0.95)
       .radius(function(d) { return d.y; })
       .angle(function(d) { return d.x / 180 * Math.PI; });
 
-      var div = d3.select("#edge-bundle-chart").insert("div", "h2")
-      .style("width", w + "px")
-      .style("height", w + "px")
-      .style("margin","auto")
-      .style("-webkit-backface-visibility", "hidden");
+      var div = d3.select('#edge-bundle-chart').insert('div', 'h2')
+      .style('width', w + 'px')
+      .style('height', w + 'px')
+      .style('margin','auto')
+      .style('-webkit-backface-visibility', 'hidden');
 
-      var svg = div.append("svg:svg")
-      .attr("width", w)
-      .attr("height", w);
+      var svg = div.append('svg:svg')
+      .attr('width', w)
+      .attr('height', w);
 
-      var wheel = svg.append("svg:g")
-      .attr("transform", "translate(" + rx + "," + ry + ")");
+      var wheel = svg.append('svg:g')
+      .attr('transform', 'translate(' + rx + ',' + ry + ')');
 
-      var network = svg.append("svg:g")
-      .attr("transform", "translate(" + rx + "," + ry + ")")
-      .style("display","none");
+      var network = svg.append('svg:g')
+      .attr('transform', 'translate(' + rx + ',' + ry + ')')
+      .style('display','none');
 
-      network.append("svg:rect").attr("x",-w/2).attr("y",-h/2).attr("width",w).attr("height",h).attr("opacity",0.9).attr("stroke","#f00");
-      network.append("svg:g")
-      .attr("transform","translate("+ (-rx) + "," + (-ry) + ")");
+      network.append('svg:rect').attr('x',-w/2).attr('y',-h/2).attr('width',w).attr('height',h).attr('opacity',0.9).attr('stroke','#f00');
+      network.append('svg:g')
+      .attr('transform','translate('+ (-rx) + ',' + (-ry) + ')');
 
       var orgArc = d3.svg.arc().outerRadius(radius - 20).innerRadius(radius - 130);
       var secArc = d3.svg.arc().outerRadius(radius).innerRadius(radius - 130);
@@ -140,23 +140,23 @@ angular.module('scienceLibrary')
       }
       function orgLabelOffset(d) {
         var a = (d.startAngle + d.endAngle) * 90 / Math.PI;
-        return (a > 90 && a < 270) ? "52px" : "-46px";
+        return (a > 90 && a < 270) ? '52px' : '-46px';
       }
       function secLabelOffset(d) {
         var a = (d.startAngle + d.endAngle) * 90 / Math.PI;
-        return (a > 90 && a < 270) ? "59px" : "-50px";
+        return (a > 90 && a < 270) ? '59px' : '-50px';
       }
 
       var secPie = d3.layout.pie()
       .sort(null)
       .value(function(d) { return d.authorCount; });
 
-      // var baseColors = ["#1B4B3C","#726D29","#725529"];
-      var baseColors = ["#5596e6", "#2ca02c", "#ff7f0e"];
+      // var baseColors = ['#1B4B3C','#726D29','#725529'];
+      var baseColors = ['#5596e6', '#2ca02c', '#ff7f0e'];
       var sectorNames = {
-        AC: "Academia",
-        GOV: "Government",
-        IND: "Industry"
+        AC: 'Academia',
+        GOV: 'Government',
+        IND: 'Industry'
       };
       var secColor = d3.scale.ordinal().domain(Object.keys(sectorNames)).range(baseColors);
 
@@ -183,18 +183,18 @@ angular.module('scienceLibrary')
       }
 
       function loadAcOrgs() {
-          return store.runCoAuthorQuery(ce.queries.coAuthor.acOrgDetails)
-            .then(function (data) {
-              acOrgsData = data;
-            });
-        }
+        return store.runCoAuthorQuery(ce.queries.coAuthor.acOrgDetails)
+          .then(function (data) {
+            acOrgsData = data;
+          });
+      }
 
       function loadIndOrgs() {
-          return store.runCoAuthorQuery(ce.queries.coAuthor.indOrgDetails)
-            .then(function (data) {
-              indOrgsData = data;
-            });
-        }
+        return store.runCoAuthorQuery(ce.queries.coAuthor.indOrgDetails)
+          .then(function (data) {
+            indOrgsData = data;
+          });
+      }
 
       function loadPeople() {
         return store.runCoAuthorQuery(ce.queries.coAuthor.personDetails)
@@ -263,7 +263,7 @@ angular.module('scienceLibrary')
             var org = el[0];
             var name = el[1];
             var shortName = el[0];
-            var sector = "GOV";
+            var sector = 'GOV';
             var country = el[2];
 
             orgs[org] = {
@@ -280,48 +280,48 @@ angular.module('scienceLibrary')
       }
 
       function buildIndOrgs() {
-          if (indOrgsData && indOrgsData.results) {
-            indOrgsData.results.forEach(function(el) {
-              var org = el[0];
-              var name = el[1];
-              var shortName = el[0];
-              var sector = "IND";
-              var country = el[2];
+        if (indOrgsData && indOrgsData.results) {
+          indOrgsData.results.forEach(function(el) {
+            var org = el[0];
+            var name = el[1];
+            var shortName = el[0];
+            var sector = 'IND';
+            var country = el[2];
 
-              orgs[org] = {
-                id: org,
-                name: name,
-                shortName: shortName,
-                sector: sector,
-                country: country,
-                authors: []
-              };
-              sectors[sector] = sectors[sector] || {id:sector, orgs:[]};
-            });
-          }
+            orgs[org] = {
+              id: org,
+              name: name,
+              shortName: shortName,
+              sector: sector,
+              country: country,
+              authors: []
+            };
+            sectors[sector] = sectors[sector] || {id:sector, orgs:[]};
+          });
         }
+      }
 
       function buildAcOrgs() {
-          if (acOrgsData && acOrgsData.results) {
-            acOrgsData.results.forEach(function(el) {
-              var org = el[0];
-              var name = el[1];
-              var shortName = el[0];
-              var sector = "AC";
-              var country = el[2];
+        if (acOrgsData && acOrgsData.results) {
+          acOrgsData.results.forEach(function(el) {
+            var org = el[0];
+            var name = el[1];
+            var shortName = el[0];
+            var sector = 'AC';
+            var country = el[2];
 
-              orgs[org] = {
-                id: org,
-                name: name,
-                shortName: shortName,
-                sector: sector,
-                country: country,
-                authors: []
-              };
-              sectors[sector] = sectors[sector] || {id:sector, orgs:[]};
-            });
-          }
+            orgs[org] = {
+              id: org,
+              name: name,
+              shortName: shortName,
+              sector: sector,
+              country: country,
+              authors: []
+            };
+            sectors[sector] = sectors[sector] || {id:sector, orgs:[]};
+          });
         }
+      }
 
       function buildAuthorOrgs() {
         if (peopleOrgsData && peopleOrgsData.results) {
@@ -404,9 +404,9 @@ angular.module('scienceLibrary')
         for (id in authors) {
           var sector = orgs[authors[id].org].sector;
 
-          if (sector === "AC" && acInput ||
-            sector === "GOV" && govInput ||
-            sector === "IND" && indInput) {
+          if (sector === 'AC' && acInput ||
+            sector === 'GOV' && govInput ||
+            sector === 'IND' && indInput) {
             sortedAuthors.push({
               id: id,
               cc: authors[id].cc
@@ -478,7 +478,6 @@ angular.module('scienceLibrary')
               return 1;
             }
           }
-          return 0;
         }).map(function(v) {
           if (v.sector !== currentSec) {
             index = 0;
@@ -520,7 +519,7 @@ angular.module('scienceLibrary')
           }
         });
 
-        var root = {name: "", children: [], depth: 0};
+        var root = {name: '', children: [], depth: 0};
 
         index = 0;
         root.children = Object.keys(authors).map(function(n) {
@@ -566,28 +565,28 @@ angular.module('scienceLibrary')
         var splines = bundle(links);
 
         var orgColor = {
-          AC:  generateOrgPalette("AC", 0, "#8CA69E"),
-          GOV: generateOrgPalette("GOV", 1, "#D0CC98"),
-          IND: generateOrgPalette("IND", 2, "#D0BA98")
+          AC:  generateOrgPalette('AC', 0, '#8CA69E'),
+          GOV: generateOrgPalette('GOV', 1, '#D0CC98'),
+          IND: generateOrgPalette('IND', 2, '#D0BA98')
         };
 
         // LINK
-        var link = wheel.selectAll("path.link")
+        var link = wheel.selectAll('path.link')
           .data(links);
 
         // enter
-        link.enter().append("svg:path")
-            .attr("class", function(d) {
-              return "link "+
-              "link-author-" + d.source.key +" "+
-              "link-author-" + d.target.key+" "+
-              "link-org-"+d.source.org+" "+
-              "link-org-"+d.target.org;
+        link.enter().append('svg:path')
+            .attr('class', function(d) {
+              return 'link '+
+              'link-author-' + d.source.key +' '+
+              'link-author-' + d.target.key+' '+
+              'link-org-'+d.source.org+' '+
+              'link-org-'+d.target.org;
             })
-            .attr("stroke-width", function(d) {
+            .attr('stroke-width', function(d) {
               return Math.max(1,Math.sqrt(d.value));
             })
-            .attr("d", function() {
+            .attr('d', function() {
               var rand = Math.random();
               var i = splines.length * Math.floor(rand);
               return line(splines[i]);
@@ -597,15 +596,15 @@ angular.module('scienceLibrary')
         link
           .transition()
             .duration(500)
-            .attr("d", function(d, i) { return line(splines[i]); })
-            .attr("class", function(d) {
-              return "link "+
-              "link-author-" + d.source.key +" "+
-              "link-author-" + d.target.key+" "+
-              "link-org-"+d.source.org+" "+
-              "link-org-"+d.target.org;
+            .attr('d', function(d, i) { return line(splines[i]); })
+            .attr('class', function(d) {
+              return 'link '+
+              'link-author-' + d.source.key +' '+
+              'link-author-' + d.target.key+' '+
+              'link-org-'+d.source.org+' '+
+              'link-org-'+d.target.org;
             })
-            .attr("stroke-width", function(d) {
+            .attr('stroke-width', function(d) {
               return Math.max(1,Math.sqrt(d.value));
             });
 
@@ -613,7 +612,7 @@ angular.module('scienceLibrary')
         link.exit()
           .transition()
             .duration(500)
-            .attr("d", function() {
+            .attr('d', function() {
               if (splines && splines.length > 0) {
                 var rand = Math.random();
                 var i = splines.length * Math.floor(rand);
@@ -637,37 +636,37 @@ angular.module('scienceLibrary')
         }
 
         // SECARC
-        var secarc = wheel.selectAll("g.secarc")
+        var secarc = wheel.selectAll('g.secarc')
           .data(secPie(secList), secArcKey);
 
         // enter
-        var g = secarc.enter().append("g")
-            .attr("class", "secarc");
-        g.append("path")
-            .attr("d", secArc)
-            .style("stroke-width","2")
-            .style("fill", function(d) {
+        var g = secarc.enter().append('g')
+            .attr('class', 'secarc');
+        g.append('path')
+            .attr('d', secArc)
+            .style('stroke-width','2')
+            .style('fill', function(d) {
               return secColor(d.data.id);
             })
             .each(function(d) { this._current = d; });
-        g.append("text")
-            .attr("transform", function(d) {return "translate(" + secArc.centroid(d) + ") rotate(" + angle(d) + ")";})
-            .attr("dy", secLabelOffset)
-            .style("text-anchor", "middle")
-            .style("font-size", "12px")
-            .style("fill", "#fff")
+        g.append('text')
+            .attr('transform', function(d) {return 'translate(' + secArc.centroid(d) + ') rotate(' + angle(d) + ')';})
+            .attr('dy', secLabelOffset)
+            .style('text-anchor', 'middle')
+            .style('font-size', '12px')
+            .style('fill', '#fff')
             .text(function(d) { return sectorNames[d.data.id]; });
 
         // update
-        secarc.select("path")
+        secarc.select('path')
           .transition()
             .duration(750)
-            .attrTween("d", secArcTween);
-        secarc.select("text")
+            .attrTween('d', secArcTween);
+        secarc.select('text')
           .transition()
             .duration(750)
-            .attr("transform", function(d) {return "translate(" + secArc.centroid(d) + ") rotate(" + angle(d) + ")";})
-            .attr("dy", secLabelOffset)
+            .attr('transform', function(d) {return 'translate(' + secArc.centroid(d) + ') rotate(' + angle(d) + ')';})
+            .attr('dy', secLabelOffset)
           .text(function(d) {
             if (d.value > 0) {
               return sectorNames[d.data.id];
@@ -691,35 +690,35 @@ angular.module('scienceLibrary')
         }
 
         // ORGARC
-        var orgarc = wheel.selectAll("g.orgarc")
+        var orgarc = wheel.selectAll('g.orgarc')
           .data(orgPie(orgList), orgArcKey);
 
         // enter
-        g = orgarc.enter().append("g")
-            .attr("class", "orgarc");
-        g.append("path")
-            .attr("d", orgArc)
-            .style("stroke-width", 1)
-            .style("fill", function(d) {
+        g = orgarc.enter().append('g')
+            .attr('class', 'orgarc');
+        g.append('path')
+            .attr('d', orgArc)
+            .style('stroke-width', 1)
+            .style('fill', function(d) {
               var c = orgColor[d.data.sector](d.data.orgIndex);
               return c;
             })
             .each(function(d) { this._current = d; })
-          .on("mouseover", function(d) { wheelMouseover("org", d.data.id, d.data.id); })
-          .on("mouseout", function(d) { wheelMouseout("org", d.data.id, d.data.id); })
-          .on("click", function(d) {
-            var url = urls.scienceLibrary + "/organisation/" + d.data.id;
+          .on('mouseover', function(d) { wheelMouseover('org', d.data.id, d.data.id); })
+          .on('mouseout', function(d) { wheelMouseout('org', d.data.id, d.data.id); })
+          .on('click', function(d) {
+            var url = urls.scienceLibrary + '/organisation/' + d.data.id;
             window.location.href = url;
           });
-        g.append("text")
-            .attr("transform", function(d) {
-              return "translate(" + orgArc.centroid(d) + ") rotate(" + angle(d) + ")";
+        g.append('text')
+            .attr('transform', function(d) {
+              return 'translate(' + orgArc.centroid(d) + ') rotate(' + angle(d) + ')';
             })
-            .attr("dy", orgLabelOffset)
-            .style("text-anchor", "middle")
-            .style("font-size", "10px")
-            .style("fill", "#fff")
-            .style("pointer-events", "none")
+            .attr('dy', orgLabelOffset)
+            .style('text-anchor', 'middle')
+            .style('font-size', '10px')
+            .style('fill', '#fff')
+            .style('pointer-events', 'none')
             .text(function(d) {
               if (Math.abs(d.endAngle-d.startAngle) > 0.01) {
                 return d.data.shortName;
@@ -727,17 +726,17 @@ angular.module('scienceLibrary')
             });
 
         // update
-        orgarc.select("path")
+        orgarc.select('path')
           .transition()
             .duration(750)
-            .attrTween("d", orgArcTween);
-        orgarc.select("text")
+            .attrTween('d', orgArcTween);
+        orgarc.select('text')
           .transition()
             .duration(750)
-            .attr("transform", function(d) {
-              return "translate(" + orgArc.centroid(d) + ") rotate(" + angle(d) + ")";
+            .attr('transform', function(d) {
+              return 'translate(' + orgArc.centroid(d) + ') rotate(' + angle(d) + ')';
             })
-            .attr("dy", orgLabelOffset)
+            .attr('dy', orgLabelOffset)
             .text(function(d) {
               if (Math.abs(d.endAngle - d.startAngle) > 0.01) {
                 return d.data.shortName;
@@ -749,7 +748,7 @@ angular.module('scienceLibrary')
           .remove();
 
         // NODE
-        var node = wheel.selectAll("g.node")
+        var node = wheel.selectAll('g.node')
           .data(nodes.filter(function(n) {
             return !n.children;
           }),
@@ -758,38 +757,38 @@ angular.module('scienceLibrary')
           });
 
         // enter
-        g = node.enter().append("g")
-            .attr("class", "node")
-            .attr("id", function(d) { return "node-" + d.key; })
-            .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; });
-        g.append("text")
-            .attr("class",function(d) {
+        g = node.enter().append('g')
+            .attr('class', 'node')
+            .attr('id', function(d) { return 'node-' + d.key; })
+            .attr('transform', function(d) { return 'rotate(' + (d.x - 90) + ')translate(' + d.y + ')'; });
+        g.append('text')
+            .attr('class',function(d) {
               if (d) {
-                return "author "+
-                "author-author-"+d.key+" "+
-                "author-org-"+d.org;
+                return 'author '+
+                'author-author-'+d.key+' '+
+                'author-org-'+d.org;
               }
             })
-            .attr("dx", function(d) { return d.x < 180 ? 8 : -8; })
-            .attr("dy", ".31em")
-            .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
-            .attr("transform", function(d) { return d.x < 180 ? null : "rotate(180)"; })
+            .attr('dx', function(d) { return d.x < 180 ? 8 : -8; })
+            .attr('dy', '.31em')
+            .attr('text-anchor', function(d) { return d.x < 180 ? 'start' : 'end'; })
+            .attr('transform', function(d) { return d.x < 180 ? null : 'rotate(180)'; })
             .text(function(d) {
               if (d && d.fn) {
-                var name = d.fn+" "+d.sn;
+                var name = d.fn+' '+d.sn;
                 if (name.length > 15) {
-                  name = d.fn[0]+". "+d.sn;
+                  name = d.fn[0]+'. '+d.sn;
                 }
                 if (name.length > 15) {
-                  name = name.substring(0,15)+"...";
+                  name = name.substring(0,15)+'...';
                 }
                 return name;
               }
             })
-          .on("mouseover", function(d) { wheelMouseover("author", d.key); })
-          .on("mouseout", function(d) { wheelMouseout("author", d.key); })
-          .on("click", function(d) {
-            var url = urls.scienceLibrary + "/author/" + d.key;
+          .on('mouseover', function(d) { wheelMouseover('author', d.key); })
+          .on('mouseout', function(d) { wheelMouseout('author', d.key); })
+          .on('click', function(d) {
+            var url = urls.scienceLibrary + '/author/' + d.key;
             window.location.href = url;
           });
 
@@ -797,22 +796,22 @@ angular.module('scienceLibrary')
         node
           .transition()
             .duration(750)
-            .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; });
-        node.select("text")
+            .attr('transform', function(d) { return 'rotate(' + (d.x - 90) + ')translate(' + d.y + ')'; });
+        node.select('text')
           .transition()
             .duration(750)
-            .attr("dx", function(d) { return d.x < 180 ? 8 : -8; })
-            .attr("dy", ".31em")
-            .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
-            .attr("transform", function(d) { return d.x < 180 ? null : "rotate(180)"; })
+            .attr('dx', function(d) { return d.x < 180 ? 8 : -8; })
+            .attr('dy', '.31em')
+            .attr('text-anchor', function(d) { return d.x < 180 ? 'start' : 'end'; })
+            .attr('transform', function(d) { return d.x < 180 ? null : 'rotate(180)'; })
             .text(function(d) {
               if (d && d.fn) {
-                var name = d.fn+" "+d.sn;
+                var name = d.fn+' '+d.sn;
                 if (name.length > 15) {
-                  name = d.fn[0]+". "+d.sn;
+                  name = d.fn[0]+'. '+d.sn;
                 }
                 if (name.length > 15) {
-                  name = name.substring(0,15)+"...";
+                  name = name.substring(0,15)+'...';
                 }
                 return name;
               }
@@ -824,25 +823,25 @@ angular.module('scienceLibrary')
       }
 
       function wheelMouseover(classPrefix, prop, org) {
-        wheel.selectAll("path.link.link-" + classPrefix + "-" + prop)
-        .classed("link-active", true)
+        wheel.selectAll('path.link.link-' + classPrefix + '-' + prop)
+        .classed('link-active', true)
         .each(function(d) {
-          wheel.select("#node-" + d.source.key).classed("author-active", true);
-          wheel.select("#node-" + d.target.key).classed("author-active", true);
+          wheel.select('#node-' + d.source.key).classed('author-active', true);
+          wheel.select('#node-' + d.target.key).classed('author-active', true);
         });
         if (org) {
-          wheel.selectAll(".author-org-" + org).classed("author-org-active", true);
+          wheel.selectAll('.author-org-' + org).classed('author-org-active', true);
         }
       }
 
       function wheelMouseout(classPrefix, prop) {
-        wheel.selectAll("path.link.link-" + classPrefix + "-" + prop)
-        .classed("link-active", false)
+        wheel.selectAll('path.link.link-' + classPrefix + '-' + prop)
+        .classed('link-active', false)
         .each(function(d) {
-          wheel.select("#node-" + d.source.key).classed("author-active", false).classed("author-org-active", false);
-          wheel.select("#node-" + d.target.key).classed("author-active", false).classed("author-org-active", false);
+          wheel.select('#node-' + d.source.key).classed('author-active', false).classed('author-org-active', false);
+          wheel.select('#node-' + d.target.key).classed('author-active', false).classed('author-org-active', false);
         });
-        wheel.selectAll(".author-org-active").classed("author-org-active", false);
+        wheel.selectAll('.author-org-active').classed('author-org-active', false);
       }
     }
   };

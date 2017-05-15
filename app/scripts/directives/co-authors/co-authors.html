@@ -1,0 +1,15 @@
+<div class="col-md-12">
+  <interactive-header></interactive-header>
+
+  <div class="list-filters">
+    <span class="list-filters-label">Filter by industry</span>
+    <label class="document-label ac"></label>
+    <input id="acInput" type="checkbox" ng-model="acInput">
+    <label class="document-label ind"></label>
+    <input id="indInput" type="checkbox" ng-model="indInput">
+    <label class="document-label gov"></label>
+    <input id="govInput" type="checkbox" ng-model="govInput">
+  </div>
+</div>
+
+<div style="clear: both;" edge-bundle-chart num-authors="'50'" ac="acInput" gov="govInput" ind="indInput"></div>
