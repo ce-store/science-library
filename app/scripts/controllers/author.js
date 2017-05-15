@@ -171,17 +171,21 @@ angular.module('itapapersApp')
       var otherCount = utils.getIntProperty(properties, ce.author.otherCount);
       var coAuthorCount = utils.getIntProperty(properties, ce.author.coAuthorCount);
       var governmentCoAuthorCount = utils.getIntProperty(properties, ce.author.governmentCoAuthorCount);
-      var googleCitationCount = utils.getIntProperty(properties, ce.author.googleCitationCount);
+      var citationCount = utils.getProperty(properties, ce.author.citationCount);
+      var googleCitationCount = utils.getIntProperty(properties, ce.author.overallCitationCount);
       var localCitationCount = utils.getIntProperty(properties, ce.author.localCitationCount);
+      var googleHIndex = utils.getIntProperty(properties, ce.author.overallHIndex);
       var localHIndex = utils.getIntProperty(properties, ce.author.localHIndex);
       var writesFor = utils.getListProperty(properties, ce.author.writesFor);
       var writesAbout = utils.getUnknownProperty(properties, ce.author.writesAbout);
       var coAuthorStatistic = utils.getListProperty(properties, ce.author.coAuthorStatistic);
       var topicPersonStatistic = utils.getListProperty(properties, ce.author.topicPersonStatistic);
+      var profilePic = utils.getProperty(properties, ce.author.profilePicture);
 
       // Set data
       $scope.authorId = $stateParams.authorId;
       $scope.author = fullName;
+      $scope.profilePic = profilePic;
       $scope.type = utils.getIndustryFor(data.main_instance);
       $scope.coAuthorsHeader = $scope.author + "'s co-authors";
       $scope.papersHeader = $scope.author + "'s papers";
@@ -252,28 +256,23 @@ angular.module('itapapersApp')
       // citations
       $scope.scholarLink = "https://scholar.google.co.uk/scholar?q=" + properties[ce.author.fullName][0] + "&btnG=&hl=en&as_sdt=0%2C5";
 
-      if (relatedInstances[googleCitationCount]) {
-        var googleCitationCountProperties = relatedInstances[googleCitationCount].property_values;
+      if (relatedInstances[citationCount]) {
+        var googleCitationCountProperties = relatedInstances[citationCount].property_values;
 
         // local and google citation count && h-index
         var url = utils.getProperty(googleCitationCountProperties, ce.citation.url);
-        var googleCount = utils.getIntProperty(googleCitationCountProperties, ce.citation.count);
-        var googleHIndex = utils.getIntProperty(googleCitationCountProperties, ce.citation.hIndex);
 
         $scope.citationCount = {
-          url: url,
           count: localCitationCount
         };
         $scope.hIndex = {
-          url: url,
           index: localHIndex
         };
         $scope.googleCitationCount = {
           url: url,
-          count: googleCount
+          count: googleCitationCount
         };
         $scope.googleHIndex = {
-          url: url,
           index: googleHIndex
         };
       }
@@ -376,7 +375,7 @@ angular.module('itapapersApp')
               id:         thisPaperId,
               name:       thisPaper.title,
               noteworthy: thisPaper.noteworthyReason,
-              url: thisPaper.noteworthyUrl,
+              url:        thisPaper.noteworthyUrl,
               date:       thisPaper.date,
               citations:  thisPaper.citations,
               type:       utils.sortTypes(thisPaper.types),

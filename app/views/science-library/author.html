@@ -99,6 +99,7 @@
     <div class="col-md-3">
       <!-- Publications -->
       <div>
+        <span ng-if="profilePic"><img src="{{profilePic}}" width="100px"/></span>
         <h3>Statistics</h3>
 
         <div class="total-publication-count">
@@ -150,28 +151,28 @@
       <div>
         <dl class="dl-horizontal dl-publications">
           <div ng-if="citationCount" ng-class="[{'answer-highlight': citation_countHighlight}]">
-            <dt>Citation Count (local)</dt>
+            <dt>Local Citation Count</dt>
             <dd>
               <a ng-if="citationCount.url" ng-href="{{citationCount.url}}">{{citationCount.count}}</a>
               <span ng-if="!citationCount.url">{{citationCount.count}}</span>
             </dd>
           </div>
           <div ng-if="hIndex" class="dl-horizontal dl-publications" ng-class="[{'answer-highlight': h_indexHighlight}]">
-            <dt>H-Index (local)</dt>
+            <dt>Local H-Index</dt>
             <dd>
               <a ng-if="hIndex.url" ng-href="{{hIndex.url}}">{{hIndex.index}}</a>
               <span ng-if="!hIndex.url">{{hIndex.index}}</span>
             </dd>
           </div>
           <div ng-if="googleCitationCount" class="dl-horizontal dl-publications" ng-class="[{'answer-highlight': h_indexHighlight}]">
-            <dt>Citation Count (Google)</dt>
+            <dt>Overall Citation Count</dt>
             <dd>
               <a ng-if="googleCitationCount.url" ng-href="{{googleCitationCount.url}}">{{googleCitationCount.count}}</a>
               <span ng-if="!googleCitationCount.url">{{googleCitationCount.count}}</span>
             </dd>
           </div>
           <div ng-if="googleHIndex" class="dl-horizontal dl-publications" ng-class="[{'answer-highlight': h_indexHighlight}]">
-            <dt>H-Index (Google)</dt>
+            <dt>Overall H-Index</dt>
             <dd>
               <a ng-if="googleHIndex.url" ng-href="{{googleHIndex.url}}">{{googleHIndex.index}}</a>
               <span ng-if="!googleHIndex.url">{{googleHIndex.index}}</span>

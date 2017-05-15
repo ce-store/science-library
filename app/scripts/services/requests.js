@@ -121,9 +121,11 @@ angular.module('itapapersApp')
 
       limRels = ce.author.writesFor + ',';
       limRels += ce.author.writesAbout + ',';
+      limRels += ce.author.citationCount + ',';
       limRels += ce.author.coAuthorList;
 
       onlyProps = ce.author.fullName + ',';
+      onlyProps += ce.author.profilePicture + ',';
       onlyProps += ce.author.documentCount + ',';
       onlyProps += ce.author.externalDocumentCount + ',';
       onlyProps += ce.author.internalDocumentCount + ',';
@@ -133,7 +135,15 @@ angular.module('itapapersApp')
       onlyProps += ce.author.internalConferencePaperCount + ',';
       onlyProps += ce.author.technicalReportCount + ',';
       onlyProps += ce.author.otherCount + ',';
+      onlyProps += ce.author.localCitationCount + ',';
+      onlyProps += ce.author.localHIndex + ',';
+      onlyProps += ce.author.overallCitationCount + ',';
+      onlyProps += ce.author.overallHIndex + ',';
       onlyProps += ce.author.documentList + ',';
+      onlyProps += ce.citation.url + ',';
+      onlyProps += ce.citation.count + ',';
+      onlyProps += ce.citation.hIndex + ',';
+      onlyProps += ce.citation.date + ',';
       onlyProps += ce.paper.title;
 
       url = '/instances/' + authorId;

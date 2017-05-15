@@ -57,7 +57,7 @@ angular.module('itapapersApp')
       otherCount:                   'other document count',
       coAuthorCount:            'co-author count',
       governmentCoAuthorCount:  'government co-author count',
-      googleCitationCount:      'citation count',
+      citationCount:            'citation count',
       localCitationCount:       'local citation count',
       localHIndex:              'local h-index',
       overallCitationCount:       'overall citation count',
