@@ -93,8 +93,6 @@ angular.module('scienceLibrary', [
       url: '/science-library/:category',
       templateUrl: 'scripts/routes/home/home.html',
       controller: 'HomeCtrl'
-      // templateUrl: 'views/science-library/main.html',
-      // controller: 'MainCtrl'
     });
 
   $locationProvider.html5Mode(true);

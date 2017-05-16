@@ -480,7 +480,9 @@ p.todo {
   font-family: "PT Mono", monospace;
   box-shadow: 10px 0 0 #41d6c3, -10px 0 0 #41d6c3;
   padding: 2px 0 6px;
-  margin: 0 20px 0 10px;
+  margin: 0 20px 0 5px;
+  position: relative;
+  left: 10px;
 }
 
 .interactive-header-selected:hover {

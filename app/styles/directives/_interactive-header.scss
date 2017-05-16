@@ -11,7 +11,9 @@
   font-family: $font-stack-mono;
   box-shadow: 10px 0 0 $colour-primary, -10px 0 0 $colour-primary;
   padding: 2px 0 6px;
-  margin: 0 20px 0 10px;
+  margin: 0 20px 0 5px;
+  position: relative;
+  left: 10px;
 }
 
 .interactive-header-selected:hover {

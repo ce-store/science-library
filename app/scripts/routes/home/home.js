@@ -378,7 +378,6 @@ angular.module('scienceLibrary')
   var getData = function() {
     store.getLastUpdated()
       .then(function(response) {
-        console.log(response)
         var foundComputeMessage = false;
         var lastUpdatedText = '';
         var projectName = '';
