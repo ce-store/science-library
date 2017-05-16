@@ -33,8 +33,16 @@ angular.module('scienceLibrary')
 
       var drawBarChart = function(data) {
         var margin = {top: 20, right: 20, bottom: 50, left: 40};
-        var width = (scope.width - 150 - margin.left - margin.right) * 0.75;
-        var height = scope.height - 370 - margin.top - margin.bottom;
+
+        var width, height;
+
+        if (scope.width < 700) {
+          width = scope.width - 60 - margin.left - margin.right;
+          height = 300;
+        } else {
+          width = (scope.width - 150 - margin.left - margin.right) * 0.75;
+          height = scope.height - 400 - margin.top - margin.bottom;
+        }
 
         var x = d3.scale.ordinal()
             .rangeRoundBands([0, width], 0.1);

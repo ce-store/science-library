@@ -51,7 +51,7 @@ angular.module('scienceLibrary', [
     })
     .state('organisation', {
       url: '/science-library/organisation/:organisationId?view',
-      templateUrl: 'views/science-library/organisation.html',
+      templateUrl: 'scripts/routes/organisation/organisation.html',
       controller: 'OrganisationCtrl'
     })
     .state('topic', {

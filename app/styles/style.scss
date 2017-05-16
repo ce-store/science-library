@@ -9,14 +9,17 @@
  @import "labels";
  @import "lists";
  @import "narrative";
+
  @import "directives/header";
  @import "directives/footer";
  @import "directives/interactive-header";
- @import "directives/pie-chart";
- @import "directives/scatter-chart";
  @import "directives/sunburst";
+ @import "directives/pie-chart";
+ @import "directives/bar-chart";
+ @import "directives/scatter-chart";
  @import "directives/edge-bundle-chart";
  @import "directives/force-directed-graph";
+
  @import "routes/document";
  @import "routes/person";
 

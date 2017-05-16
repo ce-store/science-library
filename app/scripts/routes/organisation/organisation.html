@@ -1,0 +1,84 @@
+<!--
+ * (C) Copyright IBM Corporation  2016, 2017
+ * All Rights Reserved
+ -->
+
+<div class="container">
+  <div class="col-md-12 footer-padding">
+    <div class="row" style="padding-top: 20px;">
+      <div class="col-md-9">
+        <!-- Description -->
+        <p class="center">
+          <span ng-class="[{'answer-highlight': nameHighlight}]">{{name}}</span>
+          <span class="highlight">
+            (<span ng-class="[{'answer-highlight': is_located_atHighlight}]">{{country}}</span>,
+            <span ng-class="[{'answer-highlight': typeHighlight}]">{{industry}}</span>)
+          </span>
+        </p>
+
+        <div class="list-view">
+          <div ng-show="currentView === views[0]" id="org-papers-chart">
+            <div bar-chart data="chartData"></div>
+          </div>
+
+          <div ng-show="currentView === views[1]" id="org-papers-list">
+            <interactive-header headertext="header"></interactive-header>
+
+            <div class="list-filters">
+              <span class="list-filters-label">Filter by type</span>
+              <label ng-show="journalPapers" class="document-label journal"></label>
+              <input ng-show="journalPapers" id="journalInput" type="checkbox" ng-model="journalInput">
+              <label ng-show="externalPapers" class="document-label external-conference"></label>
+              <input ng-show="externalPapers" id="externalInput" type="checkbox" ng-model="externalInput">
+              <label ng-show="patents" class="document-label patent"></label>
+              <input ng-show="patents" id="patentInput" type="checkbox" ng-model="patentInput">
+              <label ng-show="internalPapers" class="document-label internal-conference"></label>
+              <input ng-show="internalPapers" id="internalInput" type="checkbox" ng-model="internalInput">
+              <label ng-show="technicalReports" class="document-label technical-report"></label>
+              <input ng-show="technicalReports" id="technicalInput" type="checkbox" ng-model="technicalInput">
+              <label ng-show="otherDocuments" class="document-label other-document"></label>
+              <input ng-show="otherDocuments" id="otherInput" type="checkbox" ng-model="otherInput">
+            </div>
+
+            <ul class="results-list no-bullets">
+              <li ng-repeat="item in papersList | limitTo : listLength | orderBy : 'name' | orderBy : sortCommand | filter : filterPapers">
+                <span ng-class="[className, ('document-' + $index)]" ng-repeat="className in item.class track by $index"></span>
+                <a ng-href="{{scienceLibrary}}/paper/{{item.id}}" class="list-name">{{item.name}}</a>
+                <small ng-if="item.noteworthy"><span class="glyphicon glyphicon-star-empty highlight" aria-hidden="true"></span> ({{item.noteworthy}})</small> <small ng-if="item[sortValue] && sortShow" class="highlight">({{item[sortValue]}})</small>
+              </li>
+            </ul>
+          </div>
+
+          <div ng-show="currentView === views[2]" id="org-authors-list">
+            <interactive-header headertext="header"></interactive-header>
+
+            <!-- Results list -->
+            <ul class="results-list" ng-class="[{'answer-highlight': employsHighlight}]">
+              <li ng-repeat="item in authorsList | limitTo : listLength | orderBy : 'name' | orderBy : sortCommand">
+                <a ng-href="{{scienceLibrary}}/author/{{item.id}}" class="list-name">{{item.name}}</a>
+                <small ng-if="item[sortValue] && sortShow" class="highlight">({{item[sortValue]}})</small>
+              </li>
+            </ul>
+          </div>
+
+          <div ng-show="currentView === views[0]" class="float-right">
+            <p class="center helper-text">Click a bar on the graph to show papers.</p>
+          </div>
+
+          <div class="center" style="margin-bottom: 20px;">
+            <button ng-show="currentView !== views[0]" class="btn btn-default" ng-click="showView(views[0])">Show Papers Chart</button>
+            <button ng-show="currentView !== views[1]" class="btn btn-default" ng-click="showView(views[1])">List Papers</button>
+            <button ng-show="currentView !== views[2]" class="btn btn-default" ng-click="showView(views[2])">List Authors</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-3 side-list-view">
+        <ita-statistics></ita-statistics>
+
+        <!-- Pie Chart -->
+        <div pie-chart data="pieData" factor="0.25" style="margin-bottom: 20px;"></div>
+      </div>
+    </div>
+  </div>
+</div>

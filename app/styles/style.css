@@ -491,6 +491,19 @@ p.todo {
   margin: 0 5px 0 10px;
 }
 
+.sunburst {
+  margin-bottom: 30px;
+}
+
+.sunburst-svg {
+  margin-top: 50px;
+}
+@media (min-width: 700px) {
+  .sunburst-svg {
+    margin-top: 0;
+  }
+}
+
 .small-pie {
   margin-top: 50px;
 }
@@ -498,6 +511,14 @@ p.todo {
   .small-pie {
     margin-top: 0;
   }
+}
+
+.organisation-bar-chart {
+  background: transparent;
+}
+
+.organisation-bar-chart text {
+  fill: white;
 }
 
 .chart-btns {
@@ -627,19 +648,6 @@ p.todo {
 .d3-tip img {
   float: left;
   width: 80px;
-}
-
-.sunburst {
-  margin-bottom: 30px;
-}
-
-.sunburst-svg {
-  margin-top: 50px;
-}
-@media (min-width: 700px) {
-  .sunburst-svg {
-    margin-top: 0;
-  }
 }
 
 #edge-bundle-chart {
