@@ -21,11 +21,11 @@
 
   <!-- Header text -->
   <span ng-if="header">
-    {{header}}
+    {{header}}&nbsp;
   </span>
 
   <span ng-show="sort.names">
-    &nbsp;sorted by
+    sorted by
     <span uib-dropdown on-toggle="toggled(open)" class="interactive-header-dropdown">
       <a href id="simple-dropdown" uib-dropdown-toggle>
         <span class="interactive-header-selected">{{sortName}}<span class="caret"></span></span>

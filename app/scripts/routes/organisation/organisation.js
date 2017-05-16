@@ -95,23 +95,23 @@ angular.module('scienceLibrary')
   // set max-height of papers list
   var elem = angular.element('#org-papers-list');
   if ($scope.width >= 700) {
-    elem.css('height', (height + 20) + 'px');
+    elem.css('height', (height - 60) + 'px');
   }
 
   elem = angular.element('#org-papers-list .results-list');
   if ($scope.width >= 700) {
-    elem.css('max-height', 'calc(100% - 75px)');
+    elem.css('max-height', 'calc(100% - 175px)');
   }
 
   // set max-height of authors list
   elem = angular.element('#org-authors-list');
   if ($scope.width >= 700) {
-    elem.css('height', height + 'px');
+    elem.css('height', (height - 60) + 'px');
   }
 
   elem = angular.element('#org-authors-list .results-list');
   if ($scope.width >= 700) {
-    elem.css('max-height', 'calc(100% - 55px)');
+    elem.css('max-height', 'calc(100% - 185px)');
   }
 
   store.getOrganisation($stateParams.organisationId)
