@@ -1,0 +1,133 @@
+<!--
+ * (C) Copyright IBM Corporation  2016, 2017
+ * All Rights Reserved
+ -->
+
+<div class="container">
+  <div class="col-md-12 footer-padding">
+    <div class="row" style="padding-top: 20px">
+      <div class="col-md-9">
+        <!-- Title -->
+        <p class="center">
+          <span class="highlight" ng-class="[{'answer-highlight': full_nameHighlight}]">{{author}}</span>
+          writes for
+          <span ng-repeat="org in organisations">
+            <a class="highlight" ng-href="{{scienceLibrary}}/organisation/{{org.id}}" ng-class="[{'answer-highlight': is_employed_byHighlight}]">{{org.name}}</a><span ng-if="$index < organisations.length - 2">, </span><span ng-if="$index === organisations.length - 2"> and </span>
+          </span>
+        </p>
+
+        <!-- Chart -->
+        <div ng-show="currentView === views[0]" id="narrative-chart" class="panel"></div>
+
+        <div ng-show="currentView === views[1]" id="authors-publications-list" ng-class="[{'answer-highlight': wroteHighlight}]">
+          <div>
+            <interactive-header headertext="header"></interactive-header>
+
+            <div class="list-filters">
+              <span class="list-filters-label">Filter by type</span>
+              <label ng-show="journalPapers" class="document-label journal"></label>
+              <input ng-show="journalPapers" id="journalInput" type="checkbox" ng-model="journalInput">
+              <label ng-show="externalPapers" class="external-conference"></label>
+              <input ng-show="externalPapers" id="externalInput" type="checkbox" ng-model="externalInput">
+              <label ng-show="patents" class="document-label patent"></label>
+              <input ng-show="patents" id="patentInput" type="checkbox" ng-model="patentInput">
+              <label ng-show="internalPapers" class="document-label internal-conference"></label>
+              <input ng-show="internalPapers" id="internalInput" type="checkbox" ng-model="internalInput">
+              <label ng-show="technicalReports" class="document-label technical-report"></label>
+              <input ng-show="technicalReports" id="technicalInput" type="checkbox" ng-model="technicalInput">
+              <label ng-show="otherDocuments" class="document-label other-document"></label>
+              <input ng-show="otherDocuments" id="otherInput" type="checkbox" ng-model="otherInput">
+            </div>
+          </div>
+
+          <ul class="results-list no-bullets" id="publications-results-list">
+            <li ng-repeat="paper in papersList | orderBy : 'name' | orderBy : sortCommand | filter : filterPapers">
+              <span ng-class="[className, ('document-' + $index)]" ng-repeat="className in paper.class track by $index"></span>
+              <a ng-href="{{scienceLibrary}}/paper/{{paper.id}}" class="list-name">{{paper.name}}</a>
+              <small ng-if="paper.noteworthy"><span class="glyphicon glyphicon-star-empty highlight" aria-hidden="true"></span> ({{paper.noteworthy}})</small>
+              <small ng-if="paper[sortValue] && sortShow" class="highlight">({{paper[sortValue]}})</small>
+            </li>
+          </ul>
+        </div>
+
+        <div ng-show="currentView === views[2]" id="authors-coauthors-list" ng-class="[{'answer-highlight': co-authorHighlight}]">
+          <div>
+            <interactive-header headertext="header"></interactive-header>
+          </div>
+
+          <ul class="results-list" id="coauthors-results-list">
+            <li ng-repeat="coauthor in coauthorsList | orderBy : 'name' | orderBy : sortCommand">
+              <a ng-href="{{scienceLibrary}}/collaboration?author={{authorId}}&author={{coauthor.id}}" class="list-name">{{coauthor.name}}</a>
+              <small ng-show="coauthor[sortValue] && sortShow" class="highlight">({{coauthor[sortValue]}})</small>
+            </li>
+          </ul>
+        </div>
+
+        <div ng-show="currentView === views[3]" id="authors-coauthors-chart" ng-class="[{'answer-highlight': co-authorHighlight}]">
+          <div class="list-filters">
+            <span class="list-filters-label">Filter by industry</span>
+            <label class="document-label ac"></label>
+            <input id="acInput" type="checkbox" ng-model="acInput">
+            <label class="document-label ind"></label>
+            <input id="indInput" type="checkbox" ng-model="indInput">
+            <label class="document-label gov"></label>
+            <input id="govInput" type="checkbox" ng-model="govInput">
+          </div>
+
+          <force-directed-graph nodes="nodes" ac="acInput" gov="govInput" ind="indInput"></force-directed-graph>
+          <p class="helper-text center">Hover over a node to view co-author's details. Click a node to go to their collaboration page.</p>
+        </div>
+
+        <div class="center" style="margin-bottom: 20px;">
+          <button ng-show="currentView !== views[0]" class="btn btn-default" ng-click="showView(views[0])">Show Narrative Chart</button>
+          <button ng-show="currentView !== views[1]" class="btn btn-default" ng-click="showView(views[1])">List Papers</button>
+          <button ng-show="currentView !== views[2]" class="btn btn-default" ng-click="showView(views[2])">List Co-Authors</button>
+          <button ng-show="currentView !== views[3]" class="btn btn-default" ng-click="showView(views[3])">Show Co-Authors Graph</button>
+        </div>
+      </div>
+
+      <!-- <div class="row author-pubs"> -->
+      <div class="col-md-3">
+        <!-- Publications -->
+        <ita-statistics></ita-statistics>
+
+        <!-- Citations -->
+        <div>
+          <dl class="dl-publications">
+            <div ng-if="citationCount" ng-class="[{'answer-highlight': citation_countHighlight}]">
+              <dt>Citation Count (local)</dt>
+              <dd>
+                <a ng-if="citationCount.url" ng-href="{{citationCount.url}}">{{citationCount.count}}</a>
+                <span ng-if="!citationCount.url">{{citationCount.count}}</span>
+              </dd>
+            </div>
+            <div ng-if="hIndex" class="dl-horizontal dl-publications" ng-class="[{'answer-highlight': h_indexHighlight}]">
+              <dt>H-Index (local)</dt>
+              <dd>
+                <a ng-if="hIndex.url" ng-href="{{hIndex.url}}">{{hIndex.index}}</a>
+                <span ng-if="!hIndex.url">{{hIndex.index}}</span>
+              </dd>
+            </div>
+            <div ng-if="googleCitationCount" class="dl-horizontal dl-publications" ng-class="[{'answer-highlight': h_indexHighlight}]">
+              <dt>Citation Count (Google)</dt>
+              <dd>
+                <a ng-if="googleCitationCount.url" ng-href="{{googleCitationCount.url}}">{{googleCitationCount.count}}</a>
+                <span ng-if="!googleCitationCount.url">{{googleCitationCount.count}}</span>
+              </dd>
+            </div>
+            <div ng-if="googleHIndex" class="dl-horizontal dl-publications" ng-class="[{'answer-highlight': h_indexHighlight}]">
+              <dt>H-Index (Google)</dt>
+              <dd>
+                <a ng-if="googleHIndex.url" ng-href="{{googleHIndex.url}}">{{googleHIndex.index}}</a>
+                <span ng-if="!googleHIndex.url">{{googleHIndex.index}}</span>
+              </dd>
+            </div>
+          </dl>
+        </div>
+
+        <!-- Pie Chart -->
+        <div pie-chart data="pieData" factor="0.25" style="margin-bottom: 20px;"></div>
+      </div>
+    </div>
+  </div>
+</div>

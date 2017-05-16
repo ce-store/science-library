@@ -3,6 +3,11 @@
  * All Rights Reserved
  */
 @import url("https://fonts.googleapis.com/css?family=PT+Mono|PT+Sans");
+@import url(http://fonts.googleapis.com/css?family=PT+Serif|PT+Serif:b|PT+Serif:i|PT+Sans|PT+Sans:b|Cutive+Mono|Source+Code+Pro);
+@import url(http://fonts.googleapis.com/css?family=Patrick+Hand+SC);
+@import url(http://fonts.googleapis.com/css?family=Walter+Turncoat);
+@import url(http://fonts.googleapis.com/css?family=Cabin+Sketch);
+@import url(http://fonts.googleapis.com/css?family=Short+Stack);
 h1 {
   color: #fff;
   font-size: 26px;
@@ -235,7 +240,12 @@ ul.no-bullets {
 }
 
 ul.results-list {
-  margin: 20px 15px 0 15px;
+  margin: 20px 15px 50px 15px;
+}
+@media (min-width: 700px) {
+  ul.results-list {
+    margin: 20px 15px 0 15px;
+  }
 }
 
 ul.results-list li {
@@ -244,6 +254,150 @@ ul.results-list li {
 
 ul.results-list .list-name {
   color: #3a3a3a;
+}
+
+/*
+ * (C) Copyright IBM Corporation  2016, 2017
+ * All Rights Reserved
+ */
+textarea {
+  font-size: 100%;
+}
+
+body > pre {
+  border-left: solid 2px #ccc;
+  padding-left: 18px;
+  margin: 2em 0 2em -20px;
+}
+
+#narrative-chart {
+  height: 400px;
+  border: 1px solid #f1f2f1;
+  position: relative;
+}
+
+.narrative-legend {
+  z-index: 5;
+  position: absolute;
+  right: 30px;
+  top: 15px;
+  padding: 10px;
+  height: 65px;
+  width: 120px;
+  border: 1px solid #f1f2f1;
+}
+
+.legend-key {
+  height: 10px;
+  width: 10px;
+}
+
+.html .value,
+.javascript .string,
+.javascript .regexp {
+  color: #756bb1;
+}
+
+.html .tag,
+.css .tag,
+.javascript .keyword {
+  color: #3182bd;
+}
+
+.comment {
+  color: #636363;
+}
+
+.html .doctype,
+.javascript .number {
+  color: #31a354;
+}
+
+.html .attribute,
+.css .attribute,
+.javascript .class,
+.javascript .special {
+  color: #e6550d;
+}
+
+svg {
+  font: 10px sans-serif;
+  background: white;
+}
+
+sup, sub {
+  line-height: 0;
+}
+
+.scene {
+  cursor: pointer;
+  color: #787878;
+  shape-rendering: auto;
+}
+
+.scene:hover {
+  /*fill-opacity: 0.6;*/
+  color: #FFFF00;
+}
+
+.node {
+  cursor: pointer;
+}
+
+.node text {
+  pointer-events: none;
+  text-shadow: 1px 1px #fff;
+  /*font-family: "Walter Turncoat", sans-serif;*/
+  font-size: 10px;
+}
+
+.link {
+  fill: none;
+}
+
+.link:hover {
+  stroke-opacity: 1;
+}
+
+.comic-title {
+  cursor: pointer;
+  pointer-events: all;
+  font-family: "Cutive Mono", sans-serif;
+  font-size: 18px;
+  font-weight: normal;
+  line-height: 1em;
+  letter-spacing: -1px;
+}
+
+#paper-title-box {
+  z-index: 5;
+  position: absolute;
+  left: 30px;
+  top: 15px;
+  padding: 10px;
+  height: 35px;
+  width: calc(100% - 195px);
+  border: 1px solid #f1f2f1;
+}
+
+.paper-title {
+  font-size: 14px;
+}
+
+.paper-title-placeholder {
+  font-size: 14px;
+  opacity: 0.5;
+}
+
+p.step {
+  margin: -0.5em 0 0 1.2em;
+}
+
+p.todo {
+  font-style: italic;
+  margin: 0 0 0 1.2em;
+  color: #580000;
+  font-size: 12px;
 }
 
 .page-header {
@@ -568,6 +722,29 @@ ul.results-list .list-name {
   stroke: #8783B9;
 }
 
+#force-directed-graph .interlinks-label {
+  float: right;
+  position: relative;
+  color: #3a3a3a;
+  font-weight: normal;
+  padding: 10px 15px 0 0;
+}
+#force-directed-graph .interlinks-label input {
+  margin-left: 5px;
+}
+#force-directed-graph svg {
+  background: none;
+}
+#force-directed-graph .node text {
+  fill: #fff;
+  text-shadow: none;
+  font-size: 14px;
+  text-anchor: middle;
+}
+#force-directed-graph .link {
+  stroke: #4a4a4a;
+}
+
 .paper-img {
   margin: 0 -45px 30px;
   width: calc(100% + 90px);
@@ -586,6 +763,15 @@ ul.results-list .list-name {
 
 .paper-download-buttons {
   text-align: center;
+}
+
+#authors-coauthors-chart .helper-text {
+  display: none;
+}
+@media (min-width: 700px) {
+  #authors-coauthors-chart .helper-text {
+    display: inherit;
+  }
 }
 
 html {

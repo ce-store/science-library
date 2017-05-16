@@ -21,6 +21,8 @@ body > pre {
 
 #narrative-chart {
   height: 400px;
+  border: 1px solid $background-light;
+  position: relative;
 }
 
 .narrative-legend {
@@ -31,7 +33,7 @@ body > pre {
   padding: 10px;
   height: 65px;
   width: 120px;
-  border: 1px solid #a1a1a1;
+  border: 1px solid $background-light;
 }
 
 .legend-key {
@@ -94,7 +96,7 @@ sup, sub {
 .node text {
   pointer-events: none;
   text-shadow: 1px 1px #fff;
-  font-family: "Walter Turncoat", sans-serif;
+  /*font-family: "Walter Turncoat", sans-serif;*/
   font-size: 10px;
 }
 
@@ -124,7 +126,7 @@ sup, sub {
   padding: 10px;
   height: 35px;
   width: calc(100% - 195px);
-  border: 1px solid #a1a1a1;
+  border: 1px solid $background-light;
 }
 
 .paper-title {

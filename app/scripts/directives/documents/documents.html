@@ -33,46 +33,7 @@
 
 <div class="col-md-4">
   <!-- Publications -->
-  <h3>Statistics</h3>
-
-  <div class="statistics">
-    <dl ng-class="[{'answer-highlight': publicationsHighlight}]">
-      <div ng-show="totalPublications" ng-class="[{'answer-highlight': total_publication_countHighlight}]">
-        <dt>Total (External)</dt>
-        <dd>{{totalPublications}}</dd>
-      </div>
-    </dl>
-    <hr class="statistics-hr">
-    <dl ng-class="[{'answer-highlight': publicationsHighlight}]">
-      <div ng-show="journalPapers" ng-class="[{'answer-highlight': journal_paper_countHighlight}]">
-        <dt>Journals</dt>
-        <dd>{{journalPapers}}</dd>
-      </div>
-      <div ng-show="externalPapers" ng-class="[{'answer-highlight': external_paper_countHighlight}]">
-        <dt>External Conferences</dt>
-        <dd>{{externalPapers}}</dd>
-      </div>
-      <div ng-show="patents" ng-class="[{'answer-highlight': patent_countHighlight}]">
-        <dt>Patents</dt>
-        <dd>{{patents}}</dd>
-      </div>
-    </dl>
-    <hr class="statistics-hr">
-    <dl ng-class="[{'answer-highlight': publicationsHighlight}]">
-      <div ng-show="internalPapers" ng-class="[{'answer-highlight': internal_paper_countHighlight}]">
-        <dt>Internal Conferences</dt>
-        <dd>{{internalPapers}}</dd>
-      </div>
-      <div ng-show="technicalReports" ng-class="[{'answer-highlight': technical_report_countHighlight}]">
-        <dt>Technical Reports</dt>
-        <dd>{{technicalReports}}</dd>
-      </div>
-      <div ng-show="otherDocuments" ng-class="[{'answer-highlight': other_document_countHighlight}]">
-        <dt>Other Documents</dt>
-        <dd>{{otherDocuments}}</dd>
-      </div>
-    </dl>
-  </div>
+  <ita-statistics></ita-statistics>
 
   <div pie-chart data="pieData" factor="0.33"></div>
 

@@ -10,7 +10,7 @@ angular.module('scienceLibrary')
   'use strict';
 
   return {
-    template: "<div id='force-directed-graph'></div>",
+    template: '<div id="force-directed-graph"></div>',
     restrict: 'E',
     link: function postLink(scope, element, attrs) {
       var expNodes = $parse(attrs.nodes);
@@ -45,22 +45,31 @@ angular.module('scienceLibrary')
       });
 
       var d3 = $window.d3;
-      var width = scope.width * 0.75 - 100,
-          height = scope.height - 320;
+
+      var width, height;
+
+      if (scope.width < 700) {
+        width = scope.width - 60;
+        height = 300;
+      } else {
+        width = scope.width * 0.75 - 100;
+        height = scope.height - 460;
+      }
+
       var max = 0;
       var showInterlinks = true;
 
       var color = d3.scale.ordinal()
-          .domain(["AC", "IND", "GOV"])
-          .range(["#5596e6", "#ff7f0e", "#2ca02c"]);
+          .domain(['AC', 'IND', 'GOV'])
+          .range(['#5596e6', '#ff7f0e', '#2ca02c']);
 
       var tick = function() {
-        link.attr("x1", function(d) { return d.source.x; })
-            .attr("y1", function(d) { return d.source.y; })
-            .attr("x2", function(d) { return d.target.x; })
-            .attr("y2", function(d) { return d.target.y; });
+        link.attr('x1', function(d) { return d.source.x; })
+            .attr('y1', function(d) { return d.source.y; })
+            .attr('x2', function(d) { return d.target.x; })
+            .attr('y2', function(d) { return d.target.y; });
 
-        node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+        node.attr('transform', function(d) { return 'translate(' + d.x + ',' + d.y + ')'; });
       };
 
       var force = d3.layout.force()
@@ -68,53 +77,53 @@ angular.module('scienceLibrary')
             return d.value / max;
           })
           .size([width, height])
-          .on("tick", tick);
+          .on('tick', tick);
 
       var tip = d3.tip()
           .attr('class', 'd3-tip dark-tip small-tip')
           .offset([-10, 0])
           .html(function(d) {
-            var visibleCoAuthors = d3.selectAll(".link-" + d.id)[0].length;
+            var visibleCoAuthors = d3.selectAll('.link-' + d.id)[0].length;
 
-            var html = "<span>Name: </span><span class='highlight'>" + d.name + "</span><br>";
+            var html = '<span>Name: </span><span class="highlight">' + d.name + '</span><br>';
             if (d.id !== allNodes[0].id) {
-              html += "<span>Papers with " + allNodes[0].name + ": </span><span class='highlight'>" + d.count + "</span><br>";
+              html += '<span>Papers with ' + allNodes[0].name + ': </span><span class="highlight">' + d.count + '</span><br>';
             }
-            html += "<span>Visible co-authors: </span><span class='highlight'>" + visibleCoAuthors + "</span>";
+            html += '<span>Visible co-authors: </span><span class="highlight">' + visibleCoAuthors + '</span>';
 
             return html;
           });
 
       var toggleInterlinks = function() {
-        showInterlinks = d3.select("#interlinks").property("checked");
+        showInterlinks = d3.select('#interlinks').property('checked');
         filterData();
       };
 
-      d3.select("#force-directed-graph")
-        .append("label")
-            .attr("class", "interlinks-label")
-            .attr("for", "interlinks")
-            .text("Show interlinks")
-        .append("input")
-            .attr("checked", true)
-            .attr("type", "checkbox")
-            .attr("id", "interlinks")
+      d3.select('#force-directed-graph')
+        .append('label')
+            .attr('class', 'interlinks-label')
+            .attr('for', 'interlinks')
+            .text('Show interlinks')
+        .append('input')
+            .attr('checked', true)
+            .attr('type', 'checkbox')
+            .attr('id', 'interlinks')
             .on('click', toggleInterlinks);
 
-      var svg = d3.select("#force-directed-graph")
-        .append("svg")
-          .attr("width", width)
-          .attr("height", height);
+      var svg = d3.select('#force-directed-graph')
+        .append('svg')
+          .attr('width', width)
+          .attr('height', height);
 
-      var linkGroup = svg.append("g")
-          .attr("class", "link-group");
-      var nodeGroup = svg.append("g")
-          .attr("class", "node-group");
+      var linkGroup = svg.append('g')
+          .attr('class', 'link-group');
+      var nodeGroup = svg.append('g')
+          .attr('class', 'node-group');
 
       svg.call(tip);
 
-      var node = nodeGroup.selectAll(".node");
-      var link = linkGroup.selectAll(".link");
+      var node = nodeGroup.selectAll('.node');
+      var link = linkGroup.selectAll('.link');
 
       var filterData = function() {
         if (allNodes) {
@@ -131,9 +140,9 @@ angular.module('scienceLibrary')
 
           // generate nodes and root links
           allNodes.forEach(function(d, i) {
-            if (d.group === "AC" && acInput ||
-              d.group === "GOV" && govInput ||
-              d.group === "IND" && indInput ||
+            if (d.group === 'AC' && acInput ||
+              d.group === 'GOV' && govInput ||
+              d.group === 'IND' && indInput ||
               d.id === scope.authorId) {
               if (i === 0) {
                 rootFound = true;
@@ -213,8 +222,8 @@ angular.module('scienceLibrary')
       };
 
       var getInitials = function(name) {
-        var words = name.split(" ");
-        var initials = "";
+        var words = name.split(' ');
+        var initials = '';
         for (var i in words) {
           initials += words[i].charAt(0);
         }
@@ -228,80 +237,80 @@ angular.module('scienceLibrary')
       var mousemove = function(d) {
         tip.show(d);
 
-        d3.selectAll(".link-" + d.id)
-            .style("opacity", 1);
-        d3.select(".node-" + d.id + " circle")
-            .style("stroke-width", 2)
-            .style("stroke", "#fff");
+        d3.selectAll('.link-' + d.id)
+            .style('opacity', 1);
+        d3.select('.node-' + d.id + ' circle')
+            .style('stroke-width', 2)
+            .style('stroke', '#fff');
 
         for (var i in linksMap[d.id]) {
           var targetId = linksMap[d.id][i];
-          d3.select(".node-" + targetId + " circle")
-              .style("stroke-width", 2)
-              .style("stroke", "#fff");
+          d3.select('.node-' + targetId + ' circle')
+              .style('stroke-width', 2)
+              .style('stroke', '#fff');
         }
       };
 
       var mouseout = function(d) {
         tip.hide(d);
 
-        d3.selectAll(".link-" + d.id)
-            .style("opacity", getOpacity);
-        d3.select(".node-" + d.id + " circle")
-            .style("stroke-width", 0);
+        d3.selectAll('.link-' + d.id)
+            .style('opacity', getOpacity);
+        d3.select('.node-' + d.id + ' circle')
+            .style('stroke-width', 0);
 
         for (var i in linksMap[d.id]) {
           var targetId = linksMap[d.id][i];
-          d3.select(".node-" + targetId + " circle")
-              .style("stroke-width", 0);
+          d3.select('.node-' + targetId + ' circle')
+              .style('stroke-width', 0);
         }
       };
 
       var updateGraph = function() {
         link = link.data(force.links(), function(d) { return d.id; });
 
-        var line = link.enter().append("line")
-            .attr("class", function(d) {
-              return "link link-" + d.source.id + " link-" + d.target.id;
+        var line = link.enter().append('line')
+            .attr('class', function(d) {
+              return 'link link-' + d.source.id + ' link-' + d.target.id;
             });
 
-        line.style("stroke-width", function(d) { return Math.sqrt(d.value); })
-            .style("opacity", getOpacity);
+        line.style('stroke-width', function(d) { return Math.sqrt(d.value); })
+            .style('opacity', getOpacity);
 
         link.exit()
           .remove();
 
         node = node.data(force.nodes(), function(d) { return d.id; });
 
-        var g = node.enter().append("g")
-            .attr("class", function(d) {
-              return "node node-" + d.id;
+        var g = node.enter().append('g')
+            .attr('class', function(d) {
+              return 'node node-' + d.id;
             });
 
         g.filter(function(d, i) {
           return i === 0;
-        }).append("circle")
-            .attr("r", 25)
-            .style("fill", function(d) { return color(d.group); })
+        }).append('circle')
+            .attr('r', 25)
+            .style('fill', function(d) { return color(d.group); })
             .call(force.drag)
             .on('mousemove', mousemove)
             .on('mouseout', mouseout);
 
         g.filter(function(d, i) {
           return i !== 0;
-        }).append("circle")
-            .attr("r", 14)
-            .style("fill", function(d) { return color(d.group); })
+        }).append('circle')
+            .attr('r', 14)
+            .style('fill', function(d) { return color(d.group); })
             .call(force.drag)
             .on('mousemove', mousemove)
             .on('mouseout', mouseout)
             .on('click', function(d) {
-              var url = urls.scienceLibrary + "/collaboration?author=" + nodes[0].id + "&author=" + d.id;
+              var url = urls.scienceLibrary + '/collaboration?author=' + nodes[0].id + '&author=' + d.id;
               window.location.href = url;
             });
 
-        g.append("text")
-            .attr("dy", ".35em")
+        g.append('text')
+            .attr('dy', '.35em')
             .text(function(d) { return getInitials(d.name); });
 
         node.exit()

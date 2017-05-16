@@ -427,7 +427,7 @@ angular.module('scienceLibrary')
           $scope.internalPapers = $scope.typeCount[types[$scope.internalConferenceType]];
           $scope.technicalReports = $scope.typeCount[types[$scope.technicalReportType]];
           $scope.otherDocuments = $scope.typeCount[types[$scope.otherDocumentType]];
-          $scope.totalPublications = $scope.journalPapers + $scope.externalPapers + $scope.patents;
+          $scope.totalExternalPublications = $scope.journalPapers + $scope.externalPapers + $scope.patents;
 
           $scope.pieData = [{
             label: types[$scope.journalType],

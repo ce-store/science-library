@@ -23,7 +23,6 @@
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css styles/main.css -->
-    <!-- <link rel="stylesheet" href="styles/main.css"> -->
     <link rel="stylesheet" href="styles/style.css">
     <!-- endbuild -->
   </head>
@@ -65,6 +64,11 @@
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="bower_components/angular-simple-logger/dist/angular-simple-logger.js"></script>
     <script src="bower_components/lodash/lodash.js"></script>
+    <script src="bower_components/markerclustererplus/src/markerclusterer.js"></script>
+    <script src="bower_components/google-maps-utility-library-v3-markerwithlabel/dist/markerwithlabel.js"></script>
+    <script src="bower_components/google-maps-utility-library-v3-infobox/dist/infobox.js"></script>
+    <script src="bower_components/google-maps-utility-library-v3-keydragzoom/dist/keydragzoom.js"></script>
+    <script src="bower_components/js-rich-marker/src/richmarker.js"></script>
     <script src="bower_components/angular-google-maps/dist/angular-google-maps.js"></script>
     <script src="bower_components/angular-datamaps/dist/angular-datamaps.min.js"></script>
     <script src="bower_components/angular-local-storage/dist/angular-local-storage.js"></script>
@@ -79,6 +83,7 @@
     <script src="app.js"></script>
     <script src="scripts/routes/home/home.js"></script>
     <script src="scripts/routes/document/document.js"></script>
+    <script src="scripts/routes/person/person.js"></script>
 
     <script src="scripts/directives/documents/documents.js"></script>
     <script src="scripts/directives/authors/authors.js"></script>
@@ -90,6 +95,7 @@
     <script src="scripts/directives/interactive-header/interactive-header.js"></script>
     <script src="scripts/directives/header/ita-header.js"></script>
     <script src="scripts/directives/footer/ita-footer.js"></script>
+    <script src="scripts/directives/statistics/statistics.js"></script>
     <script src="scripts/directives/heatmap.js"></script>
 
     <script src="scripts/directives/edge-bundle-chart.js"></script>
@@ -117,7 +123,7 @@
 
     <script src="scripts/controllers/main.js"></script>
     <script src="scripts/controllers/venue.js"></script>
-    <script src="scripts/controllers/author.js"></script>
+    <!-- <script src="scripts/controllers/author.js"></script> -->
     <script src="scripts/controllers/results.js"></script>
     <script src="scripts/controllers/organisation.js"></script>
     <script src="scripts/controllers/project.js"></script>

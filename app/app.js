@@ -36,7 +36,7 @@ angular.module('scienceLibrary', [
     })
     .state('author', {
       url: '/science-library/author/:authorId?view',
-      templateUrl: 'views/science-library/author.html',
+      templateUrl: 'scripts/routes/person/person.html',
       controller: 'AuthorCtrl'
     })
     .state('paper', {

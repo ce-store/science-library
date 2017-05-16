@@ -37,7 +37,7 @@ angular.module('scienceLibrary')
           height = 300;
         } else {
           width = (scope.width - 200) * factor;
-          height = scope.height - 585;
+          height = scope.height - 685;
         }
 
         var radius = Math.min(width, height) / 2;
@@ -48,12 +48,12 @@ angular.module('scienceLibrary')
         var color = d3.scale.ordinal()
             .range(colours.papers);
 
-        angular.element(".pie-svg").remove();
+        angular.element('.pie-svg').remove();
         var svg = d3.select('#pie-chart')
           .append('svg')
           .attr('width', width)
           .attr('height', height)
-          .attr("class", "pie-svg")
+          .attr('class', 'pie-svg')
           .append('g')
           .attr('transform', 'translate(' + (width / 2) +
             ',' + (height / 2) + ')');

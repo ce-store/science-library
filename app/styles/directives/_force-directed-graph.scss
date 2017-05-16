@@ -1,0 +1,28 @@
+#force-directed-graph {
+  .interlinks-label {
+    float: right;
+    position: relative;
+    color: $text-colour-body;
+    font-weight: normal;
+    padding: 10px 15px 0 0;
+  }
+
+  .interlinks-label input {
+    margin-left: 5px;
+  }
+
+  svg {
+    background: none;
+  }
+
+  .node text {
+    fill: $text-colour-light;
+    text-shadow: none;
+    font-size: 14px;
+    text-anchor: middle;
+  }
+
+  .link {
+    stroke: $background-dark;
+  }
+}

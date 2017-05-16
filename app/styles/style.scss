@@ -8,6 +8,7 @@
  @import "buttons";
  @import "labels";
  @import "lists";
+ @import "narrative";
  @import "directives/header";
  @import "directives/footer";
  @import "directives/interactive-header";
@@ -15,7 +16,9 @@
  @import "directives/scatter-chart";
  @import "directives/sunburst";
  @import "directives/edge-bundle-chart";
+ @import "directives/force-directed-graph";
  @import "routes/document";
+ @import "routes/person";
 
 html {
  position: relative;
