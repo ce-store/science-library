@@ -92,6 +92,14 @@ angular.module('itapapersApp')
       $scope.presentationSource = presentationThumbnail;
       $scope.posterSource       = posterThumbnail;
       $scope.source = $scope.paperSource;
+
+      if (!$scope.source) {
+        $scope.source = $scope.posterSource;
+      }
+      if (!$scope.source) {
+        $scope.source = $scope.presentationSource;
+      }
+
       $scope.paperType  = utils.getType(conceptNames);
       $scope.paperClass = utils.getClassName($scope.paperType);
       $scope.venueDetails = venueDetails;
