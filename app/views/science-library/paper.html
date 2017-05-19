@@ -19,21 +19,21 @@
   <div class="row">
     <!-- Paper -->
     <div class="col-md-6">
-      <div ng-if="paperSource" >
+      <div ng-if="paperSource && source == paperSource" >
         <img class="paper-img" id="paper-img" ng-src="{{paperSource}}" ng-class="[{'answer-highlight': paper_thumbnailHighlight}]"/>
         <div class="paper-buttons">
           <button ng-if="posterSource && source !== posterSource" ng-click="show('poster')" class="btn">Show Poster</button>
           <button ng-if="presentationSource && source !== presentationSource" ng-click="show('presentation')" class="btn">Show Presentation</button>
         </div>
       </div>
-      <div ng-if="posterSource" >
+      <div ng-if="posterSource && source == posterSource" >
         <img class="poster-img" id="poster-img" ng-src="{{posterSource}}" ng-class="[{'answer-highlight': poster_thumbnailHighlight}]"/>
         <div class="paper-buttons">
           <button ng-if="paperSource && source !== paperSource" ng-click="show('paper')" class="btn">Show Paper</button>
           <button ng-if="presentationSource && source !== presentationSource" ng-click="show('presentation')" class="btn">Show Presentation</button>
         </div>
       </div>
-      <div ng-if="presentationSource" >
+      <div ng-if="presentationSource &&  source == presentationSource" >
         <img class="presentation-img" id="presentation-img" ng-src="{{presentationSource}}" ng-class="[{'answer-highlight': presentation_thumbnailHighlight}]"/>
         <div class="paper-buttons">
           <button ng-if="paperSource && source !== paperSource" ng-click="show('paper')" class="btn">Show Paper</button>
