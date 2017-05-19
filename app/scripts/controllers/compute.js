@@ -313,7 +313,8 @@ angular.module('itapapersApp')
 
         for (var paperId in person.instances["wrote"]) {
           var paper = person.instances["wrote"][paperId];
-          pcc += parseInt(paper.values["citation count"]);
+          var papCc = paper.values["citation count"] | 0;
+          pcc += parseInt(papCc);
         }
 
         person.values["citation count"] = pcc;
