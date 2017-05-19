@@ -1,5 +1,5 @@
 {
-  "name": "itapapers",
+  "name": "science-library",
   "private": true,
   "scripts": {
     "start": "node server.js"
