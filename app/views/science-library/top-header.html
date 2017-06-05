@@ -13,7 +13,7 @@
       </a>
       <ul class="uib-dropdown-menu" aria-labelledby="simple-dropdown">
         <li role="menuitem" ng-repeat="(key, type) in listTypes">
-          <a ng-show="type !== listTypes.projects" ui-sref="category({category: key})" ng-click="select(type)">{{type | capitalise}}</a>
+          <a ui-sref="category({category: key})" ng-click="select(type)">{{type | capitalise}}</a>
         </li>
       </ul>
     </span>

@@ -97,17 +97,25 @@ angular.module('itapapersApp')
       url:        'url',
       eventSeries:   'is part of',
       documentCount: 'paper count',
+      externalDocumentCount: 'external paper count',
       citationCount: 'citation count'
     },
     project: {
       name: 'name',
       paper: 'paper',
-      technicalArea: 'technical area'
+      technicalArea: 'technical area',
+      projectStatistic: 'project statistic',
+      documentCount:  'number of documents',
+      externalDocumentCount: 'number of external documents',
+      authorCount:    'number of authors',
+      organisationCount:    'number of organisations',
+      citationCount:  'citation count'
     },
     topic: {
       markerList:     'marker',
       topicStatistic: 'topic statistic',
       documentCount:  'number of documents',
+      externalDocumentCount: 'number of external documents',
       authorCount:    'number of authors',
       organisationCount:    'number of organisations',
       citationCount:  'citation count'
@@ -123,6 +131,7 @@ angular.module('itapapersApp')
       years:  'years ran',
       duration:   'years ran',
       documentCount: 'paper count',
+      externalDocumentCount: 'external paper count',
       citationCount: 'citation count',
       authorCount: 'author count',
       eventList: 'comprises'

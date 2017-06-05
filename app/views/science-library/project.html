@@ -7,38 +7,138 @@
   <div class="row">
     <!-- Description -->
     <p class="center">
-      <span ng-class="[{'answer-highlight': nameHighlight}]">{{name}}</span>
-      <span class="highlight" ng-class="[{'answer-highlight': technical_areaHighlight}]">({{technicalArea}})</span>
+      <span ng-class="[{'answer-highlight': nameHighlight}]">{{name | capitaliseFirst}}</span>
     </p>
   </div>
 
   <div class="row">
-    <div class="list-view">
-      <h3 class="floating-header">Publications</h3>
+    <div class="col-md-9">
+      <!-- Publications -->
+      <div ng-show="currentView === views[0]" class="list-view list-view-no-margin" id="publications-results-list">
+        <div class="col-md-12">
+          <top-header headertext="header"></top-header>
 
-      <div class="authorFilters">
-        <label class="journal"></label>
-        <input id="journalInput" type="checkbox" ng-model="journalInput">
-        <label class="external-conference"></label>
-        <input id="externalInput" type="checkbox" ng-model="externalInput">
-        <label class="internal-conference"></label>
-        <input id="internalInput" type="checkbox" ng-model="internalInput">
-        <label class="technical-report"></label>
-        <input id="technicalInput" type="checkbox" ng-model="technicalInput">
-        <label class="other-document"></label>
-        <input id="otherInput" type="checkbox" ng-model="otherInput">
-      </div>
+          <div class="authorFilters">
+            <label class="journal"></label>
+            <input id="journalInput" type="checkbox" ng-model="journalInput">
+            <label class="external-conference"></label>
+            <input id="externalInput" type="checkbox" ng-model="externalInput">
+            <label class="internal-conference"></label>
+            <input id="internalInput" type="checkbox" ng-model="internalInput">
+            <label class="technical-report"></label>
+            <input id="technicalInput" type="checkbox" ng-model="technicalInput">
+            <label class="other-document"></label>
+            <input id="otherInput" type="checkbox" ng-model="otherInput">
+          </div>
+        </div>
 
-      <div class="col-md-12 clear" ng-class="[{'answer-highlight': publicationsHighlight}]">
         <!-- Results list -->
-        <ul class="results-list" id="publications-results-list">
-          <li class="no-bullets" ng-repeat="item in publications | orderBy : 'name' | orderBy : '-citations' | filter : filterPapers">
-            <span ng-class="[className, ('document-' + $index)]" ng-repeat="className in item.class track by $index"></span>
-            <a ng-href="{{scienceLibrary}}/paper/{{item.id}}" class="list-name">{{item.name}}</a> <!-- <small class="highlight">({{item.citations}})</small> -->
-          </li>
-          <p ng-if="publications.length === 0">No publications found.</p>
-        </ul>
+        <div class="col-md-12">
+          <ul class="results-list clear">
+            <li class="no-bullets" ng-repeat="item in publications | orderBy : 'name' | orderBy : sortCommand | filter : filterPapers">
+              <span ng-class="[className, ('document-' + $index)]" ng-repeat="className in item.class track by $index"></span>
+              <a ng-href="{{scienceLibrary}}/paper/{{item.id}}" class="list-name">{{item.name}}</a>
+              <small ng-if="item.noteworthy">
+                <span ng-if="item.url" >
+                  <a href="{{item.url}}" target="_new"><span class="glyphicon glyphicon-star-empty highlight" aria-hidden="true"></span></a>
+                </span>
+                <span ng-if="!item.url" class="glyphicon glyphicon-star-empty highlight" aria-hidden="true"></span>
+                ({{item.noteworthy}})
+              </small>
+              <small ng-if="item[sortValue] && sortShow" class="highlight">({{formatSortValue(item[sortValue], sortCommand)}})</small>
+            </li>
+            <p ng-if="publications.length === 0">No publications found.</p>
+          </ul>
+        </div>
       </div>
+
+      <!-- Authors -->
+      <div ng-show="currentView === views[1]" class="list-view list-view-no-margin" id="authors-results-list">
+        <div class="col-md-12">
+          <top-header headertext="header"></top-header>
+        </div>
+
+        <div class="col-md-12">
+          <!-- Results list -->
+          <ul class="results-list clear">
+            <li ng-repeat="item in authors | orderBy : 'name' | orderBy : sortCommand">
+              <a ng-href="{{scienceLibrary}}/author/{{item.id}}" class="list-name">{{item.name}}</a>
+              <small ng-if="item[sortValue] && sortShow" class="highlight">({{item[sortValue]}})</small>
+            </li>
+            <p ng-if="authors.length === 0">No authors found.</p>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Organisations -->
+      <div ng-show="currentView === views[2]" class="list-view list-view-no-margin" id="orgs-results-list">
+        <div class="col-md-12">
+          <top-header headertext="header"></top-header>
+        </div>
+
+        <!-- Results list -->
+        <div class="col-md-12">
+          <ul class="results-list">
+            <li ng-repeat="item in organisations | orderBy : 'name' | orderBy : sortCommand">
+              <a ng-href="{{scienceLibrary}}/organisation/{{item.id}}" class="list-name">{{item.name}}</a>
+              <small ng-if="item[sortValue] && sortShow" class="highlight">({{item[sortValue]}})</small>
+            </li>
+            <p ng-if="organisation.length === 0">No organisations found.</p>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="center">
+        <button ng-show="currentView !== views[0]" class="btn view-btn" ng-click="showView(views[0])">List Publications</button>
+        <button ng-show="currentView !== views[1]" class="btn view-btn" ng-click="showView(views[1])">List Authors</button>
+        <button ng-show="currentView !== views[2]" class="btn view-btn" ng-click="showView(views[2])">List Organisations</button>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <!-- Publications -->
+      <div>
+        <h3>Statistics</h3>
+
+        <div class="total-publication-count">
+          <dl class="dl-horizontal dl-publications" ng-class="[{'answer-highlight': publicationsHighlight}]">
+            <div ng-show="paperCounts.total" ng-class="[{'answer-highlight': total_publication_countHighlight}]">
+              <dt>Total (External)</dt>
+              <dd>{{paperCounts.total}}</dd>
+            </div>
+          </dl>
+          <dl class="dl-horizontal dl-publications" ng-class="[{'answer-highlight': publicationsHighlight}]">
+            <div ng-show="paperCounts.journal" ng-class="[{'answer-highlight': journal_paper_countHighlight}]">
+              <dt>Journals</dt>
+              <dd>{{paperCounts.journal}}</dd>
+            </div>
+            <div ng-show="paperCounts.external" ng-class="[{'answer-highlight': external_paper_countHighlight}]">
+              <dt>External Conferences</dt>
+              <dd>{{paperCounts.external}}</dd>
+            </div>
+            <div ng-show="paperCounts.patent" ng-class="[{'answer-highlight': patent_countHighlight}]">
+              <dt>Patents</dt>
+              <dd>{{paperCounts.patent}}</dd>
+            </div>
+            <div ng-show="paperCounts.internal" ng-class="[{'answer-highlight': internal_paper_countHighlight}]">
+              <dt>Internal Conferences</dt>
+              <dd>{{paperCounts.internal}}</dd>
+            </div>
+            <div ng-show="paperCounts.technical" ng-class="[{'answer-highlight': technical_report_countHighlight}]">
+              <dt>Technical Reports</dt>
+              <dd>{{paperCounts.technical}}</dd>
+            </div>
+            <div ng-show="paperCounts.other" ng-class="[{'answer-highlight': other_document_countHighlight}]">
+              <dt>Other Documents</dt>
+              <dd>{{paperCounts.other}}</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+
+      <!-- Pie Chart -->
+      <div pie-chart data="pieData" factor="0.25"></div>
     </div>
   </div>
 </div>

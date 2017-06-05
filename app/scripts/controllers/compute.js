@@ -16,18 +16,21 @@ angular.module('itapapersApp')
 
   var appendErrors = function(response) {
     var alerts = response.data.alerts;
-    if (alerts.errors.length) {
-      $scope.computedCe.push('--Alerts:');
-      for (var i in alerts.errors) {
-        var msg = alerts.errors[i];
-        $scope.computedCe.push('--' + msg);
+
+    if (alerts != null) {
+      if (alerts.errors.length) {
+        $scope.computedCe.push('--Alerts:');
+        for (var i in alerts.errors) {
+          var msg = alerts.errors[i];
+          $scope.computedCe.push('--' + msg);
+        }
       }
-    }
-    if (alerts.warnings.length) {
-      $scope.computedCe.push('--Warnings:');
-      for (var i in alerts.warnings) {
-        var msg = alerts.warnings[i];
-        $scope.computedCe.push('--' + msg);
+      if (alerts.warnings.length) {
+        $scope.computedCe.push('--Warnings:');
+        for (var i in alerts.warnings) {
+          var msg = alerts.warnings[i];
+          $scope.computedCe.push('--' + msg);
+        }
       }
     }
   };

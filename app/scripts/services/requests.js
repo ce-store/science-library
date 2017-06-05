@@ -276,7 +276,11 @@ angular.module('itapapersApp')
       var limRels = null;
 
       limRels = ce.project.paper + ',';
-      limRels += ce.project.technicalArea;
+      limRels += ce.project.technicalArea + ',';
+      limRels += ce.project.projectStatistic + ',';
+      limRels += ce.statistic.person + ',';
+      limRels += ce.statistic.documentList + ',';
+      limRels += ce.statistic.organisation;
 
       url = '/instances/' + projectId;
       url += '?showStats=false';

@@ -149,22 +149,21 @@
       </div>
 
       <!-- Projects list -->
-      <!-- <div ng-show="listName === listTypes.projects">
+      <div ng-if="listName === listTypes.projects">
         <div class="col-md-12">
           <top-header></top-header>
+        </div>
 
-          <ul class="results-list clear">
-            <div ng-repeat="area in areaNames | orderBy">
-              <h6>{{area}}</h6>
-
-              <li class="indented-list-item" ng-repeat="item in projects[area] | orderBy : 'name' | orderBy : '-value' | limitTo : listLength">
-                <a class="list-name" ng-href="{{scienceLibrary}}/{{listName | limitTo : listName.length - 1}}/{{item.id}}">{{item.name}}</a>
-                <small ng-if="item.value" class="highlight">({{item.value}} papers)</small>
-              </li>
-            </div>
+        <div class="col-md-12">
+          <ul class="results-list">
+            <li ng-repeat="item in list | orderBy : 'id' | orderBy : sortCommand">
+              <!-- Projects list -->
+              <a ng-href="{{scienceLibrary}}/{{listName | limitTo : listName.length - 1}}/{{item.id}}" class="list-name">{{ item.name | capitaliseFirst }}</a>
+              <small ng-if="item[sortValue] && sortShow" class="highlight">({{formatSortValue(item[sortValue], sortCommand)}})</small>
+            </li>
           </ul>
         </div>
-      </div> -->
+      </div>
 
       <!-- Organisation list -->
       <div ng-show="listName === listTypes.organisations">

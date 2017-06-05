@@ -37,12 +37,17 @@ angular.module('itapapersApp')
       reverse:  ['-', '-', '-', '-', '-', '-', '+']
     },
     'venues': {
-      names:    ['paper count', 'author count', 'citation count', 'years attended', 'name'],
+      names:    ['external paper count', 'author count', 'citation count', 'years attended', 'name'],
       values:   ['papers', 'authors', 'citations', 'duration', 'name'],
       show:     [true, true, true, true, false],
       reverse:  ['-', '-', '-', '-', '+']
     },
-    'projects': {},
+    'projects': {
+      names:    ['external paper count', 'author count', 'organisation count', 'citation count', 'name'],
+      values:   ['papers', 'authors', 'organisations', 'citations', 'name'],
+      show:     [true, true, true, true, false],
+      reverse:  ['-', '-', '-', '-', '+']
+    },
     'organisations': {
       names:    ['authors', 'external paper count', 'citation count', 'name'],
       values:   ['value', 'externalCount', 'citations', 'name'],
@@ -51,7 +56,7 @@ angular.module('itapapersApp')
     },
     'co-authors': {},
     'topics': {
-      names:    ['paper count', 'author count', 'organisation count', 'citation count', 'name'],
+      names:    ['external paper count', 'author count', 'organisation count', 'citation count', 'name'],
       values:   ['papers', 'authors', 'organisations', 'citations', 'name'],
       show:     [true, true, true, true, true, false],
       reverse:  ['-', '-', '-', '-', '+']
@@ -327,7 +332,7 @@ angular.module('itapapersApp')
         var venueProps = instances[data[i][0]].property_values;
 
         var name = utils.getProperty(venueProps, ce.series.name);
-        var venuePaperCount = utils.getIntProperty(venueProps, ce.series.documentCount);
+        var venuePaperCount = utils.getIntProperty(venueProps, ce.series.externalDocumentCount);
         var venueAuthorCount = utils.getIntProperty(venueProps, ce.series.authorCount);
         var venueCitationCount = utils.getIntProperty(venueProps, ce.series.citationCount);;
         var venueDuration = utils.getIntProperty(venueProps, ce.series.duration)
@@ -343,6 +348,24 @@ angular.module('itapapersApp')
         });
       } else if ($scope.listName === $scope.listTypes.projects) {
         // projects page
+        var projectProps = instances[id].property_values;
+
+        // project properties
+        var projectName = utils.getProperty(projectProps, ce.project.name);
+        var projectDocumentCount = utils.getLatestIntProperty(projectProps, ce.project.externalDocumentCount);
+        var projectAuthorCount = utils.getLatestIntProperty(projectProps, ce.project.authorCount);
+        var projectOrganisationCount = utils.getLatestIntProperty(projectProps, ce.project.organisationCount);
+        var projectCitationCount = utils.getLatestIntProperty(projectProps, ce.project.citationCount);
+
+        // push data to list
+        $scope.list.push({
+          id:     id,
+          name:     projectName,
+          papers: projectDocumentCount,
+          authors: projectAuthorCount,
+          organisations: projectOrganisationCount,
+          citations: projectCitationCount
+        });
       } else if ($scope.listName === $scope.listTypes.organisations) {
         // organisations page
         var orgProps = instances[id].property_values;
@@ -379,7 +402,7 @@ angular.module('itapapersApp')
         var topicProps = instances[id].property_values;
 
         // topic properties
-        var topicDocumentCount = utils.getLatestIntProperty(topicProps, ce.topic.documentCount);
+        var topicDocumentCount = utils.getLatestIntProperty(topicProps, ce.topic.externalDocumentCount);
         var topicAuthorCount = utils.getLatestIntProperty(topicProps, ce.topic.authorCount);
         var topicOrganisationCount = utils.getLatestIntProperty(topicProps, ce.topic.organisationCount);
         var topicCitationCount = utils.getLatestIntProperty(topicProps, ce.topic.citationCount);
