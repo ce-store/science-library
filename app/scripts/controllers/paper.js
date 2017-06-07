@@ -166,7 +166,7 @@ angular.module('itapapersApp')
         var eventSeriesId = utils.getProperty(eventProps, ce.venue.eventSeries);
         var eventLocation = utils.getProperty(eventProps, ce.venue.location);
         var eventSeries = relatedInstances[eventSeriesId];
-console.log(eventLocation);
+
         $scope.venue = {
           id:   eventSeries._id,
           year: event._id,
@@ -178,7 +178,7 @@ console.log(eventLocation);
           store.getVenue(eventLocation)
             .then(function(data) {
               var locationProps = data.property_values;
-console.log(data);
+
               if (locationProps) {
                 // venue properties
                 $scope.venue.lon = utils.getProperty(locationProps, ce.location.lon);
@@ -321,7 +321,5 @@ console.log(data);
       }
 
       refreshHighlight();
-
-      console.log($scope);
   });
 }]);
