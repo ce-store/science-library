@@ -71,7 +71,7 @@ angular.module('itapapersApp')
       var venue     = utils.getProperty(properties, ce.paper.venue);
       var venueDetails = utils.getProperty(properties, ce.paper.venueDetails);
       var finalDate = utils.getProperty(properties, ce.paper.finalDate);
-      var project   = utils.getUnknownProperty(properties, ce.paper.project);
+      var projects   = utils.getListProperty(properties, ce.paper.project);
       var authorList  = utils.getListProperty(properties, ce.paper.authorList);
       var variantList = utils.getListProperty(properties, ce.paper.variantList);
       var noteworthyReason  = utils.getProperty(properties, ce.paper.noteworthyReason);
@@ -244,17 +244,22 @@ angular.module('itapapersApp')
         $scope.year = dateYear;
       }
 
-      // project
-      if (project && relatedInstances[project]) {
-        var projectProps = relatedInstances[project].property_values;
+      // projects
+      $scope.projects = [];
+      for (var j = 0; j < projects.length; ++j) {
+        var project = projects[j];
 
-        // project properties
-        var projectName = utils.getUnknownProperty(projectProps, ce.project.name);
+        if (project && relatedInstances[project]) {
+          var projectProps = relatedInstances[project].property_values;
 
-        $scope.project = {
-          id:   project,
-          name: projectName
-        };
+          // project properties
+          var projectName = utils.getUnknownProperty(projectProps, ce.project.name);
+
+          $scope.projects.push({
+            id:   project,
+            name: projectName
+          });
+        }
       }
 
       // abstract

@@ -56,10 +56,14 @@
               <small>({{orderedAuthors.length}})</small>
             </dd>
           </dl>
-          <dl class="dl-horizontal" ng-if="project" ng-class="[{'answer-highlight': projectHighlight}]">
-            <dt>Project</dt>
-            <!-- <dd ng-if="project"><a ng-href="{{scienceLibrary}}/project/{{project.id}}">{{project.name}}</a></dd> -->
-            <dd>{{project.name}}</dd>
+          <dl class="dl-horizontal" ng-if="projects" ng-class="[{'answer-highlight': projectHighlight}]">
+            <dt>Projects</dt>
+            <dd>
+              <span ng-repeat="project in projects">
+                <a ng-href="{{scienceLibrary}}/project/{{project.id}}">{{project.name}}</a><span ng-if="$index !== papers.length - 1">, </span>
+              </span>
+              <span ng-if="!projects">None</span>
+            </dd>
           </dl>
 
           <!-- Abstract -->
