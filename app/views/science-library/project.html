@@ -7,7 +7,7 @@
   <div class="row">
     <!-- Description -->
     <p class="center">
-      <span ng-class="[{'answer-highlight': nameHighlight}]">{{name | capitaliseFirst}}</span>
+      <span ng-class="[{'answer-highlight': nameHighlight}]">{{fullName}}</span>
     </p>
   </div>
 
@@ -38,6 +38,11 @@
             <li class="no-bullets" ng-repeat="item in publications | orderBy : 'name' | orderBy : sortCommand | filter : filterPapers">
               <span ng-class="[className, ('document-' + $index)]" ng-repeat="className in item.class track by $index"></span>
               <a ng-href="{{scienceLibrary}}/paper/{{item.id}}" class="list-name">{{item.name}}</a>
+              <span ng-if="item.projects">
+                <small>[</small>
+                <small ng-repeat="project in item.projects"><a href="{{scienceLibrary}}/project/{{project._id}}">{{project.codename}}</a>{{$last ? '' : ', '}}</small>
+                <small>]</small>
+              </span>
               <small ng-if="item.noteworthy">
                 <span ng-if="item.url" >
                   <a href="{{item.url}}" target="_new"><span class="glyphicon glyphicon-star-empty highlight" aria-hidden="true"></span></a>

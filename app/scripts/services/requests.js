@@ -279,6 +279,7 @@ angular.module('itapapersApp')
       limRels += ce.project.technicalArea + ',';
       limRels += ce.project.projectStatistic + ',';
       limRels += ce.statistic.person + ',';
+      limRels += ce.paper.project + ',';
       limRels += ce.statistic.documentList + ',';
       limRels += ce.statistic.organisation;
 

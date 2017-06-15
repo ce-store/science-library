@@ -48,8 +48,6 @@ angular.module('itapapersApp')
   });
 
   $scope.formatSortValue = function(rawVal, sortName) {
-    console.log(rawVal);
-    console.log(sortName);
     return utils.formatSortValue(rawVal, sortName);
   };
 
@@ -133,8 +131,8 @@ angular.module('itapapersApp')
       var properties = data.main_instance.property_values;
       var relatedInstances = data.related_instances;
       var documentMap = {};
-
       $scope.name = utils.getUnknownProperty(properties, "code name");
+      $scope.fullName = utils.getUnknownProperty(properties, "name");
 
       $scope.authorsHeader  = 'Authors who wrote for ' + $scope.name;
       $scope.papersHeader   = 'Papers created by ' + $scope.name;
@@ -161,6 +159,20 @@ angular.module('itapapersApp')
             var paperFinalDate = utils.getDateProperty(paperProps, ce.paper.finalDate);
             var paperCitationCount = utils.getIntProperty(paperProps, ce.paper.citationCount);
             var paperVariantList = utils.getListProperty(paperProps, ce.paper.variantList);
+            var projectIdList = utils.getListProperty(paperProps, ce.paper.project);
+            var projectList = [];
+
+            for (var j = 0; j < projectIdList.length; ++j) {
+              var projId = projectIdList[j];
+
+              if (projId != "Cross-project") {
+                var proj = relatedInstances[projId];
+
+                proj.codename = proj.property_values["code name"][0];
+
+                projectList.push(proj);
+              }
+            }
 
             if (!documentMap[id]) {
               var variantFound = false;
@@ -188,7 +200,8 @@ angular.module('itapapersApp')
                   url:        noteworthyUrl,
                   date:       paperFinalDate,
                   types:      [paperType],
-                  weight:     paperWeight
+                  weight:     paperWeight,
+                  projects:   projectList
                 };
               } else {
                 if (maxCitations < paperCitationCount) {
@@ -201,7 +214,8 @@ angular.module('itapapersApp')
                     url:        noteworthyUrl,
                     date:       paperFinalDate,
                     types:      [paperType].concat(variantTypes),
-                    weight:     paperWeight
+                    weight:     paperWeight,
+                    projects:   projectList
                   };
                 } else {
                   documentMap[variantFound].types.push(paperType);
@@ -293,7 +307,8 @@ angular.module('itapapersApp')
             citationCount: doc.citations,
             type:   utils.sortTypes(doc.types),
             class:  [],
-            weight: doc.weight
+            weight: doc.weight,
+            projects: doc.projects
           };
 
           for (var k = 0; k < paperItem.type.length; ++k) {
@@ -334,7 +349,5 @@ angular.module('itapapersApp')
       } else {
         $scope.showView($scope.views[0]);
       }
-
-      console.log($scope.organisations);
     });
 }]);
