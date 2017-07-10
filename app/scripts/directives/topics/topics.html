@@ -3,7 +3,7 @@
 </div>
 
 <div class="col-md-12" style="margin-bottom: 30px;">
-  <ul class="results-list">
+  <ul class="results-list" watch-height ng-style="venuesListStyle">
     <li ng-repeat="item in list | orderBy : 'id' | orderBy : sortCommand">
       <!-- Topics list -->
       <a ng-href="{{scienceLibrary}}/{{listName | limitTo : listName.length - 1}}/{{item.id}}" class="list-name">{{ item.id | capitaliseFirst }}</a>

@@ -10,6 +10,12 @@ ul.results-list {
   @media (min-width: 700px) {
     margin: 20px 15px 0 15px;
   }
+
+  @media (min-width: 992px) {
+    margin: 20px 15px 0 15px;
+    -webkit-mask-image: -webkit-gradient(linear, left 90%, left bottom, from(rgba(0,0,0,1)), to(rgba(0,0,0,0)));
+    padding-bottom: 10%;
+  }
 }
 
 ul.results-list li {

@@ -260,6 +260,13 @@ ul.results-list {
     margin: 20px 15px 0 15px;
   }
 }
+@media (min-width: 992px) {
+  ul.results-list {
+    margin: 20px 15px 0 15px;
+    -webkit-mask-image: -webkit-gradient(linear, left 90%, left bottom, from(black), to(transparent));
+    padding-bottom: 10%;
+  }
+}
 
 ul.results-list li {
   margin: 0 0 10px 0;
