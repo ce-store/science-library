@@ -31,6 +31,18 @@ angular.module('scienceLibrary')
         }
       };
 
+      scope.$watch(
+        function () {
+          var header = element[0].querySelector('.interactive-header');
+          return header.offsetHeight;
+        },
+        function (value) {
+          if (value !== 0 && value > scope.headerHeight) {
+            scope.headerHeight = value;
+          }
+        }
+      );
+
       scope.$watch('sort', function(newValue) {
         if (newValue) {
           scope.sortList(0);

@@ -3,7 +3,7 @@
 </div>
 
 <div class="col-md-12" style="margin-bottom: 30px;">
-  <ul class="results-list clear">
+  <ul class="results-list clear" watch-height ng-style="venuesListStyle">
     <li ng-repeat="item in list | orderBy : 'name' | orderBy : sortCommand">
       <a ng-href="{{scienceLibrary}}/{{listName | limitTo : listName.length - 1}}/{{item.id}}/" class="list-name">{{item.name}}</a>
       <small ng-if="item[sortValue] && sortShow" class="highlight">({{formatSortValue(item[sortValue], sortCommand)}})</small>

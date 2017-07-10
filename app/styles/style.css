@@ -114,6 +114,18 @@ p {
   color: #fff;
 }
 
+.btn-default.disabled:hover,
+.btn-default[disabled]:hover,
+fieldset[disabled] .btn-default:hover,
+.btn-default.disabled:focus,
+.btn-default[disabled]:focus,
+fieldset[disabled] .btn-default:focus,
+.btn-default.disabled.focus,
+.btn-default[disabled].focus,
+fieldset[disabled] .btn-default.focus {
+  background-color: #f49c4e;
+}
+
 .home-buttons-container {
   margin: 20px 0 0 0;
   text-align: center;
@@ -241,6 +253,7 @@ ul.no-bullets {
 
 ul.results-list {
   margin: 20px 15px 50px 15px;
+  overflow: scroll;
 }
 @media (min-width: 700px) {
   ul.results-list {

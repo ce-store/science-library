@@ -40,6 +40,19 @@
   color: $text-colour-light;
 }
 
+.btn-default.disabled:hover,
+.btn-default[disabled]:hover,
+fieldset[disabled] .btn-default:hover,
+.btn-default.disabled:focus,
+.btn-default[disabled]:focus,
+fieldset[disabled] .btn-default:focus,
+.btn-default.disabled.focus,
+.btn-default[disabled].focus,
+fieldset[disabled] .btn-default.focus {
+  background-color: $colour-one;
+  // border-color: #ccc;
+}
+
 .home-buttons-container {
   margin: 20px 0 0 0;
   text-align: center;

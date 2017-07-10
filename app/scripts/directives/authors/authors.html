@@ -1,16 +1,16 @@
 <div class="col-md-3">
   <interactive-header></interactive-header>
 
-  <ul class="results-list clear">
+  <ul class="results-list clear" watch-height ng-style="authorsListStyle">
     <li ng-repeat="item in list | orderBy : 'name' | orderBy : sortCommand | limitTo : listLength">
       <a ng-href="{{scienceLibrary}}/{{listName | limitTo : listName.length - 1}}/{{item.id}}" class="list-name">{{item.name}}</a>
       <small ng-if="item[sortValue] && sortShow" class="highlight">({{formatSortValue(item[sortValue], sortCommand)}})</small>
     </li>
-
-    <div ng-if="list.length > listLength" class="center">
-      <button class="btn btn-default see-more" ng-click="seeMore()">See more</button>
-    </div>
   </ul>
+
+  <div class="button-container" style="margin-bottom: 0;">
+    <button ng-class="{'disabled': list.length <= listLength}" class="btn btn-default" ng-click="seeMore()">See more</button>
+  </div>
 </div>
 
 <div class="col-md-9">

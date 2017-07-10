@@ -12,6 +12,19 @@ angular.module('scienceLibrary')
 
   return {
     templateUrl: 'scripts/directives/authors/authors.html',
-    restrict: 'E'
+    restrict: 'E',
+    link: function postLink(scope, element) {
+      scope.$watch(
+        function () {
+          var buttons = element[0].querySelector('.chart-btns');
+          return buttons.offsetHeight
+        },
+        function (value) {
+          if (value !== 0) {
+            scope.scatterButtonsHeight = value;
+          }
+        }
+      );
+    }
   };
 });

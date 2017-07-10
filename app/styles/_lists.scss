@@ -5,6 +5,7 @@ ul.no-bullets {
 
 ul.results-list {
   margin: 20px 15px 50px 15px;
+  overflow: scroll;
 
   @media (min-width: 700px) {
     margin: 20px 15px 0 15px;

@@ -5,7 +5,7 @@
 
 <h3 class="interactive-header">
   <!-- Top 50 -->
-  <span ng-if="!header">
+  <span ng-show="!header">
     View
     <span uib-dropdown on-toggle="toggled(open)" class="interactive-header-dropdown">
       <a href id="simple-dropdown" uib-dropdown-toggle>
@@ -17,10 +17,11 @@
         </li>
       </ul>
     </span>
+    &nbsp;
   </span>
 
   <!-- Header text -->
-  <span ng-if="header">
+  <span ng-show="header">
     {{header}}&nbsp;
   </span>
 

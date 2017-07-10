@@ -12,7 +12,7 @@ angular.module('scienceLibrary')
 
   $scope.scienceLibrary = urls.scienceLibrary;
   $scope.accepted = 'accepted';
-  $scope.listLength = 100;
+  $scope.listLength = 25;
   $scope.listTypes = {
     papers:   'papers',
     authors:  'authors',
@@ -90,7 +90,21 @@ angular.module('scienceLibrary')
     $scope.listLength += 500;
   };
 
+  // Watch for height changes on data message paragraph
+  $scope.$watch(
+    function () {
+      var message = angular.element('.data-message')[0];
+      return message.offsetHeight
+    },
+    function (value) {
+      if (value !== 0) {
+        $scope.messageHeight = value;
+      }
+    }
+  );
+
   $scope.select = function(type) {
+    $scope.headerHeight = 0;
     $scope.listName = type;
     $scope.list = [];
     $scope.sort = $scope.sortTypes[type];
@@ -100,11 +114,6 @@ angular.module('scienceLibrary')
   // get window size
   $scope.width  = window.innerWidth;
   $scope.height = window.innerHeight;
-
-  // set max-height of results lists
-  var resultsListElems = angular.element('.results-list');
-  var maxHeight = $scope.height - 305;
-  resultsListElems.css('max-height', maxHeight + 'px');
 
   $scope.filterPapers = function(value) {
     if (typeof value.type !== 'undefined') {
@@ -377,109 +386,109 @@ angular.module('scienceLibrary')
 
   var getData = function() {
     store.getLastUpdated()
-      .then(function(response) {
-        var foundComputeMessage = false;
-        var lastUpdatedText = '';
-        var projectName = '';
+    .then(function(response) {
+      var foundComputeMessage = false;
+      var lastUpdatedText = '';
+      var projectName = '';
 
-        if (response.results.length > 0) {
-          for (var i in response.results) {
-            if (response.results.hasOwnProperty(i)) {
-              var msg = response.results[i];
+      if (response.results.length > 0) {
+        for (var i in response.results) {
+          if (response.results.hasOwnProperty(i)) {
+            var msg = response.results[i];
 
-              if (msg) {
-                if (msg[0] === 'msg date') {
-                  lastUpdatedText = msg[1];
-                }
-                if (msg[0] === 'msg computed') {
-                  foundComputeMessage = true;
-                }
-                if (msg[0] === 'project name') {
-                  projectName = msg[1];
-                }
+            if (msg) {
+              if (msg[0] === 'msg date') {
+                lastUpdatedText = msg[1];
+              }
+              if (msg[0] === 'msg computed') {
+                foundComputeMessage = true;
+              }
+              if (msg[0] === 'project name') {
+                projectName = msg[1];
               }
             }
           }
-
-          if (!foundComputeMessage) {
-            lastUpdatedText += ' (Computed data not yet generated)';
-          }
-        } else {
-          lastUpdatedText = '(Computed data not found)';
-          projectName = 'Project name not found';
         }
 
-        $scope.lastUpdated = lastUpdatedText;
-        $scope.projectName = projectName;
-      });
+        if (!foundComputeMessage) {
+          lastUpdatedText += ' (Computed data not yet generated)';
+        }
+      } else {
+        lastUpdatedText = '(Computed data not found)';
+        projectName = 'Project name not found';
+      }
+
+      $scope.lastUpdated = lastUpdatedText;
+      $scope.projectName = projectName;
+    });
 
     if ($scope.listName === $scope.listTypes.papers) {
       store.getDocuments()
-        .then(function(rawResults) {
-          var results = filterData(rawResults);
+      .then(function(rawResults) {
+        var results = filterData(rawResults);
 
-          populateList(results.data, results.instances);
+        populateList(results.data, results.instances);
 
-          $scope.journalPapers = $scope.typeCount[types[$scope.journalType]];
-          $scope.externalPapers = $scope.typeCount[types[$scope.externalConferenceType]];
-          $scope.patents = $scope.typeCount[types[$scope.patentType]];
-          $scope.internalPapers = $scope.typeCount[types[$scope.internalConferenceType]];
-          $scope.technicalReports = $scope.typeCount[types[$scope.technicalReportType]];
-          $scope.otherDocuments = $scope.typeCount[types[$scope.otherDocumentType]];
-          $scope.totalExternalPublications = $scope.journalPapers + $scope.externalPapers + $scope.patents;
+        $scope.journalPapers = $scope.typeCount[types[$scope.journalType]];
+        $scope.externalPapers = $scope.typeCount[types[$scope.externalConferenceType]];
+        $scope.patents = $scope.typeCount[types[$scope.patentType]];
+        $scope.internalPapers = $scope.typeCount[types[$scope.internalConferenceType]];
+        $scope.technicalReports = $scope.typeCount[types[$scope.technicalReportType]];
+        $scope.otherDocuments = $scope.typeCount[types[$scope.otherDocumentType]];
+        $scope.totalExternalPublications = $scope.journalPapers + $scope.externalPapers + $scope.patents;
 
-          $scope.pieData = [{
-            label: types[$scope.journalType],
-            value: $scope.journalPapers
-          }, {
-            label: types[$scope.externalConferenceType],
-            value: $scope.externalPapers
-          }, {
-            label: types[$scope.patentType],
-            value: $scope.patents
-          }, {
-            label: types[$scope.internalConferenceType],
-            value: $scope.internalPapers
-          }, {
-            label: types[$scope.technicalReportType],
-            value: $scope.technicalReports
-          }, {
-            label: types[$scope.otherDocumentType],
-            value: $scope.otherDocuments
-          }];
-        });
+        $scope.pieData = [{
+          label: types[$scope.journalType],
+          value: $scope.journalPapers
+        }, {
+          label: types[$scope.externalConferenceType],
+          value: $scope.externalPapers
+        }, {
+          label: types[$scope.patentType],
+          value: $scope.patents
+        }, {
+          label: types[$scope.internalConferenceType],
+          value: $scope.internalPapers
+        }, {
+          label: types[$scope.technicalReportType],
+          value: $scope.technicalReports
+        }, {
+          label: types[$scope.otherDocumentType],
+          value: $scope.otherDocuments
+        }];
+      });
     } else if ($scope.listName === $scope.listTypes.authors) {
       store.getPublishedPeople()
-        .then(function(rawData) {
-          var data = convertInstancesToResults(rawData);
-          populateList(data.results, data.instances);
-          $scope.options = charts.getScatterData(data, urls.server);
-        });
+      .then(function(rawData) {
+        var data = convertInstancesToResults(rawData);
+        populateList(data.results, data.instances);
+        $scope.options = charts.getScatterData(data, urls.server);
+      });
     } else if ($scope.listName === $scope.listTypes.venues) {
       store.getEventSeries()
-        .then(function(rawData) {
-          var data = convertInstancesToResults(rawData);
-          populateList(data.results, data.instances);
-        });
+      .then(function(rawData) {
+        var data = convertInstancesToResults(rawData);
+        populateList(data.results, data.instances);
+      });
     } else if ($scope.listName === $scope.listTypes.projects) {
       store.getProjects()
-        .then(function(rawData) {
-          var data = convertInstancesToResults(rawData);
-          populateList(data.results, data.instances);
-        });
+      .then(function(rawData) {
+        var data = convertInstancesToResults(rawData);
+        populateList(data.results, data.instances);
+      });
     } else if ($scope.listName === $scope.listTypes.organisations) {
       store.getOrganisations()
-        .then(function(rawData) {
-          var data = convertInstancesToResults(rawData);
-          populateList(data.results, data.instances);
-          $scope.sunburstData = charts.getSunburstData(data);
-        });
+      .then(function(rawData) {
+        var data = convertInstancesToResults(rawData);
+        populateList(data.results, data.instances);
+        $scope.sunburstData = charts.getSunburstData(data);
+      });
     } else if ($scope.listName === $scope.listTypes.topics) {
       store.getTopics()
-        .then(function(rawData) {
-          var data = convertInstancesToResults(rawData);
-          populateList(data.results, data.instances);
-        });
+      .then(function(rawData) {
+        var data = convertInstancesToResults(rawData);
+        populateList(data.results, data.instances);
+      });
     }
   };
 

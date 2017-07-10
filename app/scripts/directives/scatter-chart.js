@@ -21,8 +21,8 @@ angular.module('scienceLibrary')
       scatterYAxisNames[scope.scatterYAxisOpts[2]] = 'Overall H-Index';
       scatterYAxisNames[scope.scatterYAxisOpts[3]] = 'Overall Citation Count';
 
-      scope.$watchCollection(expOptions, function(newVal) {
-        options = newVal;
+      scope.$watchCollection(expOptions, function(newValue) {
+        options = newValue;
         if (options) {
           drawScatterPlot(options);
         }
