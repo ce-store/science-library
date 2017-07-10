@@ -21,9 +21,12 @@ angular.module('scienceLibrary')
     var interactiveHeaderHeight = (scope.headerHeight || 0) + 80;
     var filterHeight = 33;
     var listMargin = 20;
-    var seeMoreHeight = 127;
+    var buttonContainerHeight = 127;
 
     var dataMessageHeight = 78;
+    var documentTitleHeight = 78;
+    var documentDLHeight = 42;
+    var mapHeight = 300;
 
     scope.$watch('headerHeight', function(newValue) {
       if (newValue) {
@@ -48,14 +51,19 @@ angular.module('scienceLibrary')
     var resizeStyles = function() {
       var innerContentHeight = $window.innerHeight - (headerHeight + margin * 2 + footerHeight);
       var resultsListHeight = innerContentHeight - (interactiveHeaderHeight +
-          filterHeight + listMargin + seeMoreHeight);
-      var venuesListHeight = innerContentHeight - (interactiveHeaderHeight + seeMoreHeight);
+          filterHeight + listMargin + buttonContainerHeight);
+      var venuesListHeight = innerContentHeight - (interactiveHeaderHeight + buttonContainerHeight);
 
       scope.height = $window.innerHeight;
 
       if ($window.innerWidth < 992) {
         scope.innerContentStyle = {};
         scope.resultsListStyle = {};
+        scope.documentStyle = {
+          image: {},
+          details: {},
+          abstract: {}
+        };
       } else {
         scope.innerContentStyle = {
           'background': 'white',
@@ -69,6 +77,20 @@ angular.module('scienceLibrary')
         };
         scope.venuesListStyle = {
           'height': venuesListHeight + 'px'
+        };
+        scope.documentStyle = {
+          image: {
+            'max-height': innerContentHeight - (documentTitleHeight + buttonContainerHeight) + 'px'
+          },
+          details: {
+            'max-height': innerContentHeight - (documentTitleHeight + 20) + 'px',
+            'overflow': 'scroll',
+            'margin-bottom': '20px'
+          },
+          abstract: {
+            'max-height': innerContentHeight - (documentTitleHeight + documentDLHeight * 7.5 + mapHeight +
+                          buttonContainerHeight) + 'px'
+          }
         };
       }
     }

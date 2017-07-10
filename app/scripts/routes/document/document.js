@@ -47,12 +47,12 @@ angular.module('scienceLibrary')
   $scope.height = window.innerHeight;
 
   // set max-height of publication list
-  var paperImgElem = angular.element('#paper-img');
+  // var paperImgElem = angular.element('#paper-img');
   var maxHeight = $scope.height - 270;
 
-  if ($scope.width >= 700) {
-    paperImgElem.css('max-height', maxHeight + 'px');
-  }
+  // if ($scope.width >= 700) {
+  //   paperImgElem.css('max-height', maxHeight + 'px');
+  // }
 
   // set max-height of publication list
   var paperAbstractElem = angular.element('#paper-abstract');
