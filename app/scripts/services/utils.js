@@ -98,6 +98,19 @@ angular.module('itapapersApp')
     getLatestIntProperty: function(propertiesList, propertyName) {
       return propertiesList[propertyName] ? parseInt(propertiesList[propertyName][propertiesList[propertyName].length-1], 10) : 0;
     },
+    getHighestIntProperty: function(propertiesList, propertyName) {
+      var thisVal = null;
+
+      for (var i = 0; i < propertiesList[propertyName].length; i++) {
+        var currVal = propertiesList[propertyName][i];
+
+        if ((thisVal == null) || (currVal > thisVal)) {
+          thisVal = currVal;
+        }
+      }
+
+      return parseInt(thisVal || 0);
+    },
     getDateProperty: function(propertiesList, propertyName) {
       return propertiesList[propertyName] ? Date.parse(propertiesList[propertyName][0]) : 0;
     },
