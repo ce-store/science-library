@@ -101,11 +101,13 @@ angular.module('itapapersApp')
     getHighestIntProperty: function(propertiesList, propertyName) {
       var thisVal = null;
 
-      for (var i = 0; i < propertiesList[propertyName].length; i++) {
-        var currVal = propertiesList[propertyName][i];
+      if (propertiesList[propertyName] != null) {
+        for (var i = 0; i < propertiesList[propertyName].length; i++) {
+          var currVal = propertiesList[propertyName][i];
 
-        if ((thisVal == null) || (currVal > thisVal)) {
-          thisVal = currVal;
+          if ((thisVal == null) || (currVal > thisVal)) {
+            thisVal = currVal;
+          }
         }
       }
 
