@@ -246,19 +246,21 @@ angular.module('itapapersApp')
 
       // projects
       $scope.projects = [];
-      for (var j = 0; j < projects.length; ++j) {
-        var project = projects[j];
+      if (projects != null) {
+        for (var j = 0; j < projects.length; ++j) {
+          var project = projects[j];
 
-        if (project && relatedInstances[project]) {
-          var projectProps = relatedInstances[project].property_values;
+          if (project && relatedInstances[project]) {
+            var projectProps = relatedInstances[project].property_values;
 
-          // project properties
-          var projectName = utils.getUnknownProperty(projectProps, ce.project.name);
+            // project properties
+            var projectName = utils.getUnknownProperty(projectProps, ce.project.name);
 
-          $scope.projects.push({
-            id:   project,
-            name: projectName
-          });
+            $scope.projects.push({
+              id:   project,
+              name: projectName
+            });
+          }
         }
       }
 
