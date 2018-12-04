@@ -5,7 +5,7 @@
 
 /* globals window: true */
 
-angular.module('itapapersApp')
+angular.module('slApp')
 
 .controller('MainCtrl', ['$scope', '$stateParams', '$location', '$sce', '$window', 'store', 'charts', 'documentTypes', 'utils', 'csv', 'colours', 'localStorageService', 'urls', 'definitions', function ($scope, $stateParams, $location, $sce, $window, store, charts, documentTypes, utils, csv, colours, localStorageService, urls, ce) {
   'use strict';

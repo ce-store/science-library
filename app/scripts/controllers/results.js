@@ -5,7 +5,7 @@
 
 /* globals window: true */
 
-angular.module('itapapersApp')
+angular.module('slApp')
 
 .controller('ResultsCtrl', ['$scope', '$stateParams', '$http', 'urls', 'definitions', function ($scope, $stateParams, $http, urls, ce) {
   'use strict';

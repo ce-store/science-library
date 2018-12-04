@@ -3,7 +3,7 @@
  * All Rights Reserved
  *******************************************************************************/
 
-angular.module('itapapersApp')
+angular.module('slApp')
 
 .factory('store', ['$http', '$q', 'localStorageService', 'utils', 'requests', 'definitions', function ($http, $q, localStorageService, utils, reqs, ce) {
   'use strict';

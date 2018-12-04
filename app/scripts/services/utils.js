@@ -3,7 +3,7 @@
  * All Rights Reserved
  *******************************************************************************/
 
-angular.module('itapapersApp')
+angular.module('slApp')
 
 .factory('utils', ['documentTypes', 'definitions', function (documentTypes, ce) {
   'use strict';

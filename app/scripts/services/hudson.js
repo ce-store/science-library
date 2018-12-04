@@ -3,7 +3,7 @@
  * All Rights Reserved
  *******************************************************************************/
 
-angular.module('itapapersApp')
+angular.module('slApp')
 
 .factory('hudson', ['$http', '$location', '$rootScope', '$state', 'urls', function ($http, $location, $rootScope, $state, urls) {
   'use strict';

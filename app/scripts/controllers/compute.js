@@ -5,7 +5,7 @@
 
 /* globals $: true */
 
-angular.module('itapapersApp')
+angular.module('slApp')
 
 .controller('ComputeCtrl', ['$scope', '$stateParams', 'store', 'urls', 'utils', 'definitions', 'drupal', function ($scope, $stateParams, store, urls, utils, ce, drupal) {
   'use strict';

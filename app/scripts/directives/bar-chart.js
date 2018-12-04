@@ -3,7 +3,7 @@
  * All Rights Reserved
  *******************************************************************************/
 
-angular.module('itapapersApp')
+angular.module('slApp')
 
 .directive('barChart', ['$parse', '$window', '$document', 'store', 'csv', 'colours', function ($parse, $window, $document, store, csv, colours) {
   'use strict';

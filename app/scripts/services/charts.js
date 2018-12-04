@@ -3,7 +3,7 @@
  * All Rights Reserved
  *******************************************************************************/
 
-angular.module('itapapersApp')
+angular.module('slApp')
 
 .service('charts', ['utils', 'definitions', function (utils, ce) {
   'use strict';

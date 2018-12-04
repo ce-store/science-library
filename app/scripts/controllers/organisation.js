@@ -5,7 +5,7 @@
 
 /* globals window: true */
 
-angular.module('itapapersApp')
+angular.module('slApp')
 
 .controller('OrganisationCtrl', ['$scope', '$state', '$stateParams', '$document', 'store', 'hudson', 'documentTypes', 'utils', 'csv', 'colours', 'urls', 'definitions', function ($scope, $state, $stateParams, $document, store, hudson, documentTypes, utils, csv, colours, urls, ce) {
   'use strict';
@@ -48,7 +48,7 @@ angular.module('itapapersApp')
 
   $scope.showView = function (view) {
     $scope.currentView = view;
-    $stateParams.view = view;
+//    $stateParams.view = view;
     $state.go('organisation', $stateParams);
 
     if (view === $scope.views[1]) {

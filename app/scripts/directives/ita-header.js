@@ -5,7 +5,7 @@
 
 /* globals localStorage: true */
 
-angular.module('itapapersApp')
+angular.module('slApp')
 
 .directive('itaHeader', ['$uibModal', '$location', '$sce', 'localStorageService', 'csv', function ($uibModal, $location, $sce, localStorageService, csv) {
   'use strict';
