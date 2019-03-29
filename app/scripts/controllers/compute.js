@@ -10,53 +10,9 @@ angular.module('slApp')
 .controller('ComputeCtrl', ['$scope', '$stateParams', 'store', 'urls', 'utils', 'definitions', 'drupal', function ($scope, $stateParams, store, urls, utils, ce, drupal) {
   'use strict';
 
+  var COMPUTE_ONLY = false;
+
   $scope.computedCe = [];
-//  $scope.computedCe.push('perform reset store with starting uid \'1\'.');
-  $scope.computedCe.push('--Loading model...');
-
-  var appendErrors = function(response) {
-    var alerts = response.data.alerts;
-
-    if (alerts != null) {
-      if (alerts.errors.length) {
-        $scope.computedCe.push('--Alerts:');
-        for (var i in alerts.errors) {
-          var msg = alerts.errors[i];
-          $scope.computedCe.push('--' + msg);
-        }
-      }
-      if (alerts.warnings.length) {
-        $scope.computedCe.push('--Warnings:');
-        for (var i in alerts.warnings) {
-          var msg = alerts.warnings[i];
-          $scope.computedCe.push('--' + msg);
-        }
-      }
-    }
-  };
-
-  drupal.loadModel().then(function(response) {
-    appendErrors(response);
-    $scope.computedCe.push('--Loaded model');
-    $scope.computedCe.push(' ');
-    $scope.computedCe.push('--Loading facts...');
-
-    drupal.loadDocuments().then(function(response) {
-      appendErrors(response);
-      $scope.computedCe.push('--Loaded facts');
-      $scope.computedCe.push(' ');
-      $scope.computedCe.push('--Loading rules...');
-
-      drupal.loadRules().then(function(response) {
-        appendErrors(response);
-        $scope.computedCe.push('--Loaded rules');
-        $scope.computedCe.push(' ');
-        $scope.computedCe.push('--Computing data...');
-
-        computeData();
-      });
-    });
-  });
 
   var computeData = function() {
     store.getDataForCompute()
@@ -73,6 +29,7 @@ angular.module('slApp')
         var dates = {};
 
         var i, inst;
+
         for (i in results[ce.concepts.document]) {
           inst = results[ce.concepts.document][i];
           inst.instances = {};
@@ -190,6 +147,59 @@ angular.module('slApp')
         console.log("all done");
       });
   };
+
+  var appendErrors = function(response) {
+    var alerts = response.data.alerts;
+
+    if (alerts != null) {
+      if (alerts.errors.length) {
+        $scope.computedCe.push('--Alerts:');
+        for (var i in alerts.errors) {
+          var msg = alerts.errors[i];
+          $scope.computedCe.push('--' + msg);
+        }
+      }
+      if (alerts.warnings.length) {
+        $scope.computedCe.push('--Warnings:');
+        for (var i in alerts.warnings) {
+          var msg = alerts.warnings[i];
+          $scope.computedCe.push('--' + msg);
+        }
+      }
+    }
+  };
+
+  if (COMPUTE_ONLY) {
+    //Don't load the CE, just compute the data
+    $scope.computedCe.push('--Computing data...');
+    computeData();
+  } else {
+    //Load the CE and then compute the data
+    $scope.computedCe.push('--Loading model...');
+
+    drupal.loadModel().then(function(response) {
+      appendErrors(response);
+      $scope.computedCe.push('--Loaded model');
+      $scope.computedCe.push(' ');
+      $scope.computedCe.push('--Loading facts...');
+
+      drupal.loadDocuments().then(function(response) {
+        appendErrors(response);
+        $scope.computedCe.push('--Loaded facts');
+        $scope.computedCe.push(' ');
+        $scope.computedCe.push('--Loading rules...');
+
+        drupal.loadRules().then(function(response) {
+          appendErrors(response);
+          $scope.computedCe.push('--Loaded rules');
+          $scope.computedCe.push(' ');
+          $scope.computedCe.push('--Computing data...');
+
+          computeData();
+        });
+      });
+    });
+  }
 
   function saveCeToStore() {
     var url = urls.server + urls.ceStore + "/sources/computedCe?showStats=true&action=save";
