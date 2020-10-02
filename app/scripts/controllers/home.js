@@ -3,7 +3,7 @@
  * All Rights Reserved
  *******************************************************************************/
 
-angular.module('itapapersApp')
+angular.module('slApp')
 
 .controller('HomeCtrl', function ($scope, urls) {
   'use strict';

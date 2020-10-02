@@ -6,7 +6,7 @@
 /* globals window: true */
 /* globals drawNarrativeChart: true */
 
-angular.module('itapapersApp')
+angular.module('slApp')
 
 .controller('AuthorCtrl', ['$scope', '$state', '$stateParams', '$timeout', 'store', 'urls', 'hudson', 'documentTypes', 'utils', 'csv', 'colours', 'definitions', function ($scope, $state, $stateParams, $timeout, store, urls, hudson, documentTypes, utils, csv, colours, ce) {
   'use strict';
@@ -53,7 +53,7 @@ angular.module('itapapersApp')
 
   $scope.showView = function (view) {
     $scope.currentView = view;
-    $stateParams.view = view;
+    //$stateParams.view = view;
     $state.go('author', $stateParams);
 
     if (view === $scope.views[0]) {

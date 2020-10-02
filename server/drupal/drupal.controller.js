@@ -1,4 +1,4 @@
-var request = require('request')
+var request = require('request');
 var Promise = require('promise');
 var settings;
 
@@ -17,7 +17,8 @@ var getToken = function() {
     headers: {
       'content-type': 'application/json'
     },
-    json: true
+    json: true,
+    resolveWithFullResponse: true
   };
 
   return new Promise(function (resolve, reject) {

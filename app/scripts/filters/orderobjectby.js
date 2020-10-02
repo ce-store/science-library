@@ -3,7 +3,7 @@
  * All Rights Reserved
  *******************************************************************************/
 
-angular.module('itapapersApp')
+angular.module('slApp')
 
 .filter('orderObjectBy', function() {
   'use strict';

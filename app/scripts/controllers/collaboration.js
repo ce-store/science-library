@@ -5,7 +5,7 @@
 
 /* globals window: true */
 
-angular.module('itapapersApp')
+angular.module('slApp')
 
 .controller('CollaborationCtrl', ['$scope', '$stateParams', '$q', '$document', 'store', 'utils', 'documentTypes', 'csv', 'colours', 'urls', 'definitions', function ($scope, $stateParams, $q, $document, store, utils, documentTypes, csv, colours, urls, ce) {
   'use strict';

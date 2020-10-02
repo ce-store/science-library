@@ -3,7 +3,7 @@
  * All Rights Reserved
  *******************************************************************************/
 
-angular.module('itapapersApp')
+angular.module('slApp')
 
 .directive('scatterChart', ['$parse', '$window', '$location', 'store', 'csv', 'colours', function ($parse, $window, $location, store, csv, colours) {
   'use strict';
@@ -90,8 +90,12 @@ angular.module('itapapersApp')
 
               var authors = [d];
               for (var i = 0; i < data.length; ++i) {
-                if (data[i].id !== d.id && data[i].totalPubs === d.totalPubs && ((d.localHIndex && data[i].localHIndex === d.localHIndex) || (d.citations && data[i].citations === d.citations))) {
-                  authors.push(data[i]);
+                if (data[i].id !== d.id) {
+                    if (data[i].totalPubs === d.totalPubs) {
+                        if (data[i][scope.scatterYAxis] === d[scope.scatterYAxis]) {
+                            authors.push(data[i]);
+                        }
+                    }
                 }
               }
 

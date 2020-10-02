@@ -5,7 +5,7 @@
 
 /* globals window: true */
 
-angular.module('itapapersApp')
+angular.module('slApp')
 
 .controller('ProjectCtrl', ['$scope', '$state', '$stateParams', 'store', 'hudson', 'documentTypes', 'utils', 'csv', 'urls', 'definitions', function ($scope, $state, $stateParams, store, hudson, documentTypes, utils, csv, urls, ce) {
   'use strict';
@@ -66,7 +66,7 @@ angular.module('itapapersApp')
 
   $scope.showView = function (view) {
     $scope.currentView = view;
-    $stateParams.view = view;
+//    $stateParams.view = view;
     $state.go('project', $stateParams);
 
     if (view === $scope.views[0]) {

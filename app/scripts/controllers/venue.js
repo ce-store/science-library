@@ -5,7 +5,7 @@
 
 /* globals window: true */
 
-angular.module('itapapersApp')
+angular.module('slApp')
 
 .controller('VenueCtrl', ['$scope', '$stateParams', 'store', 'hudson', 'colours', 'documentTypes', 'utils', 'csv', 'urls', 'definitions', function ($scope, $stateParams, store, hudson, colours, documentTypes, utils, csv, urls, ce) {
   'use strict';

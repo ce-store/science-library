@@ -3,7 +3,7 @@
  * All Rights Reserved
  *******************************************************************************/
 
-angular.module('itapapersApp', [
+angular.module('slApp', [
   'ui.router',
   'ui.bootstrap',
   'uiGmapgoogle-maps',
@@ -16,7 +16,7 @@ angular.module('itapapersApp', [
   'use strict';
 
   localStorageServiceProvider
-    .setPrefix('itapapersApp')
+    .setPrefix('slApp')
     .setStorageCookie(1, '/')
     .setStorageType('sessionStorage')
     .setNotify(true, true);

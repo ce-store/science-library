@@ -5,7 +5,7 @@
 
 /* globals webspeech: true */
 
-angular.module('itapapersApp')
+angular.module('slApp')
 
 .directive('itaFooter', ['$location', '$uibModal', 'hudson', 'store', function ($location, $uibModal, hudson, store) {
   'use strict';

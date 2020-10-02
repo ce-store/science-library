@@ -3,7 +3,7 @@
  * All Rights Reserved
  *******************************************************************************/
 
-angular.module('itapapersApp')
+angular.module('slApp')
 
 .factory('utils', ['documentTypes', 'definitions', function (documentTypes, ce) {
   'use strict';
@@ -114,8 +114,63 @@ angular.module('itapapersApp')
       return parseInt(thisVal || 0);
     },
     getDateProperty: function(propertiesList, propertyName) {
-      return propertiesList[propertyName] ? Date.parse(propertiesList[propertyName][0]) : 0;
-    },
+      let result = 0;
+
+      if (propertiesList[propertyName]) {
+        var parts = propertiesList[propertyName][0].split('-');
+        let yr = parts[1];
+        let mth = 0;
+        let day = 1;
+
+        switch(parts[0].toLowerCase()) {
+          case 'jan':
+            mth = 0;
+            break;
+          case 'feb':
+            mth = 1;
+            break;
+          case 'mar':
+            mth = 2;
+            break;
+          case 'apr':
+            mth = 3;
+            break;
+          case 'may':
+            mth = 4;
+            break;
+          case 'jun':
+            mth = 5;
+            break;
+          case 'jul':
+            mth = 6;
+            break;
+          case 'aug':
+            mth = 7;
+            break;
+          case 'sep':
+            mth = 8;
+            break;
+          case 'oct':
+            mth = 9;
+            break;
+          case 'nov':
+            mth = 10;
+            break;
+          case 'dec':
+            mth = 11;
+            break;
+          default:
+            mth = 0;
+            break;
+        }
+
+        var dt = new Date(yr, mth, day);
+
+        result =  dt.getTime();
+      }
+
+      return result;
+   },
     getIndustryFor: function (instance) {
       var result = null;
       var conceptNames = instance.concept_names;

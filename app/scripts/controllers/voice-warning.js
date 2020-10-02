@@ -3,7 +3,7 @@
  * All Rights Reserved
  *******************************************************************************/
 
-angular.module('itapapersApp')
+angular.module('slApp')
 
 .controller('VoiceWarningCtrl', ['$scope', '$uibModalInstance', function ($scope, $uibModalInstance) {
   'use strict';
