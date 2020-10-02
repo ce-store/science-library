@@ -6,8 +6,10 @@
 /.apt_generated/
 /build/
 /WebContent
+/CE_files
 
 .DS_Store
+.idea
 .project
 .classpath
 .factorypath
