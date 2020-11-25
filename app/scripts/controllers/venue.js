@@ -169,22 +169,35 @@ angular.module('slApp')
     var found = false;
     var eventSeriesId = es._id;
     var eventYearId = ev._id;
-    var eventLocationId = evLoc._id;
+    var eventLocationId = null;
     var paperId = doc._id;
     var authorId = per._id;
     var organisationId = org._id;
     var organisationLocationId = orgLoc._id;
 
+    if (evLoc) {
+      eventLocationId = evLoc._id;
+    }
+
     var authorProps = per.property_values;
-    var eventLocProps = evLoc.property_values;
+    var eventLocProps = null;
     var orgLocProps = orgLoc.property_values;
+
+    if (evLoc) {
+      eventLocProps = evLoc.property_values;
+    }
 
     // author properties
     var authorName = utils.getUnknownProperty(authorProps, ce.author.fullName);
 
+    var eventLat = null;
+    var eventLon = null;
+
     // event location properties
-    var eventLat = utils.getProperty(eventLocProps, ce.location.lat);
-    var eventLon = utils.getProperty(eventLocProps, ce.location.lon);
+    if (eventLocProps) {
+      eventLat = utils.getProperty(eventLocProps, ce.location.lat);
+      eventLon = utils.getProperty(eventLocProps, ce.location.lon);
+    }
 
     // organisation location properties
     var orgLat = utils.getProperty(orgLocProps, ce.location.lat);
