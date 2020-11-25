@@ -164,10 +164,12 @@ angular.module('slApp')
   };
 
   var askQuestion = function (question) {
+
     if (question.includes('help')) {
       $state.go('help');
     } else {
-      $http.post(urls.home + urls.interpreter, question)
+      $http.post('ce/hudson/interpreter', { question: question })
+//      $http.post(urls.home + urls.interpreter, question)
         .then(function(response) {
           var redirected = handleInterpretations(response.data.interpretations);
 

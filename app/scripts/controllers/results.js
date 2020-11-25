@@ -16,7 +16,7 @@ angular.module('slApp')
   if ($stateParams.keywords) {
     $scope.keywords = $stateParams.keywords;
 
-    $http.get(urls.home + urls.keywordSearch.keywords + $scope.keywords + urls.keywordSearch.restrictions)
+    $http.get('ce/keywords/' + $scope.keywords)
       .then(function(response) {
         $scope.results = {
           papers: [],
