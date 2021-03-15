@@ -13,8 +13,8 @@ angular.module('slApp')
   $scope.views = ['papers', 'list', 'authors'];
   $scope.scienceLibrary = urls.scienceLibrary;
   $scope.journalType            = documentTypes.journal;
-  $scope.patentType             = documentTypes.patent;
   $scope.externalConferenceType = documentTypes.external;
+  $scope.patentType             = documentTypes.patent;
   $scope.internalConferenceType = documentTypes.internal;
   $scope.technicalReportType    = documentTypes.technical;
   $scope.otherDocumentType      = documentTypes.other;

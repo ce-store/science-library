@@ -14,10 +14,11 @@ angular.module('slApp')
   $scope.scienceLibrary = urls.scienceLibrary;
   $scope.journalType            = documentTypes.journal;
   $scope.externalConferenceType = documentTypes.external;
+  $scope.patentType             = documentTypes.patent;
   $scope.internalConferenceType = documentTypes.internal;
   $scope.technicalReportType    = documentTypes.technical;
   $scope.otherDocumentType      = documentTypes.other;
-  $scope.journalInput = $scope.externalInput = $scope.internalInput = $scope.technicalInput = $scope.otherInput = true;
+  $scope.journalInput = $scope.externalInput = $scope.patentInput = $scope.internalInput = $scope.technicalInput = $scope.otherInput = true;
 
   $scope.sortTypes = {
     papers: {
@@ -87,6 +88,8 @@ angular.module('slApp')
           value.type.indexOf(types[$scope.journalType]) > -1) ||
         ($scope.externalInput &&
           value.type.indexOf(types[$scope.externalConferenceType]) > -1) ||
+        ($scope.patentInput &&
+          value.type.indexOf(types[$scope.patentType]) > -1) ||
         ($scope.internalInput &&
           value.type.indexOf(types[$scope.internalConferenceType]) > -1) ||
         ($scope.technicalInput &&

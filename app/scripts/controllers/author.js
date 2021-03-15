@@ -98,10 +98,10 @@ angular.module('slApp')
           value.type.indexOf(types[$scope.journalType]) > -1) ||
         ($scope.externalInput &&
           value.type.indexOf(types[$scope.externalConferenceType]) > -1) ||
-        ($scope.internalInput &&
-          value.type.indexOf(types[$scope.patentType]) > -1) ||
         ($scope.patentInput &&
           value.type.indexOf(types[$scope.internalConferenceType]) > -1) ||
+        ($scope.internalInput &&
+          value.type.indexOf(types[$scope.patentType]) > -1) ||
         ($scope.technicalInput &&
           value.type.indexOf(types[$scope.technicalReportType]) > -1) ||
         ($scope.otherInput &&
